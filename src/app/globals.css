@@ -1,16 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --apple-black: #000000;
+  --apple-gray-1: #1a1a1a;
+  --apple-gray-2: #2a2a2a;
+  --apple-gray-3: #3a3a3a;
+  --apple-gray-4: #6e6e6e;
+  --apple-gray-5: #8e8e8e;
+  --apple-gray-6: #aeaeb2;
+  --apple-white: #f5f5f7;
+  --apple-blue: #2997ff;
+  --apple-green: #34c759;
+  --apple-red: #ff3b30;
+}
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #333 #000; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; background: var(--apple-black); color: var(--apple-white); }
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #555; }
+
+.glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+.glass-hover:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+
+.gradient-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; animation: float 20s ease-in-out infinite; }
+@keyframes float { 0%,100% { transform: translate(0,0); } 33% { transform: translate(30px,-30px); } 66% { transform: translate(-20px,20px); } }
+
+.gradient-text { background: linear-gradient(135deg, #fff 0%, #aaa 50%, #fff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.apple-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent); }
+
+.reveal-up { opacity: 0; transform: translateY(60px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-up.visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+@media (display-mode: standalone) { body { padding-top: env(safe-area-inset-top); } }

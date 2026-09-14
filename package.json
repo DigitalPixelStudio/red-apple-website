@@ -11,20 +11,31 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.0",
+    "@react-three/fiber": "^8.17.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "autoprefixer": "^10.6.0",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.400.0",
     "next": "^15.2.0",
+    "next-pwa": "^5.0.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "three": "^0.168.0",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.168.0",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.2.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^4.1.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.7.0"
   }
 }
