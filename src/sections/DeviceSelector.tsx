@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Smartphone, Tablet, Monitor, Watch, Headphones, ChevronRight, Search } from "lucide-react";
+import { trackConversion, CONVERSIONS } from "@/lib/gtag";
 
 const deviceData = {
   iPhone: { models: ["16 Pro Max", "16 Pro", "16", "15 Pro", "15", "14", "13", "12", "SE"], problems: ["Screen cracked", "Battery draining", "Not charging", "Camera issue", "Face ID not working", "Water damage", "Speaker issue"] },
@@ -85,6 +86,7 @@ export default function DeviceSelector() {
           <AnimatePresence>
             {device && (
               <motion.a href={waUrl} target="_blank" rel="noopener"
+                onClick={() => trackConversion(CONVERSIONS.whatsapp)}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 className="bg-green-500 text-white px-8 py-4 rounded-full font-medium text-center block hover:bg-green-400 transition flex items-center justify-center gap-2">
                 💬 Get Repair Quote on WhatsApp <ChevronRight size={20} />

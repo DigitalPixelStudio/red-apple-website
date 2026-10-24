@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
+import { trackConversion, CONVERSIONS } from "@/lib/gtag";
 
 export default function WhatsAppFloat() {
   const phone = "918660663776";
@@ -8,7 +9,13 @@ export default function WhatsAppFloat() {
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
   return (
-    <a href={url} target="_blank" rel="noopener" className="fixed bottom-6 right-6 z-40">
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener"
+      className="fixed bottom-6 right-6 z-40"
+      onClick={() => trackConversion(CONVERSIONS.whatsapp)}
+    >
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}

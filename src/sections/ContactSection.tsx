@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, MapPin, Clock, Mail, Send } from "lucide-react";
+import { trackConversion, CONVERSIONS } from "@/lib/gtag";
 
 export default function ContactSection() {
   const [form, setForm] = useState({ name: "", phone: "", device: "", model: "", issue: "", method: "whatsapp" });
@@ -10,6 +11,8 @@ export default function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const msg = `Hi Red Apple Mobile Store! Name: ${form.name}. Device: ${form.model || form.device}. Issue: ${form.issue}. Preferred: ${form.method}.`;
+    // Google Ads conversion: form submit
+    trackConversion(CONVERSIONS.form);
     window.open(`https://wa.me/918660663776?text=${encodeURIComponent(msg)}`, "_blank");
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);

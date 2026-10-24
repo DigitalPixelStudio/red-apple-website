@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone, Smartphone, Monitor } from "lucide-react";
+import { trackConversion, CONVERSIONS } from "@/lib/gtag";
 
 export default function HeroSection() {
   return (
@@ -55,7 +56,7 @@ export default function HeroSection() {
           <a href="#contact" className="bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-gray-200 transition-all duration-300 text-lg flex items-center justify-center gap-2">
             Book a Repair <ArrowRight size={20} />
           </a>
-          <a href="https://wa.me/918660663776" target="_blank" className="border border-white/20 text-white px-8 py-4 rounded-full hover:bg-white/5 transition text-lg flex items-center justify-center gap-2">
+          <a href="https://wa.me/918660663776" target="_blank" onClick={() => trackConversion(CONVERSIONS.whatsapp)} className="border border-white/20 text-white px-8 py-4 rounded-full hover:bg-white/5 transition text-lg flex items-center justify-center gap-2">
             💬 WhatsApp Us
           </a>
         </motion.div>

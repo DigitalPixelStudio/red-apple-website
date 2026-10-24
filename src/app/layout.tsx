@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Poppins } from "next/font/google";
+import GoogleAdsTag from "@/components/GoogleAdsTag";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["200","300","400","500","600"] });
 const poppins = Poppins({ subsets: ["latin"], variable: "--font-poppins", weight: ["300","400","500","600","700"] });
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="bg-black text-white antialiased">
+        <GoogleAdsTag />
         {children}
       </body>
     </html>
