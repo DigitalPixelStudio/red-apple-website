@@ -1,4 +1,4 @@
-name: Deploy Red Apple
+name: Build
 on:
   push:
     branches: [main]
@@ -15,10 +15,3 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run build
-      - name: Deploy to Vercel
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: amondnet/vercel-action@v30
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
