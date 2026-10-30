@@ -100,7 +100,7 @@ export default function ReviewsSection() {
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {REVIEWS.map((r, i) => (
             <Reveal key={i} delay={i * 80}>
-              <div className="rounded-[22px] bg-[var(--bg-alt)] p-6 border border-black/[0.04] hover:shadow-lg transition-all duration-300 hover-pop spotlight-card">
+              <div className="rounded-[22px] bg-[var(--bg-alt)] p-6 border border-black/[0.04] hover:shadow-lg transition-[transform,box-shadow] duration-300 duration-300 hover-pop spotlight-card">
                 <div className="flex items-center gap-3">
                   <img
                     src={r.photo}
