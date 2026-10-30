@@ -87,7 +87,7 @@ export default function Hero() {
             <span>Get Instant WhatsApp Quote</span>
           </a>
           <a
-            href="#estimate"
+            href="#quote"
             className="px-8 py-4 rounded-2xl bg-[var(--bg-alt)] border border-[var(--border)] font-bold text-base text-[var(--text)] hover:border-[var(--orange)]/60 transition duration-300 flex items-center justify-center gap-2.5"
           >
             <LineIcon name="zap" size={18} color="var(--orange)" />
@@ -99,7 +99,7 @@ export default function Hero() {
           {devices.map((d) => (
             <a
               key={d.label}
-              href="#estimate"
+              href="#quote"
               className="spotlight-card hover-pop p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--accent)]/40 text-left flex items-center gap-3 group shadow-sm"
             >
               <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] shrink-0 group-hover:scale-110 transition-transform">
