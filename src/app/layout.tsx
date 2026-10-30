@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { SITE, baseUrl, SERVICE_PAGES } from "@/lib/site";
+import { SITE, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
 
 /* GA4 — dormant until NEXT_PUBLIC_GA_ID is set in Vercel.
@@ -67,6 +67,36 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+/* FAQPage — this is what lets Google show the Q&A directly in search results.
+   It is the single highest-value structured-data addition for a local service site. */
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.slice(0, 12).map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+/* Service schema — one entry per repair we publish, so each shows as a service. */
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Apple device repair",
+  provider: { "@type": "LocalBusiness", name: SITE.legalName, url: baseUrl },
+  areaServed: { "@type": "City", name: "Bengaluru" },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Repair services",
+    itemListElement: SERVICE_PAGES.map((s) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: s.title },
+      url: `${baseUrl}/services/${s.slug}`,
+    })),
+  },
+};
+
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
@@ -117,7 +147,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${inter.variable} ${space.variable} bg-white text-[var(--text)] antialiased`}>
         {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
           <>
