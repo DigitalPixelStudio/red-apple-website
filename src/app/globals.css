@@ -97,7 +97,7 @@ body {
 
 /* ---------- Animations (GPU-friendly, 120Hz) ---------- */
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-.animate-float { animation: float 7s ease-in-out infinite; will-change: transform; }
+.animate-float { animation: float 7s ease-in-out infinite; will-change: auto; }
 
 @keyframes fade-up { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 .animate-fade-up { animation: fade-up 0.9s cubic-bezier(0.16,1,0.3,1) both; }
@@ -112,7 +112,7 @@ body {
 .animate-pulse-ring { animation: pulse-ring 2.6s cubic-bezier(0.4,0,0.6,1) infinite; }
 
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.animate-marquee { animation: marquee 36s linear infinite; will-change: transform; }
+.animate-marquee { animation: marquee 36s linear infinite; will-change: auto; }
 
 @keyframes gradient-move { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 .animate-gradient { background-size: 220% 220%; animation: gradient-move 7s ease infinite; }
@@ -136,7 +136,7 @@ body {
 
 /* ---------- 3D tilt ---------- */
 .tilt-wrap { perspective: 1200px; }
-.tilt-inner { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); will-change: transform; }
+.tilt-inner { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); will-change: auto; }
 .tilt-wrap:hover .tilt-inner { transform: rotateY(-6deg) rotateX(3deg) scale(1.02); }
 
 /* ---------- Dynamic Island ---------- */
@@ -154,7 +154,7 @@ body {
   padding: 0.95rem 1.9rem; border-radius: var(--cta-radius);
   box-shadow: 0 4px 20px rgba(0,0,0,0.18);
   transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s;
-  will-change: transform;
+  will-change: auto;
 }
 .cta-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
 
@@ -252,7 +252,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .reveal-right { animation: reveal-right 0.8s cubic-bezier(0.16,1,0.3,1) both; }
 
 /* Parallax depth layers */
-.parallax-layer { transform-style: preserve-3d; will-change: transform; }
+.parallax-layer { transform-style: preserve-3d; will-change: auto; }
 
 /* Cursor trail glow */
 .cursor-glow {
@@ -305,10 +305,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   0%, 100% { transform: scale(1); opacity: 1; }
   50%      { transform: scale(1.03); opacity: 0.94; }
 }
-.animate-brand-breathe { animation: brand-breathe 3.8s ease-in-out infinite; display: inline-block; will-change: transform, opacity; }
+.animate-brand-breathe { animation: brand-breathe 3.8s ease-in-out infinite; display: inline-block; will-change: auto; }
 
 /* ---------- 120fps smooth motion helpers ---------- */
-.smooth-120 { will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
+.smooth-120 { will-change: auto; transform: translateZ(0); backface-visibility: hidden; }
 @media (prefers-reduced-motion: no-preference) {
   /* GPU-accelerated transform-only animations for 120Hz displays */
   .motion-smooth { transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, box-shadow 0.35s ease; }
@@ -324,7 +324,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .orb {
   position: absolute; border-radius: 9999px; opacity: 0.10; pointer-events: none;
   animation: orb-float 14s ease-in-out infinite;
-  will-change: transform; transform: translateZ(0);
+  will-change: auto; transform: translateZ(0);
   /* soft edge from the gradient — NO filter:blur() (it re-rasterises every frame) */
   background-image: radial-gradient(circle at 50% 50%, currentColor 0%, transparent 70%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
@@ -369,7 +369,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .aurora-layer {
   position: absolute; border-radius: 50%; pointer-events: none;
   animation: aurora-wave 20s ease-in-out infinite;
-  will-change: transform; transform: translateZ(0);
+  will-change: auto; transform: translateZ(0);
   background-image: radial-gradient(circle at 50% 50%, currentColor 0%, transparent 72%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 72%);
   mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 72%);
@@ -377,7 +377,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* ---------- Bob / hover card lift ---------- */
 @keyframes card-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-.animate-bob { animation: card-bob 5s ease-in-out infinite; will-change: transform; }
+.animate-bob { animation: card-bob 5s ease-in-out infinite; will-change: auto; }
 
 /* ---------- Pulse dot for "open now" ---------- */
 @keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(48, 209, 88, 0.6); } 70% { box-shadow: 0 0 0 8px rgba(48, 209, 88, 0); } }
@@ -401,7 +401,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   0%, 100% { transform: translateY(0) translateX(0); }
   50% { transform: translateY(-28px) translateX(12px); }
 }
-.chip-float { position: absolute; border-radius: 999px; animation: chip-float 14s ease-in-out infinite; will-change: transform; transform: translateZ(0); }
+.chip-float { position: absolute; border-radius: 999px; animation: chip-float 14s ease-in-out infinite; will-change: auto; transform: translateZ(0); }
 
 /* ============================================================
    HEADER — light + colour animations
@@ -678,7 +678,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: masteredShift 9s ease-in-out infinite;
-  will-change: background-position;
+  will-change: auto;
 }
 @keyframes masteredShift {
   0%   { background-position:   0% 50%; }
@@ -1214,7 +1214,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .font-breathe {
   animation: fontBreathe 5.5s ease-in-out infinite;
-  will-change: font-variation-settings, letter-spacing;
+  will-change: auto;
 }
 @keyframes fontBreathe {
   0%, 100% { font-variation-settings: "wght" 700; letter-spacing: -0.02em; }
@@ -1313,7 +1313,7 @@ html {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: headDrift 13s ease-in-out infinite;
-  will-change: background-position;
+  will-change: auto;
 }
 @keyframes headDrift {
   0%   { background-position:   0% 50%; }
@@ -1750,4 +1750,43 @@ html {
   .fx-breathe-border, .fx-marquee > div, .fx-stagger > *, .fx-enter,
   .fx-caret::after { animation: none !important; }
   .fx-gloss::after { display: none; }
+}
+
+
+/* ==========================================================================
+   COMPOSITOR BUDGET — 120fps hygiene
+   Promoting a layer with will-change costs GPU memory. Only the elements that
+   animate every single frame keep it. Everything else is left on `auto` so the
+   browser can decide. This is the difference between a smooth scroll and a
+   stuttering one on a mid-range Android.
+   ========================================================================== */
+.phone-spin,
+.phone-float,
+.phone-sheen,
+.brand-name,
+.brand-sub {
+  will-change: transform, background-position, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* anything that only animates on hover must NOT be pre-promoted */
+.hv-lift, .hv-tilt, .hv-zoom img, .fx-gloss, .hover-pop, .icon-bounce {
+  will-change: auto;
+}
+
+/* paint containment for big decorative layers so they never trigger layout */
+.bg-3d, .fx-aurora, .fx-dots, .phone-orbit {
+  contain: strict;
+}
+
+/* the long page: let the browser skip work off-screen */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-spin, .phone-float, .phone-sheen,
+  .brand-name, .brand-sub { will-change: auto; }
 }
