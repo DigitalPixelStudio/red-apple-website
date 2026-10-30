@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
+import Phone3D from "./Phone3D";
 
 export default function Hero() {
   const devices = [
@@ -17,7 +18,7 @@ export default function Hero() {
      SSR, then corrects itself on mount — no hydration mismatch. */
   const [status, setStatus] = useState<{ open: boolean; label: string }>({
     open: true,
-    label: "Open now · Bangalore · 10:30 AM – 9:00 PM",
+    label: "Open now · Bangalore · 10:00 AM – 12:00 AM",
   });
 
   useEffect(() => {
@@ -26,8 +27,8 @@ export default function Hero() {
       const now = new Date();
       const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
       const mins = ist.getHours() * 60 + ist.getMinutes();
-      const OPEN = 10 * 60 + 30;   // 10:30
-      const CLOSE = 21 * 60;       // 21:00
+      const OPEN = 10 * 60;        // 10:00
+      const CLOSE = 24 * 60;       // 24:00 (midnight)
       const isOpen = mins >= OPEN && mins < CLOSE;
 
       if (isOpen) {
@@ -35,9 +36,9 @@ export default function Hero() {
         const h = Math.floor(left / 60);
         const m = left % 60;
         const eta = h > 0 ? `${h}h ${m}m` : `${m}m`;
-        setStatus({ open: true, label: `Open now · closes in ${eta} · 10:30 AM – 9:00 PM` });
+        setStatus({ open: true, label: `Open now · closes in ${eta} · 10 AM – 12 AM` });
       } else {
-        setStatus({ open: false, label: `Closed now · opens 10:30 AM · all 7 days` });
+        setStatus({ open: false, label: `Closed now · opens 10:00 AM · all 7 days` });
       }
     };
     compute();
@@ -102,6 +103,14 @@ export default function Hero() {
               </div>
             </a>
           ))}
+        </div>
+
+        {/* 3D iPhone — the centrepiece */}
+        <div className="mt-14 hidden sm:block">
+          <Phone3D />
+          <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--orange-deep)]">
+            Built for every iPhone · 11 through 17 Pro Max
+          </p>
         </div>
       </div>
     </section>
