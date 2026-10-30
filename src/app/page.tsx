@@ -25,6 +25,7 @@ import Concierge from "@/components/Concierge";
 import SmartNudge from "@/components/SmartNudge";
 import Gifts from "@/components/Gifts";
 import WhyUs from "@/components/WhyUs";
+import Gallery from "@/components/Gallery";
 import StickyCta from "@/components/StickyCta";
 
 export default function Home() {
@@ -38,6 +39,7 @@ export default function Home() {
         <TrustBar />
       <QuoteSection />
       <PickupSection />
+      <Gallery />
         <Ecosystem />
         <DisplayFocus />
         <TechProcess />
