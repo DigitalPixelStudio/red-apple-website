@@ -15,7 +15,7 @@ export default function StickyCta() {
   }, []);
 
   return (
-    <div className={`fixed bottom-5 left-1/2 z-[60] w-[calc(100vw-2rem)] max-w-[560px] -translate-x-1/2 transition-all duration-500 ${
+    <div className={`fixed bottom-5 left-1/2 z-[60] w-[calc(100vw-2rem)] max-w-[560px] -translate-x-1/2 transition-[transform,box-shadow] duration-300 duration-500 ${
       show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-24 opacity-0"
     }`}>
       <div className="glass flex items-center gap-2 rounded-[var(--cta-radius)] bg-white/85 p-2 shadow-2xl backdrop-blur-2xl">
