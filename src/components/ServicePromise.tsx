@@ -95,7 +95,7 @@ export default function ServicePromise() {
         <Reveal delay={200}>
           <div className="figma-card-lg mt-5 grid gap-6 p-6 sm:grid-cols-3 sm:p-7">
             <div>
-              <div className="footer-head" style={{ color: "var(--cosmic-deep)" }}>
+              <div className="kicker">
                 Bring with you
               </div>
               <ul className="mt-3 space-y-2 text-[13px] text-[var(--text-muted)]">
@@ -105,7 +105,7 @@ export default function ServicePromise() {
               </ul>
             </div>
             <div>
-              <div className="footer-head" style={{ color: "var(--cosmic-deep)" }}>
+              <div className="kicker">
                 Leave at home
               </div>
               <ul className="mt-3 space-y-2 text-[13px] text-[var(--text-muted)]">
@@ -115,7 +115,7 @@ export default function ServicePromise() {
               </ul>
             </div>
             <div>
-              <div className="footer-head" style={{ color: "var(--cosmic-deep)" }}>
+              <div className="kicker">
                 How long it takes
               </div>
               <ul className="mt-3 space-y-2 text-[13px] text-[var(--text-muted)]">
