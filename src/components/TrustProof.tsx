@@ -33,7 +33,7 @@ export default function TrustProof() {
         <div className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CERTS.map((c, i) => (
             <Reveal key={i} delay={i * 60}>
-              <div className="flex h-full gap-4 rounded-[22px] bg-[var(--bg-alt)] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <div className="flex h-full gap-4 rounded-[22px] bg-[var(--bg-alt)] p-6 transition-[transform,box-shadow] duration-300 duration-300 hover:-translate-y-1 hover:shadow-lg">
                 <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 to-[var(--accent2)]/10">
                   <LineIcon name={c.icon} size={22} className="text-[var(--accent)]" />
                 </span>
