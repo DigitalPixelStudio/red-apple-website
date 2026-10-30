@@ -88,7 +88,7 @@ export default function Hero() {
           </a>
           <a
             href="#estimate"
-            className="px-8 py-4 rounded-2xl bg-[var(--bg-alt)] border border-[var(--border)] font-bold text-base text-[var(--text)] hover:border-[var(--orange)]/60 transition-all flex items-center justify-center gap-2.5"
+            className="px-8 py-4 rounded-2xl bg-[var(--bg-alt)] border border-[var(--border)] font-bold text-base text-[var(--text)] hover:border-[var(--orange)]/60 transition-[transform,box-shadow] duration-300 flex items-center justify-center gap-2.5"
           >
             <LineIcon name="zap" size={18} color="var(--orange)" />
             Check Smart Estimate
