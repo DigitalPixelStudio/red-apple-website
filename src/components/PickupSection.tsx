@@ -93,21 +93,21 @@ export function PickupSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition-[transform,box-shadow] duration-300">
+          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition duration-300">
             <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"><LineIcon name="lock" size={22} color="var(--accent)" /></div>
             <h3 className="text-xl font-bold mb-3">Zero Password Policy</h3>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">
               Your data privacy is sacred. Lock your device before handing it over. We repair component-level faults without touching your personal data.
             </p>
           </div>
-          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition-[transform,box-shadow] duration-300">
+          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition duration-300">
             <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"><LineIcon name="whatsapp" size={22} color="var(--accent)" /></div>
             <h3 className="text-xl font-bold mb-3">Live Status on WhatsApp</h3>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">
               Get real-time photo and video updates directly on WhatsApp as our master technicians inspect and repair your Apple device.
             </p>
           </div>
-          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition-[transform,box-shadow] duration-300">
+          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition duration-300">
             <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"><LineIcon name="box" size={22} color="var(--accent)" /></div>
             <h3 className="text-xl font-bold mb-3">Same Address Return</h3>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">
@@ -129,7 +129,7 @@ export function PickupSection() {
                     key={d}
                     type="button"
                     onClick={() => setDevice(d)}
-                    className={`py-2 rounded-xl text-xs font-semibold border transition-[transform,box-shadow] duration-300 ${
+                    className={`py-2 rounded-xl text-xs font-semibold border transition duration-300 ${
                       device === d
                         ? "bg-[var(--accent)] text-white border-[var(--accent)]"
                         : "bg-[var(--bg-alt)] text-[var(--text)] border-[var(--border)] hover:border-[var(--accent)]/50"
@@ -207,7 +207,7 @@ export function PickupSection() {
 
             <button
               onClick={handleBook}
-              className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold text-sm hover:opacity-90 transition-[transform,box-shadow] duration-300 shadow-lg shadow-[var(--accent)]/20 mt-2"
+              className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold text-sm hover:opacity-90 transition duration-300 shadow-lg shadow-[var(--accent)]/20 mt-2"
             >
               Book Pickup via WhatsApp 
             </button>
