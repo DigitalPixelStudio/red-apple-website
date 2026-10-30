@@ -23,6 +23,7 @@ import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import Concierge from "@/components/Concierge";
 import SmartNudge from "@/components/SmartNudge";
+import Gifts from "@/components/Gifts";
 import StickyCta from "@/components/StickyCta";
 
 export default function Home() {
@@ -55,6 +56,7 @@ export default function Home() {
       <Footer />
       <Concierge />
       <SmartNudge />
+      <Gifts />
       <StickyCta />
     </main>
   );
