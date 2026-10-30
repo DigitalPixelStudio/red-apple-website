@@ -17,7 +17,7 @@ export default function ServicesGrid() {
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
             <Reveal key={s.id} delay={(i % 3) * 80}>
-              <div className={`group relative flex h-full flex-col rounded-[26px] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 ${
+              <div className={`group relative flex h-full flex-col rounded-[26px] overflow-hidden transition-[transform,box-shadow] duration-300 duration-300 hover:-translate-y-1.5 ${
                 s.featured ? "shadow-xl" : ""
               }`}>
                 <div className="relative h-40 overflow-hidden">
@@ -47,7 +47,7 @@ export default function ServicesGrid() {
                     href={wa(`Hi! I need ${s.title}. Please share an estimate.`)}
                     target="_blank" rel="noopener noreferrer"
                     onClick={() => track("whatsapp_click", { source: "services", service: s.title })}
-                    className={`mt-4 inline-flex items-center justify-center gap-1.5 rounded-[var(--cta-radius)] px-5 py-2.5 text-[12.5px] font-bold transition-all press ${
+                    className={`mt-4 inline-flex items-center justify-center gap-1.5 rounded-[var(--cta-radius)] px-5 py-2.5 text-[12.5px] font-bold transition-[transform,box-shadow] duration-300 press ${
                       s.featured ? "bg-white text-[var(--text)] hover:bg-white/90" : "bg-[var(--cta-dark)] text-white hover:opacity-90"
                     }`}
                   >
