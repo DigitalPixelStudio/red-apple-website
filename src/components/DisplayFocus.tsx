@@ -24,7 +24,7 @@ export default function DisplayFocus() {
         <div className="mt-14 grid gap-5 lg:grid-cols-3">
           {REPAIRS.map((r, i) => (
             <Reveal key={r.title} delay={i * 90}>
-              <div className="ring-card relative h-full overflow-hidden rounded-[30px] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.08]">
+              <div className="ring-card relative h-full overflow-hidden rounded-[30px] bg-white shadow-sm transition-[transform,box-shadow] duration-300 duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.08]">
                 <div className="relative h-48 overflow-hidden">
                   <img src={r.img} alt={r.title} className="h-full w-full object-cover" loading="lazy" />
                   <span className="absolute right-3 top-3 rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-3 py-1 text-[10.5px] font-bold uppercase tracking-wide text-white">{r.tag}</span>
