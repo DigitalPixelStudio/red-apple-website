@@ -34,7 +34,7 @@ export const SITE = {
   telegramUrl: "https://t.me/RedAppleMobileRepairStore",
 } as const;
 
-export const baseUrl = "https://red-apple-repair.vercel.app";
+export const baseUrl = "https://redmobilerepair.in";
 
 export const wa = (message: string) =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
