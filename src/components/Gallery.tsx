@@ -87,6 +87,48 @@ const SHOTS: Shot[] = [
     tag: "Store",
     wide: true,
   },
+  {
+    src: "/images/gallery/repair-backglass-crack.jpg",
+    alt: "iPhone back glass shattered before repair",
+    caption: "Back glass shattered — the job we are known for",
+    tag: "Repair",
+    tall: true,
+  },
+  {
+    src: "/images/gallery/repair-battery-genuine.jpg",
+    alt: "Genuine Apple battery fitted, iPhone showing Finish Repair screen",
+    caption: "Genuine Apple battery, confirmed by iOS",
+    tag: "Repair",
+    tall: true,
+  },
+  {
+    src: "/images/gallery/repair-backglass-open.jpg",
+    alt: "iPhone with back glass removed showing the camera module",
+    caption: "Mid-repair: back glass off, camera untouched",
+    tag: "Repair",
+    tall: true,
+  },
+  {
+    src: "/images/gallery/repair-backglass-stack.jpg",
+    alt: "Four iPhone back panels in different states of repair",
+    caption: "Four in a day — every stage visible",
+    tag: "Repair",
+    tall: true,
+  },
+  {
+    src: "/images/gallery/repair-screen-before-after.jpg",
+    alt: "Cracked iPhone screen beside the repaired one",
+    caption: "Screen: before and after",
+    tag: "Repair",
+    wide: true,
+  },
+  {
+    src: "/images/gallery/repair-green-back.jpg",
+    alt: "Green iPhone back glass before and after replacement",
+    caption: "Back glass, green — before and after",
+    tag: "Repair",
+    wide: true,
+  },
 ];
 
 const TAG_COLOR: Record<Shot["tag"], string> = {
