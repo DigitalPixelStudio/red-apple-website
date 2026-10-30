@@ -481,3 +481,192 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     background: none;
   }
 }
+
+/* ============================================================
+   LEGAL PAGES — privacy / terms / refund
+   ============================================================ */
+.legal h2 {
+  margin: 2.2rem 0 0.7rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.legal h2:first-child { margin-top: 0; }
+.legal p,
+.legal li {
+  font-size: 0.96rem;
+  line-height: 1.75;
+  color: #3d3d45;
+}
+.legal p { margin-bottom: 0.9rem; }
+.legal ul { margin: 0 0 1.1rem 1.1rem; list-style: disc; }
+.legal li { margin-bottom: 0.45rem; }
+.legal a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal a:hover { color: var(--text); }
+
+/* ============================================================
+   VISUAL UPGRADE — icons, cards, micro-interactions
+   Colour / opacity / transform only. No layout thrash.
+   ============================================================ */
+
+/* --- icon hover: scale + soft brand ring ------------------- */
+.icon-pop {
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.icon-pop:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 1px rgba(255, 45, 85, 0.35);
+  border-radius: 8px;
+}
+
+/* --- cards lift on hover ----------------------------------- */
+.hover-pop {
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.hover-pop:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.22);
+}
+
+/* --- spotlight card: soft radial follows the cursor -------- */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 45, 85, 0.07),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.spotlight-card:hover::before { opacity: 1; }
+
+/* --- price rows: the "ours" number lifts ------------------- */
+.price-row {
+  transition: transform .18s ease, background-color .18s ease;
+}
+.price-row:hover { transform: translateX(2px); }
+.price-row .price-ours {
+  transition: transform .18s ease, color .18s ease, font-weight .18s ease;
+}
+.price-row:hover .price-ours {
+  transform: translateY(-2px);
+  color: var(--accent);
+}
+
+/* --- process icons draw themselves ------------------------- */
+.draw-on-scroll path,
+.draw-on-scroll line {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawLine 1.6s ease forwards;
+}
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+/* --- section headings: word-rise --------------------------- */
+.head-rise {
+  animation: headRise .55s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes headRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- WhatsApp CTA: slow rotating brand border -------------- */
+.cta-ring {
+  position: relative;
+  isolation: isolate;
+}
+.cta-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--angle, 0deg), #ff2d55, #ff9500, #ff2d55);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: ringSpin 6s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.cta-ring:hover::before { opacity: 1; }
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes ringSpin {
+  to { --angle: 360deg; }
+}
+
+/* --- trust numbers count-up feel --------------------------- */
+.count-up {
+  font-variant-numeric: tabular-nums;
+  transition: color .4s ease;
+}
+
+/* --- assistant nudge card ---------------------------------- */
+.nudge-card {
+  animation: nudgeIn .32s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes nudgeIn {
+  from { opacity: 0; transform: translateY(10px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- dark section for contrast rhythm ---------------------- */
+.dark-band {
+  background: #111114;
+  color: #f5f5f7;
+}
+.dark-band h2,
+.dark-band h3 { color: #ffffff; }
+.dark-band p { color: rgba(245, 245, 247, 0.72); }
+
+/* --- variable font weight breathing on the brand ----------- */
+@supports (font-variation-settings: normal) {
+  .brand-name {
+    font-variation-settings: "wght" 750;
+    animation: brandShift 11s ease-in-out infinite,
+               brandBreathe 4.2s ease-in-out infinite,
+               wghtBreathe 5.5s ease-in-out infinite;
+  }
+  @keyframes wghtBreathe {
+    0%, 100% { font-variation-settings: "wght" 750; }
+    50%      { font-variation-settings: "wght" 850; }
+  }
+}
+
+/* --- respect reduced motion -------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hover-pop,
+  .icon-pop,
+  .price-row,
+  .price-row:hover .price-ours,
+  .cta-ring::before,
+  .nudge-card,
+  .head-rise,
+  .draw-on-scroll path,
+  .draw-on-scroll line {
+    animation: none !important;
+    transform: none !important;
+  }
+}
