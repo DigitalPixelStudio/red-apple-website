@@ -18,7 +18,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }  /* no scroll-behavior:smooth — it fights JS scroll tracking */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
