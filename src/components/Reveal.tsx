@@ -29,7 +29,7 @@ export default function Reveal({ children, className = "", delay = 0, as = "div"
   return (
     <Tag ref={ref} id={id}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
+      className={`transition-[transform,box-shadow] duration-300 duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       } ${className}`}>
       {children}
