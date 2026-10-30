@@ -1,4 +1,5 @@
 "use client";
+import BrandMark from "@/components/BrandMark";
 import Reveal from "./Reveal";
 import { SITE } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -17,7 +18,7 @@ export default function FinalCta() {
       <div className="relative mx-auto max-w-[820px] px-6 text-center lg:px-8">
         <Reveal>
           <div className="mx-auto mb-7 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] shadow-2xl shadow-[var(--accent)]/40">
-            <LineIcon name="apple" size={28} color="#fff" />
+            <BrandMark size={40} />
           </div>
           <h2 className="font-apple text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
             Your Apple device,<br /><span className="gradient-text">fixed right.</span>
