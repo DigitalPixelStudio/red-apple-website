@@ -22,7 +22,7 @@ export default function TechProcess() {
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => (
             <Reveal key={i} delay={i * 80}>
-              <div className="group sweep-shine rounded-[22px] overflow-hidden bg-white border border-black/[0.04] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="group sweep-shine rounded-[22px] overflow-hidden bg-white border border-black/[0.04] hover:shadow-xl transition-[transform,box-shadow] duration-300 duration-300 hover:-translate-y-1">
                 <div className="relative h-44 overflow-hidden">
                   <img src={s.img} alt={s.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
