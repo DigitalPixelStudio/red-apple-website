@@ -54,7 +54,30 @@ function priceAnswer(text: string): string | null {
 /* Typed input is matched through this synonym table, so "display kharab hai"
    or "kitna paisa lagega" resolve to the right topic instead of falling back to
    the menu. Order matters: the first hit wins. */
+/* Triggered ONLY by a direct question about who built this assistant or the
+   site. It never volunteers the studio or the number — the client's customers
+   are here for a repair, not a sales pitch. */
+const BUILDER_TRIGGERS = [
+  "who made you", "who built you", "who created you", "who developed you",
+  "who designed this", "who built this site", "who made this website",
+  "who built this website", "who is your developer", "kisne banaya",
+  "kisne banai", "who are you built by", "your developer", "your creator",
+  "which company made this", "who coded this",
+];
+
+function builderAnswer(text: string): string | null {
+  const t = text.toLowerCase().replace(/\s+/g, " ");
+  if (!BUILDER_TRIGGERS.some((k) => t.includes(k))) return null;
+  return "I was built by Pixel Forge Studio, the team behind this website. They build sites, CRMs and apps — you can reach them on WhatsApp at 96200 24812. Red Apple's repairs themselves are done by their own technicians, not by Pixel Forge.";
+}
+
 const SYNONYMS: Record<string, string[]> = {
+  about: ["about you", "about the shop", "who are you", "how long have", "experience", "since when", "history", "9 years", "nine years", "trust", "legit", "genuine shop"],
+  store: ["address", "where are you", "location", "kahan", "shop", "store", "directions", "map", "reach", "metro", "halasuru", "mg road"],
+  timing: ["how long", "how much time", "duration", "kitna time", "wait", "same day", "turnaround", "how many days"],
+  payment: ["payment", "pay", "upi", "card", "cash", "advance", "paise kaise", "how to pay", "refund"],
+  quality: ["quality", "original", "genuine", "oem", "fake", "duplicate", "test", "check", "passcode", "data safe", "private"],
+  booking: ["book", "booking", "appointment", "slot", "walk in", "walk-in", "reserve", "time book"],
   screen: ["screen", "display", "glass", "crack", "cracked", "toot", "toota", "tooti", "tuta", "tuti", "fut", "touch", "lcd", "oled", "dead pixel", "lines"],
   backglass: ["back glass", "backglass", "rear", "back panel", "back cover"],
   battery: ["battery", "batter", "charge", "charging", "drain", "draining", "heating", "hot", "battery health", "swell", "swollen"],
@@ -67,7 +90,8 @@ const SYNONYMS: Record<string, string[]> = {
   airpods: ["airpod", "airpods", "earbud", "earphone", "pods"],
   macbook: ["macbook", "mac book", "laptop", "imac", "mac mini", "mac studio", "mac"],
   estimate: ["price", "pricing", "cost", "quote", "estimate", "how much", "kitna", "kitne", "paisa", "rate", "charges", "paise"],
-  location: ["location", "address", "where", "shop", "store", "directions", "kahan", "kaha", "map", "reach"],
+  /* superseded by the richer `store` topic — kept empty so scoring never splits */
+  location: [],
   pickup: ["pickup", "pick up", "doorstep", "home", "collect", "drop", "delivery"],
   warranty: ["warranty", "guarantee", "guaranty", "warrenty"],
   human: ["human", "person", "technician", "talk", "call", "speak", "agent", "staff", "baat", "insaan"],
@@ -92,6 +116,36 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
     reply:
       "Hi, I'm Pixel Ai — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
     chips: ["iPhone screen", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
+  },
+  about: {
+    reply:
+      "Red Apple Mobile Repair has been on Mahatma Gandhi Road, Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10:00 AM to 12:00 AM, all seven days. Rating is 4.9 from 905 Google reviews.",
+    chips: ["Price list", "Visit the store", "Talk to a technician"],
+  },
+  store: {
+    reply:
+      "We are at No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro, Metro Pillar 125. The workshop has glass walls so you can watch your repair. Open 10:00 AM – 12:00 AM, every day. Walk-ins welcome, no appointment needed.",
+    chips: ["Open in Maps", "Book doorstep pickup", "Talk to a technician"],
+  },
+  timing: {
+    reply:
+      "Display, back glass and battery are done in about 45–60 minutes while you wait. Charging port and camera take about an hour. Board-level and water damage need 2–3 days because of the cleaning and curing. iPad screens are 1–3 days depending on the model.",
+    chips: ["Price list", "Book doorstep pickup", "Talk to a technician"],
+  },
+  payment: {
+    reply:
+      "You pay after the diagnosis and the fixed quote — never before. UPI, cards and cash all work. There is no advance and no hidden charge; the number we quote is the number you pay. If the repair turns out to be impossible, you owe nothing.",
+    chips: ["Price list", "Visit the store", "Talk to a technician"],
+  },
+  quality: {
+    reply:
+      "Every device goes through 32 checkpoints before hand-back — touch across the whole panel, True Tone, Face ID, front and rear cameras, all sensors, charging, speakers, and a thermal check. We do not ask for your passcode and we never wipe a device without written permission.",
+    chips: ["Warranty details", "Price list", "Talk to a technician"],
+  },
+  booking: {
+    reply:
+      "Two ways. Walk in any time between 10:00 AM and 12:00 AM — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999.",
+    chips: ["Book doorstep pickup", "Visit the store", "Talk to a technician"],
   },
   device: {
     reply:
@@ -209,6 +263,16 @@ export default function Concierge() {
     // synonym pass wins over the raw substring pass — it understands Hinglish
     const syn = resolve(text);
     if (syn && MENU[syn]) resolved = syn;
+
+    // "who built you" — answered only when asked, never volunteered
+    const built = builderAnswer(text);
+    if (built) {
+      setTimeout(() => {
+        setMsgs((m) => [...m, { from: "bot", text: built, chips: [] }]);
+        setTyping(false);
+      }, 550);
+      return;
+    }
 
     // a concrete price question gets a concrete answer before anything else
     const priced = priceAnswer(text);
