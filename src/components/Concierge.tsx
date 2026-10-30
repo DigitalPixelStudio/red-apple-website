@@ -43,24 +43,96 @@ function resolve(text: string): string | null {
 
 
 const MENU: Record<string, { reply: string; chips: string[] }> = {
-  start: { reply: "Hi! I'm RedMobile F Ai, the Red Apple repair assistant. I can help you find the right repair, prepare your visit and connect you with our technicians instantly. What do you need?", chips: ["Device & repair", "Estimate", "Location & timings", "Pickup & drop", "Warranty", "Talk to a human"] },
-  "device": { reply: "We repair the full Apple family: iPhone (all models), iPad, iPod touch, Apple Watch, AirPods, MacBook Pro/Air, Mac mini, iMac and Mac Studio — plus Apple accessories. Which device do you have?", chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook / Mac", "Talk to a human"] },
-  "iphone": { reply: "iPhone is our specialty — especially display and back glass replacement on Pro & Pro Max models. We also fix batteries, cameras, charging ports, water damage, motherboards and software. What's the issue?", chips: ["Screen / display", "Back glass", "Battery", "Camera", "Water damage", "Data recovery", "Talk to a human"] },
-  "screen": { reply: "Cracked display? We replace front displays on every iPhone with OEM-grade OLED panels — True Tone preserved, ~45 minutes, 90-day warranty. Tap below to get your exact model's estimate on WhatsApp.", chips: ["Get display estimate", "Visit store", "Talk to a human"] },
-  "backglass": { reply: "Back glass is our flagship service. Laser-aligned, MagSafe-compatible, seamless finish — especially popular for iPhone Pro & Pro Max. Get a quote in 2 taps.", chips: ["Get back glass estimate", "Visit store", "Talk to a human"] },
-  "battery": { reply: "Battery replacement takes ~30 minutes with a free health report before & after. Every battery carries a 6-month health guarantee. Want a quote?", chips: ["Battery estimate", "Visit store", "Talk to a human"] },
-  "camera": { reply: "We repair front & rear cameras, OIS, zoom and lenses with OEM modules, plus calibration after install. Usually ~60 minutes.", chips: ["Camera estimate", "Talk to a human"] },
-  "water": { reply: "Water damage is time-critical — don't charge the device, bring it in fast or use our free pickup. We do ultrasonic cleaning and chip-level corrosion treatment with the best success rate in the city.", chips: ["Emergency WhatsApp", "Book pickup", "Visit store"] },
-  "data": { reply: "We recover photos, chats, contacts and files from damaged or locked devices — logical and board-level recovery. Data is never wiped without your permission.", chips: ["Data recovery quote", "Talk to a human"] },
-  "ipad": { reply: "iPad repairs: displays, batteries, charging, cameras and logic boards across iPad, Pro, Air and mini. Which issue would you like to check?", chips: ["Screen", "Battery", "Estimate", "Talk to a human"] },
-  "watch": { reply: "Apple Watch repairs: screens, batteries, sensors, speakers and straps across all Series and Ultra models.", chips: ["Watch estimate", "Talk to a human"] },
-  "airpods": { reply: "AirPods services: battery replacement, charging case repair, speaker and microphone fixes for all generations, including Pro and Max.", chips: ["AirPods estimate", "Talk to a human"] },
-  "macbook": { reply: "MacBook Pro, Air, Mac mini, iMac & Studio — displays, keyboards, batteries, storage, thermal and logic-board repairs by Apple-trained techs.", chips: ["Mac estimate", "Talk to a human"] },
-  "estimate": { reply: "Exact prices depend on your model and the part needed — we never guess on estimates. Tell us your device + model and we'll send you a precise quote on WhatsApp within minutes.", chips: ["iPhone screen quote", "Mac quote", "Watch quote", "AirPods quote", "Talk to a human"] },
-  "location": { reply: `${SITE.address}. Open ${SITE.hours}. Just 1 minute from Halasuru Metro — walk-ins welcome all day.`, chips: ["Open in Google Maps", "Call store", "Pickup & drop"] },
-  "pickup": { reply: "Free doorstep pickup & drop across Bengaluru for eligible repairs. Share your area on WhatsApp and we'll arrange it the same day.", chips: ["Book pickup", "Talk to a human"] },
-  "warranty": { reply: "Every repair includes a 90-day service warranty. Displays and batteries also carry a 6-month health guarantee. We stand behind every fix.", chips: ["Talk to a human"] },
-  "human": { reply: "Absolutely — our senior technicians are one tap away on WhatsApp. Tell them what happened and they'll take over from here.", chips: [] },
+  start: {
+    reply:
+      "Hi, I'm RedMobile F Ai — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
+    chips: ["iPhone screen", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
+  },
+  device: {
+    reply:
+      "We cover the whole Apple family — iPhone (all models through 17 Pro Max), iPad, Apple Watch, AirPods, MacBook Pro/Air, Mac mini, iMac and Mac Studio. Display, battery, back glass, camera, charging port, water damage, logic board and data recovery. Which one is yours?",
+    chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Talk to a technician"],
+  },
+  iphone: {
+    reply:
+      "iPhone is 80% of what we do. Display from ₹2,499, battery from ₹1,899, back glass from ₹1,999, charging port from ₹1,499 — the exact figure depends on your model. Most repairs are done in 30–45 minutes while you wait.",
+    chips: ["Screen price", "Battery price", "Back glass price", "Water damage", "Talk to a technician"],
+  },
+  screen: {
+    reply:
+      "Display replacement: OEM-grade OLED, True Tone preserved, roughly 45 minutes. Price runs ₹2,499 for older models up to ₹24,635 for an iPhone 16 Pro Max. Tell me your model and I'll give you the exact figure — or a technician can on WhatsApp.",
+    chips: ["iPhone 16 Pro Max", "iPhone 15", "iPhone 14", "iPhone 13", "Talk to a technician"],
+  },
+  backglass: {
+    reply:
+      "Back glass is our signature job — laser-aligned, MagSafe still works, no camera damage. From ₹1,999, about 60 minutes. It's the repair other shops in Bengaluru send to us.",
+    chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
+  },
+  battery: {
+    reply:
+      "Battery from ₹1,899, about 30 minutes, with a free health report before and after. Every battery carries a 6-month health guarantee on top of the 90-day service warranty.",
+    chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
+  },
+  camera: {
+    reply:
+      "Front or rear camera, including OIS and zoom modules, with calibration after fitting. Usually 60 minutes. From ₹2,299 depending on the model.",
+    chips: ["Get exact price", "Talk to a technician"],
+  },
+  water: {
+    reply:
+      "Water damage is time-critical. Don't charge it and don't try to dry it with heat — bring it in or book a pickup now. We do ultrasonic cleaning plus chip-level corrosion treatment, and we'll tell you honestly if it's recoverable before you pay.",
+    chips: ["Book pickup now", "Call the store", "Talk to a technician"],
+  },
+  data: {
+    reply:
+      "We recover photos, chats and contacts from damaged or dead devices — logical and board-level. Your data is never wiped without written permission from you. Assessment is free; recovery starts at ₹2,999.",
+    chips: ["Get a quote", "Talk to a technician"],
+  },
+  ipad: {
+    reply:
+      "iPad display, battery, charging port, camera and logic board — across iPad, Pro, Air and mini. Displays typically 1–2 hours because of the adhesive cure. From ₹3,499.",
+    chips: ["Get exact price", "Talk to a technician"],
+  },
+  watch: {
+    reply:
+      "Apple Watch screens, batteries, sensors and speakers across every Series and Ultra. Most are same-day. From ₹2,999.",
+    chips: ["Get exact price", "Talk to a technician"],
+  },
+  airpods: {
+    reply:
+      "AirPods battery replacement, charging-case repair, speaker and mic fixes for all generations including Pro and Max. Usually same-day. From ₹1,499.",
+    chips: ["Get exact price", "Talk to a technician"],
+  },
+  macbook: {
+    reply:
+      "MacBook Pro and Air, Mac mini, iMac and Studio — display, keyboard, battery, storage, thermal and logic-board work by Apple-trained technicians. Diagnosis is free; most board-level repairs are 2–3 days.",
+    chips: ["Get exact price", "Talk to a technician"],
+  },
+  estimate: {
+    reply:
+      "I won't guess at a price — that's how people get surprised later. Send your exact model and the fault, and you'll have a fixed figure in minutes. iPhone screen runs ₹2,499–₹24,635; battery ₹1,899–₹6,499; back glass from ₹1,999.",
+    chips: ["Send my model", "Talk to a technician"],
+  },
+  location: {
+    reply:
+      "No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro. Open 10:00 AM to 12:00 AM, all seven days. Walk-ins welcome, no appointment needed.",
+    chips: ["Open in Maps", "Call the store", "Book doorstep pickup"],
+  },
+  pickup: {
+    reply:
+      "Doorstep pickup runs 24/7 across Bengaluru — any hour, any day. A rider collects the device, we repair it, and it comes back tested. Free for repairs above ₹2,999. Book it and you'll get a WhatsApp confirmation with the rider's details.",
+    chips: ["Book pickup", "Talk to a technician"],
+  },
+  warranty: {
+    reply:
+      "90 days on every repair. Battery and display also carry a 6-month health guarantee — if battery health drops below 80% or the panel develops a non-impact fault, we replace it once free. Damage from a new drop or liquid isn't covered.",
+    chips: ["Read the full policy", "Talk to a technician"],
+  },
+  human: {
+    reply:
+      "Connecting you to a technician on WhatsApp now. They can see your chat history with me, so you won't have to repeat anything.",
+    chips: [],
+  },
 };
 
 export default function Concierge() {
@@ -122,6 +194,10 @@ export default function Concierge() {
     }
     if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
     if (chip.includes("Call")) { window.open(SITE.phoneHref, "_self"); track("call_click", { source: "concierge" }); return; }
+    if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
+    if (chip.includes("policy")) { window.open("/refund-policy", "_blank", "noopener,noreferrer"); setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opened our Refund & Warranty Policy in a new tab.", chips: [] }]); return; }
+    const modelMatch = chip.match(/iPhone\s+\d+[^,]*/i);
+    if (modelMatch) { send(`screen price for ${modelMatch[0]}`); return; }
     send(chip.replace(/^[^\w]+/, "").trim());
   };
 
