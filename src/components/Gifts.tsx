@@ -136,12 +136,12 @@ export default function Gifts() {
             className="group flex items-center gap-2.5"
           >
             <span
-              className={`h-[2px] rounded-full transition-all duration-300 ${
+              className={`h-[2px] rounded-full transition-[transform,box-shadow] duration-300 duration-300 ${
                 active === s.id ? "w-7 bg-[var(--orange)]" : "w-3.5 bg-black/15 group-hover:w-5 group-hover:bg-[var(--orange)]/60"
               }`}
             />
             <span
-              className={`text-[10.5px] font-bold uppercase tracking-[0.14em] transition-all duration-300 ${
+              className={`text-[10.5px] font-bold uppercase tracking-[0.14em] transition-[transform,box-shadow] duration-300 duration-300 ${
                 active === s.id ? "text-[var(--orange-deep)] opacity-100" : "text-[var(--text-muted)] opacity-0 group-hover:opacity-100"
               }`}
             >
