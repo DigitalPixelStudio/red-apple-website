@@ -7,6 +7,11 @@
   --text-muted: #86868b;
   --text-light: #6e6e73;
   --accent: #ff2d55;
+  /* iPhone 17 Pro Max "Cosmic Orange" family */
+  --orange: #ff6b00;
+  --orange-deep: #e85d04;
+  --orange-light: #ff8a1f;
+  --orange-glow: rgba(255, 107, 0, 0.28);
   --accent2: #ff9500;
   --green: #30d158;
   --border: rgba(0, 0, 0, 0.08);
@@ -669,4 +674,54 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     animation: none !important;
     transform: none !important;
   }
+}
+
+/* ============================================================
+   COSMIC ORANGE — iPhone 17 Pro Max inspired
+   ============================================================ */
+
+/* "mastered." in the hero headline */
+.hero-mastered {
+  background: linear-gradient(
+    100deg,
+    #ff8a1f 0%,
+    #ff6b00 32%,
+    #e85d04 62%,
+    #ff8a1f 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: masteredShift 9s ease-in-out infinite;
+  will-change: background-position;
+}
+@keyframes masteredShift {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+/* primary WhatsApp CTA */
+.cta-orange {
+  position: relative;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff8a1f 0%, #ff6b00 45%, #e85d04 100%);
+  box-shadow:
+    0 10px 30px -10px var(--orange-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.cta-orange:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow:
+    0 16px 40px -12px var(--orange-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+.cta-orange:active { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mastered { animation: none; }
+  .cta-orange { transition: none; }
 }
