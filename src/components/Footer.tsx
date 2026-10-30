@@ -99,7 +99,25 @@ export default function Footer() {
             <div className="text-[11px]">Apple is a trademark of Apple Inc. We are an independent repair service — not affiliated with Apple Inc.</div>
           </div>
           <div className="mt-4 text-center text-[11px] text-white/25">
-            Built with care by <span className="font-semibold text-white/40">Pixel Forge</span> &mdash; DigitalPixelStudio
+            Built with care by{" "}
+            <a
+              href="https://wa.me/919620024812?text=Hi%20Pixel%20Forge%20Studio%2C%20I%27d%20like%20a%20website%20like%20this%20one."
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("whatsapp_click", { location: "footer_credit" })}
+              className="font-semibold text-white/55 hover:text-[var(--cosmic-hi)]"
+            >
+              Pixel Forge Studio
+            </a>
+            {" "}&middot;{" "}
+            <a
+              href="https://wa.me/919620024812?text=Hi%20Pixel%20Forge%20Studio%2C%20I%27d%20like%20a%20website%20like%20this%20one."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-white/55 hover:text-[var(--cosmic-hi)]"
+            >
+              +91 96200 24812
+            </a>
           </div>
         </div>
       </div>
