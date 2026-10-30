@@ -29,7 +29,7 @@ export default function Ecosystem() {
               <a
                 href={d.id === "software" ? "#software" : "#quote"}
                 onClick={() => track("service_view", { service: d.name })}
-                className="group block h-full rounded-[26px] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
+                className="spotlight-card group block h-full rounded-[26px] overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
               >
                 <div className="relative h-44 overflow-hidden">
                   <img src={d.img} alt={d.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
