@@ -300,7 +300,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   0%, 100% { transform: scale(1); opacity: 1; }
   50%      { transform: scale(1.03); opacity: 0.94; }
 }
-}
 .animate-brand-breathe { animation: brand-breathe 3.8s ease-in-out infinite; display: inline-block; will-change: transform, opacity; }
 
 /* ---------- 120fps smooth motion helpers ---------- */
