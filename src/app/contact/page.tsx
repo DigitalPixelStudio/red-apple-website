@@ -18,7 +18,7 @@ export default function ContactPage() {
     if (name.trim().length < 2 || phone.trim().length < 10 || msg.trim().length < 5) return;
     track("lead_created", { source: "contact_page" });
     window.open(
-      wa(`📋 *New Contact Enquiry*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n💬 Message: ${msg}`),
+      wa(`*New Contact Enquiry*\n\nName: ${name}\nPhone: ${phone}\nMessage: ${msg}`),
       "_blank", "noopener,noreferrer"
     );
   };
@@ -52,10 +52,10 @@ export default function ContactPage() {
 
             <div className="flex flex-col gap-4">
               {[
-                { icon: "📞", t: "Call us", v: SITE.phone, href: SITE.phoneHref },
-                { icon: "💬", t: "WhatsApp", v: "Chat with a technician", href: wa("Hi Red Apple Mobile Repair! 🍎") },
-                { icon: "📍", t: "Address", v: SITE.address, href: SITE.mapsUrl },
-                { icon: "🕙", t: "Hours", v: SITE.hours, href: undefined },
+                { icon: "", t: "Call us", v: SITE.phone, href: SITE.phoneHref },
+                { icon: "", t: "WhatsApp", v: "Chat with a technician", href: wa("Hi Red Apple Mobile Repair! ") },
+                { icon: "", t: "Address", v: SITE.address, href: SITE.mapsUrl },
+                { icon: "", t: "Hours", v: SITE.hours, href: undefined },
               ].map((c) => (
                 <a key={c.t} href={c.href} target={c.href?.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer"
                   onClick={() => c.href?.includes("wa.me") ? track("whatsapp_click", { source: "contact" }) : c.href?.startsWith("tel") ? track("call_click", { source: "contact" }) : undefined}
