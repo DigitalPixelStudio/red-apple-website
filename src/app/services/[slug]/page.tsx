@@ -55,13 +55,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <h1 className="section-title font-apple mt-3 text-[#1d1d1f]">{page.title}</h1>
           <p className="section-subtitle mx-auto mt-5">{page.desc}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
-            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">⭐ 4.9 Google rated</span>
-            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">🛡️ 90-day warranty</span>
-            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">🚗 Free pickup &amp; drop</span>
+            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">4.9 Google rated</span>
+            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">️ 90-day warranty</span>
+            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">Free pickup &amp; drop</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href="#estimate" className="cta-primary">🧮 Get Estimate</a>
-            <Link href="/repair-status" className="cta-outline">🔍 Track Repair</Link>
+            <a href="#estimate" className="cta-primary">Get Estimate</a>
+            <Link href="/repair-status" className="cta-outline">Track Repair</Link>
           </div>
         </div>
       </section>
@@ -92,8 +92,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             <h3 className="font-apple text-[20px] font-bold">Not sure what&rsquo;s wrong?</h3>
             <p className="mx-auto mt-2 max-w-[440px] text-[13px] text-white/60">Bring it in for a free diagnosis — or WhatsApp us a photo and we&rsquo;ll take a look.</p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href={wa(`Hi! I need help with ${page.title}. 🍎`)} target="_blank" rel="noopener noreferrer" className="cta-primary">💬 WhatsApp Diagnosis</a>
-              <a href={SITE.mapsUrl} target="_blank" rel="noopener noreferrer" className="cta-outline !text-white" style={{ borderColor: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.08)" }}>📍 Visit Store</a>
+              <a href={wa(`Hi! I need help with ${page.title}. `)} target="_blank" rel="noopener noreferrer" className="cta-primary">WhatsApp Diagnosis</a>
+              <a href={SITE.mapsUrl} target="_blank" rel="noopener noreferrer" className="cta-outline !text-white" style={{ borderColor: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.08)" }}>Visit Store</a>
             </div>
           </div>
         </div>
