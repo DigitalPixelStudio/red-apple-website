@@ -171,7 +171,7 @@ export default function SmartNudge() {
     <div
       role="status"
       aria-live="polite"
-      className={`fixed bottom-24 left-4 z-40 w-[min(320px,calc(100vw-2rem))] transition-all duration-200 sm:bottom-6 sm:left-6 ${
+      className={`fixed bottom-24 left-4 z-40 w-[min(320px,calc(100vw-2rem))] transition-[transform,box-shadow] duration-300 duration-200 sm:bottom-6 sm:left-6 ${
         leaving ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"
       }`}
     >
