@@ -28,7 +28,7 @@ export default function ConciergeLaunch() {
           <div className="grid w-full max-w-[560px] gap-4">
             {CAPS.map((c, i) => (
               <Reveal key={c.title} delay={i * 80}>
-                <div className="flex items-center gap-4 rounded-[22px] bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
+                <div className="flex items-center gap-4 rounded-[22px] bg-white p-5 shadow-sm transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 to-[var(--accent2)]/10">
                     <LineIcon name={c.icon} size={22} className="text-[var(--accent)]" />
                   </span>
