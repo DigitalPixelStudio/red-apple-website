@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { z } from "zod";
 import { QUOTE_DEVICES, REPAIR_TYPES, wa } from "@/lib/site";
-import { getPrice, inr, TURNAROUND, priceNote } from "@/lib/pricing";
+import { getPrice, priceLabel, TURNAROUND, priceNote } from "@/lib/pricing";
 import { track } from "@/lib/analytics";
 import { LineIcon } from "./Icons";
 
@@ -207,7 +207,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
                       }`}>
                       <span>{r}</span>
                       <span className={`shrink-0 text-[12px] font-extrabold ${price ? "text-[var(--orange-deep)]" : "text-[var(--text-muted)]"}`}>
-                        {price ? inr(price) : "Quote"}
+                        {price ? priceLabel(price) : "Quote"}
                       </span>
                     </button>
                   );
@@ -235,7 +235,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
                       {(() => { const pr = getPrice(model, repair); return pr ? "Your estimate" : "Exact quote"; })()}
                     </div>
                     <div className="font-apple text-[26px] font-extrabold leading-tight text-[var(--orange-deep)]">
-                      {(() => { const pr = getPrice(model, repair); return pr ? inr(pr) : "On WhatsApp"; })()}
+                      {(() => { const pr = getPrice(model, repair); return pr ? priceLabel(pr) : "On WhatsApp"; })()}
                     </div>
                   </div>
                   <div className="text-right text-[11px] text-[var(--text-muted)]">
