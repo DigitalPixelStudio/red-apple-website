@@ -202,7 +202,7 @@ export const REPAIR_STATUS_FLOW = [
 
 // ---------- Trust signals ----------
 export const STATS = [
-  { value: "4.9★", label: "Google Rating", sub: "905+ reviews", icon: "star" },
+  { value: "4.9", label: "Google Rating", sub: "905+ reviews", icon: "star" },
   { value: "9+ yrs", label: "Apple Specialists", sub: "Halasuru, Bengaluru", icon: "experience" },
   { value: "30 min", label: "Avg. repair time", sub: "Most repairs", icon: "clock" },
   { value: "90 days", label: "Warranty", sub: "On every repair", icon: "shield" },
