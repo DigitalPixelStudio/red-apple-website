@@ -30,7 +30,7 @@ import StickyCta from "@/components/StickyCta";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-white">
+    <main id="top" className="relative min-h-screen bg-white">
       <ScrollProgress />
       <Navbar />
       <DynamicIsland />
