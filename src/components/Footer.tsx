@@ -15,14 +15,15 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#161617] text-white">
+    <footer className="site-footer text-white">
+      <div className="footer-topline" />
       <div className="mx-auto max-w-[1200px] px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-[var(--cta-dark)] shadow-lg animate-float">
-                <BrandMark size={28} />
+              <span className="grid h-12 w-12 place-items-center rounded-xl bg-white shadow-lg animate-float">
+                <BrandMark size={34} />
               </span>
               <div>
                 <div className="font-apple text-[18px] font-extrabold tracking-tight animate-brand-breathe">Red Apple</div>
@@ -34,7 +35,7 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/40">Services</div>
+            <div className="footer-head">Services</div>
             <ul className="mt-5 space-y-2.5">
               {SERVICE_PAGES.slice(0, 7).map((s) => (
                 <li key={s.slug}>
@@ -46,7 +47,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/40">Company</div>
+            <div className="footer-head">Company</div>
             <ul className="mt-5 space-y-2.5">
               <li><Link href="/quote" className="text-[13px] text-white/60 hover:text-white">Get a Quote</Link></li>
               <li><Link href="/repair-status" className="text-[13px] text-white/60 hover:text-white">Repair Status</Link></li>
@@ -59,7 +60,7 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/40">Legal</div>
+            <div className="footer-head">Legal</div>
             <ul className="mt-5 space-y-2.5">
               <li><Link href="/privacy" className="text-[13px] text-white/60 hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/terms" className="text-[13px] text-white/60 hover:text-white">Terms of Service</Link></li>
@@ -69,7 +70,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/40">Contact</div>
+            <div className="footer-head">Contact</div>
             <ul className="mt-5 space-y-3 text-[13px] text-white/60">
               <li className="flex items-start gap-2"><LineIcon name="pin" size={14} className="mt-0.5 shrink-0" /> {SITE.address}</li>
               <li className="flex items-center gap-2"><LineIcon name="clock" size={14} className="shrink-0" /> {SITE.hours}</li>
@@ -79,13 +80,13 @@ export default function Footer() {
             <div className="mt-5 flex flex-wrap gap-2">
               {SOCIALS.map((s) => (
                 <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label}
-                  className="grid h-10 w-10 place-items-center rounded-full bg-white/[0.08] transition-all hover:-translate-y-0.5 hover:bg-white/20">
+                  className="footer-chip h-10 w-10 text-white/75">
                   <LineIcon name={s.icon} size={18} />
                 </a>
               ))}
               {/* JustDial icon */}
               <a href={SITE.justdialUrl || "#"} target="_blank" rel="noopener noreferrer" title="JustDial"
-                className="grid h-10 w-10 place-items-center rounded-full bg-white/[0.08] transition-all hover:-translate-y-0.5 hover:bg-white/20">
+                className="footer-chip h-10 w-10 text-white/75">
                 <span className="text-[10px] font-bold text-white">JD</span>
               </a>
             </div>
