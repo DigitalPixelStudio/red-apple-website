@@ -55,10 +55,10 @@ export function PickupSection() {
     track("pickup_request", { device, pincode, area: area.area });
 
     const message = encodeURIComponent(
-      `🚚 *New Doorstep Pickup Request*\n\n` +
-      `📱 *Device:* ${device}\n` +
-      `📍 *Address:* ${flat ? flat + ", " : ""}${building ? building + ", " : ""}${address}\n` +
-      `📌 *Area/City:* ${area.area}, ${area.city} - ${pincode}\n\n` +
+      `*New Doorstep Pickup Request*\n\n` +
+      `*Device:* ${device}\n` +
+      `*Address:* ${flat ? flat + ", " : ""}${building ? building + ", " : ""}${address}\n` +
+      `*Area/City:* ${area.area}, ${area.city} - ${pincode}\n\n` +
       `Please confirm pickup schedule and send a technician/rider.`
     );
 
@@ -80,21 +80,21 @@ export function PickupSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6">🛡️</div>
+            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6">️</div>
             <h3 className="text-xl font-bold mb-3">Zero Password Policy</h3>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">
               Your data privacy is sacred. Lock your device before handing it over. We repair component-level faults without touching your personal data.
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6">💬</div>
+            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"></div>
             <h3 className="text-xl font-bold mb-3">Live Status on WhatsApp</h3>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">
               Get real-time photo and video updates directly on WhatsApp as our master technicians inspect and repair your Apple device.
             </p>
           </div>
           <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6">🚚</div>
+            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"></div>
             <h3 className="text-xl font-bold mb-3">Same Address Return</h3>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed">
               Once repaired and rigorously tested across 32 quality checkpoints, your device is securely handed back to you at your doorstep.
@@ -187,7 +187,7 @@ export function PickupSection() {
             {error && <p className="text-xs text-red-500 text-center font-medium">{error}</p>}
             {area && (
               <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-600 text-xs text-center font-medium">
-                ✅ Service verified in <span className="font-bold">{area.area}</span>, {area.city}.
+                Service verified in <span className="font-bold">{area.area}</span>, {area.city}.
               </div>
             )}
 
@@ -195,7 +195,7 @@ export function PickupSection() {
               onClick={handleBook}
               className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[var(--accent)]/20 mt-2"
             >
-              Book Pickup via WhatsApp 🚀
+              Book Pickup via WhatsApp 
             </button>
           </div>
         </div>
