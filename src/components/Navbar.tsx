@@ -52,18 +52,24 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 will-change-transform ${
+      className={`site-header fixed inset-x-0 top-0 z-50 transition-transform duration-300 will-change-transform ${
         hidden ? "-translate-y-full" : "translate-y-0"
-      } ${scrolled ? "bg-white/95 border-b border-black/[0.06] shadow-sm" : "bg-white/80"}`}
+      } ${scrolled ? "is-scrolled" : ""}`}
     >
       <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
         <a href="#top" className="group flex items-center gap-2.5" aria-label="Red Apple Mobile Repair Store home">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--cta-dark)] shadow-lg transition-transform group-hover:scale-105">
-            <LineIcon name="apple" size={20} color="#fff" />
-          </span>
+          <img
+            src="/logo.png"
+            alt="Red Apple Mobile Repair Store"
+            width={44}
+            height={44}
+            className="h-11 w-11 shrink-0 rounded-[10px] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            loading="eager"
+            decoding="async"
+          />
           <span className="leading-tight">
-            <span className="block font-apple text-[16px] font-extrabold tracking-tight text-[var(--text)] animate-brand-breathe">Red Apple</span>
-            <span className="block text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--accent)]">Mobile Repair Store</span>
+            <span className="brand-name block font-apple text-[17px] font-extrabold tracking-tight">Red Apple</span>
+            <span className="brand-sub block text-[11px] font-extrabold uppercase tracking-[0.2em]">Mobile Repair Store</span>
           </span>
         </a>
 
