@@ -742,7 +742,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .phone-float {
   width: 100%;
   height: 100%;
-  animation: phoneFloat 7s ease-in-out infinite;
+  animation: phoneFloat 8.5s ease-in-out infinite;
   transform-style: preserve-3d;
 }
 @keyframes phoneFloat {
@@ -755,19 +755,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  animation: phoneSpin 22s linear infinite;
+  /* full 360° turn, 13s per revolution — medium fast, linear so it never
+     visibly eases in and out. translateZ keeps it off the compositor seam. */
+  animation: phoneSpin 13s linear infinite;
+  will-change: transform;
 }
 @keyframes phoneSpin {
-  0%   { transform: rotateY(-24deg) rotateX(6deg); }
-  50%  { transform: rotateY( 24deg) rotateX(6deg); }
-  100% { transform: rotateY(-24deg) rotateX(6deg); }
+  from { transform: rotateY(0deg)   rotateX(5deg) translateZ(0); }
+  to   { transform: rotateY(360deg) rotateX(5deg) translateZ(0); }
 }
 
 .phone-face {
   position: absolute;
   inset: 0;
   border-radius: 38px;
-  backface-visibility: hidden;
+  backface-visibility: visible;
   overflow: hidden;
 }
 
