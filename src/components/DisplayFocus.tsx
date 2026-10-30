@@ -17,7 +17,7 @@ export default function DisplayFocus() {
       <div className="relative mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Where we excel</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">iPhone display &amp; back glass <span className="gradient-text">specialists.</span></h2>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">iPhone display &amp; back glass <span className="gradient-text">specialists.</span></h2>
           <p className="section-subtitle mx-auto mt-5">Cracked glass is our daily bread. Every iPhone — from 6 to 16 Pro Max — restored to like-new with precision tools and genuine-grade panels.</p>
         </Reveal>
 
