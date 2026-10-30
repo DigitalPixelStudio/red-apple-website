@@ -23,19 +23,36 @@ export default function Navbar() {
   useEffect(() => {
     let lastY = window.scrollY;
     let ticking = false;
+    /* Jitter fix: the header used to flip at the exact pixel where the scroll
+       direction changed, so a trackpad's micro-bounce made it flicker. These
+       thresholds add hysteresis — it needs a real 8px move up to reappear and
+       140px down to hide, and it never toggles twice inside 180ms. */
+    let lastToggle = 0;
 
     const update = () => {
       ticking = false;
       const y = window.scrollY;
-      // only setState when the VALUE actually changes — prevents a re-render per pixel
+
       setScrolled((prev) => {
         const next = y > 24;
         return prev === next ? prev : next;
       });
+
       setHidden((prev) => {
-        const next = y > 400 && y > lastY && !open;
+        const now = performance.now();
+        const delta = y - lastY;          // + down, - up
+
+        if (open || y < 400) { lastY = y; return prev ? false : prev; }
+        if (Math.abs(delta) < 8) return prev;          // ignore micro-moves
+        if (now - lastToggle < 200) return prev;       // debounce toggles
+
+        let next = prev;
+        if (delta > 0 && y > 520) next = true;         // scrolled well down
+        if (delta < 0) next = false;                   // any real scroll up shows it
+
         lastY = y;
-        return prev === next ? prev : next;
+        if (next !== prev) lastToggle = now;
+        return next;
       });
     };
 
@@ -52,7 +69,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`site-header fixed inset-x-0 top-0 z-50 transition-transform duration-300 will-change-transform ${
+      className={`site-header fixed inset-x-0 top-0 z-50 transition-transform duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] will-change-transform ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${scrolled ? "is-scrolled" : ""}`}
     >
