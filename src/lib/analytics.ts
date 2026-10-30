@@ -39,7 +39,11 @@ type AnalyticsEvent =
   | "ai_chat_started"
   | "lead_created"
   | "repair_status_checked"
-  | "pickup_request";
+  | "pickup_request"
+  | "nudge_shown"
+  | "nudge_quote_click"
+  | "nudge_whatsapp_click"
+  | "lead_captured";
 
 declare global {
   interface Window {
