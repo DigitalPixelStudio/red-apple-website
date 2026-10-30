@@ -17,8 +17,14 @@ export default function SoftwareRecovery() {
   return (
     <section id="software" className="section-apple relative overflow-hidden bg-[var(--bg-alt)]">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-[0%] top-[10%] h-[420px] w-[420px] rounded-full bg-[var(--accent2)]/[0.07] blur-[140px]" />
-        <div className="absolute bottom-[5%] left-[0%] h-[380px] w-[380px] rounded-full bg-[var(--accent)]/[0.06] blur-[140px]" />
+        <div
+          className="absolute right-[0%] top-[10%] h-[420px] w-[420px]"
+          style={{ background: "radial-gradient(closest-side, rgba(255,45,85,0.07), transparent)" }}
+        />
+        <div
+          className="absolute bottom-[5%] left-[0%] h-[380px] w-[380px]"
+          style={{ background: "radial-gradient(closest-side, rgba(255,45,85,0.06), transparent)" }}
+        />
       </div>
       <div className="relative mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
