@@ -29,7 +29,7 @@ export default function PricingSection() {
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-[var(--cta-radius)] text-sm font-medium transition-all press ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-[var(--cta-radius)] text-sm font-medium transition-[transform,box-shadow] duration-300 press ${
                 active === i
                   ? "bg-[var(--cta-dark)] text-white shadow-md"
                   : "bg-[var(--bg-alt)] text-[var(--text)] hover:bg-[var(--border)]"
