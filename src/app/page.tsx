@@ -24,6 +24,7 @@ import Footer from "@/components/Footer";
 import Concierge from "@/components/Concierge";
 import SmartNudge from "@/components/SmartNudge";
 import Gifts from "@/components/Gifts";
+import WhyUs from "@/components/WhyUs";
 import StickyCta from "@/components/StickyCta";
 
 export default function Home() {
@@ -45,6 +46,7 @@ export default function Home() {
         <SoftwareRecovery />
         <ProcessSection />
         <WhyChooseUs />
+      <WhyUs />
         <TrustProof />
         <PricingSection />
           <ConciergeLaunch />
