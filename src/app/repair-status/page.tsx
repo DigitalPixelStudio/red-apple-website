@@ -37,7 +37,7 @@ export default function RepairStatusPage() {
             <label className="mt-4 block text-[12.5px] font-bold text-[#1d1d1f]">Registered phone number</label>
             <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 …" inputMode="tel" required
               className="mt-2 w-full rounded-2xl border border-black/[0.08] bg-white px-5 py-3.5 text-[14px] outline-none focus:border-[#ff2d55]/50" />
-            <button type="submit" className="cta-primary mt-6 w-full">🔍 Track My Repair</button>
+            <button type="submit" className="cta-primary mt-6 w-full">Track My Repair</button>
           </form>
         </div>
 
@@ -49,7 +49,7 @@ export default function RepairStatusPage() {
                   <div className="text-[12px] font-semibold text-[#86868b]">Ticket <span className="font-black text-[#1d1d1f]">{ticket.toUpperCase()}</span></div>
                   <div className="mt-1 text-[13px] text-[#6e6e73]">Registered to <strong>{phone}</strong></div>
                 </div>
-                <div className="rounded-full bg-[#ff2d55]/10 px-4 py-2 text-[12.5px] font-bold text-[#ff2d55]">🔧 Repair in Progress</div>
+                <div className="rounded-full bg-[#ff2d55]/10 px-4 py-2 text-[12.5px] font-bold text-[#ff2d55]">Repair in Progress</div>
               </div>
 
               <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -67,7 +67,7 @@ export default function RepairStatusPage() {
                         <span className={`text-[13px] font-bold ${done && !current ? "text-[#1d1d1f]/70" : ""}`}>{s.label}</span>
                       </div>
                       <p className={`mt-2 text-[11.5px] leading-relaxed ${current ? "text-white/60" : "text-[#86868b]"}`}>{s.desc}</p>
-                      {done && !current && <div className="mt-2 text-[11px] font-bold text-[#30d158]">✓ Done</div>}
+                      {done && !current && <div className="mt-2 text-[11px] font-bold text-[#30d158]">Done</div>}
                       {current && <div className="mt-2 inline-flex rounded-full bg-[#ff2d55] px-3 py-1 text-[10.5px] font-bold text-white">● In progress</div>}
                     </div>
                   );
@@ -77,7 +77,7 @@ export default function RepairStatusPage() {
               <div className="mt-8 rounded-[20px] bg-[#f5f5f7] p-5 text-center">
                 <p className="text-[13px] text-[#6e6e73]">Questions about your repair? Our team is one message away.</p>
                 <a href={wa(`Hi! I want an update on repair ticket ${ticket.toUpperCase()} (${phone}).`)} target="_blank" rel="noopener noreferrer"
-                  className="cta-primary mt-4 text-[13px]">💬 Ask on WhatsApp</a>
+                  className="cta-primary mt-4 text-[13px]">Ask on WhatsApp</a>
               </div>
             </div>
           </div>
