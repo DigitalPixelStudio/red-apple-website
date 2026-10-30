@@ -89,7 +89,7 @@ export default function Hero() {
             <a
               key={d.label}
               href="#estimate"
-              className="p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--accent)]/40 transition-all text-left flex items-center gap-3 group shadow-sm"
+              className="spotlight-card hover-pop p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--accent)]/40 text-left flex items-center gap-3 group shadow-sm"
             >
               <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] shrink-0 group-hover:scale-110 transition-transform">
                 <LineIcon name={d.icon} className="w-5 h-5" />
