@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
@@ -8,8 +9,41 @@ export default function Hero() {
     { label: "iPhone", sub: "Display · Back glass · Battery", icon: "phone" as IconName, img: "/images/v4/iphone-product.jpg" },
     { label: "iPad", sub: "Screens & logic boards", icon: "ipad" as IconName, img: "/images/v3/ipad-repair.jpg" },
     { label: "Apple Watch", sub: "Screens · battery · sensors", icon: "watch" as IconName, img: "/images/v4/apple-watch.jpg" },
-    { label: "MacBook", sub: "Logic board · keyboard · screen", icon: "laptop" as IconName, img: "/images/v3/macbook-pro.jpg" },
+    { label: "MacBook", sub: "Logic board · keyboard · screen", icon: "macbook" as IconName, img: "/images/v3/macbook-pro.jpg" },
   ];
+
+  /* Store hours: 10:30 – 21:00, all 7 days (IST). Computed on the client so the
+     badge never claims "Open now" at 2am. Falls back to the static label during
+     SSR, then corrects itself on mount — no hydration mismatch. */
+  const [status, setStatus] = useState<{ open: boolean; label: string }>({
+    open: true,
+    label: "Open now · Bangalore · 10:30 AM – 9:00 PM",
+  });
+
+  useEffect(() => {
+    const compute = () => {
+      // Convert to IST regardless of the visitor's timezone
+      const now = new Date();
+      const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+      const mins = ist.getHours() * 60 + ist.getMinutes();
+      const OPEN = 10 * 60 + 30;   // 10:30
+      const CLOSE = 21 * 60;       // 21:00
+      const isOpen = mins >= OPEN && mins < CLOSE;
+
+      if (isOpen) {
+        const left = CLOSE - mins;
+        const h = Math.floor(left / 60);
+        const m = left % 60;
+        const eta = h > 0 ? `${h}h ${m}m` : `${m}m`;
+        setStatus({ open: true, label: `Open now · closes in ${eta} · 10:30 AM – 9:00 PM` });
+      } else {
+        setStatus({ open: false, label: `Closed now · opens 10:30 AM · all 7 days` });
+      }
+    };
+    compute();
+    const id = setInterval(compute, 60_000);   // refresh every minute
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-white pt-28 pb-20">
@@ -21,8 +55,8 @@ export default function Hero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-semibold mb-6 tracking-wide uppercase">
-          <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-          <span>Open now · Bangalore · 10:30 AM – 9:00 PM</span>
+          <span className={`w-2 h-2 rounded-full ${status.open ? "bg-green-500" : "bg-[var(--text-muted)]"} ${status.open ? "animate-pulse" : ""}`} />
+          <span>{status.label}</span>
         </div>
 
         <h1 className="hero-apple mb-6 text-balance">
