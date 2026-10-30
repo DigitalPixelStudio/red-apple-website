@@ -17,7 +17,7 @@ export default function LocationSection() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Visit us</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Easy to reach. <span className="gradient-text">Right in Halasuru.</span></h2>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">Easy to reach. <span className="gradient-text">Right in Halasuru.</span></h2>
           <p className="section-subtitle mx-auto mt-5">One minute from Halasuru Metro, opposite Bhadra Landmark on Mahatma Gandhi Road. Walk in — or order a free pickup.</p>
         </Reveal>
 
