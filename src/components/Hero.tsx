@@ -60,10 +60,10 @@ export default function Hero() {
         </div>
 
         <h1 className="hero-apple mb-6 text-balance">
-          Apple repairs, <span className="text-[var(--accent)] animate-brand-breathe">mastered.</span>
+          Apple repairs, <span className="hero-mastered">mastered.</span>
         </h1>
         <p className="hero-sub mb-10 text-balance">
-          Component-level micro-soldering, OEM displays, and 30-minute turnarounds right here in Bangalore. Backed by our rock-solid 1-year warranty.
+          Component-level micro-soldering, OEM displays, and 30-minute turnarounds right here in Bangalore. Backed by our rock-solid 90-day warranty.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
@@ -72,15 +72,17 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track("whatsapp_click", { location: "hero_primary" })}
-            className="px-8 py-4 rounded-2xl bg-[var(--accent)] text-white font-bold text-base hover:opacity-90 transition-all shadow-xl shadow-[var(--accent)]/25 flex items-center gap-3"
+            className="cta-orange px-8 py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-3"
           >
-            <span>💬 Get Instant WhatsApp Quote</span>
+            <LineIcon name="whatsapp" size={19} color="#fff" />
+            <span>Get Instant WhatsApp Quote</span>
           </a>
           <a
             href="#estimate"
-            className="px-8 py-4 rounded-2xl bg-[var(--bg-alt)] border border-[var(--border)] font-bold text-base text-[var(--text)] hover:border-[var(--accent)]/50 transition-all"
+            className="px-8 py-4 rounded-2xl bg-[var(--bg-alt)] border border-[var(--border)] font-bold text-base text-[var(--text)] hover:border-[var(--orange)]/60 transition-all flex items-center justify-center gap-2.5"
           >
-            ⚡ Check Smart Estimate
+            <LineIcon name="zap" size={18} color="var(--orange)" />
+            Check Smart Estimate
           </a>
         </div>
 
