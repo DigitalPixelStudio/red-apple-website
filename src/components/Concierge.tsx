@@ -43,7 +43,7 @@ function resolve(text: string): string | null {
 
 
 const MENU: Record<string, { reply: string; chips: string[] }> = {
-  start: { reply: "Hi! I'm the Red Apple repair concierge. I can help you find the right repair, prepare your visit and connect you with our technicians instantly. What do you need?", chips: ["Device & repair", "Estimate", "Location & timings", "Pickup & drop", "Warranty", "Talk to a human"] },
+  start: { reply: "Hi! I'm RedMobile F Ai, the Red Apple repair assistant. I can help you find the right repair, prepare your visit and connect you with our technicians instantly. What do you need?", chips: ["Device & repair", "Estimate", "Location & timings", "Pickup & drop", "Warranty", "Talk to a human"] },
   "device": { reply: "We repair the full Apple family: iPhone (all models), iPad, iPod touch, Apple Watch, AirPods, MacBook Pro/Air, Mac mini, iMac and Mac Studio — plus Apple accessories. Which device do you have?", chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook / Mac", "Talk to a human"] },
   "iphone": { reply: "iPhone is our specialty — especially display and back glass replacement on Pro & Pro Max models. We also fix batteries, cameras, charging ports, water damage, motherboards and software. What's the issue?", chips: ["Screen / display", "Back glass", "Battery", "Camera", "Water damage", "Data recovery", "Talk to a human"] },
   "screen": { reply: "Cracked display? We replace front displays on every iPhone with OEM-grade OLED panels — True Tone preserved, ~45 minutes, 90-day warranty. Tap below to get your exact model's estimate on WhatsApp.", chips: ["Get display estimate", "Visit store", "Talk to a human"] },
@@ -72,6 +72,16 @@ export default function Concierge() {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, typing]);
+
+  const [draft, setDraft] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const t = draft.trim();
+    if (!t) return;
+    setDraft("");
+    send(t);
+  };
 
   const send = (text: string) => {
     setMsgs((m) => [...m, { from: "user", text }]);
@@ -121,7 +131,7 @@ export default function Concierge() {
       <button
         id="concierge-open"
         onClick={() => setOpen(!open)}
-        aria-label="Open AI repair concierge"
+        aria-label="Open RedMobile F Ai chat"
         className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
       >
         {open ? <LineIcon name="close" size={20} /> : <LineIcon name="bot" size={22} />}
@@ -136,7 +146,7 @@ export default function Concierge() {
               <LineIcon name="bot" size={20} />
             </span>
             <div>
-              <div className="text-[14px] font-bold">Red Apple AI Concierge</div>
+              <div className="text-[14px] font-bold">RedMobile F Ai</div>
               <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> Online · replies instantly</div>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close chat" className="ml-auto grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
@@ -162,6 +172,25 @@ export default function Concierge() {
             )}
             <div ref={endRef} />
           </div>
+
+          {/* Typed input — the visitor can ask anything, not just tap chips */}
+          <form onSubmit={submit} className="flex items-center gap-2 border-t border-black/[0.07] bg-white px-3 py-2.5">
+            <input
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="Type your problem — e.g. screen toot gayi"
+              aria-label="Type your message to RedMobile F Ai"
+              className="min-w-0 flex-1 rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-2.5 text-[13px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--orange)]/60"
+            />
+            <button
+              type="submit"
+              aria-label="Send message"
+              disabled={!draft.trim()}
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--orange)] text-white transition-transform hover:scale-105 disabled:opacity-35"
+            >
+              <LineIcon name="arrow-right" size={16} color="#fff" />
+            </button>
+          </form>
 
           {/* Chips */}
           {msgs.length > 0 && msgs[msgs.length - 1].chips && msgs[msgs.length - 1].chips!.length > 0 && !typing && (
