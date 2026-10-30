@@ -90,7 +90,7 @@ function resolve(text: string): string | null {
 const MENU: Record<string, { reply: string; chips: string[] }> = {
   start: {
     reply:
-      "Hi, I'm RedMobile F Ai — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
+      "Hi, I'm Pixel Ai — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
     chips: ["iPhone screen", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
   },
   device: {
@@ -262,7 +262,7 @@ export default function Concierge() {
       <button
         id="concierge-open"
         onClick={() => setOpen(!open)}
-        aria-label="Open RedMobile F Ai chat"
+        aria-label="Open Pixel Ai chat"
         className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
       >
         {open ? <LineIcon name="close" size={20} /> : <LineIcon name="bot" size={22} />}
@@ -277,7 +277,7 @@ export default function Concierge() {
               <LineIcon name="bot" size={20} />
             </span>
             <div>
-              <div className="text-[14px] font-bold">RedMobile F Ai</div>
+              <div className="text-[14px] font-bold">Pixel Ai</div>
               <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> Online · replies instantly</div>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close chat" className="ml-auto grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
@@ -310,7 +310,7 @@ export default function Concierge() {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Type your problem — e.g. screen toot gayi"
-              aria-label="Type your message to RedMobile F Ai"
+              aria-label="Type your message to Pixel Ai"
               className="min-w-0 flex-1 rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-2.5 text-[13px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--orange)]/60"
             />
             <button
