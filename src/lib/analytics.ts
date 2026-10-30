@@ -11,7 +11,8 @@ type AnalyticsEvent =
   | "map_click"
   | "ai_chat_started"
   | "lead_created"
-  | "repair_status_checked";
+  | "repair_status_checked"
+  | "pickup_request";
 
 declare global {
   interface Window {
