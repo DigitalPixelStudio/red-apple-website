@@ -73,7 +73,7 @@ export function PickupSection() {
           <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[var(--accent)]/10 text-[var(--accent)] mb-4 uppercase tracking-wider">
             Doorstep Convenience
           </span>
-          <h2 className="section-title mb-4">Don't come to us. We'll come to you.</h2>
+          <h2 className="head-gradient section-title mb-4">Don't come to us. We'll come to you.</h2>
           <p className="section-subtitle mx-auto">
             Free insured doorstep pickup and drop across Bangalore. Zero password policy, live status tracking, and expert diagnosis.
           </p>
