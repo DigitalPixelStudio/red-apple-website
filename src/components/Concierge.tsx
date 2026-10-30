@@ -3,8 +3,54 @@ import { useEffect, useRef, useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
+import { getPrice, inr, priceRange } from "@/lib/pricing";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
+
+/* Pull a model name out of free text, then answer with the real table price. */
+const MODEL_HINTS = [
+  "17 Pro Max","17 Pro","17 Plus","17","Air",
+  "16 Pro Max","16 Pro","16 Plus","16",
+  "15 Pro Max","15 Pro","15 Plus","15",
+  "14 Pro Max","14 Pro","14 Plus","14",
+  "13 Pro Max","13 Pro","13 mini","13",
+  "12 Pro Max","12 Pro","12 mini","12",
+  "SE (3rd Gen)","11 Pro Max","11 Pro","11",
+  "XS Max","XS","XR","X",
+];
+
+const REPAIR_HINTS: [RegExp, string][] = [
+  [/screen|display|crack|toot|tut|glass front|lcd|oled/i, "Front Display Replacement"],
+  [/back ?glass|rear|back panel/i, "Back Glass Replacement"],
+  [/battery|batter|charge drain|heating/i, "Battery Replacement"],
+  [/camera|lens|photo|focus/i, "Camera Repair"],
+  [/charging port|charging|port|flex/i, "Charging Port / Flex"],
+  [/speaker|mic|haptic|sound/i, "Speaker / Mic / Haptics"],
+  [/motherboard|board|ic |chip/i, "Motherboard / IC Repair"],
+  [/water|liquid|paani|geela/i, "Water Damage Revival"],
+  [/software|ios|update|boot/i, "Software / iOS Issue"],
+  [/data|photos|recover/i, "Data Recovery"],
+  [/unlock/i, "Unlocking (lawful)"],
+  [/firmware|os install/i, "OS / Firmware Installation"],
+  [/dent|body|frame/i, "Dent / Body / Frame Repair"],
+];
+
+/** Returns a concrete price answer, or null when we cannot be specific. */
+function priceAnswer(text: string): string | null {
+  const t = text.toLowerCase();
+  const wantsPrice = /price|cost|kitna|kitne|paisa|rate|charge|how much|estimate|quote/.test(t);
+  const model = MODEL_HINTS.find((m) => t.includes(m.toLowerCase()));
+  const repair = REPAIR_HINTS.find(([re]) => re.test(text))?.[1];
+  if (!model || !repair) return null;
+
+  const full = `iPhone ${model}`;
+  const p = getPrice(full, repair);
+  if (p) {
+    return `${full} — ${repair}: **${inr(p)}**. Parts and labour included, 90-day warranty. Want me to hold a slot?`;
+  }
+  const r = priceRange();
+  return `${full} with ${repair.toLowerCase()} is quoted after a free diagnosis — we do not guess at board-level work. Our published repairs run ${inr(r.min)} to ${inr(r.max)}. Send the model on WhatsApp and a technician replies with a fixed figure.`;
+}
 
 /* Typed input is matched through this synonym table, so "display kharab hai"
    or "kitna paisa lagega" resolve to the right topic instead of falling back to
@@ -164,6 +210,16 @@ export default function Concierge() {
     // synonym pass wins over the raw substring pass — it understands Hinglish
     const syn = resolve(text);
     if (syn && MENU[syn]) resolved = syn;
+
+    // a concrete price question gets a concrete answer before anything else
+    const priced = priceAnswer(text);
+    if (priced) {
+      setTimeout(() => {
+        setMsgs((m) => [...m, { from: "bot", text: priced, chips: ["Book doorstep pickup", "Talk to a technician"] }]);
+        setTyping(false);
+      }, 550);
+      return;
+    }
     setTimeout(() => {
       const item =
         resolved === "start" && text.trim().split(/\s+/).length > 2
