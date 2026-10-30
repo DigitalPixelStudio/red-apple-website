@@ -114,9 +114,12 @@ export default function Footer() {
               href="https://wa.me/919620024812?text=Hi%20Pixel%20Forge%20Studio%2C%20I%27d%20like%20a%20website%20like%20this%20one."
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-white/55 hover:text-[var(--cosmic-hi)]"
+              className="inline-flex items-center gap-1.5 font-semibold text-white/55 hover:text-[var(--cosmic-hi)]"
             >
-              +91 96200 24812
+              <span className="footer-chip h-5 w-5 rounded-[6px] text-[#25D366]">
+                <LineIcon name="whatsapp" size={11} color="#25D366" />
+              </span>
+              96200 24812
             </a>
           </div>
         </div>
