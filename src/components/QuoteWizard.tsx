@@ -138,7 +138,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
           const active = i <= activeIdx;
           return (
             <div key={s.key} className="flex items-center gap-2">
-              <div className={`flex items-center gap-2 rounded-[var(--cta-radius)] px-3.5 py-1.5 text-[12px] font-bold transition-[transform,box-shadow] duration-300 ${
+              <div className={`flex items-center gap-2 rounded-[var(--cta-radius)] px-3.5 py-1.5 text-[12px] font-bold transition duration-300 ${
                 active ? "bg-[var(--cta-dark)] text-white" : "bg-black/[0.04] text-[var(--text-muted)]"
               }`}>
                 <span className={`grid h-5 w-5 place-items-center rounded-full text-[10px] ${active ? "bg-white/20" : "bg-black/[0.05]"}`}>{i + 1}</span>
@@ -170,7 +170,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {QUOTE_DEVICES.map((d) => (
                   <button key={d.id} onClick={() => goDevice(d.id)}
-                    className={`rounded-[16px] border p-4 text-left transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-md ${
+                    className={`rounded-[16px] border p-4 text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-md ${
                       device === d.id ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-md" : "border-black/[0.06] hover:border-[var(--accent)]/40"
                     }`}>
                     <div className="text-[14px] font-bold text-[var(--text)]">{d.label}</div>
@@ -192,7 +192,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[400px] overflow-y-auto pr-1">
                 {deviceDef?.models.map((m) => (
                   <button key={m} onClick={() => goModel(m)}
-                    className={`rounded-[12px] border px-3.5 py-2.5 text-left text-[13px] font-medium transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 ${
+                    className={`rounded-[12px] border px-3.5 py-2.5 text-left text-[13px] font-medium transition duration-300 hover:-translate-y-0.5 ${
                       model === m ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-sm" : "border-black/[0.06] hover:border-[var(--accent)]/40"
                     }`}>{m}</button>
                 ))}
@@ -213,7 +213,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
                   const price = getPrice(model, r);
                   return (
                     <button key={r} onClick={() => goRepair(r)}
-                      className={`group flex items-center justify-between gap-3 rounded-[12px] border px-4 py-3 text-left text-[13px] font-medium transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 ${
+                      className={`group flex items-center justify-between gap-3 rounded-[12px] border px-4 py-3 text-left text-[13px] font-medium transition duration-300 hover:-translate-y-0.5 ${
                         repair === r ? "border-[var(--orange)] bg-[var(--orange)]/6 shadow-sm" : "border-black/[0.06] hover:border-[var(--orange)]/45"
                       }`}>
                       <span>{r}</span>
@@ -298,7 +298,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
                   <div className="grid grid-cols-2 gap-2">
                     {URGENCY_LEVELS.map((u) => (
                       <button key={u} type="button" onClick={() => setUrgency(u)}
-                        className={`rounded-[10px] border px-3 py-2 text-left text-[12px] font-medium transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 ${
+                        className={`rounded-[10px] border px-3 py-2 text-left text-[12px] font-medium transition duration-300 hover:-translate-y-0.5 ${
                           urgency === u ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-sm" : "border-black/[0.06] hover:border-[var(--accent)]/40"
                         }`}>{u}</button>
                     ))}
@@ -310,7 +310,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
                   <div className="grid grid-cols-2 gap-2">
                     {PICKUP_OPTIONS.map((p) => (
                       <button key={p} type="button" onClick={() => setPickup(p)}
-                        className={`rounded-[10px] border px-3 py-2 text-left text-[12px] font-medium transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 ${
+                        className={`rounded-[10px] border px-3 py-2 text-left text-[12px] font-medium transition duration-300 hover:-translate-y-0.5 ${
                           pickup === p ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-sm" : "border-black/[0.06] hover:border-[var(--accent)]/40"
                         }`}>{p}</button>
                     ))}
