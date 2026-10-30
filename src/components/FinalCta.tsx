@@ -31,7 +31,7 @@ export default function FinalCta() {
               Get Instant Estimate
               <LineIcon name="arrow-right" size={16} />
             </a>
-            <a href={SITE.phoneHref} onClick={() => track("call_click", { source: "final_cta" })} className="inline-flex items-center gap-2 rounded-[var(--cta-radius)] border border-white/20 bg-white/10 px-7 py-3.5 text-[15px] font-bold backdrop-blur-xl transition-all hover:bg-white/20">
+            <a href={SITE.phoneHref} onClick={() => track("call_click", { source: "final_cta" })} className="inline-flex items-center gap-2 rounded-[var(--cta-radius)] border border-white/20 bg-white/10 px-7 py-3.5 text-[15px] font-bold backdrop-blur-xl transition-[transform,box-shadow] duration-300 hover:bg-white/20">
               <LineIcon name="call" size={16} />
               {SITE.phone}
             </a>
