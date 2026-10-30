@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
-import { getPrice, inr, priceRange } from "@/lib/pricing";
+import { getPrice, priceLabel, priceRange, inr } from "@/lib/pricing";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
 
@@ -38,7 +38,6 @@ const REPAIR_HINTS: [RegExp, string][] = [
 /** Returns a concrete price answer, or null when we cannot be specific. */
 function priceAnswer(text: string): string | null {
   const t = text.toLowerCase();
-  const wantsPrice = /price|cost|kitna|kitne|paisa|rate|charge|how much|estimate|quote/.test(t);
   const model = MODEL_HINTS.find((m) => t.includes(m.toLowerCase()));
   const repair = REPAIR_HINTS.find(([re]) => re.test(text))?.[1];
   if (!model || !repair) return null;
@@ -46,10 +45,10 @@ function priceAnswer(text: string): string | null {
   const full = `iPhone ${model}`;
   const p = getPrice(full, repair);
   if (p) {
-    return `${full} — ${repair}: **${inr(p)}**. Parts and labour included, 90-day warranty. Want me to hold a slot?`;
+    return `${full} — ${repair}: **${priceLabel(p)}**. Genuine parts and labour included. Want me to hold a slot?`;
   }
   const r = priceRange();
-  return `${full} with ${repair.toLowerCase()} is quoted after a free diagnosis — we do not guess at board-level work. Our published repairs run ${inr(r.min)} to ${inr(r.max)}. Send the model on WhatsApp and a technician replies with a fixed figure.`;
+  return `${full} with ${repair.toLowerCase()} is quoted after a free diagnosis — we do not guess at board-level work. Published repairs run ${inr(r.min)} to ${inr(r.max)}. Send the model on WhatsApp and a technician replies with a fixed figure.`;
 }
 
 /* Typed input is matched through this synonym table, so "display kharab hai"
