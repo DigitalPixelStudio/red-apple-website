@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-semibold mb-6 tracking-wide uppercase">
           <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-          <span>Bangalore&apos;s Master Apple Repair Lab</span>
+          <span>Open now · Bangalore · 10:30 AM – 9:00 PM</span>
         </div>
 
         <h1 className="hero-apple mb-6 text-balance">
