@@ -1,4 +1,5 @@
 "use client";
+import BrandMark from "@/components/BrandMark";
 import Link from "next/link";
 import { SITE, wa, SERVICE_PAGES } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -21,7 +22,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2.5">
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-[var(--cta-dark)] shadow-lg animate-float">
-                <LineIcon name="apple" size={24} color="#fff" />
+                <BrandMark size={28} />
               </span>
               <div>
                 <div className="font-apple text-[18px] font-extrabold tracking-tight animate-brand-breathe">Red Apple</div>
