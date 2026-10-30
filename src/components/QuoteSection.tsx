@@ -6,7 +6,11 @@ export default function QuoteSection() {
   return (
     <section id="quote" className="section-apple relative overflow-hidden bg-white">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-[var(--accent)]/[0.05] blur-[150px]" />
+        {/* soft wash via gradient, not filter:blur — same look, no per-frame cost */}
+        <div
+          className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2"
+          style={{ background: "radial-gradient(closest-side, rgba(255,45,85,0.05), transparent)" }}
+        />
       </div>
       <div className="relative mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
