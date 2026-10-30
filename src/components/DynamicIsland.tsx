@@ -25,7 +25,7 @@ export default function DynamicIsland() {
 
   return (
     <div
-      className={`fixed left-1/2 top-[70px] z-40 -translate-x-1/2 transition-all duration-700 ${
+      className={`fixed left-1/2 top-[70px] z-40 -translate-x-1/2 transition-[transform,opacity] duration-500 duration-700 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
       }`}
     >
