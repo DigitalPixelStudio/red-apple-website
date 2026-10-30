@@ -12,7 +12,7 @@ export default function FaqSection() {
       <div className="mx-auto max-w-[860px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">FAQ</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Questions? <span className="gradient-text">Answered.</span></h2>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">Questions? <span className="gradient-text">Answered.</span></h2>
         </Reveal>
 
         <div className="mt-12 space-y-3">
