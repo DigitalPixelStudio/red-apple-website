@@ -30,7 +30,7 @@ export default function SoftwareRecovery() {
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map((it, i) => (
             <Reveal key={it.title} delay={(i % 3) * 80}>
-              <div className="group flex h-full gap-4 rounded-[24px] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className="group flex h-full gap-4 rounded-[24px] bg-white p-6 shadow-sm transition-[transform,box-shadow] duration-300 duration-300 hover:-translate-y-1 hover:shadow-xl">
                 <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 to-[var(--accent2)]/10 transition-transform group-hover:scale-110">
                   <LineIcon name={it.icon} size={22} className="text-[var(--accent)]" />
                 </span>
