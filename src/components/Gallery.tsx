@@ -81,13 +81,6 @@ const SHOTS: Shot[] = [
     tag: "Store",
   },
   {
-    src: "/images/gallery/waiting-area.jpg",
-    alt: "Customer waiting area with a see-through workshop",
-    caption: "Waiting area, see-through workshop",
-    tag: "Store",
-    wide: true,
-  },
-  {
     src: "/images/gallery/repair-backglass-crack.jpg",
     alt: "iPhone back glass shattered before repair",
     caption: "Back glass shattered — the job we are known for",
@@ -223,7 +216,7 @@ export default function Gallery() {
           aria-modal="true"
           aria-label={SHOTS[open].caption}
           onClick={close}
-          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/88 p-4"
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-[#0a0a0c] p-4"
         >
           <button
             onClick={close}
