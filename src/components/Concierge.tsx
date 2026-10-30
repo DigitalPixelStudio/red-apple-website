@@ -122,7 +122,7 @@ export default function Concierge() {
             <div className="flex flex-wrap gap-2 border-t border-black/[0.05] bg-white px-4 py-3">
               {msgs[msgs.length - 1].chips!.map((c) => (
                 <button key={c} onClick={() => chipAction(c)}
-                  className="rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--text)] transition-all hover:border-[var(--accent)]/40 hover:bg-white">
+                  className="icon-pop rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--text)] hover:border-[var(--accent)]/40 hover:bg-white">
                   {c}
                 </button>
               ))}
