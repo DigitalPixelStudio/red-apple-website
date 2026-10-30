@@ -93,23 +93,34 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
     track("quote_completed", { device, model, repair });
     track("lead_created", { device, model, repair, source: "quote_wizard" });
     const msg =
-      `*RED APPLE MOBILE REPAIR STORE*\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `*REPAIR QUOTATION REQUEST*\n\n` +
-      `▸ Device: ${deviceDef?.label ?? device}\n` +
-      `▸ Model: ${model}\n` +
-      `▸ Repair Type: ${repair}\n` +
-      `▸ Device Condition: ${condition}\n` +
-      `▸ Urgency: ${urgency || "Not specified"}\n` +
-      `▸ Issue: ${description || "Not specified"}\n\n` +
-      `*CUSTOMER DETAILS*\n` +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `▸ Name: ${name}\n` +
-      `▸ Phone: ${phone}\n` +
-      `▸ Email: ${email || "Not provided"}\n` +
-      `▸ Service: ${pickup || "Walk-in"}\n` +
-      `▸ Preferred Time: ${preferredTime || "Flexible"}\n` +
-      `Please share the estimate. Thank you! `;
+      `*RED APPLE MOBILE REPAIR*\n` +
+      `_Where Repair Meets Connectivity_\n` +
+      `\n` +
+      `*NEW REPAIR REQUEST*\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `\n` +
+      `*DEVICE*\n` +
+      `• Type  :  ${deviceDef?.label ?? device}\n` +
+      `• Model :  ${model}\n` +
+      `• Repair:  ${repair}\n` +
+      `• Condition:  ${condition}\n` +
+      `\n` +
+      `*WHAT IS WRONG*\n` +
+      `${description || "Customer will explain on chat"}\n` +
+      `\n` +
+      `*SERVICE PREFERENCE*\n` +
+      `• Mode :  ${pickup || "Walk-in at store"}\n` +
+      `• When :  ${preferredTime || "Flexible"}\n` +
+      `• Urgency :  ${urgency || "Normal"}\n` +
+      `\n` +
+      `*CUSTOMER*\n` +
+      `• Name :  ${name}\n` +
+      `• Phone :  ${phone}\n` +
+      `• Email :  ${email || "—"}\n` +
+      `\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `Please confirm the exact price and the earliest slot. Thank you.`;
+
     const url = wa(msg);
     // open synchronously inside the click handler — popup blockers allow this
     const win = window.open(url, "_blank", "noopener,noreferrer");
