@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { z } from "zod";
 import { QUOTE_DEVICES, REPAIR_TYPES, wa } from "@/lib/site";
+import { getPrice, inr, TURNAROUND, priceNote } from "@/lib/pricing";
 import { track } from "@/lib/analytics";
 import { LineIcon } from "./Icons";
 
@@ -197,12 +198,20 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">What needs fixing?</h3>
               <p className="text-[13px] text-[var(--text-muted)] mb-6">Select the repair or service you need.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto pr-1">
-                {REPAIR_TYPES.map((r) => (
-                  <button key={r} onClick={() => goRepair(r)}
-                    className={`rounded-[12px] border px-4 py-3 text-left text-[13px] font-medium transition-all hover:-translate-y-0.5 ${
-                      repair === r ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-sm" : "border-black/[0.06] hover:border-[var(--accent)]/40"
-                    }`}>{r}</button>
-                ))}
+                {REPAIR_TYPES.map((r) => {
+                  const price = getPrice(model, r);
+                  return (
+                    <button key={r} onClick={() => goRepair(r)}
+                      className={`group flex items-center justify-between gap-3 rounded-[12px] border px-4 py-3 text-left text-[13px] font-medium transition-all hover:-translate-y-0.5 ${
+                        repair === r ? "border-[var(--orange)] bg-[var(--orange)]/6 shadow-sm" : "border-black/[0.06] hover:border-[var(--orange)]/45"
+                      }`}>
+                      <span>{r}</span>
+                      <span className={`shrink-0 text-[12px] font-extrabold ${price ? "text-[var(--orange-deep)]" : "text-[var(--text-muted)]"}`}>
+                        {price ? inr(price) : "Quote"}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -217,9 +226,23 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <p className="text-[13px] text-[var(--text-muted)] mb-6">Share your info so we can prepare your estimate.</p>
 
               {/* Summary */}
-              <div className="mb-6 rounded-[14px] bg-[var(--bg-alt)] p-4 text-[13px]">
-                <div className="font-bold text-[var(--text)]">{deviceDef?.label} — {model}</div>
-                <div className="text-[var(--text-muted)] mt-0.5">{repair}</div>
+              <div className="mb-6 rounded-[16px] border border-[var(--orange)]/25 bg-[var(--orange)]/6 p-4">
+                <div className="text-[12px] font-bold uppercase tracking-[0.14em] text-[var(--orange-deep)]">{deviceDef?.label} — {model}</div>
+                <div className="mt-1 text-[13.5px] font-semibold text-[var(--text)]">{repair}</div>
+                <div className="mt-3 flex items-end justify-between border-t border-[var(--orange)]/20 pt-3">
+                  <div>
+                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                      {(() => { const pr = getPrice(model, repair); return pr ? "Your estimate" : "Exact quote"; })()}
+                    </div>
+                    <div className="font-apple text-[26px] font-extrabold leading-tight text-[var(--orange-deep)]">
+                      {(() => { const pr = getPrice(model, repair); return pr ? inr(pr) : "On WhatsApp"; })()}
+                    </div>
+                  </div>
+                  <div className="text-right text-[11px] text-[var(--text-muted)]">
+                    <div className="font-bold text-[var(--text)]">{TURNAROUND[repair] ?? "Same day"}</div>
+                    <div>{priceNote(repair)}</div>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-4">
