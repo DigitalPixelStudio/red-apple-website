@@ -59,7 +59,7 @@ export default function ContactPage() {
               ].map((c) => (
                 <a key={c.t} href={c.href} target={c.href?.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer"
                   onClick={() => c.href?.includes("wa.me") ? track("whatsapp_click", { source: "contact" }) : c.href?.startsWith("tel") ? track("call_click", { source: "contact" }) : undefined}
-                  className="flex items-center gap-4 rounded-[24px] bg-white p-6 shadow-sm transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  className="flex items-center gap-4 rounded-[24px] bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                   <span className="grid h-13 w-13 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#ff2d55]/10 to-[#ff9500]/10 p-3 text-[22px]">{c.icon}</span>
                   <div>
                     <div className="text-[12.5px] font-bold text-[#1d1d1f]">{c.t}</div>
