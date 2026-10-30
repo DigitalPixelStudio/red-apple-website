@@ -22,6 +22,7 @@ import LocationSection from "@/components/LocationSection";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import Concierge from "@/components/Concierge";
+import SmartNudge from "@/components/SmartNudge";
 import StickyCta from "@/components/StickyCta";
 
 export default function Home() {
@@ -53,6 +54,7 @@ export default function Home() {
       </div>
       <Footer />
       <Concierge />
+      <SmartNudge />
       <StickyCta />
     </main>
   );
