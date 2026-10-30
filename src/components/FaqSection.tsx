@@ -18,7 +18,7 @@ export default function FaqSection() {
         <div className="mt-12 space-y-3">
           {FAQS.map((f, i) => (
             <Reveal key={f.q} delay={i * 30}>
-              <div className={`overflow-hidden rounded-[22px] transition-[background-color,box-shadow] duration-300 duration-300 ${openIdx === i ? "bg-white shadow-lg ring-1 ring-black/[0.05]" : "glass"}`}>
+              <div className={`overflow-hidden rounded-[22px] transition duration-300 duration-300 ${openIdx === i ? "bg-white shadow-lg ring-1 ring-black/[0.05]" : "glass"}`}>
                 <button
                   onClick={() => setOpenIdx(openIdx === i ? null : i)}
                   aria-expanded={openIdx === i}
