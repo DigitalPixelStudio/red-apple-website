@@ -8,6 +8,15 @@ const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space", disp
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/logo.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/icon-192.png"],
+  },
   title: {
     default: "Red Apple Mobile Repair Store | iPhone, iPad, MacBook & Apple Watch Repair in Halasuru, Bengaluru",
     template: "%s | Red Apple Mobile Repair Store",
@@ -49,7 +58,7 @@ const localBusinessSchema = {
   "@type": "LocalBusiness",
   "@id": `${baseUrl}/#business`,
   name: SITE.legalName,
-  image: `${baseUrl}/icon.svg`,
+  image: `${baseUrl}/icon-512.png`,
   url: baseUrl,
   telephone: SITE.phone,
   email: SITE.email,
