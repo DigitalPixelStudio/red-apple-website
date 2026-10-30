@@ -17,14 +17,14 @@ export default function PartsCatalog() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Quality Parts</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Only the best parts <span className="gradient-text">for your device.</span></h2>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">Only the best parts <span className="gradient-text">for your device.</span></h2>
           <p className="section-subtitle mx-auto mt-5">We use OEM-grade, genuine-quality components sourced from trusted suppliers. Every part is tested before installation.</p>
         </Reveal>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PARTS.map((p, i) => (
             <Reveal key={i} delay={i * 60}>
-              <div className="group spotlight-card sweep-shine rounded-[22px] overflow-hidden bg-[var(--bg-alt)] border border-black/[0.04] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="group spotlight-card hv-lift sweep-shine rounded-[22px] overflow-hidden bg-[var(--bg-alt)] border border-black/[0.04] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="relative h-44 overflow-hidden">
                   <img src={p.img} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
