@@ -52,6 +52,14 @@ export default function Hero() {
       <div className="orb left-[-14%] top-[-10%] h-[560px] w-[560px] bg-[var(--accent)]" />
       <div className="orb orb-reverse right-[-16%] bottom-[-12%] h-[520px] w-[520px] bg-[var(--accent2)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_50%_46%,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.72)_42%,rgba(255,255,255,0)_78%)]" />
+
+      {/* 3D depth layer — CSS only, no WebGL, no blur filter */}
+      <div className="bg-3d">
+        <div className="bg-grid" />
+        <div className="bg-orb-3d one" />
+        <div className="bg-orb-3d two" />
+        <div className="bg-orb-3d three" />
+      </div>
       <div className="absolute left-1/2 top-1/2 h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/[0.025]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
@@ -60,7 +68,7 @@ export default function Hero() {
           <span>{status.label}</span>
         </div>
 
-        <h1 className="hero-apple mb-6 text-balance">
+        <h1 className="hero-apple font-breathe mb-6 text-balance">
           Apple repairs, <span className="hero-mastered">mastered.</span>
         </h1>
         <p className="hero-sub mb-10 text-balance">
