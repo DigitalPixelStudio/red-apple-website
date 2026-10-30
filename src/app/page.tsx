@@ -15,7 +15,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import TrustProof from "@/components/TrustProof";
 import PricingSection from "@/components/PricingSection";
 import QuoteSection from "@/components/QuoteSection";
-import ConciergeLaunch from "@/components/ConciergeLaunch";
+import ServicePromise from "@/components/ServicePromise";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqSection from "@/components/FaqSection";
 import LocationSection from "@/components/LocationSection";
@@ -51,7 +51,7 @@ export default function Home() {
       <WhyUs />
         <TrustProof />
         <PricingSection />
-          <ConciergeLaunch />
+          <ServicePromise />
         <ReviewsSection />
         <FaqSection />
         <LocationSection />
