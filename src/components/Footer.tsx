@@ -56,6 +56,16 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Legal */}
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/40">Legal</div>
+            <ul className="mt-5 space-y-2.5">
+              <li><Link href="/privacy" className="text-[13px] text-white/60 hover:text-white">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-[13px] text-white/60 hover:text-white">Terms of Service</Link></li>
+              <li><Link href="/refund-policy" className="text-[13px] text-white/60 hover:text-white">Refund &amp; Warranty</Link></li>
+            </ul>
+          </div>
+
           {/* Contact */}
           <div>
             <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/40">Contact</div>
