@@ -1189,3 +1189,194 @@ html {
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9px; color: #666; }
   section { break-inside: avoid; page-break-inside: avoid; }
 }
+
+/* ==========================================================================
+   COSMIC ORANGE — iPhone 17 Pro Max palette, refined
+   Apple's "Cosmic Orange" sits between amber and vermilion:
+   highlight #FFB067 · core #FF7A1A · shadow #C2410C
+   ========================================================================== */
+:root {
+  --cosmic-hi:    #ffb067;
+  --cosmic-core:  #ff7a1a;
+  --cosmic-deep:  #c2410c;
+  --cosmic-glow:  rgba(255, 122, 26, 0.30);
+}
+
+/* richer CTA — three-stop gradient with an inner highlight */
+.cta-orange {
+  background: linear-gradient(135deg, var(--cosmic-hi) 0%, var(--cosmic-core) 46%, var(--cosmic-deep) 100%);
+  box-shadow:
+    0 12px 34px -12px var(--cosmic-glow),
+    0 2px 6px -2px rgba(194, 65, 12, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+.cta-orange:hover {
+  box-shadow:
+    0 18px 46px -14px var(--cosmic-glow),
+    0 3px 10px -3px rgba(194, 65, 12, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.40);
+}
+
+/* the "mastered." word, in the same family */
+.hero-mastered {
+  background: linear-gradient(100deg,
+    var(--cosmic-hi) 0%,
+    var(--cosmic-core) 34%,
+    var(--cosmic-deep) 64%,
+    var(--cosmic-hi) 100%);
+  background-size: 230% 100%;
+}
+
+/* ==========================================================================
+   HEADING COLOUR-CHANGE — every section title drifts through the brand ramp
+   Applied with .head-gradient. Colour only, never movement.
+   ========================================================================== */
+.head-gradient {
+  background: linear-gradient(96deg,
+    #1d1d1f 0%,
+    #1d1d1f 28%,
+    var(--cosmic-core) 52%,
+    var(--cosmic-deep) 68%,
+    #1d1d1f 88%,
+    #1d1d1f 100%);
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: headDrift 13s ease-in-out infinite;
+  will-change: background-position;
+}
+@keyframes headDrift {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+/* small kicker above a heading */
+.kicker {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cosmic-deep);
+  animation: kickerGlow 6s ease-in-out infinite;
+}
+@keyframes kickerGlow {
+  0%, 100% { color: var(--cosmic-deep); opacity: 1;    }
+  50%      { color: var(--cosmic-core); opacity: 0.85; }
+}
+
+/* ==========================================================================
+   MOUSE HOVER — a consistent set, all transform + shadow only
+   ========================================================================== */
+
+/* lift */
+.hv-lift {
+  transition: transform .24s cubic-bezier(.22,1,.36,1), box-shadow .24s ease, border-color .24s ease;
+}
+.hv-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 48px -24px rgba(0, 0, 0, 0.26);
+}
+
+/* tilt on the two axes — reads as a physical card */
+.hv-tilt {
+  transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease;
+  transform-style: preserve-3d;
+}
+.hv-tilt:hover {
+  transform: perspective(800px) rotateX(2.5deg) rotateY(-2.5deg) translateY(-3px);
+  box-shadow: 0 24px 52px -26px rgba(0, 0, 0, 0.28);
+}
+
+/* border warms up to orange */
+.hv-ring {
+  transition: border-color .22s ease, box-shadow .22s ease;
+}
+.hv-ring:hover {
+  border-color: rgba(255, 122, 26, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.10);
+}
+
+/* the icon inside nudges toward the reader */
+.hv-icon .hv-icon-target {
+  transition: transform .22s cubic-bezier(.34,1.56,.64,1), color .22s ease;
+}
+.hv-icon:hover .hv-icon-target {
+  transform: scale(1.14) rotate(-4deg);
+  color: var(--cosmic-core);
+}
+
+/* underline sweeps in from the left */
+.hv-underline {
+  position: relative;
+}
+.hv-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -3px;
+  height: 2px; width: 0;
+  background: linear-gradient(90deg, var(--cosmic-core), var(--cosmic-deep));
+  border-radius: 2px;
+  transition: width .26s cubic-bezier(.22,1,.36,1);
+}
+.hv-underline:hover::after { width: 100%; }
+
+/* the price number swells slightly */
+.hv-price {
+  transition: transform .2s ease, color .2s ease, letter-spacing .2s ease;
+}
+.hv-price:hover {
+  transform: translateY(-2px) scale(1.03);
+  color: var(--cosmic-deep);
+  letter-spacing: -0.01em;
+}
+
+/* image zoom inside a clipped card */
+.hv-zoom { overflow: hidden; }
+.hv-zoom img,
+.hv-zoom .hv-zoom-target {
+  transition: transform .5s cubic-bezier(.22,1,.36,1);
+}
+.hv-zoom:hover img,
+.hv-zoom:hover .hv-zoom-target { transform: scale(1.06); }
+
+/* ==========================================================================
+   FIGMA-STYLE SURFACES — precise radii, hairline strokes, layered shadow
+   ========================================================================== */
+.figma-card {
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.055);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 8px 24px -16px rgba(0, 0, 0, 0.16);
+}
+.figma-card-lg {
+  border-radius: 26px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.055);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 14px 40px -22px rgba(0, 0, 0, 0.20);
+}
+/* a soft inner top highlight — the "glass edge" Figma uses */
+.figma-edge {
+  position: relative;
+}
+.figma-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head-gradient, .kicker { animation: none !important; }
+  .head-gradient { -webkit-text-fill-color: #1d1d1f; background: none; }
+  .hv-lift:hover, .hv-tilt:hover, .hv-price:hover,
+  .hv-icon:hover .hv-icon-target, .hv-zoom:hover img { transform: none; }
+}
