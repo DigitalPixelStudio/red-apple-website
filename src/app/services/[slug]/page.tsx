@@ -81,7 +81,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <h2 className="font-apple text-center text-[22px] font-bold text-[#1d1d1f]">More services</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((r) => (
-              <Link key={r.slug} href={`/services/${r.slug}`} className="group rounded-[22px] glass p-6 transition-all hover:-translate-y-1 hover:shadow-xl">
+              <Link key={r.slug} href={`/services/${r.slug}`} className="group rounded-[22px] glass p-6 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-xl">
                 <span className="text-[24px]">{r.icon}</span>
                 <div className="mt-3 font-apple text-[14px] font-bold text-[#1d1d1f]">{r.title}</div>
                 <div className="mt-1 text-[12px] text-[#86868b]">{r.short}</div>
