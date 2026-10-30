@@ -30,7 +30,7 @@ export default function QuotePage() {
         </div>
         <div className="mx-auto mt-10 max-w-[520px] px-6 text-center text-[12.5px] text-[#86868b]">
           Prefer talking directly? <a href={SITE.phoneHref} className="font-bold text-[#ff2d55]">Call {SITE.phone}</a> or{" "}
-          <a href={wa("Hi! I need a repair quote. 🍎")} target="_blank" rel="noopener noreferrer" className="font-bold text-[#25D366]">WhatsApp us</a>.
+          <a href={wa("Hi! I need a repair quote. ")} target="_blank" rel="noopener noreferrer" className="font-bold text-[#25D366]">WhatsApp us</a>.
         </div>
       </section>
       <Footer />
