@@ -56,11 +56,24 @@ export function PickupSection() {
     track("pickup_request", { device, pincode, area: area.area });
 
     const message = encodeURIComponent(
-      `*New Doorstep Pickup Request*\n\n` +
-      `*Device:* ${device}\n` +
-      `*Address:* ${flat ? flat + ", " : ""}${building ? building + ", " : ""}${address}\n` +
-      `*Area/City:* ${area.area}, ${area.city} - ${pincode}\n\n` +
-      `Please confirm pickup schedule and send a technician/rider.`
+      `*RED APPLE MOBILE REPAIR*\n` +
+      `_Where Repair Meets Connectivity_\n` +
+      `\n` +
+      `*DOORSTEP PICKUP REQUEST*\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `\n` +
+      `*DEVICE*\n` +
+      `• ${device}\n` +
+      `\n` +
+      `*PICKUP ADDRESS*\n` +
+      `${flat ? `• Flat / Floor :  ${flat}\n` : ""}` +
+      `${building ? `• Building :  ${building}\n` : ""}` +
+      `• Street :  ${address}\n` +
+      `• Area :  ${area.area}\n` +
+      `• City :  ${area.city} — ${pincode}\n` +
+      `\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `Please confirm the rider and a pickup window. Thank you.`
     );
 
     window.open(`https://wa.me/918660663776?text=${message}`, "_blank");
