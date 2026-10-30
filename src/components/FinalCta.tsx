@@ -20,7 +20,7 @@ export default function FinalCta() {
           <div className="mx-auto mb-7 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] shadow-2xl shadow-[var(--accent)]/40">
             <BrandMark size={40} />
           </div>
-          <h2 className="font-apple text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
+          <h2 className="font-apple head-gradient text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
             Your Apple device,<br /><span className="gradient-text">fixed right.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-[560px] text-[15px] leading-relaxed text-white/60">
