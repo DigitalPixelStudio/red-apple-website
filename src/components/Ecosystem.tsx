@@ -19,7 +19,7 @@ export default function Ecosystem() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">The whole Apple ecosystem</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">One specialist store for <span className="gradient-text">every Apple device.</span></h2>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">One specialist store for <span className="gradient-text">every Apple device.</span></h2>
           <p className="section-subtitle mx-auto mt-5">From the latest iPhone 17 Pro Max to a classic MacBook — if Apple made it, we can fix it.</p>
         </Reveal>
 
@@ -29,7 +29,7 @@ export default function Ecosystem() {
               <a
                 href={d.id === "software" ? "#software" : "#quote"}
                 onClick={() => track("service_view", { service: d.name })}
-                className="spotlight-card group block h-full rounded-[26px] overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
+                className="spotlight-card hv-lift group block h-full rounded-[26px] overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
               >
                 <div className="relative h-44 overflow-hidden">
                   <img src={d.img} alt={d.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
