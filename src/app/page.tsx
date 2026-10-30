@@ -1,3 +1,4 @@
+import { PickupSection } from "@/components/PickupSection";
 import ScrollProgress from "@/components/ScrollProgress";
 import Navbar from "@/components/Navbar";
 import DynamicIsland from "@/components/DynamicIsland";
@@ -33,6 +34,7 @@ export default function Home() {
         <Hero />
         <TrustBar />
       <QuoteSection />
+      <PickupSection />
         <Ecosystem />
         <DisplayFocus />
         <TechProcess />
