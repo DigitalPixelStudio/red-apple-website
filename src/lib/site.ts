@@ -1,13 +1,14 @@
 export const SITE = {
   name: "Red Apple Mobile Repair Store",
   legalName: "RED APPLE MOBILE REPAIR STORE",
-  tagline: "Apple care, perfected.",
+  shortName: "Red Apple",
+  tagline: "Apple repairs, mastered.",
   shortDescription:
     "Bangalore's specialist Apple repair studio in Halasuru. iPhone, iPad, AirPods, Apple Watch, MacBook & Mac repairs — displays, batteries, back glass, water damage, firmware, data recovery & more.",
   phone: "+918660663776",
   phoneHref: "tel:+918660663776",
   whatsapp: "918660663776",
-  email: "redapplemobilerepairing48@gmail.com",
+  email: "support@redmobilerepair.in",
   address: "No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008",
   area: "Halasuru, Bengaluru",
   city: "Bengaluru",
