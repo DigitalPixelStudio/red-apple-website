@@ -6,6 +6,42 @@ import { LineIcon, type IconName } from "./Icons";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
 
+/* Typed input is matched through this synonym table, so "display kharab hai"
+   or "kitna paisa lagega" resolve to the right topic instead of falling back to
+   the menu. Order matters: the first hit wins. */
+const SYNONYMS: Record<string, string[]> = {
+  screen: ["screen", "display", "glass", "crack", "cracked", "toot", "toota", "tooti", "tuta", "tuti", "fut", "touch", "lcd", "oled", "dead pixel", "lines"],
+  backglass: ["back glass", "backglass", "rear", "back panel", "back cover"],
+  battery: ["battery", "batter", "charge", "charging", "drain", "draining", "heating", "hot", "battery health", "swell", "swollen"],
+  camera: ["camera", "lens", "photo", "blurry", "focus", "ois", "flash"],
+  water: ["water", "liquid", "wet", "rain", "spill", "paani", "geela", "soaked"],
+  data: ["data", "photos", "recover", "recovery", "backup", "contacts", "deleted", "lost data"],
+  iphone: ["iphone", "apple phone"],
+  ipad: ["ipad", "tablet"],
+  watch: ["watch", "iwatch", "ultra"],
+  airpods: ["airpod", "airpods", "earbud", "earphone", "pods"],
+  macbook: ["macbook", "mac book", "laptop", "imac", "mac mini", "mac studio", "mac"],
+  estimate: ["price", "pricing", "cost", "quote", "estimate", "how much", "kitna", "kitne", "paisa", "rate", "charges", "paise"],
+  location: ["location", "address", "where", "shop", "store", "directions", "kahan", "kaha", "map", "reach"],
+  pickup: ["pickup", "pick up", "doorstep", "home", "collect", "drop", "delivery"],
+  warranty: ["warranty", "guarantee", "guaranty", "warrenty"],
+  human: ["human", "person", "technician", "talk", "call", "speak", "agent", "staff", "baat", "insaan"],
+};
+
+/* Best topic for a typed sentence. Scores by how many keywords hit. */
+function resolve(text: string): string | null {
+  const t = ` ${text.toLowerCase()} `;
+  let best: string | null = null;
+  let bestScore = 0;
+  for (const [topic, words] of Object.entries(SYNONYMS)) {
+    let score = 0;
+    for (const w of words) if (t.includes(w)) score += w.length > 5 ? 2 : 1;
+    if (score > bestScore) { bestScore = score; best = topic; }
+  }
+  return bestScore >= 1 ? best : null;
+}
+
+
 const MENU: Record<string, { reply: string; chips: string[] }> = {
   start: { reply: "Hi! I'm the Red Apple repair concierge. I can help you find the right repair, prepare your visit and connect you with our technicians instantly. What do you need?", chips: ["Device & repair", "Estimate", "Location & timings", "Pickup & drop", "Warranty", "Talk to a human"] },
   "device": { reply: "We repair the full Apple family: iPhone (all models), iPad, iPod touch, Apple Watch, AirPods, MacBook Pro/Air, Mac mini, iMac and Mac Studio — plus Apple accessories. Which device do you have?", chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook / Mac", "Talk to a human"] },
@@ -43,8 +79,18 @@ export default function Concierge() {
     const lower = text.toLowerCase();
     let resolved = "start";
     for (const k of Object.keys(MENU)) { if (lower.includes(k)) { resolved = k; break; } }
+    // synonym pass wins over the raw substring pass — it understands Hinglish
+    const syn = resolve(text);
+    if (syn && MENU[syn]) resolved = syn;
     setTimeout(() => {
-      const item = MENU[resolved];
+      const item =
+        resolved === "start" && text.trim().split(/\s+/).length > 2
+          ? {
+              reply:
+                "I want to get that right rather than guess. A technician can look at your exact model and give you a fixed price in a couple of minutes.",
+              chips: ["Talk to a human", "Estimate", "Device & repair"],
+            }
+          : MENU[resolved];
       setMsgs((m) => [...m, { from: "bot", text: item.reply, chips: item.chips }]);
       setTyping(false);
     }, 650);
