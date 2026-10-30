@@ -92,23 +92,23 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
     track("quote_completed", { device, model, repair });
     track("lead_created", { device, model, repair, source: "quote_wizard" });
     const msg =
-      `🔴 *RED APPLE MOBILE REPAIR STORE*\n` +
+      `*RED APPLE MOBILE REPAIR STORE*\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `📱 *REPAIR QUOTATION REQUEST*\n\n` +
+      `*REPAIR QUOTATION REQUEST*\n\n` +
       `▸ Device: ${deviceDef?.label ?? device}\n` +
       `▸ Model: ${model}\n` +
       `▸ Repair Type: ${repair}\n` +
       `▸ Device Condition: ${condition}\n` +
       `▸ Urgency: ${urgency || "Not specified"}\n` +
       `▸ Issue: ${description || "Not specified"}\n\n` +
-      `👤 *CUSTOMER DETAILS*\n` +
+      `*CUSTOMER DETAILS*\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `▸ Name: ${name}\n` +
       `▸ Phone: ${phone}\n` +
       `▸ Email: ${email || "Not provided"}\n` +
       `▸ Service: ${pickup || "Walk-in"}\n` +
       `▸ Preferred Time: ${preferredTime || "Flexible"}\n` +
-      `Please share the estimate. Thank you! 🙏`;
+      `Please share the estimate. Thank you! `;
     const url = wa(msg);
     // open synchronously inside the click handler — popup blockers allow this
     const win = window.open(url, "_blank", "noopener,noreferrer");
