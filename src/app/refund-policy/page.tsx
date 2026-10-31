@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Refund & Warranty Policy | Red Apple Mobile Repair Store",
-  description: "Our 90-day service warranty, 6-month battery and display guarantee, and refund terms.",
+  description: "Our 90-day service warranty, 6 months of battery and display health cover, and refund terms.",
   alternates: { canonical: `${baseUrl}/refund-policy` },
 };
 
@@ -27,10 +27,10 @@ export default function RefundPage() {
             charge.
           </p>
 
-          <h2>6-month health guarantee</h2>
+          <h2>6 months of health cover</h2>
           <p>
             Battery replacements and display replacements additionally carry a 6-month
-            health guarantee. If battery health drops below 80% or the display develops a
+            health cover. If battery health drops below 80% or the display develops a
             defect that is not impact damage, we replace it once free of charge.
           </p>
 
