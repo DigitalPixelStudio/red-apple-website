@@ -57,7 +57,7 @@ export default function TermsPage() {
           <h2>Warranty</h2>
           <p>
             Every repair carries a 90-day service warranty. Displays and batteries also
-            carry a 6-month health guarantee. Full details are on our{" "}
+            carry 6 months of health cover. Full details are on our{" "}
             <a href="/refund-policy">Refund &amp; Warranty Policy</a>.
           </p>
 
