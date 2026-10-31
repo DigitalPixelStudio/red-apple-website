@@ -11,19 +11,26 @@ import { PRICES, priceRange, inr, TURNAROUND } from "@/lib/pricing";
  * and the widget falls back to its built-in rule engine, so the site still
  * works with no key configured.
  *
- * Guardrails baked into the system prompt:
- *   - never invent a price that is not in the table
- *   - never quote below the published minimum
- *   - never promise a repair outcome
- *   - never collect a password, OTP, card or Apple ID
- *   - never mention Pixel Forge unless the customer asks who built the bot
+ * Visit `/api/concierge?probe=1` in a browser to check whether the key is
+ * wired up and which model answered. It never reveals the key itself.
  */
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MODEL = "gemini-2.0-flash";
-const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+/**
+ * Google renames and retires models regularly, and an AQ auth key can be
+ * scoped to a subset. We try newest-first and use the first that answers,
+ * so a retired model name never takes the assistant down.
+ */
+const MODELS = [
+  "gemini-2.5-flash",
+  "gemini-2.0-flash",
+  "gemini-flash-latest",
+  "gemini-1.5-flash",
+];
+
+const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 /** A compact, readable dump of the price table for the system prompt. */
 function priceBlock(): string {
@@ -52,7 +59,7 @@ function systemPrompt(): string {
 - Doorstep pickup: ${SITE.pickupHours}, free for repairs above ₹2,999
 - Phone / WhatsApp: ${SITE.phone}
 - Rating: 4.9 from 905 Google reviews, 9+ years at the same MG Road location
-- Warranty: 90 days on every repair; 6 months health cover on battery and display
+- Warranty: 90 days on every repair; 6 months of health cover on battery and display
 - We are an INDEPENDENT repair service. We are not affiliated with, authorised by, or endorsed by Apple Inc. Never imply otherwise.
 - We do not ask for passcodes, Apple IDs, OTPs or card details. Ever.
 
@@ -74,6 +81,7 @@ ${REPAIR_TYPES.map((t) => `${t}: ${TURNAROUND[t] ?? "same day"}`).join("\n")}
 - English, Hindi (Devanagari or Roman), Kannada, Tamil, Telugu, Bengali, Marathi, Malayalam, Gujarati, Punjabi, Urdu — all fine.
 - Hinglish input ("screen toot gayi, kitna lagega") gets Hinglish back.
 - If the customer mixes languages, mirror their mix.
+- If the customer names a device but not a model, ask for the model in one short line — do not dump the whole price range.
 
 ## If asked who built you
 Only when the customer directly asks who made you, who built this website, or who your developer is, answer: "I was built by Pixel Forge Studio — you can reach them on WhatsApp at 96200 24812." Never bring this up unprompted. Never mention Pixel Forge in any other context.
@@ -87,13 +95,47 @@ Only when the customer directly asks who made you, who built this website, or wh
 
 type Turn = { role: "user" | "model"; text: string };
 
+type GeminiResult = { ok: true; text: string; model: string } | { ok: false; status: number; detail: string };
+
+async function callGemini(model: string, key: string, body: unknown): Promise<GeminiResult> {
+  try {
+    const res = await fetch(`${BASE}/${model}:generateContent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Header form works for both legacy AIza… and newer AQ… auth keys.
+        "x-goog-api-key": key,
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(12_000),
+    });
+
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      return { ok: false, status: res.status, detail: detail.slice(0, 240) };
+    }
+
+    const data = await res.json();
+    const text: string = (data?.candidates?.[0]?.content?.parts ?? [])
+      .map((p: { text?: string }) => p.text ?? "")
+      .join("")
+      .trim();
+
+    if (!text) return { ok: false, status: 200, detail: "empty candidate" };
+    return { ok: true, text, model };
+  } catch (err) {
+    return {
+      ok: false,
+      status: 0,
+      detail: err instanceof Error ? err.name : "network",
+    };
+  }
+}
+
 export async function POST(req: NextRequest) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
-    return NextResponse.json(
-      { ok: false, reason: "no_key", reply: null },
-      { status: 503 }
-    );
+    return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
   }
 
   let body: { message?: string; history?: Turn[] };
@@ -108,7 +150,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, reason: "empty" }, { status: 400 });
   }
 
-  // keep the last 8 turns so the prompt stays small and cheap
   const history = Array.isArray(body.history) ? body.history.slice(-8) : [];
   const contents = [
     ...history
@@ -120,66 +161,80 @@ export async function POST(req: NextRequest) {
     { role: "user", parts: [{ text: message }] },
   ];
 
-  try {
-    const res = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Google now issues both legacy AIza… and newer AQ… auth keys.
-        // The header form works for both; the ?key= query param does not.
-        "x-goog-api-key": key,
-      },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt() }] },
-        contents,
-        generationConfig: {
-          temperature: 0.5,
-          maxOutputTokens: 320,
-          topP: 0.9,
-        },
-        safetySettings: [
-          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
-          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
-          { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
-          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
-        ],
-      }),
-      // never let a slow model hang the request
-      signal: AbortSignal.timeout(12_000),
-    });
+  const payload = {
+    systemInstruction: { parts: [{ text: systemPrompt() }] },
+    contents,
+    generationConfig: { temperature: 0.5, maxOutputTokens: 320, topP: 0.9 },
+    safetySettings: [
+      { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+      { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+      { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+      { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
+    ],
+  };
 
-    if (!res.ok) {
-      // log the provider's message (never the key) so a bad or expired key is
-      // obvious in the Vercel function logs
-      const detail = await res.text().catch(() => "");
-      console.error("[concierge] gemini", res.status, detail.slice(0, 300));
-      return NextResponse.json(
-        { ok: false, reason: "provider", reply: null },
-        { status: 502 }
-      );
+  const attempts: string[] = [];
+  for (const model of MODELS) {
+    const r = await callGemini(model, key, payload);
+    if (r.ok) {
+      return NextResponse.json({ ok: true, reply: r.text, model: r.model }, { status: 200 });
     }
-
-    const data = await res.json();
-    const text: string | undefined = data?.candidates?.[0]?.content?.parts
-      ?.map((p: { text?: string }) => p.text ?? "")
-      .join("")
-      .trim();
-
-    if (!text) {
-      return NextResponse.json({ ok: false, reason: "empty_reply", reply: null }, { status: 502 });
-    }
-
-    return NextResponse.json({ ok: true, reply: text }, { status: 200 });
-  } catch (err) {
-    console.error("[concierge] request failed", err instanceof Error ? err.name : "unknown");
-    return NextResponse.json(
-      { ok: false, reason: "network", reply: null },
-      { status: 502 }
-    );
+    attempts.push(`${model}:${r.status}:${r.detail.slice(0, 60)}`);
+    // 401/403 means the key itself is wrong — trying other models will not help
+    if (r.status === 401 || r.status === 403) break;
   }
+
+  // log for the Vercel function logs; never includes the key
+  console.error("[concierge] all models failed ::", attempts.join(" | "));
+  return NextResponse.json(
+    { ok: false, reason: "provider", reply: null, attempts },
+    { status: 502 }
+  );
 }
 
-export async function GET() {
-  // lets the widget know whether the AI brain is wired up, without leaking anything
-  return NextResponse.json({ ok: true, ai: Boolean(process.env.GEMINI_API_KEY) });
+/**
+ * GET is the health check.
+ *   /api/concierge          -> { ok, ai: boolean }
+ *   /api/concierge?probe=1  -> actually calls Gemini once and reports which
+ *                              model answered, or why it failed. No key leaks.
+ */
+export async function GET(req: NextRequest) {
+  const key = process.env.GEMINI_API_KEY;
+  const probe = req.nextUrl.searchParams.get("probe");
+
+  if (!probe) {
+    return NextResponse.json({ ok: true, ai: Boolean(key) });
+  }
+  if (!key) {
+    return NextResponse.json({ ok: false, ai: false, reason: "GEMINI_API_KEY is not set" });
+  }
+
+  const payload = {
+    contents: [{ role: "user", parts: [{ text: "Reply with exactly: OK" }] }],
+    generationConfig: { temperature: 0, maxOutputTokens: 8 },
+  };
+
+  const results: Record<string, string> = {};
+  for (const model of MODELS) {
+    const r = await callGemini(model, key, payload);
+    results[model] = r.ok ? "ok" : `${r.status} ${r.detail.slice(0, 120)}`;
+    if (r.ok) {
+      return NextResponse.json({
+        ok: true,
+        ai: true,
+        workingModel: model,
+        keyFormat: key.slice(0, 3) + "…",
+        results,
+      });
+    }
+    if (r.status === 401 || r.status === 403) break;
+  }
+
+  return NextResponse.json({
+    ok: false,
+    ai: false,
+    keyFormat: key.slice(0, 3) + "…",
+    results,
+    hint: "If every model returns 401/403 the key is wrong, expired or not enabled for the Gemini API. If only some fail, the model name is retired.",
+  });
 }
