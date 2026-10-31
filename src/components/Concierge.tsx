@@ -20,11 +20,11 @@ const MODEL_HINTS = [
 ];
 
 const REPAIR_HINTS: [RegExp, string][] = [
-  [/screen|display|crack|toot|tut|glass front|lcd|oled/i, "Front Display Replacement"],
-  [/back ?glass|rear|back panel/i, "Back Glass Replacement"],
-  [/battery|batter|charge drain|heating/i, "Battery Replacement"],
+  [/back ?glass|backside|back side|back panel|rear glass|rear panel|back cover/i, "Back Glass Replacement"],
+  [/screen|display|toot|tut|broken glass|glass front|lcd|oled|touch not|touch not work|cracked screen|screen crack/i, "Front Display Replacement"],
+  [/battery|batter|charge drain|heating|discharge|drain|health/i, "Battery Replacement"],
   [/camera|lens|photo|focus/i, "Camera Repair"],
-  [/charging port|charging|port|flex/i, "Charging Port / Flex"],
+  [/charging port|charging|not charging|port|flex|lightning|usb.?c/i, "Charging Port / Flex"],
   [/speaker|mic|haptic|sound/i, "Speaker / Mic / Haptics"],
   [/motherboard|board|ic |chip/i, "Motherboard / IC Repair"],
   [/water|liquid|paani|geela/i, "Water Damage Revival"],
