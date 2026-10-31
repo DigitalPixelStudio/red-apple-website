@@ -47,7 +47,15 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-white pt-28 pb-20">
+    <section
+      onPointerMove={(e) => {
+        const el = e.currentTarget.querySelector<HTMLElement>(".hero-cursor-glow");
+        if (!el) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+        el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+      }}
+      className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-white pt-28 pb-20">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-[var(--bg-alt)] to-white" />
       <div className="orb left-[-14%] top-[-10%] h-[560px] w-[560px] bg-[var(--accent)]" />
       <div className="orb orb-reverse right-[-16%] bottom-[-12%] h-[520px] w-[520px] bg-[var(--accent2)]" />
@@ -60,6 +68,13 @@ export default function Hero() {
         <div className="bg-orb-3d two" />
         <div className="bg-orb-3d three" />
       </div>
+
+      {/* pointer-following wash — transform only, never a blur filter */}
+      <div
+        className="hero-cursor-glow"
+        aria-hidden="true"
+        style={{ ["--mx" as string]: "50%", ["--my" as string]: "38%" }}
+      />
       <div className="absolute left-1/2 top-1/2 h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/[0.025]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
