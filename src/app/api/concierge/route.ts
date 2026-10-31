@@ -32,6 +32,13 @@ const MODELS = [
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
+/**
+ * Which model answered last time. Kept in module scope so a warm serverless
+ * instance skips straight to the working model instead of probing all four on
+ * every message — that probe loop was the reason replies felt slow.
+ */
+let knownGood: string | null = null;
+
 /** A compact, readable dump of the price table for the system prompt. */
 function priceBlock(): string {
   const lines: string[] = [];
@@ -107,7 +114,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
         "x-goog-api-key": key,
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(7_000),
     });
 
     if (!res.ok) {
@@ -174,14 +181,18 @@ export async function POST(req: NextRequest) {
   };
 
   const attempts: string[] = [];
-  for (const model of MODELS) {
+  const order = knownGood ? [knownGood, ...MODELS.filter((m) => m !== knownGood)] : MODELS;
+  for (const model of order) {
     const r = await callGemini(model, key, payload);
     if (r.ok) {
+      knownGood = r.model;
       return NextResponse.json({ ok: true, reply: r.text, model: r.model }, { status: 200 });
     }
     attempts.push(`${model}:${r.status}:${r.detail.slice(0, 60)}`);
     // 401/403 means the key itself is wrong — trying other models will not help
     if (r.status === 401 || r.status === 403) break;
+    // two misses is enough on the live path; the widget falls back instantly
+    if (attempts.length >= 2) break;
   }
 
   // log for the Vercel function logs; never includes the key
