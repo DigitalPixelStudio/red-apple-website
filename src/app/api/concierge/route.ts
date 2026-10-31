@@ -121,9 +121,14 @@ export async function POST(req: NextRequest) {
   ];
 
   try {
-    const res = await fetch(`${ENDPOINT}?key=${encodeURIComponent(key)}`, {
+    const res = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        // Google now issues both legacy AIza… and newer AQ… auth keys.
+        // The header form works for both; the ?key= query param does not.
+        "x-goog-api-key": key,
+      },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: systemPrompt() }] },
         contents,
@@ -144,8 +149,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
-      // do NOT leak the key or the raw provider error to the client
-      console.error("[concierge] gemini status", res.status);
+      // log the provider's message (never the key) so a bad or expired key is
+      // obvious in the Vercel function logs
+      const detail = await res.text().catch(() => "");
+      console.error("[concierge] gemini", res.status, detail.slice(0, 300));
       return NextResponse.json(
         { ok: false, reason: "provider", reply: null },
         { status: 502 }
