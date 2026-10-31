@@ -92,28 +92,67 @@ export function PickupSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition duration-300">
-            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"><LineIcon name="lock" size={22} color="var(--accent)" /></div>
-            <h3 className="text-xl font-bold mb-3">Zero Password Policy</h3>
-            <p className="text-[var(--text-muted)] text-sm leading-relaxed">
-              Your data privacy is sacred. Lock your device before handing it over. We repair component-level faults without touching your personal data.
-            </p>
-          </div>
-          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition duration-300">
-            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"><LineIcon name="whatsapp" size={22} color="var(--accent)" /></div>
-            <h3 className="text-xl font-bold mb-3">Live Status on WhatsApp</h3>
-            <p className="text-[var(--text-muted)] text-sm leading-relaxed">
-              Get real-time photo and video updates directly on WhatsApp as our master technicians inspect and repair your Apple device.
-            </p>
-          </div>
-          <div className="p-8 rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm hover:border-[var(--accent)]/30 transition duration-300">
-            <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-bold text-xl mb-6"><LineIcon name="box" size={22} color="var(--accent)" /></div>
-            <h3 className="text-xl font-bold mb-3">Same Address Return</h3>
-            <p className="text-[var(--text-muted)] text-sm leading-relaxed">
-              Once repaired and rigorously tested across 32 quality checkpoints, your device is securely handed back to you at your doorstep.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <article className="hv-lift hv-zoom group overflow-hidden rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm">
+            <div className="relative">
+              <img
+                src="/images/cards/zero-password.jpg"
+                alt="Keep your passcode to yourself"
+                width={800}
+                height={500}
+                loading="lazy"
+                decoding="async"
+                className="aspect-[8/5] w-full object-cover"
+              />
+              <span className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent" />
+            </div>
+            <div className="p-7">
+              <h3 className="text-xl font-bold mb-3">Zero Password Policy</h3>
+              <p className="text-[var(--text-muted)] text-sm leading-relaxed">
+                Your data privacy is sacred. Lock your device before handing it over. We repair component-level faults without touching your personal data.
+              </p>
+            </div>
+          </article>
+          <article className="hv-lift hv-zoom group overflow-hidden rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm">
+            <div className="relative">
+              <img
+                src="/images/cards/live-whatsapp.jpg"
+                alt="Watch every stage of the repair"
+                width={800}
+                height={500}
+                loading="lazy"
+                decoding="async"
+                className="aspect-[8/5] w-full object-cover"
+              />
+              <span className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent" />
+            </div>
+            <div className="p-7">
+              <h3 className="text-xl font-bold mb-3">Live Status on WhatsApp</h3>
+              <p className="text-[var(--text-muted)] text-sm leading-relaxed">
+                Get real-time photo and video updates directly on WhatsApp as our master technicians inspect and repair your Apple device.
+              </p>
+            </div>
+          </article>
+          <article className="hv-lift hv-zoom group overflow-hidden rounded-2xl bg-[var(--bg)] border border-[var(--border)] shadow-sm">
+            <div className="relative">
+              <img
+                src="/images/cards/same-address.jpg"
+                alt="Back at your door, tested"
+                width={800}
+                height={500}
+                loading="lazy"
+                decoding="async"
+                className="aspect-[8/5] w-full object-cover"
+              />
+              <span className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent" />
+            </div>
+            <div className="p-7">
+              <h3 className="text-xl font-bold mb-3">Same Address Return</h3>
+              <p className="text-[var(--text-muted)] text-sm leading-relaxed">
+                Once repaired and rigorously tested across 32 quality checkpoints, your device is securely handed back to you at your doorstep.
+              </p>
+            </div>
+          </article>
         </div>
 
         <div className="max-w-xl mx-auto p-6 sm:p-8 rounded-3xl bg-[var(--bg)] border border-[var(--border)] shadow-lg">
