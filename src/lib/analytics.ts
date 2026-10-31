@@ -37,6 +37,7 @@ type AnalyticsEvent =
   | "call_click"
   | "map_click"
   | "ai_chat_started"
+  | "ai_chat_message"
   | "lead_created"
   | "repair_status_checked"
   | "pickup_request"
