@@ -40,6 +40,13 @@ function priceAnswer(text: string): string | null {
   const t = text.toLowerCase();
   const model = MODEL_HINTS.find((m) => t.includes(m.toLowerCase()));
   const repair = REPAIR_HINTS.find(([re]) => re.test(text))?.[1];
+
+  // A repair was named but no model: ask for the one thing that unblocks a
+  // real figure, instead of dumping the whole catalogue at them.
+  if (repair && !model) {
+    const r = priceRange();
+    return `Which iPhone is it? The price for ${repair.toLowerCase()} moves a lot by model — anywhere from ${inr(r.min)} to ${inr(r.max)}. Tell me the model and I'll give you the exact figure.`;
+  }
   if (!model || !repair) return null;
 
   const full = `iPhone ${model}`;
