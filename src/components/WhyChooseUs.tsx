@@ -12,7 +12,7 @@ export default function WhyChooseUs() {
           <p className="text-sm font-semibold tracking-widest uppercase text-[var(--accent)] mb-3">
             Why {SITE.name}
           </p>
-          <h2 className="section-title">Red Apple vs Apple Authorized</h2>
+          <h2 className="section-title">Red Apple vs authorised service centres</h2>
           <p className="section-subtitle mx-auto mt-4">
             We are not another repair shop. We are Apple specialists with OEM parts,
             board-level skills, and a 90-day written warranty — at 35% lower cost.
@@ -33,7 +33,7 @@ export default function WhyChooseUs() {
                 </div>
               </div>
               <div className="bg-[var(--bg-alt)] px-6 py-4 text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                Apple Authorized
+                Authorised service centre
               </div>
             </div>
             {WHY_VS_LOCAL.map((row, i) => (
