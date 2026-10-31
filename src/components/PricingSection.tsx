@@ -18,7 +18,7 @@ export default function PricingSection() {
           </p>
           <h2 className="section-title">Apple India vs Red Apple</h2>
           <p className="section-subtitle mx-auto mt-4">
-            Save up to 35% compared to Apple Authorized Service Centres — with OEM-grade parts
+            Typically 35% less than authorised service centres — with OEM-grade parts
             and a 90-day warranty. All prices are indicative; confirm at store.
           </p>
         </Reveal>
@@ -74,7 +74,7 @@ export default function PricingSection() {
             </table>
           </div>
           <div className="px-6 py-4 bg-[var(--bg-alt)] text-xs text-[var(--text-muted)] border-t border-[var(--border)]">
-            All prices are indicative and subject to device condition. Red Apple pricing is approximately 35% lower than Apple Authorized Service Centre rates. Confirm exact pricing at store.
+            All prices are indicative and subject to device condition. Red Apple pricing is typically around 35% lower than authorised service centre rates. Confirm exact pricing at store.
           </div>
         </Reveal>
 
