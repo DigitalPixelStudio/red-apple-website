@@ -122,6 +122,13 @@ export default function Gifts() {
 
   return (
     <>
+      {/* 1 — reading progress, driven by the same rAF-throttled scroll handler */}
+      <div
+        className="read-progress"
+        style={{ transform: `scaleX(${progress / 100})` }}
+        aria-hidden="true"
+      />
+
       {/* 2 — desktop section rail */}
       <nav
         aria-label="Page sections"
