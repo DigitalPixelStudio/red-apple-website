@@ -169,7 +169,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   battery: {
     reply:
-      "Battery from ₹1,899, about 30 minutes, with a free health report before and after. Every battery carries a 6-month health guarantee on top of the 90-day service warranty.",
+      "Battery from ₹1,899, about 30 minutes, with a free health report before and after. Every battery carries 6 months of health cover on top of the 90-day service warranty.",
     chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
   },
   camera: {
@@ -224,7 +224,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   warranty: {
     reply:
-      "90 days on every repair. Battery and display also carry a 6-month health guarantee — if battery health drops below 80% or the panel develops a non-impact fault, we replace it once free. Damage from a new drop or liquid isn't covered.",
+      "90 days on every repair. Battery and display also carry 6 months of health cover — if battery health drops below 80% or the panel develops a non-impact fault, we replace it once free. Damage from a new drop or liquid isn't covered.",
     chips: ["Read the full policy", "Talk to a technician"],
   },
   human: {
@@ -254,47 +254,80 @@ export default function Concierge() {
     send(t);
   };
 
-  const send = (text: string) => {
+  /**
+   * send() tries the real AI first and falls back to the local rule engine.
+   *
+   * Order matters:
+   *   1. Gemini via /api/concierge — real conversation, any language, knows the
+   *      whole price table. This is the normal path.
+   *   2. If the key is missing, the call fails, or it times out, we drop to the
+   *      deterministic resolver below. The widget never goes silent.
+   *
+   * The "who built you" and price-answer helpers stay in front of the network
+   * call because they are instant and 100% accurate — no point spending a
+   * round trip on a fact we already know.
+   */
+  const send = async (text: string) => {
     setMsgs((m) => [...m, { from: "user", text }]);
     setTyping(true);
+
+    const push = (reply: string, chips: string[] = []) => {
+      setMsgs((m) => [...m, { from: "bot", text: reply, chips }]);
+      setTyping(false);
+    };
+
+    // instant, deterministic answers first
+    const built = builderAnswer(text);
+    if (built) { setTimeout(() => push(built), 420); return; }
+
+    const priced = priceAnswer(text);
+    if (priced) {
+      setTimeout(() => push(priced, ["Book doorstep pickup", "Talk to a technician"]), 420);
+      return;
+    }
+
+    // ---- real AI ----
+    try {
+      const history = msgs
+        .filter((m) => m.text)
+        .slice(-8)
+        .map((m) => ({ role: m.from === "user" ? ("user" as const) : ("model" as const), text: m.text }));
+
+      const res = await fetch("/api/concierge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history }),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as { ok?: boolean; reply?: string | null };
+        if (data?.ok && data.reply) {
+          track("ai_chat_message", { source: "gemini" });
+          push(data.reply, ["Price list", "Book doorstep pickup", "Talk to a technician"]);
+          return;
+        }
+      }
+    } catch {
+      // fall through to the rule engine — never surface a network error to a customer
+    }
+
+    // ---- fallback: local resolver ----
     const lower = text.toLowerCase();
     let resolved = "start";
     for (const k of Object.keys(MENU)) { if (lower.includes(k)) { resolved = k; break; } }
-    // synonym pass wins over the raw substring pass — it understands Hinglish
     const syn = resolve(text);
     if (syn && MENU[syn]) resolved = syn;
 
-    // "who built you" — answered only when asked, never volunteered
-    const built = builderAnswer(text);
-    if (built) {
-      setTimeout(() => {
-        setMsgs((m) => [...m, { from: "bot", text: built, chips: [] }]);
-        setTyping(false);
-      }, 550);
-      return;
-    }
+    const entry =
+      resolved === "start" && text.trim().split(/\s+/).length > 2
+        ? {
+            reply:
+              "I want to get that right rather than guess. A technician can look at your exact model and give you a fixed price in a couple of minutes.",
+            chips: ["Talk to a human", "Estimate", "Device & repair"],
+          }
+        : MENU[resolved];
 
-    // a concrete price question gets a concrete answer before anything else
-    const priced = priceAnswer(text);
-    if (priced) {
-      setTimeout(() => {
-        setMsgs((m) => [...m, { from: "bot", text: priced, chips: ["Book doorstep pickup", "Talk to a technician"] }]);
-        setTyping(false);
-      }, 550);
-      return;
-    }
-    setTimeout(() => {
-      const item =
-        resolved === "start" && text.trim().split(/\s+/).length > 2
-          ? {
-              reply:
-                "I want to get that right rather than guess. A technician can look at your exact model and give you a fixed price in a couple of minutes.",
-              chips: ["Talk to a human", "Estimate", "Device & repair"],
-            }
-          : MENU[resolved];
-      setMsgs((m) => [...m, { from: "bot", text: item.reply, chips: item.chips }]);
-      setTyping(false);
-    }, 650);
+    setTimeout(() => push(entry.reply, entry.chips), 380);
   };
 
   const chipAction = (chip: string) => {
