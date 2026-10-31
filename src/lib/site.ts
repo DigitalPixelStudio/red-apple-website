@@ -130,7 +130,7 @@ export const SERVICES: {
     desc: "High-capacity cells with a free health check before and after.",
     time: "~30 min", devices: "iPhone · iPad · Watch · MacBook",
     img: "/images/v3/charging-port.jpg",
-    points: ["85%+ health guaranteed", "Free health report", "6-month guarantee"],
+    points: ["85%+ health on hand-back", "Free health report", "6 months of health cover"],
   },
   {
     id: "camera", title: "Camera Repair", icon: "camera",
@@ -213,7 +213,7 @@ export const STATS = [
 
 // ---------- Why Choose Us vs Local Market ----------
 export const WHY_VS_LOCAL = [
-  { feature: "Price", us: "35% cheaper than Apple Authorized Service Centre", apple: "Full Apple India official pricing" },
+  { feature: "Price", us: "Typically 35% less than authorised service centres", apple: "Full Apple India official pricing" },
   { feature: "Turnaround", us: "30 min avg for screen/battery — while you wait", apple: "3–7 days, device must be left at store" },
   { feature: "Walk-In Service", us: "No appointment needed, walk in anytime", apple: "Appointment required, slot availability limited" },
   { feature: "OEM-Grade Parts", us: "True Tone panels, MagSafe back glass, genuine battery cells", apple: "Apple-sourced parts only" },
@@ -297,7 +297,7 @@ export const PRICING_GROUPS = [
 export const FAQS: { q: string; a: string }[] = [
   { q: "Which Apple devices do you repair?", a: "iPhone (all models), iPad, iPod touch, AirPods, Apple Watch, MacBook Pro/Air, Mac mini, iMac and Mac Studio — plus Apple accessories." },
   { q: "How long does a typical repair take?", a: "Most common repairs — screen, battery, charging port — take 30–60 minutes. Board-level and water damage repairs may take 1–2 days." },
-  { q: "Do you give a warranty?", a: "Yes — every repair includes a 90-day service warranty. Battery and display work also carries a 6-month health guarantee." },
+  { q: "Do you give a warranty?", a: "Yes — every repair includes a 90-day service warranty. Battery and display work also carries 6 months of health cover." },
   { q: "Are parts genuine?", a: "We use genuine-grade, OEM-quality parts and explain your options before any work so you can choose what fits your budget." },
   { q: "Do I need an appointment?", a: "Walk-ins are welcome all day. For faster service, WhatsApp us your device model and issue." },
   { q: "Can you recover my data after a screen or water issue?", a: "Yes — data recovery is one of our specialities. We never wipe data without your permission." },
