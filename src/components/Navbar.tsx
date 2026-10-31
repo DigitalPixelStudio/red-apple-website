@@ -18,60 +18,32 @@ const LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
 
+  /* The header used to hide on scroll-down and slide back on scroll-up. That
+     transform was the jitter: two competing transitions plus a state flip on
+     every direction change. A repair shop's header is 68px tall — hiding it
+     saves nothing and costs smoothness. It now stays put and only gains a
+     shadow once you leave the hero. One boolean, one class, no transform. */
   useEffect(() => {
-    let lastY = window.scrollY;
     let ticking = false;
-    /* Jitter fix: the header used to flip at the exact pixel where the scroll
-       direction changed, so a trackpad's micro-bounce made it flicker. These
-       thresholds add hysteresis — it needs a real 8px move up to reappear and
-       140px down to hide, and it never toggles twice inside 180ms. */
-    let lastToggle = 0;
-
     const update = () => {
       ticking = false;
-      const y = window.scrollY;
-
-      setScrolled((prev) => {
-        const next = y > 24;
-        return prev === next ? prev : next;
-      });
-
-      setHidden((prev) => {
-        const now = performance.now();
-        const delta = y - lastY;          // + down, - up
-
-        if (open || y < 400) { lastY = y; return prev ? false : prev; }
-        if (Math.abs(delta) < 8) return prev;          // ignore micro-moves
-        if (now - lastToggle < 200) return prev;       // debounce toggles
-
-        let next = prev;
-        if (delta > 0 && y > 520) next = true;         // scrolled well down
-        if (delta < 0) next = false;                   // any real scroll up shows it
-
-        lastY = y;
-        if (next !== prev) lastToggle = now;
-        return next;
-      });
+      const next = window.scrollY > 16;
+      setScrolled((prev) => (prev === next ? prev : next));
     };
-
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(update);
     };
-
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [open]);
+  }, []);
 
   return (
     <header
-      className={`site-header fixed inset-x-0 top-0 z-50 transition-transform duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] will-change-transform ${
-        hidden ? "-translate-y-full" : "translate-y-0"
-      } ${scrolled ? "is-scrolled" : ""}`}
+      className={`site-header fixed inset-x-0 top-0 z-50 ${scrolled ? "is-scrolled" : ""}`}
     >
       <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
         <a href="#top" className="group flex items-center gap-2.5" aria-label="Red Apple Mobile Repair Store home">
