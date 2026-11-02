@@ -10,7 +10,7 @@ export default function Hero() {
     { label: "iPhone", sub: "Display · Back glass · Battery", icon: "phone" as IconName, img: "/images/v4/iphone-product.jpg" },
     { label: "iPad", sub: "Screens & logic boards", icon: "ipad" as IconName, img: "/images/v3/ipad-repair.jpg" },
     { label: "Apple Watch", sub: "Screens · battery · sensors", icon: "watch" as IconName, img: "/images/v4/apple-watch.jpg" },
-    { label: "MacBook", sub: "Logic board · keyboard · screen", icon: "macbook" as IconName, img: "/images/v3/macbook-pro.jpg" },
+    { label: "MacBook", sub: "Logic board · keyboard · screen", icon: "macbook" as IconName, img: "/images/v3/laptop-closeup.jpg" },
   ];
 
   /* Store hours: 10:30 – 21:00, all 7 days (IST). Computed on the client so the
@@ -55,7 +55,7 @@ export default function Hero() {
         el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
         el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
       }}
-      className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-white pt-28 pb-20">
+      className="hero-landscape-compact relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-white pt-28 pb-20">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-[var(--bg-alt)] to-white" />
       <div className="orb left-[-14%] top-[-10%] h-[560px] w-[560px] bg-[var(--accent)]" />
       <div className="orb orb-reverse right-[-16%] bottom-[-12%] h-[520px] w-[520px] bg-[var(--accent2)]" />
@@ -128,8 +128,12 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* 3D iPhone — the centrepiece */}
-        <div className="mt-14 hidden sm:block">
+        {/* 3D iPhone — the centrepiece.
+            It used to be `hidden sm:block`. In landscape the viewport is wide
+            enough to pass `sm:` but only ~390px tall, so the phone existed and
+            was never reachable. It is always rendered now, and the hero
+            compresses itself in landscape so the device comes into view. */}
+        <div className="hero-phone-wrap mt-14">
           <Phone3D />
           <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--orange-deep)]">
             Built for every iPhone · 11 through 17 Pro Max
