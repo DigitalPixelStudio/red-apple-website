@@ -295,6 +295,11 @@ export async function POST(request: NextRequest) {
   ];
 
   for (const attempt of plan) {
+    const previousFailure = attempts[attempts.length - 1];
+    if (previousFailure && (previousFailure.status === 429 || previousFailure.status === 503)) {
+      const backoffMs = Math.min(250 * 2 ** attempts.length, 750);
+      await new Promise((resolve) => setTimeout(resolve, backoffMs));
+    }
     const result = await callGemini(attempt.model, attempt.key, payload);
     if (result.ok) {
       selected = { response: result.response, model: result.model };
