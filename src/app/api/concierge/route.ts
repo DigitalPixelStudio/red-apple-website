@@ -42,7 +42,7 @@ function tokenize(value: string): string[] {
     "mujhe", "kaise", "kitna", "kitne", "karo", "karna", "chahiye", "theek",
   ]);
   const terms = value.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? [];
-  return Array.from(new Set(terms.filter((term) => !stopWords.has(term)));
+  return Array.from(new Set(terms.filter((term) => !stopWords.has(term))));
 }
 
 function knowledgeDocuments(): KnowledgeDocument[] {
