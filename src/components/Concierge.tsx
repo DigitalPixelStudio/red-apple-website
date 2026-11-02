@@ -31,13 +31,15 @@ function priceAnswer(text: string): string | null {
   const model = MODEL_HINTS.find((candidate) => {
     const key = candidate.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
     return (" " + normalized + " ").includes(" " + key + " ");
-  });
+  }) ?? (/\\biphone\\s*17\\s*(?:air|slim)\\b/i.test(text) ? "iPhone 17 Slim/Air" : null)
+     ?? (/\\biphone\\s*se\\s*(?:3rd|third)\\s*(?:gen|generation)\\b/i.test(text) ? "iPhone SE (3rd G)" : null)
+     ?? (/\\biphone\\s*se\\s*(?:2nd|second)\\s*(?:gen|generation)\\b/i.test(text) ? "iPhone SE (2nd G)" : null);
   const repair = REPAIR_HINTS.find(([pattern]) => pattern.test(text))?.[1];
 
   if (!model && repair) {
     const unlisted = text.match(/\biphone\s*(5s|5c|5|4s|4)\b/i);
     if (unlisted) return "iPhone " + unlisted[1] + " — " + repair + " is not listed in the approved price matrix. We can quote it after a free diagnosis.";
-    if (/iphone|phone|mobile/i.test(text)) return "Which iPhone model is it? Published iPhone repair prices range from ₹1,200 to ₹36,400; I'll check the exact matrix entry once I have the model.";
+    if (!/ipad|apple watch|airpods|macbook|ipod/i.test(text)) return "Which iPhone model is it? Published iPhone repair prices range from ₹1,200 to ₹36,400; I'll check the exact matrix entry once I have the model.";
     return "Which exact device and model is it? I'll check the approved price matrix rather than guess.";
   }
   if (!model || !repair) return null;
@@ -353,7 +355,7 @@ export default function Concierge() {
       push("I'm sorry this needs a person. I've opened WhatsApp with your conversation summary so the Red Apple team can take over.", []);
     };
 
-    if (/\b(bulk|b2b|corporate|school|office)\b|\b(?:5|6|7|8|9|10|five|six|seven|eight|nine|ten)\+?\s*(?:devices|phones|iphones|macbooks)\b/i.test(text)) {
+    if (/\b(bulk|b2b)\b|\b(?:5|6|7|8|9|10|five|six|seven|eight|nine|ten)\+?\s*(?:devices|phones|iphones|macbooks)\b/i.test(text)) {
       handoffNow("Bulk/B2B enquiry for owner quote");
       return;
     }
