@@ -121,6 +121,7 @@ function systemPrompt(query: string): string {
     "Use only the exact model + repair entries included in the retrieved knowledge below. If no matching entry is retrieved, quote only after free diagnosis.",
     "",
     "RETRIEVED WEBSITE KNOWLEDGE (relevant FAQ and service details):",
+    "Approved policy chunks take precedence over general FAQ or marketing descriptions if they conflict.",
     retrieveKnowledge(query) || "No additional matching FAQ or service entry; use only the verified shop facts above.",
     "",
     "TURNAROUND:",

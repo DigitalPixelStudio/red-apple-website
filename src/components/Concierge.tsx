@@ -341,7 +341,7 @@ function localKnowledgeAnswer(query: string): string | null {
     return { document, score };
   }).sort((a, b) => b.score - a.score)[0];
 
-  if (!best || best.score < 4) return null;
+  if (!best || best.score < 3) return null;
   const answer = best.document.content.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ");
   return "From our repair guide: " + (answer.length > 420 ? answer.slice(0, 417) + "..." : answer);
 }
