@@ -35,10 +35,10 @@ export default function Ecosystem() {
                   <img src={d.img} alt={d.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/20 backdrop-blur-sm">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-black/35">
                       <LineIcon name={d.icon as IconName} size={20} color="#fff" />
                     </span>
-                    <span className="rounded-full bg-white/20 backdrop-blur-sm px-2.5 py-1 text-[10.5px] font-semibold text-white">{d.tag}</span>
+                    <span className="rounded-full bg-black/35 px-2.5 py-1 text-[10.5px] font-semibold text-white">{d.tag}</span>
                   </div>
                 </div>
                 <div className="p-5 bg-white">
