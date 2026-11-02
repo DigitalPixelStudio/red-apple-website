@@ -37,6 +37,7 @@ export default function Gifts() {
   const [count, setCount] = useState(0);
   const [openNow, setOpenNow] = useState(true);
   const ticking = useRef(false);
+  const offsets = useRef<{ id: string; top: number }[]>([]);
 
   /* 1 + 2 — scroll progress and the active section */
   useEffect(() => {
@@ -46,21 +47,35 @@ export default function Gifts() {
       requestAnimationFrame(() => {
         ticking.current = false;
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        setProgress(max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0);
+        const y = window.scrollY;
+        setProgress(max > 0 ? Math.min(100, (y / max) * 100) : 0);
 
-        const mid = window.innerHeight * 0.38;
-        let best = "top";
-        for (const s of SECTIONS) {
-          const el = document.getElementById(s.id);
-          if (!el) continue;
-          if (el.getBoundingClientRect().top <= mid) best = s.id;
+        // Measuring eight sections with getBoundingClientRect on every frame
+        // forces a layout each time. Their offsets only change on resize, so
+        // we read them once and compare against the scroll position instead.
+        if (!offsets.current || offsets.current.length === 0) {
+          offsets.current = SECTIONS.map((sec) => {
+            const el = document.getElementById(sec.id);
+            return { id: sec.id, top: el ? el.offsetTop : Number.POSITIVE_INFINITY };
+          }).sort((a, b) => a.top - b.top);
         }
-        setActive(best);
+        const marker = y + window.innerHeight * 0.38;
+        let best = "top";
+        for (const o of offsets.current) {
+          if (o.top <= marker) best = o.id;
+          else break;
+        }
+        setActive((prev) => (prev === best ? prev : best));
       });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const bust = () => { offsets.current = []; };
+    window.addEventListener("resize", bust, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", bust);
+    };
   }, []);
 
   /* 3 — "/" opens the assistant, like every good search UI */
