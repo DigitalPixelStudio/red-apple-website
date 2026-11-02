@@ -8,17 +8,28 @@ export default function StickyCta() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 640);
-    onScroll();
+    let ticking = false;
+    const paint = () => {
+      ticking = false;
+      const next = window.scrollY > 640;
+      // React bails on an identical value, but we still avoid the call
+      setShow((prev) => (prev === next ? prev : next));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(paint);
+    };
+    paint();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div className={`fixed bottom-5 left-1/2 z-[60] w-[calc(100vw-2rem)] max-w-[560px] -translate-x-1/2 transition duration-300 duration-500 ${
+    <div className={`fixed bottom-5 left-1/2 z-[60] w-[calc(100vw-2rem)] max-w-[560px] -translate-x-1/2 transition duration-300 ${
       show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-24 opacity-0"
     }`}>
-      <div className="glass flex items-center gap-2 rounded-[var(--cta-radius)] bg-white/85 p-2 shadow-2xl backdrop-blur-2xl">
+      <div className="glass flex items-center gap-2 rounded-[var(--cta-radius)] bg-white p-2 shadow-2xl">
         <a href="#quote" onClick={() => track("quote_started", { source: "sticky" })}
           className="flex-1 rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-5 py-3 text-center text-[13.5px] font-bold text-white flex items-center justify-center gap-2 press">
           <LineIcon name="search" size={16} />
