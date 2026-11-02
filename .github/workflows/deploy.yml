@@ -12,9 +12,11 @@ name: Deploy to Vercel
 # The project and org IDs below are not secrets; they identify the project.
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:        # lets you trigger a deploy by hand from the Actions tab
+  # Manual only.
+  # Vercel's own Git integration already deploys on every push to main, so
+  # running this too would double the deployment count against the daily cap.
+  # Trigger it from the Actions tab when you need a deploy without a commit.
+  workflow_dispatch:
 
 concurrency:
   group: vercel-${{ github.ref }}
@@ -36,6 +38,13 @@ jobs:
         with:
           node-version: 20
           cache: npm
+
+      - name: Check for the token
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "::error::VERCEL_TOKEN is not set. Add it in Settings → Secrets and variables → Actions, or simply push to main and let the Vercel Git integration deploy."
+            exit 1
+          fi
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
