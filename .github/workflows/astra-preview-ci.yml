@@ -28,7 +28,7 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Lint changed bot files
+      - name: Lint changed production files
         run: npx eslint src/app/api/concierge/route.ts src/components/Concierge.tsx src/components/PWAInstallPrompt.tsx src/components/Navbar.tsx src/components/DynamicIsland.tsx src/components/SmartNudge.tsx src/components/ReviewsSection.tsx src/components/TrustProof.tsx src/app/page.tsx src/app/layout.tsx src/app/privacy/page.tsx src/app/robots.ts
       - name: Production build
         run: npm run build
