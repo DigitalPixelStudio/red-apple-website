@@ -146,14 +146,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${inter.variable} ${space.variable} bg-white text-[var(--text)] antialiased`}>
-        {/* ambient background — three slow drifting gradients.
-            transform/opacity only, contained so it cannot affect layout.
-            Purely decorative, hidden from assistive tech. */}
-        <div className="ambient-layer" aria-hidden="true">
-          <i className="a1" />
-          <i className="a2" />
-          <i className="a3" />
+        {/* 3D light layer — three spotlights on a perspective plane plus one
+            travelling hairline. Every one of them animates transform only, and
+            the whole layer is contain:strict, so it can never trigger layout or
+            invalidate the content above it. Decorative: hidden from AT. */}
+        <div className="light-3d" aria-hidden="true">
+          <i className="l1" />
+          <i className="l2" />
+          <i className="l3" />
         </div>
+        <div className="light-beam" aria-hidden="true" />
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
