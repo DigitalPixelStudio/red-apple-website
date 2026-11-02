@@ -146,6 +146,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${inter.variable} ${space.variable} bg-white text-[var(--text)] antialiased`}>
+        {/* ambient background — three slow drifting gradients.
+            transform/opacity only, contained so it cannot affect layout.
+            Purely decorative, hidden from assistive tech. */}
+        <div className="ambient-layer" aria-hidden="true">
+          <i className="a1" />
+          <i className="a2" />
+          <i className="a3" />
+        </div>
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
