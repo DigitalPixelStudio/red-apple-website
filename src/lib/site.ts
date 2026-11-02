@@ -15,14 +15,14 @@ export const SITE = {
   pincode: "560008",
   state: "Karnataka",
   country: "IN",
-  hours: "10:00 AM – 12:00 AM (Open all 7 days)",
-  hoursSchema: "Mo-Su 10:00-23:59",
+  hours: "10:30 AM – 9:00 PM (Open all 7 days)",
+  hoursSchema: "Mo-Su 10:30-21:00",
   pickupHours: "24/7 — doorstep pickup any hour, any day",
-  openTime: "10:00",
-  closeTime: "24:00",
+  openTime: "10:30",
+  closeTime: "21:00",
   geo: { lat: 12.9748, lng: 77.6249 },
   rating: "4.9",
-  ratingCount: "905",
+  ratingCount: "1,099",
   yearsActive: "9+",
   warrantyDays: "90",
   avgRepairTime: "30",
@@ -205,7 +205,7 @@ export const REPAIR_STATUS_FLOW = [
 
 // ---------- Trust signals ----------
 export const STATS = [
-  { value: "4.9", label: "Google Rating", sub: "905+ reviews", icon: "star" },
+  { value: "4.9", label: "Google Rating", sub: "1,099 Google reviews", icon: "star" },
   { value: "9+ yrs", label: "Apple Specialists", sub: "Halasuru, Bengaluru", icon: "experience" },
   { value: "30 min", label: "Avg. repair time", sub: "Most repairs", icon: "clock" },
   { value: "90 days", label: "Warranty", sub: "On every repair", icon: "shield" },
@@ -222,7 +222,7 @@ export const WHY_VS_LOCAL = [
   { feature: "Free Diagnosis", us: "Open inspection with photos, no charge", apple: "Paid diagnostic at Apple Store" },
   { feature: "Doorstep Pickup", us: "Free 24/7 pickup & drop across Bengaluru", apple: "Not available — you visit the store" },
   { feature: "Data Privacy", us: "Your data is never accessed — sealed workflow", apple: "Apple may access data during service" },
-  { feature: "Google Rating", us: "4.9 stars from 905+ verified reviews", apple: "Varies by Apple Store location" },
+  { feature: "Google Rating", us: "4.9 stars from 1,099 Google reviews", apple: "Varies by Apple Store location" },
 ];
 
 // ---------- Pricing: Apple India Official vs Red Apple (35% cheaper) ----------
