@@ -29,6 +29,7 @@ import SmartNudge from "@/components/SmartNudge";
 import Gifts from "@/components/Gifts";
 import WhyUs from "@/components/WhyUs";
 import StickyCta from "@/components/StickyCta";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 /**
  * Section order is a conversion decision, not a design one.
@@ -85,6 +86,7 @@ export default function Home() {
       <SmartNudge />
       <Gifts />
       <StickyCta />
+      <PWAInstallPrompt />
     </main>
   );
 }
