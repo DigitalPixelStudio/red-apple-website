@@ -16,7 +16,7 @@ type GeminiResult =
   | { ok: false; status: number; code: string; detail: string };
 
 function resolveKeys(): string[] {
-  const names = ["GEMINI_API_KEY", "GEMINI_API_KEY1", ...KEY_NAMES.slice(1)];
+  const names = ["GEMINI_API_KEY", "GEMINI_API_KEY1", "GEMINI_API_KEY2", ...KEY_NAMES.slice(1)];
   const seen = new Set<string>();
   const keys: string[] = [];
   for (const name of names) {
