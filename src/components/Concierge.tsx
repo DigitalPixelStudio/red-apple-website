@@ -363,7 +363,7 @@ export default function Concierge() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const t = draft.trim();
-    if (!t) return;
+    if (!t || typing) return;
     setDraft("");
     send(t);
   };
@@ -382,7 +382,7 @@ export default function Concierge() {
    * round trip on a fact we already know.
    */
   const send = async (text: string) => {
-    if (stopped) return;
+    if (stopped || typing) return;
     setMsgs((m) => [...m, { from: "user", text }]);
     setTyping(true);
 
