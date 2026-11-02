@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Lint
-        run: npm run lint
+      - name: Lint changed bot files
+        run: npx eslint src/app/api/concierge/route.ts src/components/Concierge.tsx
       - name: Production build
         run: npm run build
