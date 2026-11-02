@@ -74,7 +74,7 @@ export default function PrivacyPage() {
 
           <h2>Cookies</h2>
           <p>
-            This website does not currently load non-essential advertising or analytics tags by default. It uses browser session storage for the current Forge AI chat and limited local storage to remember whether you dismissed the app-install invitation. If non-essential analytics or advertising tags are enabled in future, they should be presented with a consent choice before they run.
+            This website does not currently load non-essential advertising or analytics tags by default. It uses browser session storage for the current Forge AI chat and limited local storage to remember app-install dismissal or installation state. If non-essential analytics or advertising tags are enabled in future, they should be presented with a consent choice before they run.
           </p>
 
           <h2>Security</h2>
