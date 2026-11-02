@@ -101,6 +101,14 @@ const SYNONYMS: Record<string, string[]> = {
   location: [],
   pickup: ["pickup", "pick up", "doorstep", "home", "collect", "drop", "delivery"],
   warranty: ["warranty", "guarantee", "guaranty", "warrenty"],
+  invoice: ["invoice", "bill", "gst", "receipt", "crm", "record", "job card", "jobcard"],
+  diagnosis: ["diagnosis", "diagnose", "check", "inspect", "assessment", "estimate first"],
+  notrepaired: ["not repairable", "cannot fix", "cant fix", "unrepairable", "worse", "damage your"],
+  parts: ["genuine", "oem", "original", "copy", "aftermarket", "quality of part", "which part"],
+  privacy: ["privacy", "passcode", "password", "data safe", "my data", "apple id", "otp", "wipe"],
+  corporate: ["corporate", "bulk", "company", "office", "school", "multiple devices", "reseller"],
+  insurance: ["insurance", "claim", "insurer", "damage report"],
+  whyexpensive: ["expensive", "costly", "cheaper", "price match", "too much", "why so much"],
   human: ["human", "person", "technician", "talk", "call", "speak", "agent", "staff", "baat", "insaan"],
 };
 
@@ -233,6 +241,46 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
     reply:
       "90 days on every repair. Battery and display also carry 6 months of health cover — if battery health drops below 80% or the panel develops a non-impact fault, we replace it once free. Damage from a new drop or liquid isn't covered.",
     chips: ["Read the full policy", "Talk to a technician"],
+  },
+  invoice: {
+    reply:
+      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number — and the GST invoice is generated from that record, then sent to you on WhatsApp. Need it in your company's name? Give us the GSTIN at booking and we'll issue it that way.",
+    chips: ["What happens after handover?", "Price list", "Talk to a technician"],
+  },
+  diagnosis: {
+    reply:
+      "Diagnosis is free and it comes first. We open the device, find the actual fault, and give you one fixed number. You approve it before anything is charged. If it turns out not to be repairable, you owe nothing and we tell you why.",
+    chips: ["Price list", "Book doorstep pickup", "Talk to a technician"],
+  },
+  notrepaired: {
+    reply:
+      "If we can't fix it, you pay nothing — we tell you before you commit, not after. If a repair we did makes something worse, we put it right at our cost. That has never been refused.",
+    chips: ["Warranty details", "Talk to a technician"],
+  },
+  parts: {
+    reply:
+      "OEM-grade displays and batteries, or genuine Apple parts where we can source them. We tell you which one you're getting and what each costs before we start. We never call an OEM-grade part genuine — you always know what's going into your phone.",
+    chips: ["Warranty details", "Price list", "Talk to a technician"],
+  },
+  privacy: {
+    reply:
+      "We don't need your passcode for most repairs, and we never ask for your Apple ID, an OTP or card details — anyone who does is not us. Repairs happen at the bench behind glass, so you can watch. Nothing is wiped without your written permission.",
+    chips: ["Talk to a technician", "Visit the store"],
+  },
+  corporate: {
+    reply:
+      "Three devices or more gets a written quote on one invoice — schools, offices, agencies and resellers all use this. Tell us the device list and a technician will scope it the same day.",
+    chips: ["Talk to a technician", "Price list"],
+  },
+  insurance: {
+    reply:
+      "We supply the itemised GST invoice and a written damage report, which is what an insurance claim actually needs. We don't file the claim for you, but we'll give you everything the insurer asks for.",
+    chips: ["Talk to a technician", "Price list"],
+  },
+  whyexpensive: {
+    reply:
+      "Because the number includes the OEM-grade part, the labour, a 32-point test and a 90-day warranty. A cheaper quote usually means a copy panel with no True Tone and no cover. We won't match a price that only works if the warranty is dropped.",
+    chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   human: {
     reply:
