@@ -1,0 +1,63 @@
+name: Deploy to Vercel
+
+# Why this exists
+# ---------------
+# The Vercel Git integration stopped picking up pushes (last automatic
+# deployment was 14 Sep 2026). Rather than depend on it, this workflow
+# deploys explicitly on every push to main.
+#
+# One-time setup in GitHub → Settings → Secrets and variables → Actions:
+#   VERCEL_TOKEN  — vercel.com/account/tokens  (create a token, scope: this team)
+#
+# The project and org IDs below are not secrets; they identify the project.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # lets you trigger a deploy by hand from the Actions tab
+
+concurrency:
+  group: vercel-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VERCEL_ORG_ID: team_X2IuKDqvHxg5BoaS61nc2mpg
+  VERCEL_PROJECT_ID: prj_5IgWploHqTJ4ILKBTvsns19ytire
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to production
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployed to $url"
+
+      - name: Summary
+        run: |
+          {
+            echo "### Deployed"
+            echo ""
+            echo "**Production:** ${{ steps.deploy.outputs.url }}"
+            echo "**Commit:** \`${{ github.sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
