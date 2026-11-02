@@ -106,7 +106,7 @@ export default function PWAInstallPrompt() {
 
       {showSteps && (
         <p className="mt-3 rounded-xl bg-[var(--bg-alt)] p-3 text-xs leading-relaxed text-[var(--text)]">
-          {isIOS
+          {typeof navigator !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent)
             ? "On iPhone or iPad: open this page in Safari, tap Share, then choose “Add to Home Screen”."
             : "In Chrome or Edge: open the browser menu (⋮), then choose “Install app” or “Add to Home screen”. If the option is not shown yet, keep browsing for a little while and check again."}
         </p>
