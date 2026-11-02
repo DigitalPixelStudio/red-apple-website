@@ -322,9 +322,48 @@ export default function Concierge() {
   const [typing, setTyping] = useState(false);
   const [stopped, setStopped] = useState(false);
   const [failedTurns, setFailedTurns] = useState(0);
+  const [historyReady, setHistoryReady] = useState(false);
+  const [streamingText, setStreamingText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "auto", block: "nearest" }); }, [msgs]);
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("redapple.pixelai.history.v1");
+      if (saved) {
+        const parsed = JSON.parse(saved) as unknown;
+        if (Array.isArray(parsed)) {
+          const valid = parsed.filter((item): item is Msg =>
+            Boolean(item) &&
+            typeof item === "object" &&
+            ((item as Msg).from === "user" || (item as Msg).from === "bot") &&
+            typeof (item as Msg).text === "string" &&
+            (item as Msg).text.length <= 3000
+          ).slice(-30);
+          if (valid.length) setMsgs(valid);
+        }
+      }
+    } catch {
+      // A corrupt or blocked local history must never prevent the chat from opening.
+    }
+    setHistoryReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!historyReady) return;
+    const timer = window.setTimeout(() => {
+      try {
+        window.localStorage.setItem(
+          "redapple.pixelai.history.v1",
+          JSON.stringify(msgs.slice(-30))
+        );
+      } catch {
+        // Storage may be disabled or full; the live chat still works.
+      }
+    }, 250);
+    return () => window.clearTimeout(timer);
+  }, [msgs, historyReady]);
+
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "auto", block: "nearest" }); }, [msgs, streamingText]);
 
   const [draft, setDraft] = useState("");
 
@@ -422,16 +461,45 @@ export default function Concierge() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
-        signal: AbortSignal.timeout(9000),
+        signal: AbortSignal.timeout(20000),
         cache: "no-store",
       });
 
-      if (res.ok) {
-        const data = (await res.json()) as { ok?: boolean; reply?: string | null };
-        if (data?.ok && data.reply) {
-          track("ai_chat_message", { source: "gemini" });
-          push(data.reply, ["Price list", "Book doorstep pickup", "Talk to a technician"]);
-          return;
+      if (res.ok && res.body) {
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let streamed = "";
+          let interrupted = false;
+
+          try {
+            while (true) {
+              const result = await reader.read();
+              if (result.value) {
+                streamed += decoder.decode(result.value, { stream: true });
+                setStreamingText(streamed);
+                setTyping(false);
+              }
+              if (result.done) break;
+            }
+            streamed += decoder.decode();
+          } catch {
+            interrupted = true;
+          } finally {
+            reader.releaseLock();
+          }
+
+          if (streamed.trim()) {
+            setStreamingText("");
+            track("ai_chat_message", { source: "gemini_stream" });
+            const reply = interrupted
+              ? streamed.trim() + "\n\nI couldn't finish that reply. A technician can help on WhatsApp."
+              : streamed.trim();
+            push(reply, ["Price list", "Book doorstep pickup", "Talk to a technician"]);
+            return;
+          }
+          setStreamingText("");
         }
       }
     } catch {
@@ -533,6 +601,14 @@ export default function Concierge() {
                 </div>
               </div>
             ))}
+            {streamingText && (
+              <div className="flex justify-start">
+                <div className="max-w-[85%] rounded-3xl bg-white px-4 py-3 text-[13px] leading-relaxed text-[var(--text)] shadow-sm">
+                  {streamingText}
+                  <span className="ml-1 inline-block h-3 w-1 animate-pulse rounded-full bg-[var(--orange)] align-middle" />
+                </div>
+              </div>
+            )}
             {typing && (
               <div className="flex justify-start">
                 <div className="rounded-3xl bg-white px-4 py-3 shadow-sm"><span className="inline-flex gap-1"><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--text-muted)]" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--text-muted)] [animation-delay:120ms]" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--text-muted)] [animation-delay:240ms]" /></span></div>

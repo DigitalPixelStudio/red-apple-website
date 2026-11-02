@@ -1,209 +1,327 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SITE } from "@/lib/site";
-import { PRICES, inr } from "@/lib/pricing";
+import { SITE, FAQS, SERVICES } from "@/lib/site";
+import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
+import { KNOWLEDGE_BASE, type KnowledgeDocument } from "@/lib/knowledge-base";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_KEY", "GEMINI_STUDIO_API_KEY"] as const;
-type Turn = { role: "user" | "model"; text: string };
-type GeminiResult =
-  | { ok: true; text: string; model: string }
-  | { ok: false; status: number; code: string; detail: string };
+const KEY_NAMES = [
+  "GEMINI_API_KEY",
+  "GEMINI_API_KEY1",
+  "GOOGLE_GEMINI_API_KEY",
+  "GOOGLE_GENERATIVE_AI_API_KEY",
+  "GOOGLE_API_KEY",
+  "GEMINI_KEY",
+  "GEMINI_STUDIO_API_KEY",
+] as const;
 
-function resolveKey(): string | null {
+type Turn = { role: "user" | "model"; text: string };
+type RetrievedDocument = KnowledgeDocument & { score: number };
+
+function resolveKeys(): string[] {
+  const keys: string[] = [];
   for (const name of KEY_NAMES) {
     const value = process.env[name];
-    if (value && value.trim().length > 8) return value.trim();
+    if (value && value.trim().length > 8 && !keys.includes(value.trim())) {
+      keys.push(value.trim());
+    }
   }
-  return null;
+  return keys;
 }
 
-function priceBlock(): string {
-  return Object.entries(PRICES).map(([model, repairs]) => {
-    const values = Object.entries(repairs).map(([repair, [min, max]]) =>
-      repair + "=" + (min === max ? inr(min) : inr(min) + "–" + inr(max))
-    );
-    return model + ": " + values.join("; ");
-  }).join("\n");
+function tokenize(value: string): string[] {
+  const stopWords = new Set([
+    "the", "and", "for", "with", "from", "that", "this", "have", "has", "are",
+    "was", "were", "what", "when", "where", "which", "will", "would", "can",
+    "could", "you", "your", "our", "their", "about", "please", "tell", "me",
+    "hai", "ka", "ki", "ke", "ko", "kya", "hai", "mera", "meri", "mere",
+    "mujhe", "kaise", "kitna", "kitne", "karo", "karna", "chahiye", "theek",
+  ]);
+  const terms = value.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? [];
+  return Array.from(new Set(terms.filter((term) => !stopWords.has(term)));
 }
 
-function systemPrompt(): string {
+function knowledgeDocuments(): KnowledgeDocument[] {
+  const faqDocuments = FAQS.map((faq, index) => ({
+    id: "faq-" + index,
+    title: faq.q,
+    tags: tokenize(faq.q),
+    content: faq.a,
+  }));
+
+  const serviceDocuments = SERVICES.map((service) => ({
+    id: "service-" + service.id,
+    title: service.title,
+    tags: tokenize(service.title + " " + service.devices + " " + service.desc),
+    content: service.title + ". " + service.desc + " Typical timing: " + service.time +
+      ". Devices: " + service.devices + ". " + service.points.join("; ") + ".",
+  }));
+
+  const priceDocuments = Object.entries(PRICES).flatMap(([model, repairs]) =>
+    Object.entries(repairs).map(([repair, range]) => ({
+      id: "price-" + model + "-" + repair,
+      title: model + " " + repair,
+      tags: tokenize(model + " " + repair + " price cost quote"),
+      content: model + " — " + repair + ": " + inr(range[0]) +
+        (range[0] === range[1] ? "" : " to " + inr(range[1])) +
+        ". Typical turnaround: " + (TURNAROUND[repair] ?? "confirmed after diagnosis") + ".",
+    }))
+  );
+
+  return [...KNOWLEDGE_BASE, ...faqDocuments, ...serviceDocuments, ...priceDocuments];
+}
+
+function retrieveKnowledge(query: string): RetrievedDocument[] {
+  const queryTerms = tokenize(query);
+  if (!queryTerms.length) return [];
+
+  const documents = knowledgeDocuments();
+  return documents
+    .map((document) => {
+      const title = document.title.toLowerCase();
+      const tags = document.tags.join(" ").toLowerCase();
+      const content = document.content.toLowerCase();
+      let score = 0;
+
+      for (const term of queryTerms) {
+        if (title.includes(term)) score += 5;
+        else if (tags.includes(term)) score += 3;
+        else if (content.includes(term)) score += 1;
+      }
+
+      if (query.toLowerCase().includes(title)) score += 8;
+      return { ...document, score };
+    })
+    .filter((document) => document.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
+}
+
+function systemPrompt(query: string): string {
+  const retrieved = retrieveKnowledge(query);
+  const context = retrieved.length
+    ? retrieved.map((document, index) =>
+        "[" + (index + 1) + "] " + document.title + "\n" + document.content
+      ).join("\n\n")
+    : "No matching knowledge chunk was found. Ask one concise clarification or offer a human technician; do not guess.";
+
   return [
-    "You are Pixel Ai, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
+    "You are Pixel Ai, the customer-care assistant for " + SITE.name + " in Bengaluru, India.",
+    "PERSONA: Warm, clear, concise and professional, like a senior service advisor. Usually 2–4 short sentences. Ask one question at a time. Match the customer's language and script, including English, Hindi, Hinglish, Kannada and Tamil.",
     "",
-    "PERSONA: Warm, concise, confident, like a helpful senior service advisor. Usually 2–4 short sentences. Ask only one question at a time. Match the customer's language AND script (English, Hindi, Hinglish, Kannada, Tamil, Telugu, and other languages).",
-    "",
-    "VERIFIED SHOP FACTS:",
+    "VERIFIED BUSINESS FACTS:",
     "- Address: " + SITE.address,
-    "- Opening hours: " + SITE.hours + ", all seven days.",
-    "- Phone/WhatsApp: " + SITE.phone,
+    "- Opening hours: " + SITE.hours,
+    "- Phone / WhatsApp: " + SITE.phone,
     "- Doorstep pickup: " + SITE.pickupHours + " across Bengaluru; free for repairs above ₹2,999.",
-    "- We repair iPhone 6 through iPhone 18 Pro Max, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
-    "- Independent repair workshop. NOT an Apple Authorised Service Provider; never imply Apple affiliation.",
-    "- 90-day service warranty on repairs. Battery and display also have 6 months of health cover: battery health below 80% or a non-impact display fault qualifies for one replacement under policy. New impact/liquid damage and third-party repair are excluded.",
-    "- Devices in transit and on the bench are covered by the shop care policy and photographed at collection and hand-back.",
-    "- Customers may watch bench work through the workshop glass wall. We do not copy, read or retain customer data; repair records contain only model, fault, part, price and date.",
-    "- Diagnosis is free. Customer receives a fixed quote and approves it before work or payment.",
-    "- Payment is after diagnosis and approval; no advance. UPI, card and cash are accepted.",
+    "- Public rating: " + SITE.rating + " from " + SITE.ratingCount + " reviews.",
+    "- Independent repair workshop; not affiliated with, authorised by or endorsed by Apple Inc.",
+    "- Diagnosis is free. A fixed quote must be approved before work or payment. No advance is required.",
+    "- Payment after approval: UPI, card or cash.",
+    "- Repair warranty: 90 days. Battery/display health cover is subject to the written policy.",
     "",
-    "PRICE RULES — STRICT:",
-    "- The table below is the only source for numeric repair prices. Never invent, estimate, interpolate, or use a price remembered from another conversation.",
-    "- If both model and repair are known, quote the exact table entry. For a range, show the complete range and say the exact grade/revision is confirmed at free diagnosis.",
-    "- If a model/repair pair is absent, say it is quoted after a free diagnosis. Do not substitute another model's price.",
-    "- Never discount below the lower end of a listed range. Never promise a cash discount or price match.",
-    "- Data recovery starts at ₹2,999 with free assessment; outcome is not guaranteed.",
-    "- If a customer explicitly asks for the overall iPhone price range, state ₹1,200 to ₹36,400, then ask for the exact model and fault. Do not present this as a quote.",
+    "RETRIEVED KNOWLEDGE — use this as the source of truth for the current question:",
+    context,
     "",
-    "PRICE MATRIX (INR):",
-    priceBlock(),
+    "NON-NEGOTIABLE RULES:",
+    "- Never invent a price, repair, part grade, discount, stock level, booking, pickup slot, technician name, guarantee or completion time.",
+    "- Quote a price only when the exact model and repair appear in the retrieved price data. Otherwise say the technician confirms it after free diagnosis.",
+    "- Do not claim to be Apple-authorised. Describe parts as OEM-grade unless genuine status is explicitly verified for that exact part.",
+    "- Never request or accept passcodes, Apple ID/passwords, OTPs, UPI PINs, card numbers or other credentials.",
+    "- Never bypass iCloud Activation Lock. Carrier/network unlocks require proof of ownership.",
+    "- Never promise water-damage recovery or data recovery. For water damage, say do not charge the device and do not apply heat.",
+    "- Never claim this chat has created a booking. Direct the customer to the pickup form or WhatsApp for confirmation.",
+    "- Do not claim data is wiped or retained; state that nothing is wiped without prior written permission.",
+    "- Escalate complaints, refunds, repeat failures, damage reports, legal concerns and explicit human requests to a technician without arguing.",
+    "- If retrieved knowledge does not answer the question, say what is missing and ask one useful question or offer WhatsApp. Never fill gaps with assumptions.",
+    "- Do not mention Pixel Forge Studio unless directly asked who built the website or assistant. If asked, say Pixel Forge Studio and WhatsApp 96200 24812.",
     "",
-    "TURNAROUND:",
-    "- Display, back glass and battery: usually same day, approximately 45–60 minutes.",
-    "- Charging port and camera: approximately 60 minutes.",
-    "- Board-level / motherboard work: 2–3 days.",
-    "- Water-damage assessment and treatment: approximately 24–48 hours; never promise recovery.",
-    "- Data recovery: approximately 1–2 days; never promise the data can be recovered.",
-    "- iPad screens: approximately 1–3 days.",
-    "- If timing is not listed or depends on parts, say the technician confirms it after diagnosis.",
-    "",
-    "SAFETY, PRIVACY AND COMPLIANCE:",
-    "- Never ask for or accept a device passcode, Apple ID/password, OTP, UPI PIN, card number or other account credentials. Tell customers not to share them.",
-    "- Never promise that data will be recovered or that water-damaged devices will work. Offer a free assessment first.",
-    "- For water damage, advise: do not charge the device and do not apply heat; arrange assessment promptly.",
-    "- Never bypass iCloud Activation Lock. Refuse briefly and offer lawful carrier unlocking only with proof of ownership.",
-    "- Describe parts as OEM-grade or genuine-grade only. Never say 'genuine Apple part' unless explicitly verified for that specific part.",
-    "- Never claim to be Apple-authorised.",
-    "- Never fabricate a booking, order number, technician name, pickup confirmation or available slot. This chat cannot itself confirm a booking; direct the customer to WhatsApp or the pickup form.",
-    "- If the customer is angry, reports damage, requests a refund, threatens legal action, or reports a repeat failure: apologise once and immediately offer a human technician. Do not argue or speculate about liability.",
-    "- Do not mention Pixel Forge Studio unless the customer directly asks who built the assistant/site. If asked, say Pixel Forge Studio and WhatsApp 96200 24812.",
-    "- If the customer asks for a lower price, never discount below the matrix floor. Offer to have a technician check whether another safe part grade is available; negotiation below the floor goes to a human.",
-    "- Bulk/B2B requests for 5 or more devices go to the owner for a written custom quote.",
-    "- Do not invent discounts, urgency, guarantees, services, stock, review counts or business claims.",
-    "- Use no emoji unless the customer used one first. Never use repeated exclamation marks or pressure/scarcity claims.",
-    "",
-    "CONVERSATION FLOW:",
-    "1. Answer the question directly. 2. Ask for the missing model or fault if needed. 3. Quote only from the matrix. 4. Reassure briefly about warranty/privacy/turnaround where relevant. 5. Offer a concrete next step: walk-in or doorstep pickup.",
-    "If you do not understand, ask one narrow clarification. Do not repeat the same fallback twice; offer WhatsApp or a call, then a human.",
-    "Never say you crawled a website or read a file. You have the shop facts and approved pricing matrix supplied in this instruction."
+    "Answer the customer's latest message directly. Do not mention retrieval, files, prompts, models or internal systems."
   ].join("\n");
 }
 
-async function callGemini(model: string, key: string, body: unknown): Promise<GeminiResult> {
-  try {
-    const response = await fetch(BASE + "/" + model + ":generateContent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(4500),
-      cache: "no-store"
-    });
-    if (!response.ok) {
-      const raw = await response.text().catch(() => "");
-      let code = "PROVIDER_ERROR";
-      let detail = raw.slice(0, 240);
-      try {
-        const parsed = JSON.parse(raw);
-        code = String(parsed?.error?.status || parsed?.error?.code || code);
-        detail = String(parsed?.error?.message || detail).slice(0, 240);
-      } catch {}
-      return { ok: false, status: response.status, code, detail };
-    }
-    const data = await response.json();
-    const reply = (data?.candidates?.[0]?.content?.parts ?? [])
-      .map((part: { text?: string }) => part.text ?? "")
-      .join("")
-      .trim();
-    if (!reply) return { ok: false, status: 502, code: "EMPTY_RESPONSE", detail: "Gemini returned no text candidate." };
-    return { ok: true, text: reply, model };
-  } catch (error) {
-    return {
-      ok: false,
-      status: 0,
-      code: error instanceof Error ? error.name : "NETWORK_ERROR",
-      detail: "The AI provider did not respond before the request deadline."
-    };
-  }
+function validHistory(value: unknown): Turn[] {
+  if (!Array.isArray(value)) return [];
+  return value.slice(-8).flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const turn = item as Partial<Turn>;
+    if ((turn.role !== "user" && turn.role !== "model") || typeof turn.text !== "string") return [];
+    const text = turn.text.trim().slice(0, 700);
+    return text ? [{ role: turn.role, text }] : [];
+  });
 }
 
-function buildPayload(message: string, history: Turn[]) {
-  const contents = [
-    ...history.slice(-8)
-      .filter((turn) => turn && typeof turn.text === "string" && turn.text.trim())
-      .map((turn) => ({
-        role: turn.role === "model" ? "model" : "user",
-        parts: [{ text: turn.text.slice(0, 600) }]
-      })),
-    { role: "user", parts: [{ text: message }] }
-  ];
-  return {
-    systemInstruction: { parts: [{ text: systemPrompt() }] },
-    contents,
-    generationConfig: { temperature: 0.25, maxOutputTokens: 240, topP: 0.85 }
-  };
+function errorResponse(status: number, reason: string, attempts: Array<{ model: string; status: number; code: string }>) {
+  return NextResponse.json(
+    { ok: false, reason, attempts, reply: null },
+    { status, headers: { "Cache-Control": "no-store" } }
+  );
 }
 
 export async function POST(request: NextRequest) {
-  const key = resolveKey();
-  if (!key) return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
-
   let body: { message?: unknown; history?: unknown };
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, reason: "bad_json" }, { status: 400 });
+    return errorResponse(400, "bad_json", []);
   }
 
   const message = typeof body.message === "string" ? body.message.trim().slice(0, 800) : "";
-  if (!message) return NextResponse.json({ ok: false, reason: "empty_message" }, { status: 400 });
+  if (!message) return errorResponse(400, "empty_message", []);
 
-  const history: Turn[] = Array.isArray(body.history)
-    ? body.history.slice(-8).filter((item): item is Turn =>
-        Boolean(item) &&
-        typeof item === "object" &&
-        ((item as Turn).role === "user" || (item as Turn).role === "model") &&
-        typeof (item as Turn).text === "string"
-      )
-    : [];
+  const keys = resolveKeys();
+  if (!keys.length) return errorResponse(503, "no_key", []);
 
-  const payload = buildPayload(message, history);
+  const history = validHistory(body.history);
+  const contextQuery = history
+    .filter((turn) => turn.role === "user")
+    .slice(-2)
+    .map((turn) => turn.text)
+    .concat(message)
+    .join(" ");
+
+  const contents = history.map((turn) => ({
+    role: turn.role,
+    parts: [{ text: turn.text }],
+  }));
+  contents.push({ role: "user", parts: [{ text: message }] });
+
+  const payload = {
+    systemInstruction: { parts: [{ text: systemPrompt(contextQuery) }] },
+    contents,
+    generationConfig: { temperature: 0.2, maxOutputTokens: 320, topP: 0.85 },
+  };
+
+  const plan: Array<{ model: string; key: string }> = [
+    { model: MODELS[0], key: keys[0] },
+    ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []),
+    { model: MODELS[1], key: keys[0] },
+  ];
+
   const attempts: Array<{ model: string; status: number; code: string }> = [];
+  let upstream: Response | null = null;
+  let selectedModel = MODELS[0];
 
-  for (const model of MODELS) {
-    const result = await callGemini(model, key, payload);
-    if (result.ok) {
-      return NextResponse.json({ ok: true, reply: result.text, model: result.model }, {
-        status: 200,
-        headers: { "Cache-Control": "no-store" }
+  for (const attempt of plan) {
+    let response: Response;
+    try {
+      response = await fetch(BASE + "/" + attempt.model + ":streamGenerateContent?alt=sse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": attempt.key },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.any([request.signal, AbortSignal.timeout(12000)]),
+        cache: "no-store",
       });
+    } catch (error) {
+      const code = error instanceof Error ? error.name : "NETWORK_ERROR";
+      attempts.push({ model: attempt.model, status: 0, code });
+      console.warn("[concierge] upstream connection failed", { model: attempt.model, code });
+      break;
     }
 
-    attempts.push({ model, status: result.status, code: result.code });
-    console.error("[concierge] provider failure", {
-      model,
-      status: result.status,
-      code: result.code,
-      detail: result.detail.slice(0, 180)
-    });
+    if (response.ok && response.body) {
+      upstream = response;
+      selectedModel = attempt.model;
+      break;
+    }
 
-    if (result.status === 0 || result.status === 401 || result.status === 403 || result.status === 400) break;
+    const status = response.status;
+    const code = status === 429 ? "RESOURCE_EXHAUSTED" : status === 404 ? "MODEL_NOT_FOUND" : "PROVIDER_ERROR";
+    attempts.push({ model: attempt.model, status, code });
+    console.warn("[concierge] provider rejected request", { model: attempt.model, status, code });
+
+    if (status === 401 || status === 403 || status === 429 || status === 404 || status >= 500) {
+      continue;
+    }
+    break;
   }
 
-  return NextResponse.json({
-    ok: false,
-    reason: "provider_unavailable",
-    reply: null,
-    attempts
-  }, { status: 502, headers: { "Cache-Control": "no-store" } });
+  if (!upstream?.body) {
+    const lastStatus = attempts[attempts.length - 1]?.status ?? 503;
+    return errorResponse(lastStatus === 429 ? 429 : 503, "provider_unavailable", attempts);
+  }
+
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  const reader = upstream.body.getReader();
+
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      let buffer = "";
+
+      const emitEvent = (event: string) => {
+        const data = event
+          .split(/\r?\n/)
+          .filter((line) => line.startsWith("data:"))
+          .map((line) => line.slice(5).trim())
+          .join("\n");
+
+        if (!data || data === "[DONE]") return;
+
+        try {
+          const chunk = JSON.parse(data);
+          const text = (chunk?.candidates?.[0]?.content?.parts ?? [])
+            .map((part: { text?: string }) => part.text ?? "")
+            .join("");
+          if (text) controller.enqueue(encoder.encode(text));
+        } catch {
+          // Ignore malformed keep-alive or partial SSE events; the next event continues.
+        }
+      };
+
+      try {
+        while (true) {
+          const result = await reader.read();
+          if (result.value) buffer += decoder.decode(result.value, { stream: true });
+
+          let boundary = buffer.match(/\r?\n\r?\n/);
+          while (boundary && boundary.index !== undefined) {
+            emitEvent(buffer.slice(0, boundary.index));
+            buffer = buffer.slice(boundary.index + boundary[0].length);
+            boundary = buffer.match(/\r?\n\r?\n/);
+          }
+
+          if (result.done) break;
+        }
+
+        buffer += decoder.decode();
+        if (buffer.trim()) emitEvent(buffer);
+        controller.close();
+      } catch (error) {
+        console.warn("[concierge] response stream interrupted", {
+          name: error instanceof Error ? error.name : "STREAM_ERROR",
+        });
+        controller.error(error);
+      } finally {
+        reader.releaseLock();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store, no-transform",
+      "X-Accel-Buffering": "no",
+      "X-Concierge-Model": selectedModel,
+    },
+  });
 }
 
 export async function GET() {
-  const key = resolveKey();
-  return NextResponse.json({
-    ok: true,
-    configured: Boolean(key),
-    models: MODELS
-  }, { headers: { "Cache-Control": "no-store" } });
+  return NextResponse.json(
+    {
+      ok: true,
+      configured: resolveKeys().length > 0,
+      streaming: true,
+      knowledgeDocuments: knowledgeDocuments().length,
+      models: MODELS,
+    },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
