@@ -54,7 +54,7 @@ export default function PrivacyPage() {
 
           <h2>Who we share it with</h2>
           <p>
-            We do not sell your data. We share it only with services needed to operate the website: hosting (Vercel), advertising measurement (Google Ads and Meta), messaging (WhatsApp), and AI response generation (Google Gemini when you use Forge AI).
+            We do not sell your data. We share it only with services needed for the action you choose: hosting (Vercel), AI response generation (Google Gemini when you use Forge AI), and WhatsApp if you choose to open a WhatsApp handoff. This website does not currently load Meta Pixel or Google Ads conversion tags by default.
           </p>
 
           <h2>How long we keep it</h2>
@@ -74,9 +74,7 @@ export default function PrivacyPage() {
 
           <h2>Cookies</h2>
           <p>
-            We use cookies for advertising measurement and basic analytics. You can block
-            them in your browser settings — the site still works, you will just see less
-            relevant ads elsewhere.
+            This website does not currently load non-essential advertising or analytics tags by default. It uses browser session storage for the current Forge AI chat and limited local storage to remember whether you dismissed the app-install invitation. If non-essential analytics or advertising tags are enabled in future, they should be presented with a consent choice before they run.
           </p>
 
           <h2>Security</h2>
