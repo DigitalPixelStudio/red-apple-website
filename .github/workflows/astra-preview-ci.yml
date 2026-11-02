@@ -3,6 +3,7 @@ name: Astra preview validation
 on:
   push:
     branches:
+      - main
       - feat/astra-streaming-rag-memory
   pull_request:
     branches:
