@@ -101,7 +101,7 @@ function systemPrompt(query: string): string {
     "- Opening hours: " + SITE.hours + ", all seven days.",
     "- Phone/WhatsApp: " + SITE.phone,
     "- Doorstep pickup: " + SITE.pickupHours + " across Bengaluru; free for repairs above ₹2,999.",
-    "- We repair iPhone 6 through iPhone 18 Pro Max, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
+    "- We repair supported iPhone models listed in the website model list, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
     "- Independent repair workshop. NOT an Apple Authorised Service Provider; never imply Apple affiliation.",
     "- 90-day service warranty on repairs. Battery and display also have 6 months of health cover: battery health below 80% or a non-impact display fault qualifies for one replacement under policy. New impact/liquid damage and third-party repair are excluded.",
     "- Devices in transit and on the bench are covered by the shop care policy and photographed at collection and hand-back.",
@@ -287,7 +287,7 @@ export async function POST(request: NextRequest) {
   let selected: { response: Response; model: string } | null = null;
 
   // At most three attempts: primary key/model, one alternate key, then the fallback model.
-  // A network timeout stops retries; repeatedly waiting on the same exhausted project only adds latency.
+  // Timeouts and transient provider failures continue to the next configured fallback; malformed requests stop.
   const plan = [
     { model: MODELS[0], key: keys[0] },
     ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []),
