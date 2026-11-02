@@ -18,6 +18,12 @@ export default function PWAInstallPrompt() {
   const [showSteps, setShowSteps] = useState(false);
 
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // Offline support is an enhancement; the website remains usable without it.
+      });
+    }
+
     const standalone =
       window.matchMedia("(display-mode: standalone)").matches ||
       Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
@@ -47,12 +53,6 @@ export default function PWAInstallPrompt() {
 
     window.addEventListener("beforeinstallprompt", onBeforeInstall);
     window.addEventListener("appinstalled", onInstalled);
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {
-        // Install guidance remains available if service-worker registration is blocked.
-      });
-    }
-
     return () => {
       window.clearTimeout(showTimer);
       window.removeEventListener("beforeinstallprompt", onBeforeInstall);
