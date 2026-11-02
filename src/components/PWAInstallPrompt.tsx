@@ -15,7 +15,6 @@ export default function PWAInstallPrompt() {
   const promptRef = useRef<InstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [canInstall, setCanInstall] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
 
   useEffect(() => {
@@ -24,8 +23,6 @@ export default function PWAInstallPrompt() {
       Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
     if (standalone) return;
 
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    setIsIOS(ios);
 
     try {
       const dismissedAt = Number(window.localStorage.getItem(DISMISS_KEY) || "0");
@@ -44,7 +41,7 @@ export default function PWAInstallPrompt() {
     const onInstalled = () => {
       setVisible(false);
       promptRef.current = null;
-      try { window.localStorage.setItem("redapple-pwa-installed", "1"); } catch {}
+      try { window.localStorage.setItem("redapple-pwa-installed", "1"); } catch { /* Storage is optional. */ }
     };
 
     window.addEventListener("beforeinstallprompt", onBeforeInstall);
@@ -64,7 +61,7 @@ export default function PWAInstallPrompt() {
 
   const dismiss = () => {
     setVisible(false);
-    try { window.localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch {}
+    try { window.localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch { /* Storage is optional. */ }
   };
 
   const install = async () => {
