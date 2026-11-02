@@ -161,12 +161,12 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   about: {
     reply:
-      "Red Apple Mobile Repair has been on Mahatma Gandhi Road, Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10:00 AM to 12:00 AM, all seven days. Rating is 4.9 from 905 Google reviews.",
+      "Red Apple Mobile Repair has been on Mahatma Gandhi Road, Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10:30 AM to 9:00 PM, all seven days. Rating is 4.9 from 1,099 Google reviews.",
     chips: ["Price list", "Visit the store", "Talk to a technician"],
   },
   store: {
     reply:
-      "We are at No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro, Metro Pillar 125. The workshop has glass walls so you can watch your repair. Open 10:00 AM – 12:00 AM, every day. Walk-ins welcome, no appointment needed.",
+      "We are at No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro, Metro Pillar 125. The workshop has glass walls so you can watch your repair. Open 10:30 AM – 9:00 PM, every day. Walk-ins welcome, no appointment needed.",
     chips: ["Open in Maps", "Book doorstep pickup", "Talk to a technician"],
   },
   timing: {
@@ -186,7 +186,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   booking: {
     reply:
-      "Two ways. Walk in any time between 10:00 AM and 12:00 AM — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999.",
+      "Two ways. Walk in any time between 10:30 AM and 9:00 PM — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999.",
     chips: ["Book doorstep pickup", "Visit the store", "Talk to a technician"],
   },
   device: {
@@ -196,7 +196,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   iphone: {
     reply:
-      "We repair iPhone models from iPhone 6 through iPhone 18 Pro Max. Prices depend on the exact model and repair; tell me both and I'll check the approved price matrix rather than guess.",
+      "We repair iPhone models from supported iPhone models shown in our current model list. Prices depend on the exact model and repair; tell me both and I'll check the approved price matrix rather than guess.",
     chips: ["Screen price", "Battery price", "Back glass price", "Water damage", "Talk to a technician"],
   },
   screen: {
@@ -256,7 +256,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   location: {
     reply:
-      "No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro. Open 10:00 AM to 12:00 AM, all seven days. Walk-ins welcome, no appointment needed.",
+      "No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro. Open 10:30 AM to 9:00 PM, all seven days. Walk-ins welcome, no appointment needed.",
     chips: ["Open in Maps", "Call the store", "Book doorstep pickup"],
   },
   pickup: {
@@ -652,7 +652,7 @@ export default function Concierge() {
             </span>
             <div>
               <div className="text-[14px] font-bold">Forge AI</div>
-              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> Online · replies instantly</div>
+              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> AI repair help · human handoff</div>
             </div>
             <button
               type="button"
