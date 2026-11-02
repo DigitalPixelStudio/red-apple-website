@@ -7,7 +7,7 @@ import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
 import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
-const CHAT_MEMORY_KEY = "redapple-pixel-ai-history-v1";
+const CHAT_MEMORY_KEY = "redapple-forge-ai-history-v2";
 
 /* Pull a model name out of free text, then answer with the real table price. */
 const MODEL_HINTS = Object.keys(PRICES).sort((a, b) => b.length - a.length);
@@ -156,7 +156,7 @@ function resolve(text: string): string | null {
 const MENU: Record<string, { reply: string; chips: string[] }> = {
   start: {
     reply:
-      "Hi, I'm Pixel Ai — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
+      "Hi, I'm Forge AI — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
     chips: ["iPhone screen", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
   },
   about: {
@@ -362,7 +362,7 @@ export default function Concierge() {
     if (!memoryReady) return;
     const timer = window.setTimeout(() => {
       try {
-        window.localStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify({ savedAt: Date.now(), messages: msgs.slice(-30) }));
+        window.sessionStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify({ savedAt: Date.now(), messages: msgs.slice(-30) }));
       } catch {
         // Storage quotas and private browsing are non-fatal.
       }
@@ -415,7 +415,7 @@ export default function Concierge() {
 
     const handoffNow = (reason: string) => {
       const transcript = [...msgs.slice(-8), { from: "user" as const, text }]
-        .map((item) => (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text)
+        .map((item) => (item.from === "user" ? "Customer: " : "Forge AI: ") + item.text)
         .join("\n");
       const message = "REDAPPLE-HANDOFF\nReason: " + reason + "\nPlease have a technician review this conversation.\n\n" + transcript;
       window.open(wa(message), "_blank", "noopener,noreferrer");
@@ -470,7 +470,7 @@ export default function Concierge() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
-        signal: AbortSignal.timeout(27000),
+        signal: AbortSignal.timeout(42000),
         cache: "no-store",
       });
 
@@ -578,7 +578,7 @@ export default function Concierge() {
     if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || /pickup/i.test(chip) || /technician|human|agent/i.test(chip)) {
       const isHuman = /technician|human|agent/i.test(chip);
       const transcript = msgs.slice(-8).map((item) =>
-        (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text
+        (item.from === "user" ? "Customer: " : "Forge AI: ") + item.text
       ).join("\n");
       const msg = isHuman
         ? "REDAPPLE-HANDOFF\nCustomer requests a technician. Please review this chat:\n\n" + transcript
@@ -606,7 +606,7 @@ export default function Concierge() {
   const restoreMemory = () => {
     if (memoryReady) return;
     try {
-      const saved = window.localStorage.getItem(CHAT_MEMORY_KEY);
+      const saved = window.sessionStorage.getItem(CHAT_MEMORY_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as { savedAt?: number; messages?: unknown };
         const fresh = typeof parsed.savedAt === "number" && Date.now() - parsed.savedAt < 24 * 60 * 60 * 1000;
@@ -621,7 +621,7 @@ export default function Concierge() {
           ).slice(-30);
           if (safe.length) setMsgs(safe);
         } else {
-          window.localStorage.removeItem(CHAT_MEMORY_KEY);
+          window.sessionStorage.removeItem(CHAT_MEMORY_KEY);
         }
       }
     } catch {
@@ -636,7 +636,7 @@ export default function Concierge() {
       <button
         id="concierge-open"
         onClick={() => { if (!open) restoreMemory(); setOpen(!open); }}
-        aria-label="Open Pixel Ai chat"
+        aria-label="Open Forge AI chat"
         className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
       >
         {open ? <LineIcon name="close" size={20} /> : <LineIcon name="bot" size={22} />}
@@ -651,7 +651,7 @@ export default function Concierge() {
               <LineIcon name="bot" size={20} />
             </span>
             <div>
-              <div className="text-[14px] font-bold">Pixel Ai</div>
+              <div className="text-[14px] font-bold">Forge AI</div>
               <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> Online · replies instantly</div>
             </div>
             <button
@@ -661,7 +661,7 @@ export default function Concierge() {
                 setMsgs([{ from: "bot", text: MENU.start.reply, chips: MENU.start.chips }]);
                 setStopped(false);
                 setFailedTurns(0);
-                window.localStorage.removeItem(CHAT_MEMORY_KEY);
+                window.sessionStorage.removeItem(CHAT_MEMORY_KEY);
               }}
               disabled={typing || streaming}
               aria-label="Clear conversation history on this device"
@@ -699,7 +699,7 @@ export default function Concierge() {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Type your problem — e.g. screen toot gayi"
-              aria-label="Type your message to Pixel Ai"
+              aria-label="Type your message to Forge AI"
               className="min-w-0 flex-1 rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-2.5 text-[13px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--orange)]/60"
             />
             <button
