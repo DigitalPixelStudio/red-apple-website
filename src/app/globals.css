@@ -2392,3 +2392,60 @@ footer a {
   .ring-card:hover { transform: none; }
   .hv-zoom:hover img, .card:hover img { transform: none; }
 }
+
+
+/* ============================================================
+   OFFSCREEN MOTION GOVERNOR
+   ------------------------------------------------------------
+   Anything inside a section that is not on screen has its animations frozen.
+   `animation-play-state` pauses rather than resets, so a section resumes
+   exactly where it left off — no jump when it scrolls back in.
+
+   This is the single largest remaining win for scroll smoothness: it removes
+   roughly forty continuously running animations from the compositor while you
+   are reading any one part of the page.
+   ============================================================ */
+.motion-paused,
+.motion-paused *,
+.motion-paused *::before,
+.motion-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* a paused section must not hold a composited layer either */
+.motion-paused * {
+  will-change: auto !important;
+}
+
+/* fixed chrome is never paused — it is always on screen */
+.site-header,
+.site-header *,
+.scroll-progress,
+.light-3d,
+.light-3d *,
+.light-beam,
+.sticky-cta,
+.sticky-cta * {
+  animation-play-state: running !important;
+}
+
+/* ---- the header itself: a hard guarantee of composited-only work -------- */
+.site-header {
+  /* one layer, promoted once, never invalidated by scroll */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: auto;
+  /* the shadow is the only thing that changes, and it changes once */
+  transition: box-shadow .24s linear;
+}
+.site-header.is-scrolled {
+  box-shadow: 0 6px 24px -14px rgba(0, 0, 0, .22);
+}
+
+/* nothing in the header may animate a paint property, ever */
+.site-header .brand-name,
+.site-header .brand-sub,
+.site-header nav a {
+  animation: none !important;
+  will-change: auto !important;
+}
