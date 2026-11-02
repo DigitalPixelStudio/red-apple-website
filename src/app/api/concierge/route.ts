@@ -41,7 +41,7 @@ function retrieveKnowledge(query: string): string {
     }))
   ];
   const terms = [...new Set(
-    query.toLowerCase().replace(/[^a-z0-9\\s]/g, " ").split(/\\s+/)
+    query.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
       .filter((term) => term.length > 2 && !["the", "and", "for", "with", "how", "what", "can", "you", "are", "is", "this", "that"].includes(term))
   )];
   if (!terms.length) return "";
@@ -55,7 +55,7 @@ function retrieveKnowledge(query: string): string {
     .sort((a, b) => b.score - a.score)
     .slice(0, 4)
     .map((doc) => doc.title + ": " + doc.body)
-    .join("\\n");
+    .join("\n");
 }
 
 function priceBlock(): string {
@@ -172,7 +172,7 @@ function textStream(upstream: Response): ReadableStream<Uint8Array> {
   let buffer = "";
 
   const emitEvent = (event: string, controller: ReadableStreamDefaultController<Uint8Array>) => {
-    for (const line of event.split("\\n")) {
+    for (const line of event.split("\n")) {
       if (!line.startsWith("data:")) continue;
       const raw = line.slice(5).trim();
       if (!raw || raw === "[DONE]") continue;
@@ -194,12 +194,12 @@ function textStream(upstream: Response): ReadableStream<Uint8Array> {
         while (true) {
           const { value, done } = await reader.read();
           if (done) break;
-          buffer += decoder.decode(value, { stream: true }).replace(/\\r\\n/g, "\\n");
-          let boundary = buffer.indexOf("\\n\\n");
+          buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
+          let boundary = buffer.indexOf("\n\n");
           while (boundary !== -1) {
             emitEvent(buffer.slice(0, boundary), controller);
             buffer = buffer.slice(boundary + 2);
-            boundary = buffer.indexOf("\\n\\n");
+            boundary = buffer.indexOf("\n\n");
           }
         }
         buffer += decoder.decode();
