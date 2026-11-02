@@ -2701,3 +2701,47 @@ footer a {
 .head-underline::after {
   transition-property: transform, opacity !important;
 }
+
+
+/* ============================================================
+   FORGE FINISH — restrained motion, top-edge notch and device detail
+   Compositor-friendly transforms only; never promise a fixed FPS.
+   ============================================================ */
+@media (min-width: 768px) {
+  .dynamic-island {
+    min-height: 40px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-top: 0;
+    border-radius: 0 0 22px 22px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.12);
+  }
+}
+.phone-island {
+  top: 8px;
+  left: 50%;
+  width: 112px;
+  height: 27px;
+  margin-left: -56px;
+  border-radius: 0 0 17px 17px;
+  background: #050506;
+  box-shadow: 0 1px 0 rgba(255,255,255,.14);
+}
+@keyframes forgePhoneFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+.phone-float {
+  animation: forgePhoneFloat 8s ease-in-out infinite !important;
+  will-change: transform;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .site-header a[aria-label*="home"] img {
+    transition: transform .28s cubic-bezier(.2,.8,.2,1);
+  }
+  .site-header a[aria-label*="home"]:hover img {
+    transform: translate3d(0,-2px,0) rotate(-2deg) scale(1.04);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-float { animation: none !important; }
+}
