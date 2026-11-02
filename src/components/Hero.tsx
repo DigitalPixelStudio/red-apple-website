@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
@@ -46,15 +46,55 @@ export default function Hero() {
     return () => clearInterval(id);
   }, []);
 
+
+  /**
+   * The pointer wash.
+   *
+   * It used to call getBoundingClientRect() on every pointermove. That forces
+   * the browser to flush pending layout, and on a scroll-driven page it runs
+   * hundreds of times a second — a measurable part of the jank people feel.
+   *
+   * Now: the rect is measured once and cached (re-measured on resize), the
+   * style writes are coalesced into a single rAF, and a touch pointer is
+   * ignored entirely because a finger dragging to scroll is not a hover.
+   */
+  const glowRef = useRef<HTMLDivElement | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const moveRef = useRef<{ x: number; y: number } | null>(null);
+  const rafRef = useRef(false);
+
+  useEffect(() => {
+    const measure = () => { rectRef.current = null; };
+    window.addEventListener("resize", measure, { passive: true });
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  const onHeroPointerMove = (e: React.PointerEvent<HTMLElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const el = glowRef.current;
+    if (!el) return;
+
+    if (!rectRef.current) rectRef.current = e.currentTarget.getBoundingClientRect();
+    const r = rectRef.current;
+    moveRef.current = {
+      x: ((e.clientX - r.left) / r.width) * 100,
+      y: ((e.clientY - r.top) / r.height) * 100,
+    };
+
+    if (rafRef.current) return;
+    rafRef.current = true;
+    requestAnimationFrame(() => {
+      rafRef.current = false;
+      const m = moveRef.current;
+      if (!m) return;
+      el.style.setProperty("--mx", `${m.x}%`);
+      el.style.setProperty("--my", `${m.y}%`);
+    });
+  };
+
   return (
     <section
-      onPointerMove={(e) => {
-        const el = e.currentTarget.querySelector<HTMLElement>(".hero-cursor-glow");
-        if (!el) return;
-        const r = e.currentTarget.getBoundingClientRect();
-        el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
-        el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
-      }}
+      onPointerMove={onHeroPointerMove}
       className="hero-landscape-compact relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-white pt-28 pb-20">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-[var(--bg-alt)] to-white" />
       <div className="orb left-[-14%] top-[-10%] h-[560px] w-[560px] bg-[var(--accent)]" />
@@ -71,6 +111,7 @@ export default function Hero() {
 
       {/* pointer-following wash — transform only, never a blur filter */}
       <div
+        ref={glowRef}
         className="hero-cursor-glow"
         aria-hidden="true"
         style={{ ["--mx" as string]: "50%", ["--my" as string]: "38%" }}
