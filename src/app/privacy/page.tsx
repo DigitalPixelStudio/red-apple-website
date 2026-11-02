@@ -33,6 +33,17 @@ export default function PrivacyPage() {
             <li>Basic usage data — pages viewed and buttons clicked, in aggregate.</li>
           </ul>
 
+          <h2>AI repair assistant</h2>
+          <p>
+            If you use Forge AI on this website, the messages you type and a limited
+            amount of recent chat context are sent securely to Google Gemini to generate
+            a reply. The chat history is kept in session storage in your current browser
+            tab so the conversation can continue while the tab remains open; this website
+            does not save that chat transcript to Red Apple&apos;s repair records or CRM.
+            Please do not enter device passcodes, Apple ID passwords, OTPs, payment PINs
+            or other account credentials in the chat.
+          </p>
+
           <h2>Why we collect it</h2>
           <ul>
             <li>To prepare an accurate repair estimate.</li>
@@ -45,7 +56,7 @@ export default function PrivacyPage() {
           <p>
             We do not sell your data. We share it only with the services that run this
             website — hosting (Vercel), advertising measurement (Google Ads, Meta), and
-            messaging (WhatsApp) — and only to the extent needed for them to work.
+            messaging (WhatsApp), and AI response generation (Google Gemini when you use Forge AI) — and only to the extent needed for them to work.
           </p>
 
           <h2>How long we keep it</h2>
