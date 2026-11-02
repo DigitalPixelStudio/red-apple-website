@@ -26,7 +26,7 @@ export default function TrustProof() {
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Why trust us</p>
           <h2 className="section-title font-apple mt-3 text-[var(--text)]">Built on <span className="gradient-text">trust & precision.</span></h2>
-          <p className="section-subtitle mx-auto mt-5">905+ five-star reviews can't be wrong. Here's what makes us Bengaluru's most trusted Apple repair store.</p>
+          <p className="section-subtitle mx-auto mt-5">More than 1,000 Google reviews and a 4.9 rating. Here's what customers value about our repair service.</p>
         </Reveal>
 
         {/* Certifications grid */}
