@@ -135,6 +135,32 @@ Only when the customer directly asks who made you, who built this website, or wh
 - Never fabricate a booking confirmation, an order number or a technician name.`;
 }
 
+
+/**
+ * Resolve the Gemini key from any of the names it is commonly saved under.
+ *
+ * The env var is set in the Vercel dashboard by hand, so the name is whatever
+ * was typed there. Reading one fixed name meant a correctly-saved key could
+ * still look "missing". This checks the aliases in priority order and reports
+ * which one matched — the value is never logged or returned.
+ */
+const KEY_NAMES = [
+  "GEMINI_API_KEY",
+  "GOOGLE_GEMINI_API_KEY",
+  "GOOGLE_GENERATIVE_AI_API_KEY",
+  "GOOGLE_API_KEY",
+  "GEMINI_KEY",
+  "GEMINI_STUDIO_API_KEY",
+] as const;
+
+function resolveKey(): { key: string | null; from: string | null } {
+  for (const name of KEY_NAMES) {
+    const v = process.env[name];
+    if (v && v.trim().length > 8) return { key: v.trim(), from: name };
+  }
+  return { key: null, from: null };
+}
+
 type Turn = { role: "user" | "model"; text: string };
 
 type GeminiResult = { ok: true; text: string; model: string } | { ok: false; status: number; detail: string };
@@ -175,7 +201,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
 }
 
 export async function POST(req: NextRequest) {
-  const key = process.env.GEMINI_API_KEY;
+  const { key, from: keyFrom } = resolveKey();
   if (!key) {
     return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
   }
@@ -246,14 +272,20 @@ export async function POST(req: NextRequest) {
  *                              model answered, or why it failed. No key leaks.
  */
 export async function GET(req: NextRequest) {
-  const key = process.env.GEMINI_API_KEY;
+  const { key, from: keyFrom } = resolveKey();
   const probe = req.nextUrl.searchParams.get("probe");
 
   if (!probe) {
-    return NextResponse.json({ ok: true, ai: Boolean(key) });
+    return NextResponse.json({ ok: true, ai: Boolean(key), keyFrom, lookedFor: KEY_NAMES });
   }
   if (!key) {
-    return NextResponse.json({ ok: false, ai: false, reason: "GEMINI_API_KEY is not set" });
+    return NextResponse.json({
+      ok: false,
+      ai: false,
+      reason: "no key found",
+      lookedFor: KEY_NAMES,
+      hint: "Add the key in Vercel → Settings → Environment Variables for the Production environment, then redeploy. Any of the names in lookedFor works.",
+    });
   }
 
   const payload = {
@@ -271,6 +303,7 @@ export async function GET(req: NextRequest) {
         ok: true,
         ai: true,
         workingModel: model,
+        keyFrom,
         keyFormat: key.slice(0, 3) + "…",
         results,
       });
