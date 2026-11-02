@@ -13,7 +13,7 @@
  * transform+opacity reveal. No blur, no filter, no canvas.
  */
 
-import { Reveal } from "./Reveal";
+import Reveal from "./Reveal";
 import { LineIcon } from "./Icons";
 
 type Pair = {
