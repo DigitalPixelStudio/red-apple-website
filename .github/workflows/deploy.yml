@@ -1,72 +1,72 @@
 name: Deploy to Vercel
 
-# Why this exists
-# ---------------
-# The Vercel Git integration stopped picking up pushes (last automatic
-# deployment was 14 Sep 2026). Rather than depend on it, this workflow
-# deploys explicitly on every push to main.
-#
-# One-time setup in GitHub → Settings → Secrets and variables → Actions:
-#   VERCEL_TOKEN  — vercel.com/account/tokens  (create a token, scope: this team)
-#
-# The project and org IDs below are not secrets; they identify the project.
-
+# Manual production release. The public domain is attached to redmobile-repair.in.
+# Run this after the Vercel deployment/build quota is available.
 on:
-  # Manual only.
-  # Vercel's own Git integration already deploys on every push to main, so
-  # running this too would double the deployment count against the daily cap.
-  # Trigger it from the Actions tab when you need a deploy without a commit.
   workflow_dispatch:
 
 concurrency:
-  group: vercel-${{ github.ref }}
-  cancel-in-progress: true
+  group: vercel-red-apple-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 env:
   VERCEL_ORG_ID: team_X2IuKDqvHxg5BoaS61nc2mpg
-  VERCEL_PROJECT_ID: prj_5IgWploHqTJ4ILKBTvsns19ytire
+  VERCEL_PROJECT_ID: prj_UXuax2HiAkDgB0MNqrTc10b52TFr
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
-      - name: Check for the token
+      - name: Check for the Vercel token
+        env:
+          VERCEL_TOKEN: \${{ secrets.VERCEL_TOKEN }}
         run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
-            echo "::error::VERCEL_TOKEN is not set. Add it in Settings → Secrets and variables → Actions, or simply push to main and let the Vercel Git integration deploy."
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Add VERCEL_TOKEN in GitHub Settings → Secrets and variables → Actions."
             exit 1
           fi
 
       - name: Install Vercel CLI
-        run: npm i -g vercel@latest
+        run: npm install --global vercel@latest
 
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Pull production environment
+        run: vercel pull --yes --environment=production
+        env:
+          VERCEL_TOKEN: \${{ secrets.VERCEL_TOKEN }}
 
-      - name: Build
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build with production environment
+        run: vercel build --prod
+        env:
+          VERCEL_TOKEN: \${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to production
+      - name: Deploy the tested build to production
         id: deploy
         run: |
-          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          url="$(vercel deploy --prebuilt --prod)"
           echo "url=$url" >> "$GITHUB_OUTPUT"
-          echo "Deployed to $url"
+          echo "Production deployment: $url"
+        env:
+          VERCEL_TOKEN: \${{ secrets.VERCEL_TOKEN }}
 
-      - name: Summary
+      - name: Deployment summary
         run: |
           {
-            echo "### Deployed"
+            echo "### Red Apple production deployment"
             echo ""
-            echo "**Production:** ${{ steps.deploy.outputs.url }}"
-            echo "**Commit:** \`${{ github.sha }}\`"
+            echo "**Project:** redmobile-repair.in"
+            echo "**Production:** \${{ steps.deploy.outputs.url }}"
+            echo "**Commit:** \`\${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
