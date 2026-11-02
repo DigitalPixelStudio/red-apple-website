@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SITE, FAQS, SERVICES } from "@/lib/site";
+import { SITE, FAQS, SERVICE_PAGES } from "@/lib/site";
 import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
 import { KNOWLEDGE_BASE, type KnowledgeDocument } from "@/lib/knowledge-base";
 
@@ -53,12 +53,12 @@ function knowledgeDocuments(): KnowledgeDocument[] {
     content: faq.a,
   }));
 
-  const serviceDocuments = SERVICES.map((service) => ({
-    id: "service-" + service.id,
+  const serviceDocuments = SERVICE_PAGES.map((service) => ({
+    id: "service-" + service.slug,
     title: service.title,
-    tags: tokenize(service.title + " " + service.devices + " " + service.desc),
-    content: service.title + ". " + service.desc + " Typical timing: " + service.time +
-      ". Devices: " + service.devices + ". " + service.points.join("; ") + ".",
+    tags: tokenize(service.title + " " + service.short + " " + service.desc + " " + service.keywords.join(" ")),
+    content: service.title + ". " + service.short + ". " + service.desc +
+      ". Related topics: " + service.keywords.join(", ") + ".",
   }));
 
   const priceDocuments = Object.entries(PRICES).flatMap(([model, repairs]) =>
