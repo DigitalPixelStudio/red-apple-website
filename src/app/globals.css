@@ -2655,3 +2655,49 @@ footer a {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* Final high-refresh cleanup: stop remaining font/background/shadow keyframes. */
+.font-breathe,
+.head-gradient,
+.kicker,
+.icon-bounce-idle,
+.fx-divider,
+.fx-badge,
+.fx-halo,
+.fx-caret::after,
+.fx-dots,
+.fx-breathe-border {
+  animation: none !important;
+  will-change: auto !important;
+}
+
+/* These effects animate paint/layout properties rather than useful content. */
+.fx-gloss::after {
+  display: none !important;
+  transition: none !important;
+}
+.head-underline::after {
+  width: 56px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .45s cubic-bezier(.22,1,.36,1);
+}
+.reveal-in .head-underline::after,
+.is-visible .head-underline::after,
+.head-underline:hover::after {
+  width: 56px;
+  transform: scaleX(1);
+}
+.motion-smooth,
+.cta-orange,
+.hv-lift,
+.hv-tilt,
+.fx-lift-glow,
+.spotlight-card,
+.price-hover,
+.icon-bounce,
+.type-mark,
+.head-underline::after {
+  transition-property: transform, opacity !important;
+}
