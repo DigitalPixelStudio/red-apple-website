@@ -181,7 +181,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   quality: {
     reply:
-      "Every device goes through 32 checkpoints before hand-back — touch across the whole panel, True Tone, Face ID, front and rear cameras, all sensors, charging, speakers, and a thermal check. We do not ask for your passcode and we never wipe a device without written permission.",
+      "Every device goes through a 21-point quality check before hand-back — touch across the whole panel, True Tone, Face ID, front and rear cameras, all sensors, charging, speakers, and a thermal check. We do not ask for your passcode and we never wipe a device without written permission.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   booking: {
@@ -191,12 +191,12 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   device: {
     reply:
-      "We cover iPhone models through iPhone 18 Pro Max, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and data recovery. Which device and model do you have?",
+      "We repair supported iPhone models listed on our website, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and data recovery. Which device and model do you have?",
     chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Talk to a technician"],
   },
   iphone: {
     reply:
-      "We repair iPhone models from supported iPhone models shown in our current model list. Prices depend on the exact model and repair; tell me both and I'll check the approved price matrix rather than guess.",
+      "We repair supported iPhone models listed on our website. Tell me your exact model and fault so I can check the right service and approved price.",
     chips: ["Screen price", "Battery price", "Back glass price", "Water damage", "Talk to a technician"],
   },
   screen: {
@@ -281,7 +281,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   notrepaired: {
     reply:
-      "If we can't fix it, you pay nothing — we tell you before you commit, not after. If a repair we did makes something worse, we put it right at our cost. That has never been refused.",
+      "If we can't fix it, you pay nothing — we tell you before you commit, not after. If you have a concern after hand-back, contact us and the team will assess it under the written warranty.",
     chips: ["Warranty details", "Talk to a technician"],
   },
   parts: {
