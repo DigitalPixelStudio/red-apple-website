@@ -2543,3 +2543,115 @@ footer a {
   /* nothing here needs a paint-triggering keyframe any more; the ones that
      still exist are unreferenced by any live element */
 }
+
+
+/* ============================================================
+   MOBILE-FIRST PERFORMANCE OVERRIDES — November 2026
+   Keep the visual design intact; remove recurring paint/layout work.
+   ============================================================ */
+
+/* The header is intentionally static: no scroll shadow tween, colour cycle,
+   background animation, or per-scroll JS state. */
+.site-header,
+.site-header.is-scrolled {
+  background: #fff !important;
+  border-bottom: 1px solid rgba(0, 0, 0, .055);
+  box-shadow: none !important;
+  transition: none !important;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.site-header .brand-name,
+.site-header .brand-sub,
+.site-header nav a {
+  animation: none !important;
+  will-change: auto !important;
+}
+.site-header nav a::after {
+  transition: transform .18s ease;
+}
+
+/* Disable infinite effects that repaint text, shadows, borders or backgrounds.
+   Short entrance transitions and the chat typing indicator remain available. */
+.stat-breathe,
+.text-shimmer,
+.gradient-border::after,
+.animate-gradient,
+.animate-aurora,
+.animate-pulse-ring,
+.animate-pulse-dot,
+.animate-shine,
+.animate-breathe,
+.animate-float-rotate,
+.animate-spin-slow,
+.aurora-layer,
+.orb,
+.orb-reverse,
+.chip-float,
+.sweep-shine::after,
+.light-3d .l1,
+.light-3d .l2,
+.light-3d .l3,
+.light-beam,
+.typing-cursor::after {
+  animation: none !important;
+  will-change: auto !important;
+}
+
+/* Avoid animating box-shadow and other paint properties in general UI motion. */
+.motion-smooth,
+.cta-primary,
+.cta-dark,
+.cta-outline,
+.dynamic-island,
+.hover-pop,
+.card,
+.card-lg,
+.ring-card {
+  transition-property: transform, opacity !important;
+}
+.site-header,
+.site-header * {
+  scroll-behavior: auto;
+}
+
+/* Touch devices do not need pointer-hover transforms or cursor-following layers. */
+@media (hover: none), (max-width: 767px) {
+  .light-3d,
+  .light-beam,
+  .hero-cursor-glow,
+  .cursor-glow {
+    display: none !important;
+  }
+  .animate-marquee,
+  .fx-marquee {
+    animation-play-state: paused !important;
+    will-change: auto !important;
+  }
+  .site-header a:hover,
+  .site-header button:hover,
+  .site-header nav a:hover::after {
+    transform: none !important;
+  }
+  a[href]:hover,
+  button:hover,
+  .card:hover,
+  .card-lg:hover,
+  .spotlight-card:hover,
+  .hv-lift:hover,
+  .ring-card:hover {
+    transform: none !important;
+  }
+}
+
+/* Respect OS motion preference without changing the layout or content. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
