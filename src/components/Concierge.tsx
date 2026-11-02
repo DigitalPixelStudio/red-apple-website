@@ -460,6 +460,7 @@ export default function Concierge() {
 
     // ---- real AI ----
     let streamedReply = "";
+    let providerUnavailable = false;
     try {
       const history = msgs
         .filter((m) => m.text)
@@ -474,7 +475,9 @@ export default function Concierge() {
         cache: "no-store",
       });
 
-      if (res.ok && res.body) {
+      if (res.status === 204 || !res.ok) {
+        providerUnavailable = true;
+      } else if (res.body) {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let inserted = false;
@@ -539,7 +542,13 @@ export default function Concierge() {
         push("My reply was interrupted while connecting. Please try once more, or choose WhatsApp to continue with a technician.", ["Talk to a technician"]);
         return;
       }
-      // fall through to the rule engine — never surface a network error to a customer
+      providerUnavailable = true;
+    }
+
+    if (providerUnavailable) {
+      setFailedTurns(0);
+      push("I’m temporarily having trouble reaching the AI service, and I don’t want to guess about your device. I can still help you check the published price information or connect you directly with a Red Apple technician.", ["Price list", "Talk to a technician"]);
+      return;
     }
 
     // ---- fallback: local knowledge retrieval, then the deterministic menu ----
@@ -575,6 +584,11 @@ export default function Concierge() {
   };
 
   const chipAction = (chip: string) => {
+    if (/price list/i.test(chip)) {
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Here is the published repair-pricing section. If your exact model or repair is not listed, the team will confirm it after a free diagnosis.", chips: ["Talk to a technician"] }]);
+      return;
+    }
     if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || /pickup/i.test(chip) || /technician|human|agent/i.test(chip)) {
       const isHuman = /technician|human|agent/i.test(chip);
       const transcript = msgs.slice(-8).map((item) =>
@@ -652,7 +666,7 @@ export default function Concierge() {
             </span>
             <div>
               <div className="text-[14px] font-bold">Forge AI</div>
-              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> AI repair help · human handoff</div>
+              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Repair assistant · technician handoff</div>
             </div>
             <button
               type="button"
