@@ -19,7 +19,7 @@ const REPAIR_HINTS: [RegExp, string][] = [
   [/camera|lens|blurry|focus|ois/i, "Camera Repair"],
   [/charging port|not charging|charging|port|flex|lightning|usb.?c/i, "Charging Port / Flex"],
   [/speaker|mic|haptic|sound|earpiece/i, "Speaker / Mic / Haptics"],
-  [/motherboard|board|\bic\b|chip/i, "Motherboard / IC Repair"],
+  [/motherboard|logic board|\bboard\b|\bic\b|chip/i, "Motherboard / IC Repair"],
   [/software|ios|update|boot loop|firmware/i, "Software / iOS Issue"],
   [/unlock|activation lock|icloud/i, "Unlocking (lawful)"],
   [/dent|body|frame|housing/i, "Dent / Body / Frame Repair"],
@@ -359,7 +359,7 @@ export default function Concierge() {
       handoffNow("Customer requested a human technician");
       return;
     }
-    if (/(water damage|dropped in water|paani|geela|liquid damage)/i.test(text)) {
+    if (/(water|liquid|paani|geela)/i.test(text)) {
       push("Please do not charge the device or use heat to dry it. Water damage needs a free assessment first; recovery cannot be promised. Would you prefer a walk-in assessment or doorstep pickup?", ["Book doorstep pickup", "Talk to a technician"]);
       return;
     }
