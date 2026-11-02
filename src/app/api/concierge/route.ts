@@ -2,317 +2,225 @@ import { NextRequest, NextResponse } from "next/server";
 import { SITE, REPAIR_TYPES } from "@/lib/site";
 import { PRICES, priceRange, inr, TURNAROUND } from "@/lib/pricing";
 
-/**
- * /api/concierge — Pixel Ai's brain.
- *
- * The Gemini key lives ONLY in the Vercel environment variable
- * `GEMINI_API_KEY`. It is never written into the repo, never sent to the
- * browser, and never logged. If the variable is missing the route answers 503
- * and the widget falls back to its built-in rule engine, so the site still
- * works with no key configured.
- *
- * Visit `/api/concierge?probe=1` in a browser to check whether the key is
- * wired up and which model answered. It never reveals the key itself.
- */
-
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/**
- * Google renames and retires models regularly, and an AQ auth key can be
- * scoped to a subset. We try newest-first and use the first that answers,
- * so a retired model name never takes the assistant down.
- */
-const MODELS = [
-  "gemini-3.8-flash",
-  "gemini-3.6-flash",
-  "gemini-3.5-flash-lite",
-];
-
+const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_KEY", "GEMINI_STUDIO_API_KEY"] as const;
+type Turn = { role: "user" | "model"; text: string };
+type GeminiResult =
+  | { ok: true; text: string; model: string }
+  | { ok: false; status: number; code: string; detail: string };
 
-/**
- * Which model answered last time. Kept in module scope so a warm serverless
- * instance skips straight to the working model instead of probing all four on
- * every message — that probe loop was the reason replies felt slow.
- */
-let knownGood: string | null = null;
-
-/** A compact, readable dump of the price table for the system prompt. */
-function priceBlock(): string {
-  const lines: string[] = [];
-  for (const [model, repairs] of Object.entries(PRICES)) {
-    const parts = Object.entries(repairs).map(([repair, [lo, hi]]) =>
-      `${repair}=${lo === hi ? inr(lo) : `${inr(lo)}-${inr(hi)}`}`
-    );
-    lines.push(`${model}: ${parts.join("; ")}`);
+function resolveKey(): string | null {
+  for (const name of KEY_NAMES) {
+    const value = process.env[name];
+    if (value && value.trim().length > 8) return value.trim();
   }
-  return lines.join("\n");
+  return null;
+}
+
+function priceBlock(): string {
+  return Object.entries(PRICES).map(([model, repairs]) => {
+    const values = Object.entries(repairs).map(([repair, [min, max]]) =>
+      repair + "=" + (min === max ? inr(min) : inr(min) + "–" + inr(max))
+    );
+    return model + ": " + values.join("; ");
+  }).join("\n");
 }
 
 function systemPrompt(): string {
-  const r = priceRange();
-  return `You are Pixel Ai, the repair assistant for ${SITE.legalName} (${SITE.name}) in Bengaluru, India.
-
-## Who you are
-- You help customers understand their Apple device problem, the price, the timing and the warranty.
-- You are warm, brief and concrete. You never waffle. Two to four short sentences is usually enough.
-- You are NOT a general chatbot. If someone asks something unrelated to device repair, gently steer back.
-
-## The shop
-- Address: ${SITE.address}
-- Hours: ${SITE.hours}
-- Doorstep pickup: ${SITE.pickupHours}, free for repairs above ₹2,999
-- Phone / WhatsApp: ${SITE.phone}
-- Rating: 4.9 from 905 Google reviews, 9+ years at the same MG Road location
-- Warranty: 90 days on every repair; 6 months of health cover on battery and display
-- We are an INDEPENDENT repair service. We are not affiliated with, authorised by, or endorsed by Apple Inc. Never imply otherwise.
-- We do not ask for passcodes, Apple IDs, OTPs or card details. Ever.
-
-## Pricing rules — these are absolute
-- The only prices you may quote are in the table below. Range: ${inr(r.min)} to ${inr(r.max)}.
-- If a model+repair is NOT in the table, say it is quoted after a free diagnosis and offer WhatsApp. Do not estimate, do not guess, do not interpolate.
-- Never quote below the listed minimum.
-- Never invent a discount, offer, EMI plan or coupon.
-- If the customer pushes for a lower price, say the price is fixed and explain what is included (genuine parts, labour, 90-day warranty).
-
-## Price table (model: repair=price in INR)
-${priceBlock()}
-
-## Typical turnaround
-${REPAIR_TYPES.map((t) => `${t}: ${TURNAROUND[t] ?? "same day"}`).join("\n")}
-
-## Language
-- Reply in the SAME language and script the customer wrote in.
-- English, Hindi (Devanagari or Roman), Kannada, Tamil, Telugu, Bengali, Marathi, Malayalam, Gujarati, Punjabi, Urdu — all fine.
-- Hinglish input ("screen toot gayi, kitna lagega") gets Hinglish back.
-- If the customer mixes languages, mirror their mix.
-- If the customer names a device but not a model, ask for the model in one short line — do not dump the whole price range.
-
-## If asked who built you
-Only when the customer directly asks who made you, who built this website, or who your developer is, answer: "I was built by Pixel Forge Studio — you can reach them on WhatsApp at 96200 24812." Never bring this up unprompted. Never mention Pixel Forge in any other context.
-
-
-## How a job actually runs — explain this when someone asks "what happens after I hand it over"
-1. Free diagnosis. The device is booked in and gets a job number in our CRM.
-2. You get a fixed quote. Nothing is charged before you approve it.
-3. Repair. Every part fitted is logged against that job number.
-4. 32-point test before hand-back.
-5. GST invoice generated from the CRM — not written by hand — and sent to you on WhatsApp, with your repair history saved for the next visit.
-
-## Policies you may state as fact
-- **Payment**: after diagnosis and approval. Never in advance. UPI, card, cash, and bank transfer all accepted. GST invoice issued on request, with your company GSTIN if you give it.
-- **If it cannot be repaired**: you pay nothing. We tell you before you commit, not after.
-- **If we make it worse**: we make it right at our cost. That has never been refused.
-- **Parts**: OEM-grade displays and batteries, or genuine Apple parts where we can source them. We tell you which one you are getting and what it costs, before we start. We never claim a part is genuine when it is OEM-grade.
-- **Passcodes**: we do not need your passcode for most repairs. For testing we may ask you to unlock it in front of us. We never ask for your Apple ID, an OTP, or card details — anyone who does is not us.
-- **Data**: nothing is wiped without your written permission. If a repair requires a wipe we tell you first and you decide.
-- **Warranty claim**: bring the device and the invoice number. No argument, no re-diagnosis fee. Damage from a new drop or liquid is not covered, and we will show you why.
-- **Bulk / corporate / school**: three or more devices gets a written quote with a single invoice. Ask and a technician will scope it.
-- **Insurance**: we provide the itemised GST invoice and damage report that insurance claims need. We do not file the claim for you.
-- **Trade-in**: we do not buy devices. We will tell you honestly if a repair is not worth the money compared to the device's value.
-
-## Answers to the questions people actually ask
-- **"Why are you more expensive than the shop near me?"** — Because the price includes the OEM-grade part, the labour, the 32-point test and a 90-day warranty. A cheaper quote usually means a copy panel with no True Tone and no warranty. We will not match a price that requires cutting the warranty.
-- **"Is my data safe?"** — Yes. We do not browse your device. Repairs are done at the bench with you able to watch through the glass wall. Nothing is wiped without written permission.
-- **"Can you come to me?"** — Doorstep pickup runs 24/7 across Bengaluru, free above ₹2,999. A rider collects and returns it.
-- **"Do you speak Kannada?"** — Yes. Kannada, Hindi, English and Tamil are all spoken at the counter.
-- **"How long have you been here?"** — Since 2017, same shop on MG Road, Halasuru.
-- **"Is this an Apple authorised service centre?"** — No. We are an independent specialist. Say this plainly and without apology: independent is why we can do board-level work Apple would replace instead of repair.
-
-## Things you must never do
-- Never promise a repair will succeed before diagnosis.
-- Never quote a price for a model or repair that is not in the table.
-- Never claim to be Apple-authorised.
-- Never confirm a booking you did not create — bookings go through the pickup form or WhatsApp, not through you.
-- Never give medical, legal or financial advice of any kind.
-
-## Tone
-- No emojis.
-- No exclamation marks.
-- Do not say "As an AI". You are Pixel Ai, a shop assistant.
-- Never fabricate a booking confirmation, an order number or a technician name.`;
+  const range = priceRange();
+  return [
+    "You are Pixel Ai, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
+    "",
+    "PERSONA: Warm, concise, confident, like a helpful senior service advisor. Usually 2–4 short sentences. Ask only one question at a time. Match the customer's language AND script (English, Hindi, Hinglish, Kannada, Tamil, Telugu, and other languages).",
+    "",
+    "VERIFIED SHOP FACTS:",
+    "- Address: " + SITE.address,
+    "- Opening hours: " + SITE.hours + ", all seven days.",
+    "- Phone/WhatsApp: " + SITE.phone,
+    "- Doorstep pickup: " + SITE.pickupHours + " across Bengaluru; free for repairs above ₹2,999.",
+    "- Independent repair workshop. NOT an Apple Authorised Service Provider; never imply Apple affiliation.",
+    "- 90-day service warranty on repairs. Battery and display also have 6 months of health cover, subject to the stated policy.",
+    "- Diagnosis is free. Customer receives a fixed quote and approves it before work or payment.",
+    "- Payment is after diagnosis and approval; no advance. UPI, card and cash are accepted.",
+    "",
+    "PRICE RULES — STRICT:",
+    "- The table below is the only source for numeric repair prices. Never invent, estimate, interpolate, or use a price remembered from another conversation.",
+    "- If both model and repair are known, quote the exact table entry. For a range, show the complete range and say the exact grade/revision is confirmed at free diagnosis.",
+    "- If a model/repair pair is absent, say it is quoted after a free diagnosis. Do not substitute another model's price.",
+    "- Never discount below the lower end of a listed range. Never promise a cash discount or price match.",
+    "- Data recovery starts at ₹2,999 with free assessment; outcome is not guaranteed.",
+    "- Published iPhone catalogue range is " + inr(range.min) + " to " + inr(range.max) + ". Only state this range when the customer explicitly asks for the overall catalogue range.",
+    "",
+    "PRICE MATRIX (INR):",
+    priceBlock(),
+    "",
+    "TURNAROUND:",
+    "- Display, back glass and battery: usually same day, approximately 45–60 minutes.",
+    "- Charging port and camera: approximately 60 minutes.",
+    "- Board-level / motherboard work: 2–3 days.",
+    "- Water-damage assessment and treatment: approximately 24–48 hours; never promise recovery.",
+    "- Data recovery: approximately 1–2 days; never promise the data can be recovered.",
+    "- iPad screens: approximately 1–3 days.",
+    "- If timing is not listed or depends on parts, say the technician confirms it after diagnosis.",
+    "",
+    "SAFETY, PRIVACY AND COMPLIANCE:",
+    "- Never ask for or accept a device passcode, Apple ID/password, OTP, UPI PIN, card number or other account credentials. Tell customers not to share them.",
+    "- Never promise that data will be recovered or that water-damaged devices will work. Offer a free assessment first.",
+    "- For water damage, advise: do not charge the device and do not apply heat; arrange assessment promptly.",
+    "- Never bypass iCloud Activation Lock. Refuse briefly and offer lawful carrier unlocking only with proof of ownership.",
+    "- Describe parts as OEM-grade or genuine-grade only. Never say 'genuine Apple part' unless explicitly verified for that specific part.",
+    "- Never claim to be Apple-authorised.",
+    "- Never fabricate a booking, order number, technician name, pickup confirmation or available slot. This chat cannot itself confirm a booking; direct the customer to WhatsApp or the pickup form.",
+    "- If the customer is angry, reports damage, requests a refund, threatens legal action, or reports a repeat failure: apologise once and immediately offer a human technician. Do not argue or speculate about liability.",
+    "- Do not mention Pixel Forge Studio unless the customer directly asks who built the assistant/site. If asked, say Pixel Forge Studio and WhatsApp 96200 24812.",
+    "- Do not invent discounts, urgency, guarantees, services, stock, review counts or business claims.",
+    "",
+    "CONVERSATION FLOW:",
+    "1. Answer the question directly. 2. Ask for the missing model or fault if needed. 3. Quote only from the matrix. 4. Reassure briefly about warranty/privacy/turnaround where relevant. 5. Offer a concrete next step: walk-in or doorstep pickup.",
+    "If you do not understand, ask one narrow clarification. Do not repeat the same fallback twice; offer WhatsApp or a call, then a human.",
+    "Never say you crawled a website or read a file. You have the shop facts and approved pricing matrix supplied in this instruction."
+  ].join("\n");
 }
-
-
-/**
- * Resolve the Gemini key from any of the names it is commonly saved under.
- *
- * The env var is set in the Vercel dashboard by hand, so the name is whatever
- * was typed there. Reading one fixed name meant a correctly-saved key could
- * still look "missing". This checks the aliases in priority order and reports
- * which one matched — the value is never logged or returned.
- */
-const KEY_NAMES = [
-  "GEMINI_API_KEY",
-  "GOOGLE_GEMINI_API_KEY",
-  "GOOGLE_GENERATIVE_AI_API_KEY",
-  "GOOGLE_API_KEY",
-  "GEMINI_KEY",
-  "GEMINI_STUDIO_API_KEY",
-] as const;
-
-function resolveKey(): { key: string | null; from: string | null } {
-  for (const name of KEY_NAMES) {
-    const v = process.env[name];
-    if (v && v.trim().length > 8) return { key: v.trim(), from: name };
-  }
-  return { key: null, from: null };
-}
-
-type Turn = { role: "user" | "model"; text: string };
-
-type GeminiResult = { ok: true; text: string; model: string } | { ok: false; status: number; detail: string };
 
 async function callGemini(model: string, key: string, body: unknown): Promise<GeminiResult> {
   try {
-    const res = await fetch(`${BASE}/${model}:generateContent`, {
+    const response = await fetch(BASE + "/" + model + ":generateContent", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Header form works for both legacy AIza… and newer AQ… auth keys.
-        "x-goog-api-key": key,
-      },
+      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(6500),
+      cache: "no-store"
     });
-
-    if (!res.ok) {
-      const detail = await res.text().catch(() => "");
-      return { ok: false, status: res.status, detail: detail.slice(0, 240) };
+    if (!response.ok) {
+      const raw = await response.text().catch(() => "");
+      let code = "PROVIDER_ERROR";
+      let detail = raw.slice(0, 240);
+      try {
+        const parsed = JSON.parse(raw);
+        code = String(parsed?.error?.status || parsed?.error?.code || code);
+        detail = String(parsed?.error?.message || detail).slice(0, 240);
+      } catch {}
+      return { ok: false, status: response.status, code, detail };
     }
-
-    const data = await res.json();
-    const text: string = (data?.candidates?.[0]?.content?.parts ?? [])
-      .map((p: { text?: string }) => p.text ?? "")
+    const data = await response.json();
+    const reply = (data?.candidates?.[0]?.content?.parts ?? [])
+      .map((part: { text?: string }) => part.text ?? "")
       .join("")
       .trim();
-
-    if (!text) return { ok: false, status: 200, detail: "empty candidate" };
-    return { ok: true, text, model };
-  } catch (err) {
+    if (!reply) return { ok: false, status: 502, code: "EMPTY_RESPONSE", detail: "Gemini returned no text candidate." };
+    return { ok: true, text: reply, model };
+  } catch (error) {
     return {
       ok: false,
       status: 0,
-      detail: err instanceof Error ? err.name : "network",
+      code: error instanceof Error ? error.name : "NETWORK_ERROR",
+      detail: "The AI provider did not respond before the request deadline."
     };
   }
 }
 
-export async function POST(req: NextRequest) {
-  const { key, from: keyFrom } = resolveKey();
-  if (!key) {
-    return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
-  }
+function buildPayload(message: string, history: Turn[]) {
+  const contents = [
+    ...history.slice(-8)
+      .filter((turn) => turn && typeof turn.text === "string" && turn.text.trim())
+      .map((turn) => ({
+        role: turn.role === "model" ? "model" : "user",
+        parts: [{ text: turn.text.slice(0, 600) }]
+      })),
+    { role: "user", parts: [{ text: message }] }
+  ];
+  return {
+    systemInstruction: { parts: [{ text: systemPrompt() }] },
+    contents,
+    generationConfig: { temperature: 0.25, maxOutputTokens: 240, topP: 0.85 }
+  };
+}
 
-  let body: { message?: string; history?: Turn[] };
+export async function POST(request: NextRequest) {
+  const key = resolveKey();
+  if (!key) return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
+
+  let body: { message?: unknown; history?: unknown };
   try {
-    body = await req.json();
+    body = await request.json();
   } catch {
     return NextResponse.json({ ok: false, reason: "bad_json" }, { status: 400 });
   }
 
-  const message = (body.message ?? "").toString().slice(0, 800).trim();
-  if (!message) {
-    return NextResponse.json({ ok: false, reason: "empty" }, { status: 400 });
-  }
+  const message = typeof body.message === "string" ? body.message.trim().slice(0, 800) : "";
+  if (!message) return NextResponse.json({ ok: false, reason: "empty_message" }, { status: 400 });
 
-  const history = Array.isArray(body.history) ? body.history.slice(-8) : [];
-  const contents = [
-    ...history
-      .filter((t) => t && typeof t.text === "string" && t.text.trim())
-      .map((t) => ({
-        role: t.role === "model" ? "model" : "user",
-        parts: [{ text: t.text.slice(0, 600) }],
-      })),
-    { role: "user", parts: [{ text: message }] },
-  ];
+  const history: Turn[] = Array.isArray(body.history)
+    ? body.history.slice(-8).filter((item): item is Turn =>
+        Boolean(item) &&
+        typeof item === "object" &&
+        ((item as Turn).role === "user" || (item as Turn).role === "model") &&
+        typeof (item as Turn).text === "string"
+      )
+    : [];
 
-  const payload = {
-    systemInstruction: { parts: [{ text: systemPrompt() }] },
-    contents,
-    generationConfig: { temperature: 0.5, maxOutputTokens: 320, topP: 0.9 },
-    safetySettings: [
-      { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
-      { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
-      { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
-      { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
-    ],
-  };
+  const payload = buildPayload(message, history);
+  const attempts: Array<{ model: string; status: number; code: string }> = [];
 
-  const attempts: string[] = [];
-  const order = knownGood ? [knownGood, ...MODELS.filter((m) => m !== knownGood)] : MODELS;
-  for (const model of order) {
-    const r = await callGemini(model, key, payload);
-    if (r.ok) {
-      knownGood = r.model;
-      return NextResponse.json({ ok: true, reply: r.text, model: r.model }, { status: 200 });
-    }
-    const { status, detail } = r as Extract<GeminiResult, { ok: false }>;
-    attempts.push(`${model}:${status}:${detail.slice(0, 160)}`);
-    // 401/403 means the key itself is wrong — trying other models will not help
-    if (status === 401 || status === 403) break;
-    // two misses is enough on the live path; the widget falls back instantly
-    if (attempts.length >= 2) break;
-  }
-
-  // log for the Vercel function logs; never includes the key
-  console.error("[concierge] all models failed ::", attempts.join(" | "));
-  return NextResponse.json(
-    { ok: false, reason: "provider", reply: null, attempts },
-    { status: 502 }
-  );
-}
-
-/**
- * GET is the health check.
- *   /api/concierge          -> { ok, ai: boolean }
- *   /api/concierge?probe=1  -> actually calls Gemini once and reports which
- *                              model answered, or why it failed. No key leaks.
- */
-export async function GET(req: NextRequest) {
-  const { key, from: keyFrom } = resolveKey();
-  const probe = req.nextUrl.searchParams.get("probe");
-
-  if (!probe) {
-    return NextResponse.json({ ok: true, ai: Boolean(key), keyFrom, lookedFor: KEY_NAMES });
-  }
-  if (!key) {
-    return NextResponse.json({
-      ok: false,
-      ai: false,
-      reason: "no key found",
-      lookedFor: KEY_NAMES,
-      hint: "Add the key in Vercel → Settings → Environment Variables for the Production environment, then redeploy. Any of the names in lookedFor works.",
-    });
-  }
-
-  const payload = {
-    contents: [{ role: "user", parts: [{ text: "Reply with exactly: OK" }] }],
-    generationConfig: { temperature: 0, maxOutputTokens: 8 },
-  };
-
-  const results: Record<string, string> = {};
   for (const model of MODELS) {
-    const r = await callGemini(model, key, payload);
-    const failed = r as Extract<GeminiResult, { ok: false }>;
-    results[model] = r.ok ? "ok" : `${failed.status} ${failed.detail.slice(0, 120)}`;
-    if (r.ok) {
-      return NextResponse.json({
-        ok: true,
-        ai: true,
-        workingModel: model,
-        keyFrom,
-        results,
+    const result = await callGemini(model, key, payload);
+    if (result.ok) {
+      return NextResponse.json({ ok: true, reply: result.text, model: result.model }, {
+        status: 200,
+        headers: { "Cache-Control": "no-store" }
       });
     }
-    if (failed.status === 401 || failed.status === 403) break;
+
+    attempts.push({ model, status: result.status, code: result.code });
+    console.error("[concierge] provider failure", {
+      model,
+      status: result.status,
+      code: result.code,
+      detail: result.detail.slice(0, 180)
+    });
+
+    if (result.status === 401 || result.status === 403 || result.status === 400) break;
   }
 
   return NextResponse.json({
     ok: false,
-    ai: false,
-    results,
-    hint: "If every model returns 401/403 the key is wrong, expired or not enabled for the Gemini API. If only some fail, the model name is retired.",
+    reason: "provider_unavailable",
+    reply: null,
+    attempts
+  }, { status: 502, headers: { "Cache-Control": "no-store" } });
+}
+
+export async function GET(request: NextRequest) {
+  const key = resolveKey();
+  const probe = request.nextUrl.searchParams.get("probe");
+  if (!probe) {
+    return NextResponse.json({ ok: true, configured: Boolean(key), models: MODELS }, {
+      headers: { "Cache-Control": "no-store" }
+    });
+  }
+  if (!key) {
+    return NextResponse.json({ ok: false, configured: false, reason: "no_key" }, { status: 503 });
+  }
+
+  const result = await callGemini(MODELS[0], key, {
+    contents: [{ role: "user", parts: [{ text: "Reply with exactly: OK" }] }],
+    generationConfig: { temperature: 0, maxOutputTokens: 8 }
   });
+  if (result.ok) {
+    return NextResponse.json({ ok: true, configured: true, model: result.model }, {
+      headers: { "Cache-Control": "no-store" }
+    });
+  }
+  return NextResponse.json({
+    ok: false,
+    configured: true,
+    model: MODELS[0],
+    status: result.status,
+    code: result.code,
+    detail: result.detail
+  }, { status: 502, headers: { "Cache-Control": "no-store" } });
 }
