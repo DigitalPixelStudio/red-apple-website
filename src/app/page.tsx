@@ -1,5 +1,6 @@
 import { PickupSection } from "@/components/PickupSection";
 import ScrollProgress from "@/components/ScrollProgress";
+import MotionGovernor from "@/components/MotionGovernor";
 import Navbar from "@/components/Navbar";
 import DynamicIsland from "@/components/DynamicIsland";
 import Hero from "@/components/Hero";
@@ -46,6 +47,7 @@ export default function Home() {
   return (
     <main id="top" className="relative min-h-screen bg-white">
       <ScrollProgress />
+      <MotionGovernor />
       <Navbar />
       <DynamicIsland />
       <div className="relative z-10">
