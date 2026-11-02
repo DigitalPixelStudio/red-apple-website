@@ -73,7 +73,7 @@ export default function ReviewsSection() {
               <SolidStars count={5} />
             </div>
             <div className="mt-3 font-apple text-[54px] font-extrabold leading-none tracking-tight">{SITE.rating}</div>
-            <div className="mt-2 text-[14px] font-semibold text-[var(--text)]">Based on {SITE.ratingCount}+ Google reviews</div>
+            <div className="mt-2 text-[14px] font-semibold text-[var(--text)]">Based on {SITE.ratingCount} Google reviews</div>
             <div className="mx-auto mt-6 max-w-[420px] space-y-3 text-left">
               {RATINGS.map((r) => (
                 <div key={r.label} className="flex items-center gap-3">
