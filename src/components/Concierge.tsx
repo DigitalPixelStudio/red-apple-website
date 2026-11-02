@@ -3,59 +3,55 @@ import { useEffect, useRef, useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
-import { getPrice, priceLabel, priceRange, inr } from "@/lib/pricing";
+import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
 
 /* Pull a model name out of free text, then answer with the real table price. */
-const MODEL_HINTS = [
-  "17 Pro Max","17 Pro","17 Plus","17","Air",
-  "16 Pro Max","16 Pro","16 Plus","16",
-  "15 Pro Max","15 Pro","15 Plus","15",
-  "14 Pro Max","14 Pro","14 Plus","14",
-  "13 Pro Max","13 Pro","13 mini","13",
-  "12 Pro Max","12 Pro","12 mini","12",
-  "SE (3rd Gen)","11 Pro Max","11 Pro","11",
-  "XS Max","XS","XR","X",
-];
+const MODEL_HINTS = Object.keys(PRICES).sort((a, b) => b.length - a.length);
 
 const REPAIR_HINTS: [RegExp, string][] = [
+  [/water|liquid|paani|geela|dropped in/i, "Water Damage Revival"],
+  [/data recover|recover photos|photos|contacts|backup|dead phone data/i, "Data Recovery"],
   [/back ?glass|backside|back side|back panel|rear glass|rear panel|back cover/i, "Back Glass Replacement"],
-  [/screen|display|toot|tut|broken glass|glass front|lcd|oled|touch not|touch not work|cracked screen|screen crack/i, "Front Display Replacement"],
-  [/battery|batter|charge drain|heating|discharge|drain|health/i, "Battery Replacement"],
-  [/camera|lens|photo|focus/i, "Camera Repair"],
-  [/charging port|charging|not charging|port|flex|lightning|usb.?c/i, "Charging Port / Flex"],
-  [/speaker|mic|haptic|sound/i, "Speaker / Mic / Haptics"],
-  [/motherboard|board|ic |chip/i, "Motherboard / IC Repair"],
-  [/water|liquid|paani|geela/i, "Water Damage Revival"],
-  [/software|ios|update|boot/i, "Software / iOS Issue"],
-  [/data|photos|recover/i, "Data Recovery"],
-  [/unlock/i, "Unlocking (lawful)"],
-  [/firmware|os install/i, "OS / Firmware Installation"],
-  [/dent|body|frame/i, "Dent / Body / Frame Repair"],
+  [/screen|display|toot|tut|broken glass|cracked|black screen|green line|touch not working|lcd|oled/i, "Front Display Replacement"],
+  [/battery|batter|charge not lasting|discharge|drain|health/i, "Battery Replacement"],
+  [/camera|lens|blurry|focus|ois/i, "Camera Repair"],
+  [/charging port|not charging|charging|port|flex|lightning|usb.?c/i, "Charging Port / Flex"],
+  [/speaker|mic|haptic|sound|earpiece/i, "Speaker / Mic / Haptics"],
+  [/motherboard|board|\bic\b|chip/i, "Motherboard / IC Repair"],
+  [/software|ios|update|boot loop|firmware/i, "Software / iOS Issue"],
+  [/unlock|activation lock|icloud/i, "Unlocking (lawful)"],
+  [/dent|body|frame|housing/i, "Dent / Body / Frame Repair"],
 ];
 
-/** Returns a concrete price answer, or null when we cannot be specific. */
+/** Deterministic price lookup: the spreadsheet-backed matrix is the sole source. */
 function priceAnswer(text: string): string | null {
-  const t = text.toLowerCase();
-  const model = MODEL_HINTS.find((m) => t.includes(m.toLowerCase()));
-  const repair = REPAIR_HINTS.find(([re]) => re.test(text))?.[1];
+  const normalized = text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const model = MODEL_HINTS.find((candidate) => {
+    const key = candidate.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    return (" " + normalized + " ").includes(" " + key + " ");
+  });
+  const repair = REPAIR_HINTS.find(([pattern]) => pattern.test(text))?.[1];
 
-  // A repair was named but no model: ask for the one thing that unblocks a
-  // real figure, instead of dumping the whole catalogue at them.
-  if (repair && !model) {
-    const r = priceRange();
-    return `Which iPhone is it? The price for ${repair.toLowerCase()} moves a lot by model — anywhere from ${inr(r.min)} to ${inr(r.max)}. Tell me the model and I'll give you the exact figure.`;
-  }
+  if (!model && repair) return "Which exact device and model is it? I'll check the approved price matrix rather than guess.";
   if (!model || !repair) return null;
 
-  const full = `iPhone ${model}`;
-  const p = getPrice(full, repair);
-  if (p) {
-    return `${full} — ${repair}: **${priceLabel(p)}**. Genuine parts and labour included. Want me to hold a slot?`;
+  if (repair === "Water Damage Revival") {
+    return "Water damage needs a free assessment first, and we cannot promise a recovery outcome. Please do not charge the device or apply heat. Would you prefer a walk-in assessment or doorstep pickup?";
   }
-  const r = priceRange();
-  return `${full} with ${repair.toLowerCase()} is quoted after a free diagnosis — we do not guess at board-level work. Published repairs run ${inr(r.min)} to ${inr(r.max)}. Send the model on WhatsApp and a technician replies with a fixed figure.`;
+  if (repair === "Data Recovery") {
+    return "Data recovery starts at ₹2,999 and the assessment is free. Recovery is not guaranteed; the technician checks whether the data is reachable before any work. Would you like to arrange an assessment?";
+  }
+
+  const price = getPrice(model, repair);
+  if (!price) return model + " — " + repair + " is quoted after a free diagnosis because it is not listed in the approved price matrix.";
+
+  const quote = priceLabel(price);
+  const priceText = price[0] === price[1]
+    ? model + " " + repair.toLowerCase() + ": " + quote + ". This is the listed price."
+    : model + " " + repair.toLowerCase() + ": " + quote + ". The exact part grade/revision is confirmed during free diagnosis.";
+  return priceText + " The repair carries a 90-day service warranty. Would you like to arrange a visit or doorstep pickup?";
 }
 
 /* Typed input is matched through this synonym table, so "display kharab hai"
@@ -145,7 +141,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   timing: {
     reply:
-      "Display, back glass and battery are done in about 45–60 minutes while you wait. Charging port and camera take about an hour. Board-level and water damage need 2–3 days because of the cleaning and curing. iPad screens are 1–3 days depending on the model.",
+      "Display, back glass and battery are usually same-day, about 45–60 minutes. Charging port and camera take about an hour; board-level work takes 2–3 days, water-damage work about 24–48 hours, data recovery 1–2 days, and iPad screens 1–3 days.",
     chips: ["Price list", "Book doorstep pickup", "Talk to a technician"],
   },
   payment: {
@@ -165,32 +161,32 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   device: {
     reply:
-      "We cover the whole Apple family — iPhone (all models through 17 Pro Max), iPad, Apple Watch, AirPods, MacBook Pro/Air, Mac mini, iMac and Mac Studio. Display, battery, back glass, camera, charging port, water damage, logic board and data recovery. Which one is yours?",
+      "We cover iPhone models through iPhone 18 Pro Max, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and data recovery. Which device and model do you have?",
     chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Talk to a technician"],
   },
   iphone: {
     reply:
-      "iPhone is 80% of what we do. Display from ₹2,499, battery from ₹1,899, back glass from ₹1,999, charging port from ₹1,499 — the exact figure depends on your model. Most repairs are done in 30–45 minutes while you wait.",
+      "We repair iPhone models from iPhone 6 through iPhone 18 Pro Max. Prices depend on the exact model and repair; tell me both and I'll check the approved price matrix rather than guess.",
     chips: ["Screen price", "Battery price", "Back glass price", "Water damage", "Talk to a technician"],
   },
   screen: {
     reply:
-      "Display replacement: OEM-grade OLED, True Tone preserved, roughly 45 minutes. Price runs ₹2,499 for older models up to ₹24,635 for an iPhone 16 Pro Max. Tell me your model and I'll give you the exact figure — or a technician can on WhatsApp.",
+      "We offer OEM-grade display replacement. The exact price depends on the model and is quoted from the approved price matrix; if a combination is not listed, diagnosis is free and the technician will confirm the quote. Which iPhone model is it?",
     chips: ["iPhone 16 Pro Max", "iPhone 15", "iPhone 14", "iPhone 13", "Talk to a technician"],
   },
   backglass: {
     reply:
-      "Back glass is our signature job — laser-aligned, MagSafe still works, no camera damage. From ₹1,999, about 60 minutes. It's the repair other shops in Bengaluru send to us.",
+      "Back-glass replacement is available for supported models and usually takes about 45–60 minutes. The exact price depends on your model; tell me which iPhone you have and I'll check the approved price matrix.",
     chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
   },
   battery: {
     reply:
-      "Battery from ₹1,899, about 30 minutes, with a free health report before and after. Every battery carries 6 months of health cover on top of the 90-day service warranty.",
+      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model; battery repairs carry a 90-day service warranty plus the stated 6-month battery health cover. Which model do you have?",
     chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
   },
   camera: {
     reply:
-      "Front or rear camera, including OIS and zoom modules, with calibration after fitting. Usually 60 minutes. From ₹2,299 depending on the model.",
+      "We assess front and rear camera faults, including focus and stabilisation issues. Turnaround is usually about an hour; the price depends on the exact model and fault. Which device do you have?",
     chips: ["Get exact price", "Talk to a technician"],
   },
   water: {
@@ -205,27 +201,27 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   ipad: {
     reply:
-      "iPad display, battery, charging port, camera and logic board — across iPad, Pro, Air and mini. Displays typically 1–2 hours because of the adhesive cure. From ₹3,499.",
+      "We repair iPad Pro, Air and mini models, including display, battery, charging and housing issues. Screen repairs usually take 1–3 days; the exact price depends on the iPad model and repair.",
     chips: ["Get exact price", "Talk to a technician"],
   },
   watch: {
     reply:
-      "Apple Watch screens, batteries, sensors and speakers across every Series and Ultra. Most are same-day. From ₹2,999.",
+      "We repair supported Apple Watch Ultra, Series and SE models, including screens, batteries and housing issues. Tell me the exact model and repair so I can check the approved price matrix.",
     chips: ["Get exact price", "Talk to a technician"],
   },
   airpods: {
     reply:
-      "AirPods battery replacement, charging-case repair, speaker and mic fixes for all generations including Pro and Max. Usually same-day. From ₹1,499.",
+      "We assess AirPods battery, charging-case, speaker and microphone faults. Pricing is confirmed at the counter after checking the exact model and issue.",
     chips: ["Get exact price", "Talk to a technician"],
   },
   macbook: {
     reply:
-      "MacBook Pro and Air, Mac mini, iMac and Studio — display, keyboard, battery, storage, thermal and logic-board work by Apple-trained technicians. Diagnosis is free; most board-level repairs are 2–3 days.",
+      "We assess MacBook Pro and Air, Mac mini, iMac and Mac Studio faults. MacBook repairs are quoted after a free diagnosis; board-level work generally takes 2–3 days.",
     chips: ["Get exact price", "Talk to a technician"],
   },
   estimate: {
     reply:
-      "I won't guess at a price — that's how people get surprised later. Send your exact model and the fault, and you'll have a fixed figure in minutes. iPhone screen runs ₹2,499–₹24,635; battery ₹1,899–₹6,499; back glass from ₹1,999.",
+      "I won't guess at a price. Send your exact device model and the repair needed, and I'll check the approved price matrix; anything not listed is quoted after a free diagnosis. Which model and fault should I check?",
     chips: ["Send my model", "Talk to a technician"],
   },
   location: {
@@ -260,17 +256,17 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   parts: {
     reply:
-      "OEM-grade displays and batteries, or genuine Apple parts where we can source them. We tell you which one you're getting and what each costs before we start. We never call an OEM-grade part genuine — you always know what's going into your phone.",
+      "We use OEM-grade or genuine-grade parts and tell you the part grade before work begins. We are an independent repair workshop, not an Apple Authorised Service Provider, and we never describe an OEM-grade part as a genuine Apple part.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   privacy: {
     reply:
-      "We don't need your passcode for most repairs, and we never ask for your Apple ID, an OTP or card details — anyone who does is not us. Repairs happen at the bench behind glass, so you can watch. Nothing is wiped without your written permission.",
+      "We never ask for your passcode, Apple ID, OTP, UPI PIN or card details. Repairs are performed at component level; if a repair ever requires a data wipe, we explain it first and obtain your written permission.",
     chips: ["Talk to a technician", "Visit the store"],
   },
   corporate: {
     reply:
-      "Three devices or more gets a written quote on one invoice — schools, offices, agencies and resellers all use this. Tell us the device list and a technician will scope it the same day.",
+      "Bulk enquiries for five or more devices are handled by the owner with a custom written quote. Share the device list and a technician will arrange the next step.",
     chips: ["Talk to a technician", "Price list"],
   },
   insurance: {
@@ -285,7 +281,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   human: {
     reply:
-      "Connecting you to a technician on WhatsApp now. They can see your chat history with me, so you won't have to repeat anything.",
+      "I can open WhatsApp with a summary of this conversation so a Red Apple technician can take over. I won't claim a handoff is complete until the team responds.",
     chips: [],
   },
 };
@@ -296,9 +292,10 @@ export default function Concierge() {
     { from: "bot", text: MENU.start.reply, chips: MENU.start.chips },
   ]);
   const [typing, setTyping] = useState(false);
+  const [stopped, setStopped] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, typing]);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "auto", block: "nearest" }); }, [msgs]);
 
   const [draft, setDraft] = useState("");
 
@@ -324,6 +321,7 @@ export default function Concierge() {
    * round trip on a fact we already know.
    */
   const send = async (text: string) => {
+    if (stopped) return;
     setMsgs((m) => [...m, { from: "user", text }]);
     setTyping(true);
 
@@ -331,6 +329,40 @@ export default function Concierge() {
       setMsgs((m) => [...m, { from: "bot", text: reply, chips }]);
       setTyping(false);
     };
+
+    const lowerText = text.toLowerCase().trim();
+    if (/^(stop|unsubscribe|opt out|opt-out)$/i.test(lowerText)) {
+      setStopped(true);
+      push("Understood. I won't send any further replies in this chat.");
+      return;
+    }
+
+    const handoffNow = (reason: string) => {
+      const transcript = [...msgs.slice(-8), { from: "user" as const, text }]
+        .map((item) => (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text)
+        .join("\n");
+      const message = "REDAPPLE-HANDOFF\nReason: " + reason + "\nPlease have a technician review this conversation.\n\n" + transcript;
+      window.open(wa(message), "_blank", "noopener,noreferrer");
+      track("whatsapp_click", { source: "concierge", chip: "human_handoff" });
+      push("I'm sorry this needs a person. I've opened WhatsApp with your conversation summary so the Red Apple team can take over.", []);
+    };
+
+    if (/(refund|legal action|lawyer|complaint|second time|terrible|damaged by (you|the repair)|you damaged)/i.test(text)) {
+      handoffNow("Customer complaint / refund / damage escalation");
+      return;
+    }
+    if (/(icloud|activation lock).*(bypass|unlock)|(bypass|unlock).*(icloud|activation lock)/i.test(text)) {
+      push("We cannot bypass iCloud Activation Lock. If this is a carrier/network lock, a technician can explain the lawful option with proof of ownership.", ["Talk to a technician"]);
+      return;
+    }
+    if (/(talk to (a )?(human|person|technician)|speak to (a )?(human|person|technician)|call me|agent|staff)/i.test(text)) {
+      handoffNow("Customer requested a human technician");
+      return;
+    }
+    if (/(water damage|dropped in water|paani|geela|liquid damage)/i.test(text)) {
+      push("Please do not charge the device or use heat to dry it. Water damage needs a free assessment first; recovery cannot be promised. Would you prefer a walk-in assessment or doorstep pickup?", ["Book doorstep pickup", "Talk to a technician"]);
+      return;
+    }
 
     // instant, deterministic answers first
     const built = builderAnswer(text);
@@ -353,6 +385,8 @@ export default function Concierge() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
+        signal: AbortSignal.timeout(9000),
+        cache: "no-store",
       });
 
       if (res.ok) {
@@ -387,14 +421,20 @@ export default function Concierge() {
   };
 
   const chipAction = (chip: string) => {
-    if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || chip.includes("Book pickup")) {
-      const msg = chip.includes("estimate") || chip.includes("quote")
-        ? "Hi Red Apple Mobile Repair Store! I'd like an estimate for my Apple device."
-        : chip.includes("pickup")
-          ? "Hi! I'd like to book free pickup & drop for my Apple device."
-          : chip.includes("Emergency")
-            ? "URGENT: My Apple device has water damage. Please help!"
-            : "Hi Red Apple Mobile Repair Store! I need help with my Apple device.";
+    if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || chip.includes("Book pickup") || /technician|human|agent/i.test(chip)) {
+      const isHuman = /technician|human|agent/i.test(chip);
+      const transcript = msgs.slice(-8).map((item) =>
+        (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text
+      ).join("\n");
+      const msg = isHuman
+        ? "REDAPPLE-HANDOFF\nCustomer requests a technician. Please review this chat:\n\n" + transcript
+        : chip.includes("estimate") || chip.includes("quote")
+          ? "Hi Red Apple Mobile Repair Store! I'd like an estimate for my Apple device."
+          : chip.toLowerCase().includes("pickup")
+            ? "Hi! I'd like to arrange doorstep pickup for my Apple device. Please confirm availability."
+            : chip.includes("Emergency")
+              ? "URGENT: My Apple device has water damage. Please advise on a free assessment."
+              : "Hi Red Apple Mobile Repair Store! I need help with my Apple device.";
       window.open(wa(msg), "_blank", "noopener,noreferrer");
       track("whatsapp_click", { source: "concierge", chip });
       setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opening WhatsApp in a new tab — our team usually replies within minutes.", chips: [] }]);
