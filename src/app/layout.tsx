@@ -121,11 +121,6 @@ const localBusinessSchema = {
     longitude: SITE.geo.lng,
   },
   openingHours: SITE.hoursSchema,
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: SITE.rating,
-    reviewCount: SITE.ratingCount,
-  },
   areaServed: "Bengaluru",
   hasMap: SITE.mapsUrl,
   sameAs: [SITE.gmbUrl],
