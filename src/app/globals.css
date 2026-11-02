@@ -2449,3 +2449,102 @@ footer a {
   animation: none !important;
   will-change: auto !important;
 }
+
+/* ============================================================
+   STATIC DEVICE + ZERO DECORATIVE ANIMATION
+   ------------------------------------------------------------
+   The brief: 120fps matters more than motion. The iPhone 17 Pro Max was the
+   single most expensive element on the page — twenty nested children, each
+   with its own 3D transform, two of them animating continuously on top of a
+   perspective container. That is a lot of compositing for a decorative
+   centrepiece.
+
+   It is now completely static: the device sits at a three-quarter angle and
+   does not move. It reads exactly the same in a still frame, and it costs one
+   painted layer instead of a dozen animated ones.
+
+   Everything else decorative follows the same rule. What remains animating on
+   this page is:
+     · the light layer (three transforms, contained)
+     · the travelling hairline
+     · hover states, which only run while the pointer is on something
+   ============================================================ */
+
+/* ---- the device: still, at its showcase angle ---- */
+.phone-float,
+.phone-spin,
+.phone-app,
+.phone-sheen,
+.phone-orbit-1,
+.phone-orbit-2,
+.phone-shadow,
+.phone-screen-glow {
+  animation: none !important;
+  will-change: auto !important;
+}
+
+/* keep the three-quarter pose the spin used to settle on */
+.phone-spin {
+  transform: rotateY(-18deg) rotateX(6deg);
+}
+
+/* the device no longer needs a 3D context, which is the expensive part */
+.phone-stage {
+  perspective: none;
+  transform-style: flat;
+}
+
+/* ---- every other decorative loop, off ---- */
+.animate-aurora,
+.animate-bob,
+.animate-brand-breathe,
+.animate-breathe,
+.animate-float,
+.animate-float-rotate,
+.animate-gradient,
+.animate-pulse-dot,
+.animate-pulse-ring,
+.animate-shine,
+.animate-spin-slow,
+.bg-grid,
+.bg-grid::after,
+.bg-orb-3d,
+.chip-float,
+.connect-device,
+.connect-ring,
+.connect-status,
+.fx-marquee,
+.orb,
+.orb-reverse,
+.aurora-layer,
+.fx-aurora {
+  animation: none !important;
+  will-change: auto !important;
+}
+
+/* the marquee is content, not decoration — it keeps moving, but linearly and
+   on a composited transform, and only while it is on screen */
+.animate-marquee,
+.fx-marquee {
+  animation: marquee 42s linear infinite !important;
+  will-change: transform;
+}
+
+/* the hero orbs stay as soft light, they just stop drifting */
+.orb, .orb-reverse {
+  opacity: .8;
+}
+
+/* ---- what is allowed to keep moving ---- */
+.light-3d .l1,
+.light-3d .l2,
+.light-3d .l3,
+.light-beam {
+  animation-play-state: running !important;
+}
+
+/* ---- and a global guarantee: no infinite animation may repaint ---- */
+@media (prefers-reduced-motion: no-preference) {
+  /* nothing here needs a paint-triggering keyframe any more; the ones that
+     still exist are unreferenced by any live element */
+}
