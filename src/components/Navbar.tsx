@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon } from "./Icons";
@@ -16,34 +16,11 @@ const LINKS = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  /* The header used to hide on scroll-down and slide back on scroll-up. That
-     transform was the jitter: two competing transitions plus a state flip on
-     every direction change. A repair shop's header is 68px tall — hiding it
-     saves nothing and costs smoothness. It now stays put and only gains a
-     shadow once you leave the hero. One boolean, one class, no transform. */
-  useEffect(() => {
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const next = window.scrollY > 16;
-      setScrolled((prev) => (prev === next ? prev : next));
-    };
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <header
-      className={`site-header fixed inset-x-0 top-0 z-50 ${scrolled ? "is-scrolled" : ""}`}
+      className="site-header sticky inset-x-0 top-0 z-50"
     >
       <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
         <a href="#top" className="group flex items-center gap-2.5" aria-label="Red Apple Mobile Repair Store home">

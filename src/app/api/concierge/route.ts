@@ -24,10 +24,9 @@ export const dynamic = "force-dynamic";
  * so a retired model name never takes the assistant down.
  */
 const MODELS = [
-  "gemini-2.5-flash",
-  "gemini-2.0-flash",
-  "gemini-flash-latest",
-  "gemini-1.5-flash",
+  "gemini-3.8-flash",
+  "gemini-3.6-flash",
+  "gemini-3.5-flash-lite",
 ];
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
@@ -175,7 +174,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
         "x-goog-api-key": key,
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(7_000),
+      signal: AbortSignal.timeout(10_000),
     });
 
     if (!res.ok) {
@@ -250,7 +249,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, reply: r.text, model: r.model }, { status: 200 });
     }
     const { status, detail } = r as Extract<GeminiResult, { ok: false }>;
-    attempts.push(`${model}:${status}:${detail.slice(0, 60)}`);
+    attempts.push(`${model}:${status}:${detail.slice(0, 160)}`);
     // 401/403 means the key itself is wrong — trying other models will not help
     if (status === 401 || status === 403) break;
     // two misses is enough on the live path; the widget falls back instantly
@@ -304,7 +303,6 @@ export async function GET(req: NextRequest) {
         ai: true,
         workingModel: model,
         keyFrom,
-        keyFormat: key.slice(0, 3) + "…",
         results,
       });
     }
@@ -314,7 +312,6 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     ok: false,
     ai: false,
-    keyFormat: key.slice(0, 3) + "…",
     results,
     hint: "If every model returns 401/403 the key is wrong, expired or not enabled for the Gemini API. If only some fail, the model name is retired.",
   });
