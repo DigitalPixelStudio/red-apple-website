@@ -21,7 +21,7 @@ export default function ProcessSection() {
                   <img src={s.img} alt={s.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                   <span className="font-apple absolute left-3 top-3 text-[48px] font-black text-white/20">{s.step}</span>
-                  <span className="absolute bottom-3 left-3 grid h-10 w-10 place-items-center rounded-xl bg-white/20 backdrop-blur-sm">
+                  <span className="absolute bottom-3 left-3 grid h-10 w-10 place-items-center rounded-xl bg-black/35">
                     <LineIcon name={s.icon as IconName} size={18} color="#fff" />
                   </span>
                 </div>
