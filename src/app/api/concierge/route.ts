@@ -223,9 +223,10 @@ export async function POST(req: NextRequest) {
       knownGood = r.model;
       return NextResponse.json({ ok: true, reply: r.text, model: r.model }, { status: 200 });
     }
-    attempts.push(`${model}:${r.status}:${r.detail.slice(0, 60)}`);
+    const { status, detail } = r as Extract<GeminiResult, { ok: false }>;
+    attempts.push(`${model}:${status}:${detail.slice(0, 60)}`);
     // 401/403 means the key itself is wrong — trying other models will not help
-    if (r.status === 401 || r.status === 403) break;
+    if (status === 401 || status === 403) break;
     // two misses is enough on the live path; the widget falls back instantly
     if (attempts.length >= 2) break;
   }
@@ -263,7 +264,8 @@ export async function GET(req: NextRequest) {
   const results: Record<string, string> = {};
   for (const model of MODELS) {
     const r = await callGemini(model, key, payload);
-    results[model] = r.ok ? "ok" : `${r.status} ${r.detail.slice(0, 120)}`;
+    const failed = r as Extract<GeminiResult, { ok: false }>;
+    results[model] = r.ok ? "ok" : `${failed.status} ${failed.detail.slice(0, 120)}`;
     if (r.ok) {
       return NextResponse.json({
         ok: true,
@@ -273,7 +275,7 @@ export async function GET(req: NextRequest) {
         results,
       });
     }
-    if (r.status === 401 || r.status === 403) break;
+    if (failed.status === 401 || failed.status === 403) break;
   }
 
   return NextResponse.json({
