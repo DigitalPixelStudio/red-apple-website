@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SITE, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
