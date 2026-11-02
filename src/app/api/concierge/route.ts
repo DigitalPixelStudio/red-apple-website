@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SITE, REPAIR_TYPES } from "@/lib/site";
-import { PRICES, priceRange, inr, TURNAROUND } from "@/lib/pricing";
+import { SITE } from "@/lib/site";
+import { PRICES, priceRange, inr } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
