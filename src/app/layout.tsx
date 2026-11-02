@@ -152,6 +152,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className="light-beam" aria-hidden="true" />
         {children}
+        <PWAInstallPrompt />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
