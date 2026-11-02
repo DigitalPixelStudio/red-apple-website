@@ -92,7 +92,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(6500),
+      signal: AbortSignal.timeout(4500),
       cache: "no-store"
     });
     if (!response.ok) {
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
       detail: result.detail.slice(0, 180)
     });
 
-    if (result.status === 401 || result.status === 403 || result.status === 400) break;
+    if (result.status === 0 || result.status === 401 || result.status === 403 || result.status === 400) break;
   }
 
   return NextResponse.json({
