@@ -1,0 +1,43 @@
+name: Patch dependency lockfile
+
+on:
+  push:
+    branches:
+      - "feat/forge-ai-pwa-premium-fixes"
+    paths:
+      - "package.json"
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Regenerate lockfile without lifecycle scripts
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Apply compatible security patches
+        run: npm audit fix --package-lock-only --ignore-scripts --no-fund
+      - name: Commit patched lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m "fix(deps): patch vulnerable production dependency lockfile"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+      - name: Repository lint
+        run: npx eslint . --quiet
+      - name: Production build
+        run: npm run build
