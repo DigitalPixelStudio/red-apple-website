@@ -32,7 +32,7 @@ jobs:
         if: github.ref_name != 'main'
         run: |
           npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-          npm audit fix --package-lock-only --ignore-scripts --no-fund
+          npm audit fix --package-lock-only --ignore-scripts --no-fund --audit-level=high
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add package-lock.json
@@ -45,6 +45,6 @@ jobs:
       - name: Lint changed production files
         run: npx eslint . --quiet
       - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --audit-level=high
       - name: Production build
         run: npm run build
