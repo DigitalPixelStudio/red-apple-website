@@ -455,7 +455,7 @@ export default function Concierge() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
-        signal: AbortSignal.timeout(22000),
+        signal: AbortSignal.timeout(27000),
         cache: "no-store",
       });
 
