@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${baseUrl}/privacy` },
 };
 
-const UPDATED = "30 October 2026";
+const UPDATED = "3 November 2026";
 
 export default function PrivacyPage() {
   return (
@@ -33,6 +33,17 @@ export default function PrivacyPage() {
             <li>Basic usage data — pages viewed and buttons clicked, in aggregate.</li>
           </ul>
 
+          <h2>AI repair assistant</h2>
+          <p>
+            If you use Forge AI on this website, the messages you type and a limited
+            amount of recent chat context are sent securely to Google Gemini to generate
+            a reply. The chat history is kept in session storage in your current browser
+            tab so the conversation can continue while the tab remains open; this website
+            does not save that chat transcript to Red Apple&apos;s repair records or CRM.
+            Please do not enter device passcodes, Apple ID passwords, OTPs, payment PINs
+            or other account credentials in the chat. If you choose the WhatsApp handoff, a summary is prefilled in a WhatsApp draft for you to review and send; this website does not send it automatically.
+          </p>
+
           <h2>Why we collect it</h2>
           <ul>
             <li>To prepare an accurate repair estimate.</li>
@@ -43,9 +54,7 @@ export default function PrivacyPage() {
 
           <h2>Who we share it with</h2>
           <p>
-            We do not sell your data. We share it only with the services that run this
-            website — hosting (Vercel), advertising measurement (Google Ads, Meta), and
-            messaging (WhatsApp) — and only to the extent needed for them to work.
+            We do not sell your data. We share it only with services needed for the action you choose: hosting (Vercel), AI response generation (Google Gemini when you use Forge AI), and WhatsApp if you choose to open a WhatsApp handoff. This website does not currently load Meta Pixel or Google Ads conversion tags by default.
           </p>
 
           <h2>How long we keep it</h2>
@@ -65,9 +74,7 @@ export default function PrivacyPage() {
 
           <h2>Cookies</h2>
           <p>
-            We use cookies for advertising measurement and basic analytics. You can block
-            them in your browser settings — the site still works, you will just see less
-            relevant ads elsewhere.
+            This website does not currently load non-essential advertising or analytics tags by default. It uses browser session storage for the current Forge AI chat and limited local storage to remember app-install dismissal or installation state. If non-essential analytics or advertising tags are enabled in future, they should be presented with a consent choice before they run.
           </p>
 
           <h2>Security</h2>

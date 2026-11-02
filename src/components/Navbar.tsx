@@ -22,7 +22,7 @@ export default function Navbar() {
     <header
       className="site-header sticky inset-x-0 top-0 z-50"
     >
-      <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
+      <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 md:pt-12 lg:px-8">
         <a href="#top" className="group flex items-center gap-2.5" aria-label="Red Apple Mobile Repair Store home">
           <img
             src="/logo.png"

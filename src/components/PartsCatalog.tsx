@@ -9,7 +9,7 @@ const PARTS = [
   { name: "Camera Module", device: "iPhone 14 Pro / 15 Pro / 16 Pro", quality: "OEM Sensor Assembly", img: "/images/v4/camera-repair.jpg", icon: "camera" },
   { name: "Charging Port Flex", device: "iPhone, iPad, AirPods", quality: "Precision Connector", img: "/images/v3/charging-port.jpg", icon: "charging" },
   { name: "Logic Board Components", device: "MacBook, iPhone, iPad", quality: "Micro-soldered IC Chips", img: "/images/v4/logic-board-real.jpg", icon: "board" },
-];
+] as const;
 
 export default function PartsCatalog() {
   return (
@@ -30,7 +30,7 @@ export default function PartsCatalog() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
                     <span className="grid h-9 w-9 place-items-center rounded-xl bg-black/35">
-                      <LineIcon name={p.icon as any} size={18} color="#fff" />
+                      <LineIcon name={p.icon} size={18} color="#fff" />
                     </span>
                     <span className="rounded-full bg-green-600 px-2.5 py-1 text-[10px] font-bold text-white">{p.quality}</span>
                   </div>

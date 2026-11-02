@@ -5,7 +5,7 @@ import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
+export const maxDuration = 40;
 
 const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
@@ -92,7 +92,7 @@ function retrieveKnowledge(query: string): string {
 
 function systemPrompt(query: string): string {
   return [
-    "You are Pixel Ai, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
+    "You are Forge AI, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
     "",
     "PERSONA: Warm, concise, confident, like a helpful senior service advisor. Usually 2–4 short sentences. Ask only one question at a time. Match the customer's language AND script (English, Hindi, Hinglish, Kannada, Tamil, Telugu, and other languages).",
     "",
@@ -101,7 +101,7 @@ function systemPrompt(query: string): string {
     "- Opening hours: " + SITE.hours + ", all seven days.",
     "- Phone/WhatsApp: " + SITE.phone,
     "- Doorstep pickup: " + SITE.pickupHours + " across Bengaluru; free for repairs above ₹2,999.",
-    "- We repair iPhone 6 through iPhone 18 Pro Max, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
+    "- We repair supported iPhone models listed in the website model list, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
     "- Independent repair workshop. NOT an Apple Authorised Service Provider; never imply Apple affiliation.",
     "- 90-day service warranty on repairs. Battery and display also have 6 months of health cover: battery health below 80% or a non-impact display fault qualifies for one replacement under policy. New impact/liquid damage and third-party repair are excluded.",
     "- Devices in transit and on the bench are covered by the shop care policy and photographed at collection and hand-back.",
@@ -161,7 +161,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(12000),
       cache: "no-store"
     });
     if (!response.ok) {
@@ -287,7 +287,7 @@ export async function POST(request: NextRequest) {
   let selected: { response: Response; model: string } | null = null;
 
   // At most three attempts: primary key/model, one alternate key, then the fallback model.
-  // A network timeout stops retries; repeatedly waiting on the same exhausted project only adds latency.
+  // Timeouts and transient provider failures continue to the next configured fallback; malformed requests stop.
   const plan = [
     { model: MODELS[0], key: keys[0] },
     ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []),
@@ -295,6 +295,11 @@ export async function POST(request: NextRequest) {
   ];
 
   for (const attempt of plan) {
+    const previousFailure = attempts[attempts.length - 1];
+    if (previousFailure && (previousFailure.status === 429 || previousFailure.status === 503)) {
+      const backoffMs = Math.min(250 * 2 ** attempts.length, 750);
+      await new Promise((resolve) => setTimeout(resolve, backoffMs));
+    }
     const result = await callGemini(attempt.model, attempt.key, payload);
     if (result.ok) {
       selected = { response: result.response, model: result.model };
@@ -306,7 +311,7 @@ export async function POST(request: NextRequest) {
       status: result.status,
       code: result.code,
     });
-    if (result.status === 0 || result.status === 400) break;
+    if (result.status === 400) break;
   }
 
   if (selected) {

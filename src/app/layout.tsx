@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SITE, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
@@ -67,8 +68,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/* FAQPage — this is what lets Google show the Q&A directly in search results.
-   It is the single highest-value structured-data addition for a local service site. */
+/* FAQPage describes the visible FAQ content. Google currently limits FAQ rich results
+   primarily to authoritative government and health sites; no display is promised. */
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -121,11 +122,6 @@ const localBusinessSchema = {
     longitude: SITE.geo.lng,
   },
   openingHours: SITE.hoursSchema,
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: SITE.rating,
-    reviewCount: SITE.ratingCount,
-  },
   areaServed: "Bengaluru",
   hasMap: SITE.mapsUrl,
   sameAs: [SITE.gmbUrl],
@@ -157,6 +153,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className="light-beam" aria-hidden="true" />
         {children}
+        <PWAInstallPrompt />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
