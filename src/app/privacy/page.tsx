@@ -41,7 +41,7 @@ export default function PrivacyPage() {
             tab so the conversation can continue while the tab remains open; this website
             does not save that chat transcript to Red Apple&apos;s repair records or CRM.
             Please do not enter device passcodes, Apple ID passwords, OTPs, payment PINs
-            or other account credentials in the chat.
+            or other account credentials in the chat. If you choose the WhatsApp handoff, a summary is prefilled in a WhatsApp draft for you to review and send; this website does not send it automatically.
           </p>
 
           <h2>Why we collect it</h2>
@@ -54,9 +54,7 @@ export default function PrivacyPage() {
 
           <h2>Who we share it with</h2>
           <p>
-            We do not sell your data. We share it only with the services that run this
-            website — hosting (Vercel), advertising measurement (Google Ads, Meta), and
-            messaging (WhatsApp), and AI response generation (Google Gemini when you use Forge AI) — and only to the extent needed for them to work.
+            We do not sell your data. We share it only with services needed to operate the website: hosting (Vercel), advertising measurement (Google Ads and Meta), messaging (WhatsApp), and AI response generation (Google Gemini when you use Forge AI).
           </p>
 
           <h2>How long we keep it</h2>
