@@ -326,27 +326,6 @@ export default function Concierge() {
   const [memoryReady, setMemoryReady] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  // Keep the last conversation in this browser tab, including across refreshes.
-  // sessionStorage is intentionally used instead of a permanent profile store.
-  useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem(CHAT_MEMORY_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const safe = parsed.filter((item): item is Msg =>
-            item && (item.from === "user" || item.from === "bot") &&
-            typeof item.text === "string"
-          ).slice(-16);
-          if (safe.length) setMsgs(safe);
-        }
-      }
-    } catch {
-      // Corrupt or unavailable browser storage must never stop the chat.
-    }
-    setMemoryReady(true);
-  }, []);
-
   useEffect(() => {
     if (!memoryReady) return;
     try {
@@ -580,12 +559,32 @@ export default function Concierge() {
     send(chip.replace(/^[^\w]+/, "").trim());
   };
 
+  const restoreMemory = () => {
+    if (memoryReady) return;
+    try {
+      const saved = sessionStorage.getItem(CHAT_MEMORY_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const safe = parsed.filter((item): item is Msg =>
+            item && (item.from === "user" || item.from === "bot") &&
+            typeof item.text === "string"
+          ).slice(-16);
+          if (safe.length) setMsgs(safe);
+        }
+      }
+    } catch {
+      // Corrupt or unavailable browser storage must never stop the chat.
+    }
+    setMemoryReady(true);
+  };
+
   return (
     <>
       {/* Floating launcher */}
       <button
         id="concierge-open"
-        onClick={() => setOpen(!open)}
+        onClick={() => { if (!open) restoreMemory(); setOpen(!open); }}
         aria-label="Open Pixel Ai chat"
         className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
       >
