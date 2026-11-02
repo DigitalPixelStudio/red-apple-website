@@ -199,33 +199,11 @@ export async function POST(request: NextRequest) {
   }, { status: 502, headers: { "Cache-Control": "no-store" } });
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const key = resolveKey();
-  const probe = request.nextUrl.searchParams.get("probe");
-  if (!probe) {
-    return NextResponse.json({ ok: true, configured: Boolean(key), models: MODELS }, {
-      headers: { "Cache-Control": "no-store" }
-    });
-  }
-  if (!key) {
-    return NextResponse.json({ ok: false, configured: false, reason: "no_key" }, { status: 503 });
-  }
-
-  const result = await callGemini(MODELS[0], key, {
-    contents: [{ role: "user", parts: [{ text: "Reply with exactly: OK" }] }],
-    generationConfig: { temperature: 0, maxOutputTokens: 8 }
-  });
-  if (result.ok) {
-    return NextResponse.json({ ok: true, configured: true, model: result.model }, {
-      headers: { "Cache-Control": "no-store" }
-    });
-  }
   return NextResponse.json({
-    ok: false,
-    configured: true,
-    model: MODELS[0],
-    status: result.status,
-    code: result.code,
-    detail: result.detail
-  }, { status: 502, headers: { "Cache-Control": "no-store" } });
+    ok: true,
+    configured: Boolean(key),
+    models: MODELS
+  }, { headers: { "Cache-Control": "no-store" } });
 }
