@@ -25,6 +25,7 @@ export default function PWAInstallPrompt() {
 
 
     try {
+      if (window.localStorage.getItem("redapple-pwa-installed") === "1") return;
       const dismissedAt = Number(window.localStorage.getItem(DISMISS_KEY) || "0");
       if (dismissedAt && Date.now() - dismissedAt < DISMISS_FOR) return;
     } catch {
