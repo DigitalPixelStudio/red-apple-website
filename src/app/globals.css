@@ -1883,3 +1883,252 @@ section {
   .card-tilt:hover { transform: none; }
   .hero-cursor-glow { display: none; }
 }
+
+/* ============================================================
+   PERFORMANCE PASS — repaint-free motion
+   ------------------------------------------------------------
+   Four animations were animating `background-position` or `color`.
+   Neither is compositable: each one forces the browser to re-rasterise
+   the text on EVERY frame, forever. In the fixed header that is the
+   stutter you feel while scrolling.
+
+   They are replaced below with equivalents that only touch
+   `transform` and `opacity`, which the compositor handles on its own
+   thread. The look is preserved; the per-frame paint is gone.
+   ============================================================ */
+
+/* ---- 1. brand name: was background-position, now a static wash ---- */
+.brand-name {
+  background: linear-gradient(92deg, #1d1d1f 0%, #ff2d55 42%, #ff9500 68%, #1d1d1f 100%);
+  background-size: 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: none;
+  will-change: auto;
+}
+
+/* ---- 2. brand sub-line: was colour cycling, now a static colour ---- */
+.brand-sub {
+  color: #ff2d55;
+  animation: none;
+  will-change: auto;
+}
+
+/* a small dot after the sub-line keeps the "alive" feeling at zero cost */
+.brand-sub::after {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: #ff9500;
+  vertical-align: middle;
+  animation: dotBlink 3.6s ease-in-out infinite;
+}
+@keyframes dotBlink {
+  0%, 100% { opacity: .35; transform: scale(.8); }
+  50%      { opacity: 1;   transform: scale(1.1); }
+}
+
+/* ---- 3. kicker: was colour cycling ---- */
+.kicker {
+  color: var(--cosmic-deep);
+  animation: none;
+}
+
+/* ---- 4. hero headline sweep: was background-position ---- */
+.mastered-shift,
+[class*="mastered"] {
+  animation: none !important;
+}
+
+/* ---- 5. the header itself: one composited layer, nothing else ---- */
+.site-header {
+  contain: layout style;
+  will-change: auto;
+}
+.site-header.is-scrolled {
+  box-shadow: 0 6px 24px -14px rgba(0, 0, 0, .22);
+}
+
+/* ============================================================
+   LANDSCAPE — the animated iPhone must appear in every orientation
+   ------------------------------------------------------------
+   The device was inside `hidden sm:block`. In portrait that hid it
+   correctly, but in landscape the hero is only ~390px tall and the
+   phone sat far below the fold, so it read as missing.
+   Now it is always rendered, and landscape compresses the hero so
+   the phone is actually reachable.
+   ============================================================ */
+@media (orientation: landscape) and (max-height: 560px) {
+  .hero-landscape-compact {
+    min-height: auto !important;
+    padding-top: 72px !important;
+    padding-bottom: 32px !important;
+  }
+  .hero-landscape-compact .hero-device-grid {
+    margin-top: 16px !important;
+  }
+  .hero-landscape-compact .hero-phone-wrap {
+    margin-top: 24px !important;
+  }
+  .phone-stage {
+    width: 132px !important;
+    height: 234px !important;
+  }
+  .hero-landscape-compact h1 {
+    font-size: clamp(1.5rem, 5vw, 2.1rem) !important;
+    line-height: 1.1 !important;
+  }
+}
+
+/* ============================================================
+   LIGHTWEIGHT AMBIENT LAYER
+   ------------------------------------------------------------
+   Two slow drifting gradients and a fine dot field, all behind the
+   content. Every one of them animates transform or opacity only, so
+   they cost a composited layer and nothing else.
+   ============================================================ */
+.ambient-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+.ambient-layer > i {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  will-change: transform;
+}
+.ambient-layer .a1 {
+  width: 46vmax; height: 46vmax;
+  left: -14vmax; top: -12vmax;
+  background: radial-gradient(circle, rgba(255, 45, 85, .10), transparent 68%);
+  animation: driftA 38s ease-in-out infinite;
+}
+.ambient-layer .a2 {
+  width: 40vmax; height: 40vmax;
+  right: -12vmax; bottom: -10vmax;
+  background: radial-gradient(circle, rgba(255, 149, 0, .09), transparent 68%);
+  animation: driftB 46s ease-in-out infinite;
+}
+.ambient-layer .a3 {
+  width: 30vmax; height: 30vmax;
+  left: 52%; top: 44%;
+  background: radial-gradient(circle, rgba(255, 45, 85, .06), transparent 70%);
+  animation: driftA 54s ease-in-out infinite reverse;
+}
+@keyframes driftA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(6vmax, 4vmax, 0) scale(1.12); }
+}
+@keyframes driftB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-5vmax, -3vmax, 0) scale(1.1); }
+}
+
+/* ============================================================
+   ELITE MICRO-DETAIL
+   ------------------------------------------------------------
+   Small, composited touches that read as expensive without
+   costing a frame: an underline that grows, a card that lifts,
+   a divider that draws, a counter that settles.
+   ============================================================ */
+
+/* heading rule that draws itself once, on reveal */
+.rule-draw {
+  display: block;
+  height: 2px;
+  width: 0;
+  margin: 14px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--orange));
+  transition: width .7s cubic-bezier(.22, 1, .36, 1);
+}
+.is-visible .rule-draw,
+.reveal-in .rule-draw {
+  width: 52px;
+}
+
+/* section links get an underline that grows from the left */
+.link-grow {
+  position: relative;
+}
+.link-grow::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -2px;
+  height: 1.5px; width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform .28s cubic-bezier(.22, 1, .36, 1);
+}
+.link-grow:hover::after { transform: scaleX(1); }
+
+/* cards lift on a composited transform only */
+.hv-lift {
+  transition: transform .3s cubic-bezier(.22, 1, .36, 1),
+              box-shadow .3s cubic-bezier(.22, 1, .36, 1);
+}
+.hv-lift:hover {
+  transform: translate3d(0, -4px, 0);
+  box-shadow: 0 18px 40px -26px rgba(0, 0, 0, .38);
+}
+
+/* image zoom, clipped by the parent, transform only */
+.hv-zoom img {
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+.hv-zoom:hover img { transform: scale(1.04); }
+
+/* a hairline that sweeps across a section boundary */
+.section-hairline {
+  position: relative;
+}
+.section-hairline::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 45, 85, .38), transparent);
+  transform-origin: 0 50%;
+  animation: hairSweep 9s ease-in-out infinite;
+}
+@keyframes hairSweep {
+  0%, 100% { transform: scaleX(.18); opacity: .25; }
+  50%      { transform: scaleX(1);   opacity: .8; }
+}
+
+/* the accent bar beside a kicker */
+.kicker::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  margin-right: 8px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--orange));
+  vertical-align: middle;
+}
+
+/* ============================================================
+   REDUCED MOTION — everything above is decoration
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-layer .a1,
+  .ambient-layer .a2,
+  .ambient-layer .a3,
+  .brand-sub::after,
+  .section-hairline::before {
+    animation: none !important;
+  }
+  .ambient-layer { opacity: .55; }
+  .hv-lift:hover { transform: none; }
+  .hv-zoom:hover img { transform: none; }
+}
