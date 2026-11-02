@@ -5,8 +5,8 @@ import { LineIcon } from "./Icons";
 const STEPS = [
   { step: "01", title: "Walk-In Diagnosis", desc: "Bring your device. Our technician inspects it on the spot with photos and explains the exact issue.", img: "/images/v4/tech-analyze.jpg" },
   { step: "02", title: "Transparent Quote", desc: "You get a fixed price before any work begins. No surprises, no hidden charges.", img: "/images/v4/tech-battery.jpg" },
-  { step: "03", title: "Expert Repair", desc: "OEM-grade parts, micro-soldering under microscope, and clean-room assembly.", img: "/images/v4/quality-testing.jpg" },
-  { step: "04", title: "Quality Check", desc: "Every device goes through a 12-point quality inspection before handover.", img: "/images/v4/repair-process.jpg" },
+  { step: "03", title: "Expert Repair", desc: "OEM-grade parts, micro-soldering under microscope, and clean-room assembly.", img: "/images/v3/smartphone-repair.jpg" },
+  { step: "04", title: "Quality Check", desc: "Every device goes through a 12-point quality inspection before handover.", img: "/images/v4/quality-testing.jpg" },
 ];
 
 export default function TechProcess() {
