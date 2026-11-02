@@ -5,7 +5,7 @@ import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
+export const maxDuration = 40;
 
 const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
@@ -92,7 +92,7 @@ function retrieveKnowledge(query: string): string {
 
 function systemPrompt(query: string): string {
   return [
-    "You are Pixel Ai, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
+    "You are Forge AI, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
     "",
     "PERSONA: Warm, concise, confident, like a helpful senior service advisor. Usually 2–4 short sentences. Ask only one question at a time. Match the customer's language AND script (English, Hindi, Hinglish, Kannada, Tamil, Telugu, and other languages).",
     "",
@@ -161,7 +161,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(12000),
       cache: "no-store"
     });
     if (!response.ok) {
@@ -306,7 +306,7 @@ export async function POST(request: NextRequest) {
       status: result.status,
       code: result.code,
     });
-    if (result.status === 0 || result.status === 400) break;
+    if (result.status === 400) break;
   }
 
   if (selected) {
