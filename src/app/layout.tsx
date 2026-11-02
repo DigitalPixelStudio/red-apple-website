@@ -67,8 +67,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/* FAQPage — this is what lets Google show the Q&A directly in search results.
-   It is the single highest-value structured-data addition for a local service site. */
+/* FAQPage describes the visible FAQ content. Google currently limits FAQ rich results
+   primarily to authoritative government and health sites; no display is promised. */
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
