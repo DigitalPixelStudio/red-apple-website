@@ -25,14 +25,14 @@ export default function DynamicIsland() {
 
   return (
     <div
-      className={`fixed left-1/2 top-[70px] z-40 -translate-x-1/2 transition duration-500 duration-700 ${
+      className={`fixed left-1/2 top-0 z-[60] -translate-x-1/2 transition duration-500 duration-700 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
       }`}
     >
       <a
         href="#quote"
         onClick={() => track("quote_started", { source: "dynamic_island" })}
-        className="dynamic-island hidden items-center gap-3 rounded-full px-5 py-2.5 text-white md:flex"
+        className="dynamic-island hidden items-center gap-3 rounded-b-[22px] rounded-t-none px-5 py-2.5 text-white md:flex"
       >
         <span className="grid h-8 w-8 place-items-center rounded-full bg-white/10">
           <LineIcon name={s.icon} size={16} />
