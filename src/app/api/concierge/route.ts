@@ -160,7 +160,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(6000),
+      signal: AbortSignal.timeout(8000),
       cache: "no-store"
     });
     if (!response.ok) {
@@ -260,7 +260,7 @@ function buildPayload(message: string, history: Turn[]) {
 
 export async function POST(request: NextRequest) {
   const keys = resolveKeys();
-  if (!keys.length) return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
+  if (!keys.length) return new Response(null, { status: 204, headers: { "Cache-Control": "no-store", "X-Concierge-Fallback": "local" } });
 
   let body: { message?: unknown; history?: unknown };
   try {
@@ -285,25 +285,27 @@ export async function POST(request: NextRequest) {
   const attempts: Array<{ model: string; status: number; code: string }> = [];
   let selected: { response: Response; model: string } | null = null;
 
-  // Try the configured primary key first, then the secondary key, then the
-  // lower-cost fallback model. This handles per-key quota and transient 503s.
-  for (const model of MODELS) {
-    for (const key of keys) {
-      const result = await callGemini(model, key, payload);
-      if (result.ok) {
-        selected = { response: result.response, model: result.model };
-        break;
-      }
-      attempts.push({ model, status: result.status, code: result.code });
-      console.error("[concierge] provider failure", {
-        model,
-        status: result.status,
-        code: result.code,
-        detail: result.detail.slice(0, 180)
-      });
-      if (result.status === 400) break;
+  // At most three attempts: primary key/model, one alternate key, then the fallback model.
+  // A network timeout stops retries; repeatedly waiting on the same exhausted project only adds latency.
+  const plan = [
+    { model: MODELS[0], key: keys[0] },
+    ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []),
+    { model: MODELS[1], key: keys[0] },
+  ];
+
+  for (const attempt of plan) {
+    const result = await callGemini(attempt.model, attempt.key, payload);
+    if (result.ok) {
+      selected = { response: result.response, model: result.model };
+      break;
     }
-    if (selected) break;
+    attempts.push({ model: attempt.model, status: result.status, code: result.code });
+    console.warn("[concierge] provider fallback", {
+      model: attempt.model,
+      status: result.status,
+      code: result.code,
+    });
+    if (result.status === 0 || result.status === 400) break;
   }
 
   if (selected) {
@@ -318,12 +320,16 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({
-    ok: false,
-    reason: "provider_unavailable",
-    reply: null,
-    attempts
-  }, { status: 502, headers: { "Cache-Control": "no-store" } });
+  // Let the browser's deterministic resolver answer from the local knowledge base.
+  // A quota outage is not a customer-facing server error and should not count as a 5xx.
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Concierge-Fallback": "local",
+      "X-Concierge-Attempts": String(attempts.length),
+    },
+  });
 }
 
 export async function GET() {

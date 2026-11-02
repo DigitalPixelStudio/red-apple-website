@@ -57,7 +57,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "turnaround",
     title: "Typical repair turnaround times",
     tags: ["time", "duration", "turnaround", "same day", "minutes", "hours", "days", "screen", "battery", "board", "water", "data recovery", "iPad"],
-    content: "Typical turnaround from the approved repair guide: front display about 60 minutes; back glass about 60 minutes; battery about 45 minutes; camera about 60 minutes; charging port/flex about 60 minutes; speaker/mic/haptics about 45 minutes; motherboard/IC work 1–3 days; water-damage work 24–48 hours; software/iOS about 2 hours; data recovery 1–2 days; lawful unlocking same day; OS/firmware installation about 2 hours; body/frame repair 1–2 days. Parts availability and diagnosis can change timing, so do not promise a completion time."
+    content: "Typical turnaround from the approved repair guide: front display about 60 minutes; back glass about 60 minutes; battery about 45 minutes; camera about 60 minutes; charging port/flex about 60 minutes; speaker/mic/haptics about 45 minutes; motherboard/IC work 2–3 days; water-damage work 24–48 hours; software/iOS about 2 hours; data recovery 1–2 days; lawful unlocking same day; OS/firmware installation about 2 hours; body/frame repair 1–2 days. Parts availability and diagnosis can change timing, so do not promise a completion time."
   },
   {
     id: "water-damage",

@@ -4,6 +4,7 @@ import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
+import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
 const CHAT_MEMORY_KEY = "redapple-pixel-ai-history-v1";
@@ -315,6 +316,36 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
 };
 
+function localKnowledgeAnswer(query: string): string | null {
+  const stopWords = new Set([
+    "the", "and", "for", "with", "from", "that", "this", "have", "has", "are",
+    "was", "were", "what", "when", "where", "which", "will", "would", "can",
+    "could", "you", "your", "our", "their", "about", "please", "tell", "me",
+    "hai", "ka", "ki", "ke", "ko", "kya", "mera", "meri", "mere", "mujhe",
+    "kaise", "kitna", "kitne", "karo", "karna", "chahiye", "theek",
+  ]);
+  const terms = Array.from(new Set(query.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? []))
+    .filter((term) => !stopWords.has(term));
+  if (!terms.length) return null;
+
+  const best = KNOWLEDGE_BASE.map((document) => {
+    const title = document.title.toLowerCase();
+    const tags = document.tags.join(" ").toLowerCase();
+    const body = document.content.toLowerCase();
+    let score = 0;
+    for (const term of terms) {
+      if (title.includes(term)) score += 5;
+      else if (tags.includes(term)) score += 3;
+      else if (body.includes(term)) score += 1;
+    }
+    return { document, score };
+  }).sort((a, b) => b.score - a.score)[0];
+
+  if (!best || best.score < 4) return null;
+  const answer = best.document.content.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ");
+  return "From our repair guide: " + (answer.length > 420 ? answer.slice(0, 417) + "..." : answer);
+}
+
 export default function Concierge() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([
@@ -331,7 +362,7 @@ export default function Concierge() {
     if (!memoryReady) return;
     const timer = window.setTimeout(() => {
       try {
-        window.localStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify(msgs.slice(-30)));
+        window.localStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify({ savedAt: Date.now(), messages: msgs.slice(-30) }));
       } catch {
         // Storage quotas and private browsing are non-fatal.
       }
@@ -511,7 +542,13 @@ export default function Concierge() {
       // fall through to the rule engine — never surface a network error to a customer
     }
 
-    // ---- fallback: local resolver ----
+    // ---- fallback: local knowledge retrieval, then the deterministic menu ----
+    const localAnswer = localKnowledgeAnswer(text);
+    if (localAnswer) {
+      setFailedTurns(0);
+      setTimeout(() => push(localAnswer, ["Book doorstep pickup", "Talk to a technician"]), 250);
+      return;
+    }
     const lower = text.toLowerCase();
     let resolved = "start";
     for (const k of Object.keys(MENU)) { if (lower.includes(k)) { resolved = k; break; } }
@@ -571,13 +608,20 @@ export default function Concierge() {
     try {
       const saved = window.localStorage.getItem(CHAT_MEMORY_KEY);
       if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const safe = parsed.filter((item): item is Msg =>
-            item && (item.from === "user" || item.from === "bot") &&
-            typeof item.text === "string"
-          ).filter((item) => !item.chips || (Array.isArray(item.chips) && item.chips.every((chip) => typeof chip === "string"))).slice(-30);
+        const parsed = JSON.parse(saved) as { savedAt?: number; messages?: unknown };
+        const fresh = typeof parsed.savedAt === "number" && Date.now() - parsed.savedAt < 24 * 60 * 60 * 1000;
+        if (fresh && Array.isArray(parsed.messages)) {
+          const safe = parsed.messages.filter((item): item is Msg =>
+            Boolean(item) &&
+            typeof item === "object" &&
+            ((item as Msg).from === "user" || (item as Msg).from === "bot") &&
+            typeof (item as Msg).text === "string" &&
+            (item as Msg).text.length <= 3000 &&
+            (!(item as Msg).chips || (Array.isArray((item as Msg).chips) && (item as Msg).chips!.every((chip) => typeof chip === "string")))
+          ).slice(-30);
           if (safe.length) setMsgs(safe);
+        } else {
+          window.localStorage.removeItem(CHAT_MEMORY_KEY);
         }
       }
     } catch {
@@ -610,7 +654,22 @@ export default function Concierge() {
               <div className="text-[14px] font-bold">Pixel Ai</div>
               <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> Online · replies instantly</div>
             </div>
-            <button onClick={() => setOpen(false)} aria-label="Close chat" className="ml-auto grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
+            <button
+              type="button"
+              onClick={() => {
+                if (typing || streaming) return;
+                setMsgs([{ from: "bot", text: MENU.start.reply, chips: MENU.start.chips }]);
+                setStopped(false);
+                setFailedTurns(0);
+                window.localStorage.removeItem(CHAT_MEMORY_KEY);
+              }}
+              disabled={typing || streaming}
+              aria-label="Clear conversation history on this device"
+              className="ml-auto mr-1 rounded-full bg-white/10 px-2.5 py-1.5 text-[10px] font-semibold text-white/75 hover:bg-white/20 disabled:opacity-30"
+            >
+              Clear
+            </button>
+            <button onClick={() => setOpen(false)} aria-label="Close chat" className="grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
               <LineIcon name="close" size={14} />
             </button>
           </div>
