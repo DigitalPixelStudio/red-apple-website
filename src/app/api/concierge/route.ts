@@ -1,24 +1,61 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SITE } from "@/lib/site";
+import { SITE, FAQS, SERVICES, DEVICE_FAMILIES } from "@/lib/site";
 import { PRICES, inr } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 25;
 
 const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_KEY", "GEMINI_STUDIO_API_KEY"] as const;
 type Turn = { role: "user" | "model"; text: string };
 type GeminiResult =
-  | { ok: true; text: string; model: string }
+  | { ok: true; response: Response; model: string }
   | { ok: false; status: number; code: string; detail: string };
 
-function resolveKey(): string | null {
-  for (const name of KEY_NAMES) {
-    const value = process.env[name];
-    if (value && value.trim().length > 8) return value.trim();
+function resolveKeys(): string[] {
+  const names = ["GEMINI_API_KEY", "GEMINI_API_KEY1", ...KEY_NAMES.slice(1)];
+  const seen = new Set<string>();
+  const keys: string[] = [];
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+    if (value && value.length > 8 && !seen.has(value)) {
+      seen.add(value);
+      keys.push(value);
+    }
   }
-  return null;
+  return keys;
+}
+
+function retrieveKnowledge(query: string): string {
+  const docs = [
+    ...FAQS.map((item) => ({ title: item.q, body: item.a })),
+    ...SERVICES.map((item) => ({
+      title: item.title,
+      body: [item.desc, item.time, item.devices, ...item.points].join(" · ")
+    })),
+    ...DEVICE_FAMILIES.map((item) => ({
+      title: item.name,
+      body: [item.tag, item.desc].join(" · ")
+    }))
+  ];
+  const terms = [...new Set(
+    query.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
+      .filter((term) => term.length > 2 && !["the", "and", "for", "with", "how", "what", "can", "you", "are", "is", "this", "that"].includes(term))
+  )];
+  if (!terms.length) return "";
+  return docs
+    .map((doc) => {
+      const haystack = (doc.title + " " + doc.body).toLowerCase();
+      const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0);
+      return { ...doc, score };
+    })
+    .filter((doc) => doc.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4)
+    .map((doc) => doc.title + ": " + doc.body)
+    .join("\n");
 }
 
 function priceBlock(): string {
@@ -30,7 +67,7 @@ function priceBlock(): string {
   }).join("\n");
 }
 
-function systemPrompt(): string {
+function systemPrompt(query: string): string {
   return [
     "You are Pixel Ai, the customer-care assistant for " + SITE.name + ", an independent device-repair workshop in Bengaluru.",
     "",
@@ -59,6 +96,9 @@ function systemPrompt(): string {
     "",
     "PRICE MATRIX (INR):",
     priceBlock(),
+    "",
+    "RETRIEVED WEBSITE KNOWLEDGE (relevant FAQ and service details):",
+    retrieveKnowledge(query) || "No additional matching FAQ or service entry; use only the verified shop facts above.",
     "",
     "TURNAROUND:",
     "- Display, back glass and battery: usually same day, approximately 45–60 minutes.",
@@ -93,11 +133,11 @@ function systemPrompt(): string {
 
 async function callGemini(model: string, key: string, body: unknown): Promise<GeminiResult> {
   try {
-    const response = await fetch(BASE + "/" + model + ":generateContent", {
+    const response = await fetch(BASE + "/" + model + ":streamGenerateContent?alt=sse", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(4500),
+      signal: AbortSignal.timeout(6000),
       cache: "no-store"
     });
     if (!response.ok) {
@@ -111,13 +151,10 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
       } catch {}
       return { ok: false, status: response.status, code, detail };
     }
-    const data = await response.json();
-    const reply = (data?.candidates?.[0]?.content?.parts ?? [])
-      .map((part: { text?: string }) => part.text ?? "")
-      .join("")
-      .trim();
-    if (!reply) return { ok: false, status: 502, code: "EMPTY_RESPONSE", detail: "Gemini returned no text candidate." };
-    return { ok: true, text: reply, model };
+    if (!response.body) {
+      return { ok: false, status: 502, code: "EMPTY_STREAM", detail: "Gemini returned no response stream." };
+    }
+    return { ok: true, response, model };
   } catch (error) {
     return {
       ok: false,
@@ -128,6 +165,57 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
   }
 }
 
+function textStream(upstream: Response): ReadableStream<Uint8Array> {
+  const reader = upstream.body!.getReader();
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let buffer = "";
+
+  const emitEvent = (event: string, controller: ReadableStreamDefaultController<Uint8Array>) => {
+    for (const line of event.split("\n")) {
+      if (!line.startsWith("data:")) continue;
+      const raw = line.slice(5).trim();
+      if (!raw || raw === "[DONE]") continue;
+      try {
+        const payload = JSON.parse(raw);
+        const text = (payload?.candidates?.[0]?.content?.parts ?? [])
+          .map((part: { text?: string }) => part.text ?? "")
+          .join("");
+        if (text) controller.enqueue(encoder.encode(text));
+      } catch {
+        // Ignore malformed keep-alive or partial SSE events; the next event remains usable.
+      }
+    }
+  };
+
+  return new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
+          let boundary = buffer.indexOf("\n\n");
+          while (boundary !== -1) {
+            emitEvent(buffer.slice(0, boundary), controller);
+            buffer = buffer.slice(boundary + 2);
+            boundary = buffer.indexOf("\n\n");
+          }
+        }
+        buffer += decoder.decode();
+        if (buffer.trim()) emitEvent(buffer, controller);
+        controller.close();
+      } catch (error) {
+        controller.error(error);
+      } finally {
+        reader.releaseLock();
+      }
+    },
+    cancel() {
+      reader.cancel().catch(() => undefined);
+    }
+  });
+}
 function buildPayload(message: string, history: Turn[]) {
   const contents = [
     ...history.slice(-8)
@@ -139,15 +227,15 @@ function buildPayload(message: string, history: Turn[]) {
     { role: "user", parts: [{ text: message }] }
   ];
   return {
-    systemInstruction: { parts: [{ text: systemPrompt() }] },
+    systemInstruction: { parts: [{ text: systemPrompt(message) }] },
     contents,
     generationConfig: { temperature: 0.25, maxOutputTokens: 240, topP: 0.85 }
   };
 }
 
 export async function POST(request: NextRequest) {
-  const key = resolveKey();
-  if (!key) return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
+  const keys = resolveKeys();
+  if (!keys.length) return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
 
   let body: { message?: unknown; history?: unknown };
   try {
@@ -170,25 +258,39 @@ export async function POST(request: NextRequest) {
 
   const payload = buildPayload(message, history);
   const attempts: Array<{ model: string; status: number; code: string }> = [];
+  let selected: { response: Response; model: string } | null = null;
 
+  // Try the configured primary key first, then the secondary key, then the
+  // lower-cost fallback model. This handles per-key quota and transient 503s.
   for (const model of MODELS) {
-    const result = await callGemini(model, key, payload);
-    if (result.ok) {
-      return NextResponse.json({ ok: true, reply: result.text, model: result.model }, {
-        status: 200,
-        headers: { "Cache-Control": "no-store" }
+    for (const key of keys) {
+      const result = await callGemini(model, key, payload);
+      if (result.ok) {
+        selected = { response: result.response, model: result.model };
+        break;
+      }
+      attempts.push({ model, status: result.status, code: result.code });
+      console.error("[concierge] provider failure", {
+        model,
+        status: result.status,
+        code: result.code,
+        detail: result.detail.slice(0, 180)
       });
+      if (result.status === 400) break;
     }
+    if (selected) break;
+  }
 
-    attempts.push({ model, status: result.status, code: result.code });
-    console.error("[concierge] provider failure", {
-      model,
-      status: result.status,
-      code: result.code,
-      detail: result.detail.slice(0, 180)
+  if (selected) {
+    return new Response(textStream(selected.response), {
+      status: 200,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store, no-transform",
+        "X-Accel-Buffering": "no",
+        "X-AI-Model": selected.model
+      }
     });
-
-    if (result.status === 0 || result.status === 401 || result.status === 403 || result.status === 400) break;
   }
 
   return NextResponse.json({
@@ -200,10 +302,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const key = resolveKey();
+  const keys = resolveKeys();
   return NextResponse.json({
     ok: true,
-    configured: Boolean(key),
+    configured: keys.length > 0,
+    configuredKeySlots: keys.length,
     models: MODELS
   }, { headers: { "Cache-Control": "no-store" } });
 }

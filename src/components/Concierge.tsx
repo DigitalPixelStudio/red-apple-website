@@ -6,6 +6,7 @@ import { LineIcon, type IconName } from "./Icons";
 import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
+const CHAT_MEMORY_KEY = "redapple-pixel-ai-session-v1";
 
 /* Pull a model name out of free text, then answer with the real table price. */
 const MODEL_HINTS = Object.keys(PRICES).sort((a, b) => b.length - a.length);
@@ -322,7 +323,17 @@ export default function Concierge() {
   const [typing, setTyping] = useState(false);
   const [stopped, setStopped] = useState(false);
   const [failedTurns, setFailedTurns] = useState(0);
+  const [memoryReady, setMemoryReady] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!memoryReady) return;
+    try {
+      sessionStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify(msgs.slice(-16)));
+    } catch {
+      // Storage quotas and private browsing are non-fatal.
+    }
+  }, [msgs, memoryReady]);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "auto", block: "nearest" }); }, [msgs]);
 
@@ -331,7 +342,7 @@ export default function Concierge() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const t = draft.trim();
-    if (!t) return;
+    if (!t || typing) return;
     setDraft("");
     send(t);
   };
@@ -350,7 +361,7 @@ export default function Concierge() {
    * round trip on a fact we already know.
    */
   const send = async (text: string) => {
-    if (stopped) return;
+    if (stopped || typing) return;
     setMsgs((m) => [...m, { from: "user", text }]);
     setTyping(true);
 
@@ -412,6 +423,7 @@ export default function Concierge() {
     }
 
     // ---- real AI ----
+    let streamedReply = "";
     try {
       const history = msgs
         .filter((m) => m.text)
@@ -422,19 +434,73 @@ export default function Concierge() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
-        signal: AbortSignal.timeout(9000),
+        signal: AbortSignal.timeout(27000),
         cache: "no-store",
       });
 
-      if (res.ok) {
-        const data = (await res.json()) as { ok?: boolean; reply?: string | null };
-        if (data?.ok && data.reply) {
-          track("ai_chat_message", { source: "gemini" });
-          push(data.reply, ["Price list", "Book doorstep pickup", "Talk to a technician"]);
+      if (res.ok && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let inserted = false;
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          if (!chunk) continue;
+          streamedReply += chunk;
+
+          if (!inserted) {
+            inserted = true;
+            setTyping(false);
+            setMsgs((m) => [...m, { from: "bot", text: chunk, chips: [] }]);
+          } else {
+            setMsgs((m) => {
+              const next = [...m];
+              const last = next[next.length - 1];
+              if (last?.from === "bot") {
+                next[next.length - 1] = { ...last, text: last.text + chunk };
+              }
+              return next;
+            });
+          }
+        }
+
+        const tail = decoder.decode();
+        if (tail) {
+          streamedReply += tail;
+          setMsgs((m) => {
+            const next = [...m];
+            const last = next[next.length - 1];
+            if (last?.from === "bot") {
+              next[next.length - 1] = { ...last, text: last.text + tail };
+            }
+            return next;
+          });
+        }
+
+        if (streamedReply.trim()) {
+          track("ai_chat_message", { source: "gemini_stream" });
+          setMsgs((m) => {
+            const next = [...m];
+            const last = next[next.length - 1];
+            if (last?.from === "bot") {
+              next[next.length - 1] = {
+                ...last,
+                chips: ["Price list", "Book doorstep pickup", "Talk to a technician"]
+              };
+            }
+            return next;
+          });
+          setTyping(false);
           return;
         }
       }
     } catch {
+      if (typeof streamedReply !== "undefined" && streamedReply.trim()) {
+        push("My reply was interrupted while connecting. Please try once more, or choose WhatsApp to continue with a technician.", ["Talk to a technician"]);
+        return;
+      }
       // fall through to the rule engine — never surface a network error to a customer
     }
 
@@ -493,12 +559,32 @@ export default function Concierge() {
     send(chip.replace(/^[^\w]+/, "").trim());
   };
 
+  const restoreMemory = () => {
+    if (memoryReady) return;
+    try {
+      const saved = sessionStorage.getItem(CHAT_MEMORY_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const safe = parsed.filter((item): item is Msg =>
+            item && (item.from === "user" || item.from === "bot") &&
+            typeof item.text === "string"
+          ).slice(-16);
+          if (safe.length) setMsgs(safe);
+        }
+      }
+    } catch {
+      // Corrupt or unavailable browser storage must never stop the chat.
+    }
+    setMemoryReady(true);
+  };
+
   return (
     <>
       {/* Floating launcher */}
       <button
         id="concierge-open"
-        onClick={() => setOpen(!open)}
+        onClick={() => { if (!open) restoreMemory(); setOpen(!open); }}
         aria-label="Open Pixel Ai chat"
         className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
       >
@@ -553,7 +639,7 @@ export default function Concierge() {
             <button
               type="submit"
               aria-label="Send message"
-              disabled={!draft.trim()}
+              disabled={!draft.trim() || typing}
               className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--orange)] text-white transition-transform hover:scale-105 disabled:opacity-35"
             >
               <LineIcon name="arrow-right" size={16} color="#fff" />
