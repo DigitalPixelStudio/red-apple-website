@@ -29,10 +29,10 @@ export default function PartsCatalog() {
                   <img src={p.img} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/20 backdrop-blur-sm">
+                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-black/35">
                       <LineIcon name={p.icon as any} size={18} color="#fff" />
                     </span>
-                    <span className="rounded-full bg-green-500/90 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white">{p.quality}</span>
+                    <span className="rounded-full bg-green-600 px-2.5 py-1 text-[10px] font-bold text-white">{p.quality}</span>
                   </div>
                 </div>
                 <div className="p-5">
