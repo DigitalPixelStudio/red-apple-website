@@ -26,39 +26,44 @@ type Shot = {
 
 const SHOTS: Shot[] = [
   {
-    src: "/images/gallery/store-front.jpg",
-    alt: "Red Apple Mobile Repair shop entrance on MG Road, Bengaluru",
-    caption: "Walk in through the glass door on MG Road",
+    src: "/images/gallery/store-glass-front.webp",
+    alt: "Red Apple Mobile Repair glass storefront on MG Road, Halasuru, lit from inside",
+    caption: "Walk in off MG Road — one minute from Halasuru Metro",
     tag: "Store",
+    wide: true,
+  },
+  {
+    src: "/images/gallery/lab-wide-three-techs.webp",
+    alt: "Three technicians working at separate benches inside the Red Apple workshop",
+    caption: "Three benches, three technicians, one room",
+    tag: "Store",
+    wide: true,
+  },
+  {
+    src: "/images/gallery/tech-at-microscope.webp",
+    alt: "Technician at the stereo microscope doing board-level work",
+    caption: "Board-level work under the microscope",
+    tag: "Bench",
     tall: true,
   },
   {
     src: "/images/gallery/workbench.jpg",
-    alt: "Micro-soldering bench with laser and rework stations",
+    alt: "The micro-soldering bench with laser, rework station and microscope",
     caption: "The bench — laser, rework station, microscope",
     tag: "Bench",
-    wide: true,
+    tall: true,
   },
   {
-    src: "/images/gallery/ipad-board.jpg",
-    alt: "iPad logic board being repaired at component level",
-    caption: "iPad logic board, mid board-level repair",
-    tag: "Repair",
-    wide: true,
-  },
-  {
-    src: "/images/gallery/before-after.jpg",
-    alt: "iPhone before and after back glass repair",
-    caption: "Back glass: before and after",
-    tag: "Repair",
-    wide: true,
-  },
-  {
-    src: "/images/gallery/interior.jpg",
-    alt: "Inside the workshop with iMac and MacBook diagnostics",
-    caption: "Diagnostics desk",
+    src: "/images/gallery/tech-under-red-apple-sign.webp",
+    alt: "Technician repairing an iPhone beneath the illuminated Red Apple sign",
+    caption: "Our own sign, our own bench",
     tag: "Store",
-    wide: true,
+  },
+  {
+    src: "/images/gallery/signage.jpg",
+    alt: "Red Apple Mobile Repair signage board",
+    caption: "Where Repair Meets Connectivity",
+    tag: "Store",
   },
   {
     src: "/images/gallery/orange-wall.jpg",
@@ -68,58 +73,10 @@ const SHOTS: Shot[] = [
     tall: true,
   },
   {
-    src: "/images/gallery/logo-counter.jpg",
-    alt: "Red Apple counter signage",
-    caption: "The counter",
+    src: "/images/gallery/interior.jpg",
+    alt: "Inside the workshop with iMac and MacBook diagnostics",
+    caption: "Diagnostics desk",
     tag: "Store",
-    tall: true,
-  },
-  {
-    src: "/images/gallery/signage.jpg",
-    alt: "Red Apple Mobile Repair signage board",
-    caption: "Where Repair Meets Connectivity",
-    tag: "Store",
-  },
-  {
-    src: "/images/gallery/repair-backglass-crack.jpg",
-    alt: "iPhone back glass shattered before repair",
-    caption: "Back glass shattered — the job we are known for",
-    tag: "Repair",
-    tall: true,
-  },
-  {
-    src: "/images/gallery/repair-battery-genuine.jpg",
-    alt: "Genuine Apple battery fitted, iPhone showing Finish Repair screen",
-    caption: "Genuine Apple battery, confirmed by iOS",
-    tag: "Repair",
-    tall: true,
-  },
-  {
-    src: "/images/gallery/repair-backglass-open.jpg",
-    alt: "iPhone with back glass removed showing the camera module",
-    caption: "Mid-repair: back glass off, camera untouched",
-    tag: "Repair",
-    tall: true,
-  },
-  {
-    src: "/images/gallery/repair-backglass-stack.jpg",
-    alt: "Four iPhone back panels in different states of repair",
-    caption: "Four in a day — every stage visible",
-    tag: "Repair",
-    tall: true,
-  },
-  {
-    src: "/images/gallery/repair-screen-before-after.jpg",
-    alt: "Cracked iPhone screen beside the repaired one",
-    caption: "Screen: before and after",
-    tag: "Repair",
-    wide: true,
-  },
-  {
-    src: "/images/gallery/repair-green-back.jpg",
-    alt: "Green iPhone back glass before and after replacement",
-    caption: "Back glass, green — before and after",
-    tag: "Repair",
     wide: true,
   },
 ];
@@ -156,16 +113,17 @@ export default function Gallery() {
   }, [open, close, next, prev]);
 
   return (
-    <section id="gallery" className="relative py-20">
+    <section id="gallery" className="relative py-16 sm:py-20">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <div className="mx-auto max-w-[680px] text-center">
-          <span className="kicker">Inside The Store</span>
+          <span className="kicker">The Real Store</span>
           <h2 className="head-gradient mt-3 font-apple text-[clamp(1.9rem,4vw,2.8rem)] font-extrabold leading-[1.08] tracking-tight">
-            The bench your phone actually goes on
+            A real shop, a real bench, real people
           </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-muted)]">
-            No stock photos. This is the shop on MG Road — the laser, the rework
-            station, the microscope, and the people using them.
+            Before you hand over a ₹80,000 phone, you should know where it goes.
+            This is our store on MG Road, our benches, and the people who will
+            open it — photographed, not illustrated.
           </p>
         </div>
 
@@ -238,6 +196,8 @@ export default function Gallery() {
             <img
               src={SHOTS[open].src}
               alt={SHOTS[open].alt}
+              loading="lazy"
+              decoding="async"
               className="max-h-[78vh] w-auto rounded-[14px] object-contain"
             />
             <figcaption className="mt-3 text-center text-[12.5px] font-semibold text-white/85">
