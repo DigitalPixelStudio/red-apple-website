@@ -26,7 +26,7 @@ export default function ServicesGrid() {
                   <div className="absolute bottom-3 left-3 right-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/20 backdrop-blur-sm">
+                        <span className="grid h-9 w-9 place-items-center rounded-xl bg-black/35">
                           <LineIcon name={s.icon as IconName} size={18} color="#fff" />
                         </span>
                         <span className="text-[13px] font-bold text-white">{s.title}</span>
