@@ -34,7 +34,12 @@ function priceAnswer(text: string): string | null {
   });
   const repair = REPAIR_HINTS.find(([pattern]) => pattern.test(text))?.[1];
 
-  if (!model && repair) return "Which exact device and model is it? I'll check the approved price matrix rather than guess.";
+  if (!model && repair) {
+    const unlisted = text.match(/\biphone\s*(5s|5c|5|4s|4)\b/i);
+    if (unlisted) return "iPhone " + unlisted[1] + " — " + repair + " is not listed in the approved price matrix. We can quote it after a free diagnosis.";
+    if (/iphone|phone|mobile/i.test(text)) return "Which iPhone model is it? Published iPhone repair prices range from ₹1,200 to ₹36,400; I'll check the exact matrix entry once I have the model.";
+    return "Which exact device and model is it? I'll check the approved price matrix rather than guess.";
+  }
   if (!model || !repair) return null;
 
   if (repair === "Water Damage Revival") {
@@ -221,7 +226,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   estimate: {
     reply:
-      "I won't guess at a price. Send your exact device model and the repair needed, and I'll check the approved price matrix; anything not listed is quoted after a free diagnosis. Which model and fault should I check?",
+      "Published iPhone repair prices range from ₹1,200 to ₹36,400 depending on the model and repair. That is not a quote: send your exact model and fault and I'll check the approved matrix; anything not listed is quoted after a free diagnosis.",
     chips: ["Send my model", "Talk to a technician"],
   },
   location: {
@@ -276,7 +281,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   whyexpensive: {
     reply:
-      "Because the number includes the OEM-grade part, the labour, a 32-point test and a 90-day warranty. A cheaper quote usually means a copy panel with no True Tone and no cover. We won't match a price that only works if the warranty is dropped.",
+      "I understand. The price reflects the part grade, labour and 90-day warranty. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   human: {
@@ -293,6 +298,7 @@ export default function Concierge() {
   ]);
   const [typing, setTyping] = useState(false);
   const [stopped, setStopped] = useState(false);
+  const [failedTurns, setFailedTurns] = useState(0);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "auto", block: "nearest" }); }, [msgs]);
@@ -347,6 +353,14 @@ export default function Concierge() {
       push("I'm sorry this needs a person. I've opened WhatsApp with your conversation summary so the Red Apple team can take over.", []);
     };
 
+    if (/\b(bulk|b2b|corporate|school|office)\b|\b(?:5|6|7|8|9|10|five|six|seven|eight|nine|ten)\+?\s*(?:devices|phones|iphones|macbooks)\b/i.test(text)) {
+      handoffNow("Bulk/B2B enquiry for owner quote");
+      return;
+    }
+    if (/(discount|cheaper|price match|negotiate|lower.*price|price.*lower|cash.*less)/i.test(text)) {
+      handoffNow("Price negotiation; technician to check safe part-grade options");
+      return;
+    }
     if (/(refund|legal action|lawyer|complaint|second time|terrible|damaged by (you|the repair)|you damaged)/i.test(text)) {
       handoffNow("Customer complaint / refund / damage escalation");
       return;
@@ -408,16 +422,23 @@ export default function Concierge() {
     const syn = resolve(text);
     if (syn && MENU[syn]) resolved = syn;
 
-    const entry =
-      resolved === "start" && text.trim().split(/\s+/).length > 2
-        ? {
-            reply:
-              "I want to get that right rather than guess. A technician can look at your exact model and give you a fixed price in a couple of minutes.",
-            chips: ["Talk to a human", "Estimate", "Device & repair"],
-          }
-        : MENU[resolved];
+    if (resolved === "start" && text.trim().split(/\s+/).length > 2) {
+      const nextFailedTurn = failedTurns + 1;
+      setFailedTurns(nextFailedTurn);
+      if (nextFailedTurn >= 3) {
+        handoffNow("Three consecutive unclear customer messages");
+        return;
+      }
+      const clarification = nextFailedTurn === 1
+        ? "I want to get that right. Which device and model are you asking about?"
+        : "Is the issue with the screen, battery, charging, or something else?";
+      setTimeout(() => push(clarification, ["Screen", "Battery", "Charging", "Talk to a technician"]), 300);
+      return;
+    }
 
-    setTimeout(() => push(entry.reply, entry.chips), 380);
+    setFailedTurns(0);
+    const entry = MENU[resolved];
+    setTimeout(() => push(entry.reply, entry.chips), 300);
   };
 
   const chipAction = (chip: string) => {
