@@ -421,7 +421,7 @@ export default function Concierge() {
   };
 
   const chipAction = (chip: string) => {
-    if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || chip.includes("Book pickup") || /technician|human|agent/i.test(chip)) {
+    if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || /pickup/i.test(chip) || /technician|human|agent/i.test(chip)) {
       const isHuman = /technician|human|agent/i.test(chip);
       const transcript = msgs.slice(-8).map((item) =>
         (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text
