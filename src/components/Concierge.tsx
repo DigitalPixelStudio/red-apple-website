@@ -6,7 +6,7 @@ import { LineIcon, type IconName } from "./Icons";
 import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
-const CHAT_MEMORY_KEY = "redapple-pixel-ai-session-v1";
+const CHAT_MEMORY_KEY = "redapple-pixel-ai-history-v1";
 
 /* Pull a model name out of free text, then answer with the real table price. */
 const MODEL_HINTS = Object.keys(PRICES).sort((a, b) => b.length - a.length);
@@ -321,6 +321,7 @@ export default function Concierge() {
     { from: "bot", text: MENU.start.reply, chips: MENU.start.chips },
   ]);
   const [typing, setTyping] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [stopped, setStopped] = useState(false);
   const [failedTurns, setFailedTurns] = useState(0);
   const [memoryReady, setMemoryReady] = useState(false);
@@ -328,11 +329,14 @@ export default function Concierge() {
 
   useEffect(() => {
     if (!memoryReady) return;
-    try {
-      sessionStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify(msgs.slice(-16)));
-    } catch {
-      // Storage quotas and private browsing are non-fatal.
-    }
+    const timer = window.setTimeout(() => {
+      try {
+        window.localStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify(msgs.slice(-30)));
+      } catch {
+        // Storage quotas and private browsing are non-fatal.
+      }
+    }, 250);
+    return () => window.clearTimeout(timer);
   }, [msgs, memoryReady]);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "auto", block: "nearest" }); }, [msgs]);
@@ -342,7 +346,7 @@ export default function Concierge() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const t = draft.trim();
-    if (!t || typing) return;
+    if (!t || typing || streaming) return;
     setDraft("");
     send(t);
   };
@@ -361,13 +365,14 @@ export default function Concierge() {
    * round trip on a fact we already know.
    */
   const send = async (text: string) => {
-    if (stopped || typing) return;
+    if (stopped || typing || streaming) return;
     setMsgs((m) => [...m, { from: "user", text }]);
     setTyping(true);
 
     const push = (reply: string, chips: string[] = []) => {
       setMsgs((m) => [...m, { from: "bot", text: reply, chips }]);
       setTyping(false);
+      setStreaming(false);
     };
 
     const lowerText = text.toLowerCase().trim();
@@ -453,6 +458,7 @@ export default function Concierge() {
           if (!inserted) {
             inserted = true;
             setTyping(false);
+            setStreaming(true);
             setMsgs((m) => [...m, { from: "bot", text: chunk, chips: [] }]);
           } else {
             setMsgs((m) => {
@@ -493,6 +499,7 @@ export default function Concierge() {
             return next;
           });
           setTyping(false);
+          setStreaming(false);
           return;
         }
       }
@@ -562,14 +569,14 @@ export default function Concierge() {
   const restoreMemory = () => {
     if (memoryReady) return;
     try {
-      const saved = sessionStorage.getItem(CHAT_MEMORY_KEY);
+      const saved = window.localStorage.getItem(CHAT_MEMORY_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
           const safe = parsed.filter((item): item is Msg =>
             item && (item.from === "user" || item.from === "bot") &&
             typeof item.text === "string"
-          ).slice(-16);
+          ).filter((item) => !item.chips || (Array.isArray(item.chips) && item.chips.every((chip) => typeof chip === "string"))).slice(-30);
           if (safe.length) setMsgs(safe);
         }
       }
@@ -639,7 +646,7 @@ export default function Concierge() {
             <button
               type="submit"
               aria-label="Send message"
-              disabled={!draft.trim() || typing}
+              disabled={!draft.trim() || typing || streaming}
               className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--orange)] text-white transition-transform hover:scale-105 disabled:opacity-35"
             >
               <LineIcon name="arrow-right" size={16} color="#fff" />
@@ -647,7 +654,7 @@ export default function Concierge() {
           </form>
 
           {/* Chips */}
-          {msgs.length > 0 && msgs[msgs.length - 1].chips && msgs[msgs.length - 1].chips!.length > 0 && !typing && (
+          {msgs.length > 0 && msgs[msgs.length - 1].chips && msgs[msgs.length - 1].chips!.length > 0 && !typing && !streaming && (
             <div className="flex flex-wrap gap-2 border-t border-black/[0.05] bg-white px-4 py-3">
               {msgs[msgs.length - 1].chips!.map((c) => (
                 <button key={c} onClick={() => chipAction(c)}

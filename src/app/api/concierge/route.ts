@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SITE, FAQS, SERVICES, DEVICE_FAMILIES } from "@/lib/site";
-import { PRICES, inr } from "@/lib/pricing";
+import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
+import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,41 +31,63 @@ function resolveKeys(): string[] {
 
 function retrieveKnowledge(query: string): string {
   const docs = [
-    ...FAQS.map((item) => ({ title: item.q, body: item.a })),
+    ...KNOWLEDGE_BASE.map((item) => ({
+      title: item.title,
+      body: item.content,
+      tags: item.tags,
+    })),
+    ...FAQS.map((item) => ({ title: item.q, body: item.a, tags: [item.q] })),
     ...SERVICES.map((item) => ({
       title: item.title,
-      body: [item.desc, item.time, item.devices, ...item.points].join(" · ")
+      body: [item.desc, item.time, item.devices, ...item.points].join(" · "),
+      tags: [item.title, item.devices],
     })),
     ...DEVICE_FAMILIES.map((item) => ({
       title: item.name,
-      body: [item.tag, item.desc].join(" · ")
-    }))
+      body: [item.tag, item.desc].join(" · "),
+      tags: [item.name, item.tag],
+    })),
+    ...Object.entries(PRICES).flatMap(([model, repairs]) =>
+      Object.entries(repairs).map(([repair, range]) => ({
+        title: model + " " + repair,
+        tags: [model, repair, "price", "pricing", "cost", "quote"],
+        body: model + " — " + repair + ": " + inr(range[0]) +
+          (range[0] === range[1] ? "" : " – " + inr(range[1])) +
+          ". Typical turnaround: " + (TURNAROUND[repair] ?? "confirmed after diagnosis") + ".",
+      }))
+    ),
   ];
-  const terms = [...new Set(
-    query.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
-      .filter((term) => term.length > 2 && !["the", "and", "for", "with", "how", "what", "can", "you", "are", "is", "this", "that"].includes(term))
-  )];
+
+  const stopWords = new Set([
+    "the", "and", "for", "with", "from", "that", "this", "have", "has", "are",
+    "was", "were", "what", "when", "where", "which", "will", "would", "can",
+    "could", "you", "your", "our", "their", "about", "please", "tell", "me",
+    "hai", "ka", "ki", "ke", "ko", "kya", "mera", "meri", "mere", "mujhe",
+    "kaise", "kitna", "kitne", "karo", "karna", "chahiye", "theek",
+  ]);
+  const terms = Array.from(new Set(query.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? []))
+    .filter((term) => !stopWords.has(term));
   if (!terms.length) return "";
+
   return docs
     .map((doc) => {
-      const haystack = (doc.title + " " + doc.body).toLowerCase();
-      const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0);
+      const title = doc.title.toLowerCase();
+      const tags = doc.tags.join(" ").toLowerCase();
+      const body = doc.body.toLowerCase();
+      let score = 0;
+      for (const term of terms) {
+        if (title.includes(term)) score += 5;
+        else if (tags.includes(term)) score += 3;
+        else if (body.includes(term)) score += 1;
+      }
+      if (query.toLowerCase().includes(title)) score += 8;
       return { ...doc, score };
     })
     .filter((doc) => doc.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 4)
-    .map((doc) => doc.title + ": " + doc.body)
+    .slice(0, 6)
+    .map((doc) => doc.title + ": " + doc.body.slice(0, 900))
     .join("\n");
-}
-
-function priceBlock(): string {
-  return Object.entries(PRICES).map(([model, repairs]) => {
-    const values = Object.entries(repairs).map(([repair, [min, max]]) =>
-      repair + "=" + (min === max ? inr(min) : inr(min) + "–" + inr(max))
-    );
-    return model + ": " + values.join("; ");
-  }).join("\n");
 }
 
 function systemPrompt(query: string): string {
@@ -87,15 +110,15 @@ function systemPrompt(query: string): string {
     "- Payment is after diagnosis and approval; no advance. UPI, card and cash are accepted.",
     "",
     "PRICE RULES — STRICT:",
-    "- The table below is the only source for numeric repair prices. Never invent, estimate, interpolate, or use a price remembered from another conversation.",
+    "- Retrieved price entries below are the only source for numeric repair prices. Never invent, estimate, interpolate, or use a price remembered from another conversation.",
     "- If both model and repair are known, quote the exact table entry. For a range, show the complete range and say the exact grade/revision is confirmed at free diagnosis.",
     "- If a model/repair pair is absent, say it is quoted after a free diagnosis. Do not substitute another model's price.",
     "- Never discount below the lower end of a listed range. Never promise a cash discount or price match.",
     "- Data recovery starts at ₹2,999 with free assessment; outcome is not guaranteed.",
     "- If a customer explicitly asks for the overall iPhone price range, state ₹1,200 to ₹36,400, then ask for the exact model and fault. Do not present this as a quote.",
     "",
-    "PRICE MATRIX (INR):",
-    priceBlock(),
+    "RETRIEVED PRICE MATRIX (INR):",
+    "Use only the exact model + repair entries included in the retrieved knowledge below. If no matching entry is retrieved, quote only after free diagnosis.",
     "",
     "RETRIEVED WEBSITE KNOWLEDGE (relevant FAQ and service details):",
     retrieveKnowledge(query) || "No additional matching FAQ or service entry; use only the verified shop facts above.",
@@ -227,7 +250,9 @@ function buildPayload(message: string, history: Turn[]) {
     { role: "user", parts: [{ text: message }] }
   ];
   return {
-    systemInstruction: { parts: [{ text: systemPrompt(message) }] },
+    systemInstruction: { parts: [{ text: systemPrompt(
+      history.filter((turn) => turn.role === "user").slice(-2).map((turn) => turn.text).concat(message).join(" ")
+    ) }] },
     contents,
     generationConfig: { temperature: 0.25, maxOutputTokens: 240, topP: 0.85 }
   };
@@ -307,6 +332,9 @@ export async function GET() {
     ok: true,
     configured: keys.length > 0,
     configuredKeySlots: keys.length,
+    streaming: true,
+    retrieval: "local-keyword-rag",
+    knowledgeDocuments: KNOWLEDGE_BASE.length + FAQS.length + SERVICES.length + DEVICE_FAMILIES.length + Object.values(PRICES).reduce((total, row) => total + Object.keys(row).length, 0),
     models: MODELS
   }, { headers: { "Cache-Control": "no-store" } });
 }
