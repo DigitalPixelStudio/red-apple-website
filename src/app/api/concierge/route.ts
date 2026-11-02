@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SITE, FAQS, SERVICES, DEVICE_FAMILIES } from "@/lib/site";
-import { PRICES, inr } from "@/lib/pricing";
+import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
+import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ type GeminiResult =
   | { ok: false; status: number; code: string; detail: string };
 
 function resolveKeys(): string[] {
-  const names = ["GEMINI_API_KEY", "GEMINI_API_KEY1", ...KEY_NAMES.slice(1)];
+  const names = ["GEMINI_API_KEY", "GEMINI_API_KEY1", "GEMINI_API_KEY2", ...KEY_NAMES.slice(1)];
   const seen = new Set<string>();
   const keys: string[] = [];
   for (const name of names) {
@@ -30,41 +31,63 @@ function resolveKeys(): string[] {
 
 function retrieveKnowledge(query: string): string {
   const docs = [
-    ...FAQS.map((item) => ({ title: item.q, body: item.a })),
+    ...KNOWLEDGE_BASE.map((item) => ({
+      title: item.title,
+      body: item.content,
+      tags: item.tags,
+    })),
+    ...FAQS.map((item) => ({ title: item.q, body: item.a, tags: [item.q] })),
     ...SERVICES.map((item) => ({
       title: item.title,
-      body: [item.desc, item.time, item.devices, ...item.points].join(" · ")
+      body: [item.desc, item.time, item.devices, ...item.points].join(" · "),
+      tags: [item.title, item.devices],
     })),
     ...DEVICE_FAMILIES.map((item) => ({
       title: item.name,
-      body: [item.tag, item.desc].join(" · ")
-    }))
+      body: [item.tag, item.desc].join(" · "),
+      tags: [item.name, item.tag],
+    })),
+    ...Object.entries(PRICES).flatMap(([model, repairs]) =>
+      Object.entries(repairs).map(([repair, range]) => ({
+        title: model + " " + repair,
+        tags: [model, repair, "price", "pricing", "cost", "quote"],
+        body: model + " — " + repair + ": " + inr(range[0]) +
+          (range[0] === range[1] ? "" : " – " + inr(range[1])) +
+          ". Typical turnaround: " + (TURNAROUND[repair] ?? "confirmed after diagnosis") + ".",
+      }))
+    ),
   ];
-  const terms = [...new Set(
-    query.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
-      .filter((term) => term.length > 2 && !["the", "and", "for", "with", "how", "what", "can", "you", "are", "is", "this", "that"].includes(term))
-  )];
+
+  const stopWords = new Set([
+    "the", "and", "for", "with", "from", "that", "this", "have", "has", "are",
+    "was", "were", "what", "when", "where", "which", "will", "would", "can",
+    "could", "you", "your", "our", "their", "about", "please", "tell", "me",
+    "hai", "ka", "ki", "ke", "ko", "kya", "mera", "meri", "mere", "mujhe",
+    "kaise", "kitna", "kitne", "karo", "karna", "chahiye", "theek",
+  ]);
+  const terms = Array.from(new Set(query.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? []))
+    .filter((term) => !stopWords.has(term));
   if (!terms.length) return "";
+
   return docs
     .map((doc) => {
-      const haystack = (doc.title + " " + doc.body).toLowerCase();
-      const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0);
+      const title = doc.title.toLowerCase();
+      const tags = doc.tags.join(" ").toLowerCase();
+      const body = doc.body.toLowerCase();
+      let score = 0;
+      for (const term of terms) {
+        if (title.includes(term)) score += 5;
+        else if (tags.includes(term)) score += 3;
+        else if (body.includes(term)) score += 1;
+      }
+      if (query.toLowerCase().includes(title)) score += 8;
       return { ...doc, score };
     })
     .filter((doc) => doc.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 4)
-    .map((doc) => doc.title + ": " + doc.body)
+    .slice(0, 6)
+    .map((doc) => doc.title + ": " + doc.body.slice(0, 900))
     .join("\n");
-}
-
-function priceBlock(): string {
-  return Object.entries(PRICES).map(([model, repairs]) => {
-    const values = Object.entries(repairs).map(([repair, [min, max]]) =>
-      repair + "=" + (min === max ? inr(min) : inr(min) + "–" + inr(max))
-    );
-    return model + ": " + values.join("; ");
-  }).join("\n");
 }
 
 function systemPrompt(query: string): string {
@@ -87,17 +110,18 @@ function systemPrompt(query: string): string {
     "- Payment is after diagnosis and approval; no advance. UPI, card and cash are accepted.",
     "",
     "PRICE RULES — STRICT:",
-    "- The table below is the only source for numeric repair prices. Never invent, estimate, interpolate, or use a price remembered from another conversation.",
+    "- Retrieved price entries below are the only source for numeric repair prices. Never invent, estimate, interpolate, or use a price remembered from another conversation.",
     "- If both model and repair are known, quote the exact table entry. For a range, show the complete range and say the exact grade/revision is confirmed at free diagnosis.",
     "- If a model/repair pair is absent, say it is quoted after a free diagnosis. Do not substitute another model's price.",
     "- Never discount below the lower end of a listed range. Never promise a cash discount or price match.",
     "- Data recovery starts at ₹2,999 with free assessment; outcome is not guaranteed.",
     "- If a customer explicitly asks for the overall iPhone price range, state ₹1,200 to ₹36,400, then ask for the exact model and fault. Do not present this as a quote.",
     "",
-    "PRICE MATRIX (INR):",
-    priceBlock(),
+    "RETRIEVED PRICE MATRIX (INR):",
+    "Use only the exact model + repair entries included in the retrieved knowledge below. If no matching entry is retrieved, quote only after free diagnosis.",
     "",
     "RETRIEVED WEBSITE KNOWLEDGE (relevant FAQ and service details):",
+    "Approved policy chunks take precedence over general FAQ or marketing descriptions if they conflict.",
     retrieveKnowledge(query) || "No additional matching FAQ or service entry; use only the verified shop facts above.",
     "",
     "TURNAROUND:",
@@ -137,7 +161,7 @@ async function callGemini(model: string, key: string, body: unknown): Promise<Ge
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(6000),
+      signal: AbortSignal.timeout(8000),
       cache: "no-store"
     });
     if (!response.ok) {
@@ -227,7 +251,9 @@ function buildPayload(message: string, history: Turn[]) {
     { role: "user", parts: [{ text: message }] }
   ];
   return {
-    systemInstruction: { parts: [{ text: systemPrompt(message) }] },
+    systemInstruction: { parts: [{ text: systemPrompt(
+      history.filter((turn) => turn.role === "user").slice(-2).map((turn) => turn.text).concat(message).join(" ")
+    ) }] },
     contents,
     generationConfig: { temperature: 0.25, maxOutputTokens: 240, topP: 0.85 }
   };
@@ -235,7 +261,7 @@ function buildPayload(message: string, history: Turn[]) {
 
 export async function POST(request: NextRequest) {
   const keys = resolveKeys();
-  if (!keys.length) return NextResponse.json({ ok: false, reason: "no_key", reply: null }, { status: 503 });
+  if (!keys.length) return new Response(null, { status: 204, headers: { "Cache-Control": "no-store", "X-Concierge-Fallback": "local" } });
 
   let body: { message?: unknown; history?: unknown };
   try {
@@ -260,25 +286,27 @@ export async function POST(request: NextRequest) {
   const attempts: Array<{ model: string; status: number; code: string }> = [];
   let selected: { response: Response; model: string } | null = null;
 
-  // Try the configured primary key first, then the secondary key, then the
-  // lower-cost fallback model. This handles per-key quota and transient 503s.
-  for (const model of MODELS) {
-    for (const key of keys) {
-      const result = await callGemini(model, key, payload);
-      if (result.ok) {
-        selected = { response: result.response, model: result.model };
-        break;
-      }
-      attempts.push({ model, status: result.status, code: result.code });
-      console.error("[concierge] provider failure", {
-        model,
-        status: result.status,
-        code: result.code,
-        detail: result.detail.slice(0, 180)
-      });
-      if (result.status === 400) break;
+  // At most three attempts: primary key/model, one alternate key, then the fallback model.
+  // A network timeout stops retries; repeatedly waiting on the same exhausted project only adds latency.
+  const plan = [
+    { model: MODELS[0], key: keys[0] },
+    ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []),
+    { model: MODELS[1], key: keys[0] },
+  ];
+
+  for (const attempt of plan) {
+    const result = await callGemini(attempt.model, attempt.key, payload);
+    if (result.ok) {
+      selected = { response: result.response, model: result.model };
+      break;
     }
-    if (selected) break;
+    attempts.push({ model: attempt.model, status: result.status, code: result.code });
+    console.warn("[concierge] provider fallback", {
+      model: attempt.model,
+      status: result.status,
+      code: result.code,
+    });
+    if (result.status === 0 || result.status === 400) break;
   }
 
   if (selected) {
@@ -293,12 +321,16 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({
-    ok: false,
-    reason: "provider_unavailable",
-    reply: null,
-    attempts
-  }, { status: 502, headers: { "Cache-Control": "no-store" } });
+  // Let the browser's deterministic resolver answer from the local knowledge base.
+  // A quota outage is not a customer-facing server error and should not count as a 5xx.
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Concierge-Fallback": "local",
+      "X-Concierge-Attempts": String(attempts.length),
+    },
+  });
 }
 
 export async function GET() {
@@ -307,6 +339,9 @@ export async function GET() {
     ok: true,
     configured: keys.length > 0,
     configuredKeySlots: keys.length,
+    streaming: true,
+    retrieval: "local-keyword-rag",
+    knowledgeDocuments: KNOWLEDGE_BASE.length + FAQS.length + SERVICES.length + DEVICE_FAMILIES.length + Object.values(PRICES).reduce((total, row) => total + Object.keys(row).length, 0),
     models: MODELS
   }, { headers: { "Cache-Control": "no-store" } });
 }
