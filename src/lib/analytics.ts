@@ -32,6 +32,7 @@ type AnalyticsEvent =
   | "quote_started"
   | "device_selected"
   | "model_selected"
+  | "glass_price_select"
   | "quote_completed"
   | "whatsapp_click"
   | "call_click"

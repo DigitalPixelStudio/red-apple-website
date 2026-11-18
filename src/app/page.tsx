@@ -7,6 +7,9 @@ import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import Gallery from "@/components/Gallery";
 import CraftShowcase from "@/components/CraftShowcase";
+import GlassRestoration from "@/components/GlassRestoration";
+import TickerStrip from "@/components/TickerStrip";
+import SectionDivider from "@/components/SectionDivider";
 import Ecosystem from "@/components/Ecosystem";
 import DisplayFocus from "@/components/DisplayFocus";
 import ServicesGrid from "@/components/ServicesGrid";
@@ -53,15 +56,21 @@ export default function Home() {
       <div className="relative z-10">
         <Hero />
         <TrustBar />
+        <TickerStrip />
 
         {/* ---- the store, up front, because trust is the first job ---- */}
         <Gallery />
+        <SectionDivider />
 
         <QuoteSection />
         <PickupSection />
 
         {/* ---- the proof: results, the bench, the record ---- */}
         <CraftShowcase />
+
+        {/* ---- the glass line: prices, before/after and the TBK machines ---- */}
+        <GlassRestoration />
+        <SectionDivider />
 
         <Ecosystem />
         <DisplayFocus />
@@ -80,6 +89,7 @@ export default function Home() {
         <LocationSection />
         <FinalCta />
       </div>
+      <TickerStrip reverse />
       <Footer />
       <Concierge />
       <SmartNudge />

@@ -17,12 +17,14 @@ export default function Footer() {
   return (
     <footer className="site-footer text-white">
       <div className="footer-topline" />
+      <span className="footer-beam" aria-hidden="true" />
+      <span className="footer-aurora" aria-hidden="true" />
       <div className="mx-auto max-w-[1200px] px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-white shadow-lg animate-float">
+              <span className="footer-brand-live grid h-12 w-12 place-items-center rounded-xl bg-white shadow-lg">
                 <BrandMark size={34} />
               </span>
               <div>

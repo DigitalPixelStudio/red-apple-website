@@ -11,6 +11,8 @@
  * then offer "Other / Not sure" and route to WhatsApp — never invent a number.
  */
 
+import { glassPriceFor } from "./glass-pricing";
+
 export type Price = [number, number];
 export type RepairPriceMap = Record<string, Price>;
 
@@ -79,6 +81,7 @@ export const PRICES: Record<string, RepairPriceMap> = {
 
 /** Turnaround per repair type — taken from the sheet's Avg Turnaround column. */
 export const TURNAROUND: Record<string, string> = {
+  "Front Glass Restoration": "Same day (after eligibility check)",
   "Front Display Replacement": "~60 min",
   "Back Glass Replacement": "~60 min",
   "Battery Replacement": "~45 min",
@@ -101,11 +104,20 @@ export function priceNote(repair: string): string {
     return "Quoted after a free board-level diagnosis.";
   }
   if (repair === "Water Damage Revival") return "Assessed first — we tell you honestly if it is recoverable.";
+  if (repair === "Front Glass Restoration") {
+    return "Published glass-restoration price. Final eligibility is confirmed on inspection — if the OLED itself is damaged we recommend full display replacement instead.";
+  }
   return "Genuine parts and labour included";
 }
 
 /** Look up a price. null when the sheet does not cover this combination. */
 export function getPrice(model: string, repair: string): Price | null {
+  // Front-glass restoration has its own published list (glass-pricing.ts).
+  // It is a fixed price for glass-only work, separate from a full display.
+  if (repair === "Front Glass Restoration") {
+    const glass = glassPriceFor(model);
+    return glass === null ? null : [glass, glass];
+  }
   const row = PRICES[model];
   if (!row) return null;
   const v = row[repair];

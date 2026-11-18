@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SITE, FAQS, SERVICES, DEVICE_FAMILIES } from "@/lib/site";
 import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
+import { GLASS_PRICE_ROWS, GLASS_PRICE_MIN, GLASS_PRICE_MAX, GLASS_WARRANTY_MONTHS } from "@/lib/glass-pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -56,6 +57,19 @@ function retrieveKnowledge(query: string): string {
           ". Typical turnaround: " + (TURNAROUND[repair] ?? "confirmed after diagnosis") + ".",
       }))
     ),
+    ...GLASS_PRICE_ROWS.map((row) => ({
+      title: row.model + " Front Glass Restoration",
+      tags: [row.model, "front glass", "glass restoration", "glass only", "cracked glass", "price", "pricing", "cost", "quote", "TBK"],
+      body: row.model + " — Front Glass Restoration: " + inr(row.price) +
+        ". Glass-only restoration, separate from full display replacement. " +
+        GLASS_WARRANTY_MONTHS + "-month hardware warranty; eligibility confirmed on inspection. " +
+        "Typical turnaround: same day after the eligibility check.",
+    })),
+    {
+      title: "Front glass restoration machinery (TBK)",
+      tags: ["TBK", "machine", "machinery", "OCA", "laminating", "vacuum", "hydraulic press", "bubble remover", "chamber", "UV laser", "cold laser", "TBK-958", "lab"],
+      body: "Glass restoration uses three TBK systems: the TBK OCA Laminating Vacuum Compressed Hydraulic Press for vacuum and hydraulic optical bonding; the TBK 90-Litre High-Pressure Bubble Remover Chamber for a zero-bubble, permanent OCA cure; and the TBK-958 Cold UV Purple Laser for low-temperature bezel separation and back-glass removal with no thermal stress on the logic board.",
+    },
   ];
 
   const stopWords = new Set([
@@ -104,6 +118,9 @@ function systemPrompt(query: string): string {
     "- We repair supported iPhone models listed in the website model list, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
     "- Independent repair workshop. NOT an Apple Authorised Service Provider; never imply Apple affiliation.",
     "- 90-day service warranty on repairs. Battery and display also have 6 months of health cover: battery health below 80% or a non-impact display fault qualifies for one replacement under policy. New impact/liquid damage and third-party repair are excluded.",
+    "- Front Glass Restoration is a separate service from Front Display Replacement. Published glass-only prices run from ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + " by model, with a " + GLASS_WARRANTY_MONTHS + "-month hardware warranty. Eligibility is confirmed on inspection; if the OLED or touch layer itself is damaged, recommend full display replacement instead.",
+    "- Glass restoration machinery, named verbatim: TBK OCA Laminating Vacuum Compressed Hydraulic Press; TBK 90-Litre High-Pressure Bubble Remover Chamber; TBK-958 Cold UV Purple Laser. Explain the process, but never claim a machine was used on a specific device unless the repair is front-glass restoration.",
+    "- Store hours are 10 AM – 12 AM midnight, all seven days. Customer assistance and doorstep pickup run 24/7.",
     "- Devices in transit and on the bench are covered by the shop care policy and photographed at collection and hand-back.",
     "- Customers may watch bench work through the workshop glass wall. We do not copy, read or retain customer data; repair records contain only model, fault, part, price and date.",
     "- Diagnosis is free. Customer receives a fixed quote and approves it before work or payment.",
@@ -115,6 +132,7 @@ function systemPrompt(query: string): string {
     "- If a model/repair pair is absent, say it is quoted after a free diagnosis. Do not substitute another model's price.",
     "- Never discount below the lower end of a listed range. Never promise a cash discount or price match.",
     "- Data recovery starts at ₹2,999 with free assessment; outcome is not guaranteed.",
+    "- Front-glass entries in the retrieved knowledge are fixed published prices. Quote them exactly, say the price is for glass-only restoration, and confirm eligibility on inspection. Never confuse front glass with back glass or with a full display replacement.",
     "- If a customer explicitly asks for the overall iPhone price range, state ₹1,200 to ₹36,400, then ask for the exact model and fault. Do not present this as a quote.",
     "",
     "RETRIEVED PRICE MATRIX (INR):",
@@ -126,6 +144,7 @@ function systemPrompt(query: string): string {
     "",
     "TURNAROUND:",
     "- Display, back glass and battery: usually same day, approximately 45–60 minutes.",
+    "- Front glass restoration: same day after the eligibility check.",
     "- Charging port and camera: approximately 60 minutes.",
     "- Board-level / motherboard work: 2–3 days.",
     "- Water-damage assessment and treatment: approximately 24–48 hours; never promise recovery.",

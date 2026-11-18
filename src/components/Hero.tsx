@@ -13,7 +13,7 @@ export default function Hero() {
     { label: "MacBook", sub: "Logic board · keyboard · screen", icon: "macbook" as IconName, img: "/images/v3/laptop-closeup.jpg" },
   ];
 
-  /* Store hours: 10:30 – 21:00, all 7 days (IST). Computed on the client so the
+  /* Store hours: 10:00 – 24:00 (midnight), all 7 days (IST). Computed on the client so the
      badge never claims "Open now" at 2am. Falls back to the static label during
      SSR, then corrects itself on mount — no hydration mismatch. */
   const [status, setStatus] = useState<{ open: boolean; label: string }>({
@@ -125,10 +125,11 @@ export default function Hero() {
         </div>
 
         <h1 className="hero-apple font-breathe mb-6 text-balance">
-          Apple repairs, <span className="hero-mastered">mastered.</span>
+          Apple repairs, <span className="hero-mastered">perfected.</span>
         </h1>
         <p className="hero-sub mb-10 text-balance">
-          Component-level micro-soldering, OEM displays, and 30-minute turnarounds right here in Bangalore. Backed by our rock-solid 90-day warranty.
+          Component-level micro-soldering, OEM displays and front-glass restoration on specialised TBK machinery — with
+          30-minute turnarounds right here in Bangalore. Backed by our 90-day service warranty.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
@@ -174,10 +175,10 @@ export default function Hero() {
             enough to pass `sm:` but only ~390px tall, so the phone existed and
             was never reachable. It is always rendered now, and the hero
             compresses itself in landscape so the device comes into view. */}
-        <div className="hero-phone-wrap mt-14">
+        <div className="hero-phone-wrap hero-phone-live mt-14">
           <Phone3D />
           <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--orange-deep)]">
-            Built for every iPhone · 11 through 17 Pro Max
+            Built for every iPhone · 11 through 18 Pro Max
           </p>
         </div>
       </div>

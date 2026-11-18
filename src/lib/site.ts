@@ -2,9 +2,9 @@ export const SITE = {
   name: "Red Apple Mobile Repair Store",
   legalName: "RED APPLE MOBILE REPAIR STORE",
   shortName: "Red Apple",
-  tagline: "Apple repairs, mastered.",
+  tagline: "Apple repairs, perfected.",
   shortDescription:
-    "Bangalore's specialist Apple repair studio in Halasuru. iPhone, iPad, AirPods, Apple Watch, MacBook & Mac repairs — displays, batteries, back glass, water damage, firmware, data recovery & more.",
+    "Bangalore's specialist Apple repair studio in Halasuru. iPhone, iPad, AirPods, Apple Watch, MacBook & Mac repairs — front glass restoration on TBK machinery, displays, batteries, back glass, water damage, firmware, data recovery & more.",
   phone: "+918660663776",
   phoneHref: "tel:+918660663776",
   whatsapp: "918660663776",
@@ -15,11 +15,11 @@ export const SITE = {
   pincode: "560008",
   state: "Karnataka",
   country: "IN",
-  hours: "10:30 AM – 9:00 PM (Open all 7 days)",
-  hoursSchema: "Mo-Su 10:30-21:00",
+  hours: "10 AM – 12 AM midnight (Open all 7 days)",
+  hoursSchema: "Mo-Su 10:00-23:59",
   pickupHours: "24/7 — doorstep pickup any hour, any day",
-  openTime: "10:30",
-  closeTime: "21:00",
+  openTime: "10:00",
+  closeTime: "23:59",
   geo: { lat: 12.9748, lng: 77.6249 },
   rating: "4.9",
   ratingCount: "1,099",
@@ -57,7 +57,7 @@ export const DEVICE_FAMILIES = [
 export const QUOTE_DEVICES = [
   {
     id: "iphone", label: "iPhone",
-    models: ["iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 17 Plus", "iPhone 17", "iPhone Air", "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16",
+    models: ["iPhone 18 Pro Max", "iPhone 18 Pro", "iPhone 18 Plus", "iPhone 18", "iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 17 Plus", "iPhone 17", "iPhone Air", "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16",
       "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15",
       "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14",
       "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13 mini", "iPhone 13",
@@ -90,6 +90,7 @@ export const QUOTE_DEVICES = [
 ] as const;
 
 export const REPAIR_TYPES = [
+  "Front Glass Restoration",
   "Front Display Replacement",
   "Back Glass Replacement",
   "Battery Replacement",
@@ -117,6 +118,13 @@ export const SERVICES: {
     time: "~45 min", devices: "iPhone · iPad · MacBook",
     featured: true, img: "/images/v3/iphone-display.jpg",
     points: ["True Tone preserved", "OEM-grade panel", "90-day warranty"],
+  },
+  {
+    id: "frontglass", title: "Front Glass Restoration", icon: "display",
+    desc: "For devices where the original display/OLED is still suitable and only the front glass or touch layer is damaged. Eligibility is confirmed after a technician inspection — if the display itself is damaged we recommend full display replacement instead.",
+    time: "Same day", devices: "iPhone · iPad · Apple Watch",
+    img: "/images/craft/before-after-screen.webp",
+    points: ["Eligibility checked first", "Original display retained where suitable", "6-month hardware warranty"],
   },
   {
     id: "backglass", title: "Back Glass Replacement", icon: "backglass",
@@ -302,11 +310,13 @@ export const FAQS: { q: string; a: string }[] = [
   { q: "Do I need an appointment?", a: "Walk-ins are welcome all day. For faster service, WhatsApp us your device model and issue." },
   { q: "Can you recover my data after a screen or water issue?", a: "Yes — data recovery is one of our specialities. We never wipe data without your permission." },
   { q: "Do you offer pickup and delivery?", a: "Yes — doorstep pickup runs 24/7 across Bengaluru, any hour and any day. Free for repairs above ₹2,999. Book it and you get a WhatsApp confirmation with the rider details." },
-  { q: "Where are you located?", a: "No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru, Bengaluru 560008 — 1 minute from Halasuru Metro, open 10:30 AM – 9:00 PM daily." },
+  { q: "Where are you located?", a: "No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru, Bengaluru 560008 — 1 minute from Halasuru Metro, open 10 AM – 12 AM midnight daily." },
   { q: "Will my data stay safe?", a: "Absolutely. We keep your data private, never access your accounts, and return your device with locks intact." },
   { q: "What if you can't fix it?", a: "If we can't repair your device, there is no charge for the failed attempt." },
   { q: "How do I track my repair status?", a: "WhatsApp us your receipt number and we'll send real-time updates." },
   { q: "Do you repair MacBooks too?", a: "Yes — MacBook Pro, MacBook Air, Mac mini, iMac and Mac Studio. Display, battery, keyboard, logic board, thermal and storage upgrades." },
+  { q: "What is front glass restoration?", a: "It replaces only the damaged outer glass while keeping your original OLED display, touch layer and True Tone. We bond the new glass with a TBK OCA laminating press, cure it in a 90-litre high-pressure bubble-remover chamber, and use the TBK-958 cold UV laser for precise, low-heat separation. It carries a 6-month hardware warranty." },
+  { q: "How much does front glass restoration cost?", a: "Published glass-restoration prices range from ₹2,500 for an iPhone 8 / SE (Gen 2/3) to ₹19,500 for an iPhone 18 Pro Max. Final eligibility is confirmed on inspection — if the OLED itself is damaged, we recommend a full display replacement instead." },
 ];
 
 // ---------- SEO service pages ----------
@@ -315,6 +325,7 @@ export const SERVICE_PAGES: {
 }[] = [
   { slug: "iphone-repair", title: "iPhone Repair — All Models", icon: "phone", short: "Screen, battery, camera & more", desc: "Complete iPhone repair for every generation.", keywords: ["iPhone repair Bangalore", "iPhone repair Halasuru"] },
   { slug: "iphone-display-repair", title: "iPhone Display / Screen Replacement", icon: "display", short: "OEM-grade OLED, True Tone preserved", desc: "Front display replacement on all iPhone models.", keywords: ["iPhone screen replacement", "iPhone display repair Bangalore"] },
+  { slug: "front-glass-restoration", title: "Front Glass Restoration", icon: "display", short: "Glass-only restoration, eligibility checked first", desc: "Front glass/touch layer restoration for devices where the original display/OLED assembly remains suitable. Final eligibility is determined after technician inspection, and the service carries a 6-month hardware warranty.", keywords: ["front glass restoration Bangalore", "front glass replacement Halasuru", "glass only screen repair"] },
   { slug: "iphone-back-glass-repair", title: "iPhone Back Glass Replacement", icon: "backglass", short: "Laser-aligned, MagSafe compatible", desc: "Factory-grade back glass replacement.", keywords: ["iPhone back glass repair", "iPhone back glass replacement Bangalore"] },
   { slug: "ipad-repair", title: "iPad Repair — All Models", icon: "ipad", short: "Screens, batteries & board-level", desc: "iPad, iPad Pro, iPad Air and iPad mini repairs.", keywords: ["iPad repair Bangalore", "iPad screen replacement"] },
   { slug: "apple-watch-repair", title: "Apple Watch Repair", icon: "watch", short: "Screens, batteries & sensors", desc: "Apple Watch screen, battery, sensor repairs.", keywords: ["Apple Watch repair Bangalore"] },

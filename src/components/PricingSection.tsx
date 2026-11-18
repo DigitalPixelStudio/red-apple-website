@@ -23,6 +23,17 @@ export default function PricingSection() {
           </p>
         </Reveal>
 
+        <Reveal className="mb-9 flex justify-center">
+          <a
+            href="#glass"
+            className="group inline-flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-[var(--border)] bg-white px-5 py-3 text-[13px] font-semibold text-[var(--text)] shadow-sm transition-transform hover:-translate-y-0.5 hover:border-[var(--orange)]/50"
+          >
+            <LineIcon name="display" size={16} color="var(--orange)" />
+            Front glass restoration: ₹2,500 – ₹19,500 by model
+            <span className="text-[var(--orange)] transition-transform group-hover:translate-x-0.5">See the glass price list →</span>
+          </a>
+        </Reveal>
+
         {/* Category tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {PRICING_GROUPS.map((g, i) => (

@@ -1,9 +1,15 @@
+import { GLASS_PRICE_ROWS, GLASS_PRICE_MIN, GLASS_PRICE_MAX, GLASS_WARRANTY_MONTHS } from "./glass-pricing";
+
 export type KnowledgeDocument = {
   id: string;
   title: string;
   tags: string[];
   content: string;
 };
+
+const GLASS_PRICE_SENTENCE = GLASS_PRICE_ROWS
+  .map((row) => row.model + " ₹" + row.price.toLocaleString("en-IN"))
+  .join("; ");
 
 /**
  * Curated, version-controlled knowledge for Pixel Ai.
@@ -21,7 +27,25 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "device-coverage",
     title: "Supported devices and repair services",
     tags: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Mac", "iPod", "screen", "display", "battery", "camera", "charging", "speaker", "microphone", "motherboard", "water", "software", "repair"],
-    content: "The workshop services iPhone, iPad, Apple Watch, AirPods, iPod and MacBook/Mac devices. Repair categories include front display replacement, back glass replacement, battery replacement, camera repair, charging port and flex repair, speaker/microphone/haptics, motherboard and IC-level work, water-damage assessment, software and iOS issues, data recovery, lawful unlocking, OS/firmware installation and body/frame repair. Exact model and fault must be confirmed before quoting."
+    content: "The workshop services iPhone, iPad, Apple Watch, AirPods, iPod and MacBook/Mac devices. Repair categories include front glass restoration, front display replacement, back glass replacement, battery replacement, camera repair, charging port and flex repair, speaker/microphone/haptics, motherboard and IC-level work, water-damage assessment, software and iOS issues, data recovery, lawful unlocking, OS/firmware installation and body/frame repair. Exact model and fault must be confirmed before quoting."
+  },
+  {
+    id: "front-glass-restoration",
+    title: "Front Glass Restoration versus full display replacement",
+    tags: ["front glass", "glass restoration", "glass only", "front glass replacement", "outer glass", "touch layer", "display", "screen", "OLED", "cracked glass"],
+    content: "Front Glass Restoration is a separate service from Front Display Replacement. It applies when the original display/OLED assembly is still suitable and only the front glass or touch layer is damaged. The technician inspects the device first and confirms eligibility; if the display itself is damaged, full display replacement is recommended instead. Front Glass Restoration carries a 6-month hardware warranty, subject to the stated repair warranty terms, and does not cover new impact or liquid damage. A published glass price exists for listed iPhone models, but eligibility is always confirmed on inspection."
+  },
+  {
+    id: "glass-restoration-prices",
+    title: "Published front glass restoration prices by iPhone model",
+    tags: ["front glass price", "glass restoration price", "glass only price", "screen glass price", "cracked glass price", "iPhone glass", "price list", "pricing", "cost", "quote", "OCA", "lamination"],
+    content: "Front glass restoration published prices, in rupees: " + GLASS_PRICE_SENTENCE + ". The published range is ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + ". These are glass-only restoration prices, not full display replacement. A model not on this list has no published glass price and must be quoted after a free inspection. Every glass restoration carries a " + GLASS_WARRANTY_MONTHS + "-month hardware warranty. Eligibility depends on the existing OLED/display being suitable; if the display itself is damaged, quote full display replacement instead."
+  },
+  {
+    id: "glass-lab-machinery",
+    title: "TBK glass restoration machinery and process",
+    tags: ["machinery", "machines", "TBK", "OCA", "laminating", "vacuum", "hydraulic press", "bubble remover", "autoclave", "chamber", "laser", "UV laser", "cold laser", "purple laser", "TBK-958", "90 litre", "bezel", "lamination", "factory finish", "OLED"],
+    content: "Front glass restoration is performed on three specialised TBK systems at the Halasuru lab. (1) TBK OCA Laminating Vacuum Compressed Hydraulic Press: aligns and bonds the new glass to the original OLED under vacuum and controlled hydraulic pressure for factory-level optical lamination. (2) TBK 90-Litre High-Pressure Bubble Remover Chamber: removes microscopic air bubbles and cures the OCA for a crystal-clear, zero-defect finish with permanent adhesion. (3) TBK-958 Cold UV Purple Laser: separates the front bezel and removes back glass with low-temperature UV laser precision, so the logic board and internal components receive no thermal stress. The process preserves the original OLED panel and touch sensitivity wherever the display is suitable. All post-repair diagnostics run through Apple Diagnostic Mode under a zero-password policy: the customer is never asked for a passcode, Apple ID, OTP, UPI PIN or card details."
   },
   {
     id: "diagnosis-and-quote",
