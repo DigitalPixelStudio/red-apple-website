@@ -25,9 +25,18 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }  /* no scroll-behavior:smooth — it fights JS scroll tracking */
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+/* Motion is ON by default. The footer "Motion" switch sets
+   <html data-motion="off"> for visitors who want a still page. */
+html[data-motion="off"] {
+  scroll-behavior: auto;
+}
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
 body {
@@ -473,7 +482,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .site-header::after,
   .brand-name,
   .brand-sub { animation: none !important; }
@@ -658,7 +667,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* --- respect reduced motion -------------------------------- */
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .hover-pop,
   .icon-pop,
   .price-row,
@@ -719,7 +728,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .cta-orange:active { transform: translateY(0); }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .hero-mastered { animation: none; }
   .cta-orange { transition: none; }
 }
@@ -1066,7 +1075,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .phone-app-grid { top: 140px; gap: 9px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .phone-float, .phone-spin, .phone-sheen,
   .phone-app, .phone-screen-glow, .phone-orbit, .phone-shadow {
     animation: none !important;
@@ -1243,7 +1252,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ==========================================================================
    REDUCED MOTION — everything off
    ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .connect-device, .connect-ring, .connect-status, .connect-status::before,
   .icon-bounce-idle, .bg-grid, .bg-orb-3d, .font-breathe {
     animation: none !important;
@@ -1328,10 +1337,12 @@ html {
     #1d1d1f 88%,
     #1d1d1f 100%);
   background-size: 260% 100%;
+  /* checked centre so the brand ramp is visible even with motion off */
+  background-position: 50% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: headDrift 13s ease-in-out infinite;
+  animation: headDrift 22s ease-in-out infinite;
   will-change: auto;
 }
 @keyframes headDrift {
@@ -1462,7 +1473,7 @@ html {
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .head-gradient, .kicker { animation: none !important; }
   .head-gradient { -webkit-text-fill-color: #1d1d1f; background: none; }
   .hv-lift:hover, .hv-tilt:hover, .hv-price:hover,
@@ -1499,17 +1510,16 @@ html {
   pointer-events: none;
 }
 
-/* column headings get the brand ramp */
+/* column headings — solid warm colour, never gradient-clipped, so they read
+   crisply at every zoom level and on every GPU */
 .site-footer .footer-head {
-  background-image: linear-gradient(92deg, #ffb067, #ff7a1a 48%, #ff2d55 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  font-size: 10.5px;
+  color: #ffb067;
+  font-size: 11.5px;
   font-weight: 800;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  -webkit-text-fill-color: currentColor;
+  line-height: 1.4;
 }
 
 /* links drift toward orange on hover, with a small slide */
@@ -1764,7 +1774,7 @@ html {
   to   { opacity: 1; transform: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .fx-aurora, .fx-divider, .fx-badge, .fx-halo, .fx-dots,
   .fx-breathe-border, .fx-marquee > div, .fx-stagger > *, .fx-enter,
   .fx-caret::after { animation: none !important; }
@@ -1799,13 +1809,14 @@ html {
   contain: strict;
 }
 
-/* the long page: let the browser skip work off-screen */
+/* The long page is a single scroll; content-visibility caused scrollbar
+   jumps while sections were measured lazily, so it is intentionally off.
+   Sections are cheap enough and this keeps scrolling continuous. */
 section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 720px;
+  content-visibility: visible;
 }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .phone-spin, .phone-float, .phone-sheen,
   .brand-name, .brand-sub { will-change: auto; }
 }
@@ -1887,7 +1898,7 @@ section {
 }
 .card-tilt-icon { transition: transform .26s cubic-bezier(.34,1.56,.64,1); }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .head-underline::after { animation: none; transform: scaleX(1); }
   .stat-breathe { animation: none; }
   .card-tilt:hover { transform: none; }
@@ -1939,16 +1950,16 @@ section {
 }
 
 
-/* ---- 3. kicker: was colour cycling ---- */
+/* ---- 3. kicker keeps a gentle colour pulse ---- */
 .kicker {
   color: var(--cosmic-deep);
-  animation: none;
 }
 
-/* ---- 4. hero headline sweep: was background-position ---- */
-.mastered-shift,
-[class*="mastered"] {
+/* ---- 4. hero headline sweep ---- */
+html[data-motion="off"] .mastered-shift,
+html[data-motion="off"] [class*="mastered"] {
   animation: none !important;
+  background-position: 50% 50% !important;
 }
 
 /* ---- 5. the header itself: one composited layer, nothing else ---- */
@@ -2008,7 +2019,7 @@ section {
    them to the section instead of the viewport. */
 
 /* ---- 12. respect reduced motion for everything above ---- */
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .bg-grid::after,
   .orb,
   .orb-reverse {
@@ -2295,7 +2306,7 @@ table tbody tr {
 }
 
 /* ---------- reduced motion ---------- */
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .light-3d .l1, .light-3d .l2, .light-3d .l3,
   .light-beam { animation: none !important; }
   .light-3d { opacity: .5; }
@@ -2489,30 +2500,30 @@ footer a {
   transform-style: flat;
 }
 
-/* ---- every other decorative loop, off ---- */
-.animate-aurora,
-.animate-bob,
-.animate-brand-breathe,
-.animate-breathe,
-.animate-float,
-.animate-float-rotate,
-.animate-gradient,
-.animate-pulse-dot,
-.animate-pulse-ring,
-.animate-shine,
-.animate-spin-slow,
-.bg-grid,
-.bg-grid::after,
-.bg-orb-3d,
-.chip-float,
-.connect-device,
-.connect-ring,
-.connect-status,
-.fx-marquee,
-.orb,
-.orb-reverse,
-.aurora-layer,
-.fx-aurora {
+/* ---- every other decorative loop: on by default, off on request ---- */
+html[data-motion="off"] .animate-aurora,
+html[data-motion="off"] .animate-bob,
+html[data-motion="off"] .animate-brand-breathe,
+html[data-motion="off"] .animate-breathe,
+html[data-motion="off"] .animate-float,
+html[data-motion="off"] .animate-float-rotate,
+html[data-motion="off"] .animate-gradient,
+html[data-motion="off"] .animate-pulse-dot,
+html[data-motion="off"] .animate-pulse-ring,
+html[data-motion="off"] .animate-shine,
+html[data-motion="off"] .animate-spin-slow,
+html[data-motion="off"] .bg-grid,
+html[data-motion="off"] .bg-grid::after,
+html[data-motion="off"] .bg-orb-3d,
+html[data-motion="off"] .chip-float,
+html[data-motion="off"] .connect-device,
+html[data-motion="off"] .connect-ring,
+html[data-motion="off"] .connect-status,
+html[data-motion="off"] .fx-marquee,
+html[data-motion="off"] .orb,
+html[data-motion="off"] .orb-reverse,
+html[data-motion="off"] .aurora-layer,
+html[data-motion="off"] .fx-aurora {
   animation: none !important;
   will-change: auto !important;
 }
@@ -2572,28 +2583,29 @@ footer a {
 }
 
 /* Disable infinite effects that repaint text, shadows, borders or backgrounds.
-   Short entrance transitions and the chat typing indicator remain available. */
-.stat-breathe,
-.text-shimmer,
-.gradient-border::after,
-.animate-gradient,
-.animate-aurora,
-.animate-pulse-ring,
-.animate-pulse-dot,
-.animate-shine,
-.animate-breathe,
-.animate-float-rotate,
-.animate-spin-slow,
-.aurora-layer,
-.orb,
-.orb-reverse,
-.chip-float,
-.sweep-shine::after,
-.light-3d .l1,
-.light-3d .l2,
-.light-3d .l3,
-.light-beam,
-.typing-cursor::after {
+   Short entrance transitions and the chat typing indicator remain available.
+   (Only when the visitor has turned motion off.) */
+html[data-motion="off"] .stat-breathe,
+html[data-motion="off"] .text-shimmer,
+html[data-motion="off"] .gradient-border::after,
+html[data-motion="off"] .animate-gradient,
+html[data-motion="off"] .animate-aurora,
+html[data-motion="off"] .animate-pulse-ring,
+html[data-motion="off"] .animate-pulse-dot,
+html[data-motion="off"] .animate-shine,
+html[data-motion="off"] .animate-breathe,
+html[data-motion="off"] .animate-float-rotate,
+html[data-motion="off"] .animate-spin-slow,
+html[data-motion="off"] .aurora-layer,
+html[data-motion="off"] .orb,
+html[data-motion="off"] .orb-reverse,
+html[data-motion="off"] .chip-float,
+html[data-motion="off"] .sweep-shine::after,
+html[data-motion="off"] .light-3d .l1,
+html[data-motion="off"] .light-3d .l2,
+html[data-motion="off"] .light-3d .l3,
+html[data-motion="off"] .light-beam,
+html[data-motion="off"] .typing-cursor::after {
   animation: none !important;
   will-change: auto !important;
 }
@@ -2645,7 +2657,7 @@ footer a {
 }
 
 /* Respect OS motion preference without changing the layout or content. */
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   *,
   *::before,
   *::after {
@@ -2657,17 +2669,17 @@ footer a {
 }
 
 
-/* Final high-refresh cleanup: stop remaining font/background/shadow keyframes. */
-.font-breathe,
-.head-gradient,
-.kicker,
-.icon-bounce-idle,
-.fx-divider,
-.fx-badge,
-.fx-halo,
-.fx-caret::after,
-.fx-dots,
-.fx-breathe-border {
+/* Final cleanup: font/background/shadow keyframes rest only when motion is off. */
+html[data-motion="off"] .font-breathe,
+html[data-motion="off"] .head-gradient,
+html[data-motion="off"] .kicker,
+html[data-motion="off"] .icon-bounce-idle,
+html[data-motion="off"] .fx-divider,
+html[data-motion="off"] .fx-badge,
+html[data-motion="off"] .fx-halo,
+html[data-motion="off"] .fx-caret::after,
+html[data-motion="off"] .fx-dots,
+html[data-motion="off"] .fx-breathe-border {
   animation: none !important;
   will-change: auto !important;
 }
@@ -2742,7 +2754,7 @@ footer a {
     transform: translate3d(0,-2px,0) rotate(-2deg) scale(1.04);
   }
 }
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .phone-float { animation: none !important; }
 }
 
@@ -3283,7 +3295,7 @@ footer a {
   .glass-result-media { height: 200px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
+html[data-motion="off"] {
   .ticker-track,
   .section-divider-light,
   .header-beam,
@@ -3300,4 +3312,35 @@ footer a {
     animation: none !important;
     will-change: auto !important;
   }
+}
+
+/* ============================================================
+   MOTION SWITCH — footer control
+   Motion is the default; html[data-motion="off"] is the opt-out.
+   ============================================================ */
+.footer-motion-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.30);
+  transition: background-color .2s ease, box-shadow .2s ease;
+}
+.footer-motion-dot.is-on {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16);
+  animation: motionDot 2.6s ease-in-out infinite;
+}
+@keyframes motionDot {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .45; }
+}
+html[data-motion="off"] .footer-motion-dot.is-on {
+  animation: none;
+  background: #ffb067;
+  box-shadow: none;
+}
+@media (hover: none) {
+  /* keep the switch tappable and visually stable on touch */
+  .footer-motion:active { transform: none; }
 }

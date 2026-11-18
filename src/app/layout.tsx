@@ -142,6 +142,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${inter.variable} ${space.variable} bg-white text-[var(--text)] antialiased`}>
+        {/* Apply a saved "motion off" choice before the page paints. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('ramr-motion')==='off'){document.documentElement.setAttribute('data-motion','off');}}catch(e){}",
+          }}
+        />
         {/* 3D light layer — three spotlights on a perspective plane plus one
             travelling hairline. Every one of them animates transform only, and
             the whole layer is contain:strict, so it can never trigger layout or
