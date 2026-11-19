@@ -8,15 +8,18 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 40;
 
-const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
+// Current stable flash models first; a 404 on one model falls through to the next.
+const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-3.8-flash"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_KEY", "GEMINI_STUDIO_API_KEY"] as const;
+// GEMINI_API_KEY is canonical; the others are accepted aliases for older deployments.
+const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_STUDIO_API_KEY", "GOOGLE_GEMINI_API_KEY", "GEMINI_KEY"] as const;
 type Turn = { role: "user" | "model"; text: string };
 type GeminiResult =
   | { ok: true; response: Response; model: string }
   | { ok: false; status: number; code: string; detail: string };
 
 function resolveKeys(): string[] {
+  // Canonical slot first, then numbered slots, then the accepted aliases.
   const names = ["GEMINI_API_KEY", "GEMINI_API_KEY1", "GEMINI_API_KEY2", ...KEY_NAMES.slice(1)];
   const seen = new Set<string>();
   const keys: string[] = [];
@@ -101,7 +104,9 @@ function retrieveKnowledge(query: string): string {
     unlock: ["activation lock", "carrier", "network lock"],
     open: ["hours", "timing", "opening"],
     time: ["turnaround", "duration", "how long"],
-    warranty: ["guarantee", "policy", "cover", "90 days"],
+    warranty: ["guarantee", "policy", "cover", "6 months", "six months", "invoice", "claim", "warranty claim"],
+    invoice: ["bill", "receipt", "crm", "job card", "proof of repair", "warranty record"],
+    status: ["repair status", "stage", "stage update", "whatsapp update", "tracking", "where is my device"],
     genuine: ["oem", "original", "part grade"],
     original: ["oem", "genuine", "part grade"],
     fix: ["repair", "service"],
@@ -160,6 +165,14 @@ function systemPrompt(query: string): string {
     "",
     "PERSONA: Warm, concise, confident, like a helpful senior service advisor. Usually 2–4 short sentences. Ask only one question at a time. Match the customer's language AND script (English, Hindi, Hinglish, Kannada, Tamil, Telugu, and other languages).",
     "",
+    "GROUNDING RULES — STRICT:",
+    "- Answer ONLY from the verified shop facts and the retrieved knowledge base / price matrix supplied below. Never use a remembered fact, never invent a detail, and never guess.",
+    "- If the answer is not in the supplied material, say it needs a free diagnosis or a technician. Do not fill the gap with general knowledge.",
+    "- Keep it short and friendly: two to four sentences, one question at most.",
+    "- NEVER quote or mention a 90-day warranty. The warranty is SIX MONTHS on every repair, display, battery and glass job; motherboard repairs are the only exclusion. The invoice is the warranty record and the customer can claim diagnosis and a covered repair on that same invoice within six months.",
+    "- NEVER give the old address (No. 1 Mahatma Gandhi Road or 'opposite Bhadra Landmark' by itself). The verified address is " + SITE.address + " — " + SITE.addressVerified + ".",
+    "- Rating is 4.9 from " + SITE.ratingCount + " Google reviews. Verified listing: " + SITE.gmbUrl + ".",
+    "",
     "VERIFIED SHOP FACTS:",
     "- Address: " + SITE.address,
     "- Opening hours: " + SITE.hours + ", all seven days.",
@@ -167,7 +180,9 @@ function systemPrompt(query: string): string {
     "- Doorstep pickup: " + SITE.pickupHours + " across Bengaluru; free for repairs above ₹2,999.",
     "- We repair supported iPhone models listed in the website model list, plus iPad, Apple Watch, iPod, AirPods and MacBook.",
     "- Independent repair workshop. NOT an Apple Authorised Service Provider; never imply Apple affiliation.",
-    "- 90-day service warranty on repairs. Battery and display also have 6 months of health cover: battery health below 80% or a non-impact display fault qualifies for one replacement under policy. New impact/liquid damage and third-party repair are excluded.",
+    "- Six-month repair warranty on all repairs, displays, batteries and glass work; motherboard repairs are the only exclusion. The invoice is the warranty record: bring the invoice and the device, or WhatsApp the invoice number and photos, and diagnosis plus a covered repair are handled on that same invoice within six months. Excluded: physical/impact or liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults.",
+    "- Repair progress is tracked in our CRM. Walk-in and doorstep-pickup customers get WhatsApp stage updates (received, diagnosis, in repair, quality check, ready for hand-back, delivered). Point customers to the repair-status page or WhatsApp; never claim a specific stage is complete.",
+    "- " + SITE.addressVerified + ": " + SITE.address + ". Google reviews: " + SITE.gmbUrl + ".",
     "- Front Glass Restoration is a separate service from Front Display Replacement. Published glass-only prices run from ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + " by model, with a " + GLASS_WARRANTY_MONTHS + "-month hardware warranty. Eligibility is confirmed on inspection; if the OLED or touch layer itself is damaged, recommend full display replacement instead.",
     "- Glass restoration machinery, named verbatim: TBK OCA Laminating Vacuum Compressed Hydraulic Press; TBK 90-Litre High-Pressure Bubble Remover Chamber; TBK-958 Cold UV Purple Laser. Explain the process, but never claim a machine was used on a specific device unless the repair is front-glass restoration.",
     "- Store hours are 10 AM – 12 AM midnight, all seven days. Customer assistance and doorstep pickup run 24/7.",
@@ -309,7 +324,18 @@ function textStream(upstream: Response): ReadableStream<Uint8Array> {
     }
   });
 }
-function buildPayload(message: string, history: Turn[]) {
+/* temperature / topP / topK are deliberately omitted: several current flash
+   models reject them and a rejected optional field is not worth a retry.
+   Thinking is requested at a low budget only on models that support it; if a
+   model rejects the field we retry once with the minimal config below. */
+function generationConfigFor(model: string, minimal = false): Record<string, unknown> {
+  if (minimal) return { maxOutputTokens: 800 };
+  const config: Record<string, unknown> = { maxOutputTokens: 800 };
+  if (/gemini-(?:2\.5|3\.)/.test(model)) config.thinkingConfig = { thinkingBudget: 256 };
+  return config;
+}
+
+function buildPayload(message: string, history: Turn[], model: string, minimal = false) {
   const contents = [
     ...history.slice(-8)
       .filter((turn) => turn && typeof turn.text === "string" && turn.text.trim())
@@ -324,23 +350,32 @@ function buildPayload(message: string, history: Turn[]) {
       history.filter((turn) => turn.role === "user").slice(-2).map((turn) => turn.text).concat(message).join(" ")
     ) }] },
     contents,
-    generationConfig: { temperature: 0.25, maxOutputTokens: 240, topP: 0.85 }
+    generationConfig: generationConfigFor(model, minimal)
   };
 }
 
 export async function POST(request: NextRequest) {
   const keys = resolveKeys();
-  if (!keys.length) return new Response(null, { status: 204, headers: { "Cache-Control": "no-store", "X-Concierge-Fallback": "local" } });
+  // No configured key is a normal local-answer path, not a server error.
+  if (!keys.length) return new Response(null, {
+    status: 204,
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Concierge-Fallback": "local",
+      "X-Concierge-Source": "unavailable",
+      "X-Concierge-Reason": "no_api_key"
+    }
+  });
 
   let body: { message?: unknown; history?: unknown };
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, reason: "bad_json" }, { status: 400 });
+    return NextResponse.json({ ok: false, reason: "bad_json" }, { status: 400, headers: { "X-Concierge-Source": "unavailable" } });
   }
 
   const message = typeof body.message === "string" ? body.message.trim().slice(0, 800) : "";
-  if (!message) return NextResponse.json({ ok: false, reason: "empty_message" }, { status: 400 });
+  if (!message) return NextResponse.json({ ok: false, reason: "empty_message" }, { status: 400, headers: { "X-Concierge-Source": "unavailable" } });
 
   const history: Turn[] = Array.isArray(body.history)
     ? body.history.slice(-8).filter((item): item is Turn =>
@@ -351,17 +386,17 @@ export async function POST(request: NextRequest) {
       )
     : [];
 
-  const payload = buildPayload(message, history);
   const attempts: Array<{ model: string; status: number; code: string }> = [];
   let selected: { response: Response; model: string } | null = null;
 
-  // At most three attempts: primary key/model, one alternate key, then the fallback model.
-  // Timeouts and transient provider failures continue to the next configured fallback; malformed requests stop.
-  const plan = [
-    { model: MODELS[0], key: keys[0] },
-    ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []),
-    { model: MODELS[1], key: keys[0] },
-  ];
+  // Try the primary model with the canonical key, one alternate key, then each
+  // fallback model. A 404 (unknown model) always moves to the next model.
+  // A 400 caused by an optional generationConfig field is retried once with a
+  // minimal config; a still-malformed request stops the chain.
+  const plan = MODELS.flatMap((model, index) => [
+    { model, key: keys[0] },
+    ...(keys[1] && index === 0 ? [{ model, key: keys[1] }] : []),
+  ]);
 
   for (const attempt of plan) {
     const previousFailure = attempts[attempts.length - 1];
@@ -369,12 +404,16 @@ export async function POST(request: NextRequest) {
       const backoffMs = Math.min(250 * 2 ** attempts.length, 750);
       await new Promise((resolve) => setTimeout(resolve, backoffMs));
     }
-    const result = await callGemini(attempt.model, attempt.key, payload);
+    let result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model));
+    if (!result.ok && result.status === 400) {
+      result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, true));
+    }
     if (result.ok) {
       selected = { response: result.response, model: result.model };
       break;
     }
     attempts.push({ model: attempt.model, status: result.status, code: result.code });
+    // Log status and model name only — never a key or a provider message.
     console.warn("[concierge] provider fallback", {
       model: attempt.model,
       status: result.status,
@@ -390,7 +429,8 @@ export async function POST(request: NextRequest) {
         "Content-Type": "text/plain; charset=utf-8",
         "Cache-Control": "no-store, no-transform",
         "X-Accel-Buffering": "no",
-        "X-AI-Model": selected.model
+        "X-AI-Model": selected.model,
+        "X-Concierge-Source": "gemini"
       }
     });
   }
@@ -402,7 +442,10 @@ export async function POST(request: NextRequest) {
     headers: {
       "Cache-Control": "no-store",
       "X-Concierge-Fallback": "local",
+      "X-Concierge-Source": "fallback",
+      "X-Concierge-Reason": "provider_unavailable",
       "X-Concierge-Attempts": String(attempts.length),
+      "X-Concierge-Models": Array.from(new Set(attempts.map((a) => a.model))).join(","),
     },
   });
 }
@@ -413,9 +456,14 @@ export async function GET() {
     ok: true,
     configured: keys.length > 0,
     configuredKeySlots: keys.length,
+    source: keys.length > 0 ? "gemini" : "unavailable",
+    reason: keys.length > 0 ? "ready" : "no_api_key — set GEMINI_API_KEY (aliases accepted)",
+    keyNamesAccepted: KEY_NAMES,
+    primaryModel: MODELS[0],
+    fallbackModels: MODELS.slice(1),
     streaming: true,
     retrieval: "local-keyword-rag",
     knowledgeDocuments: KNOWLEDGE_BASE.length + FAQS.length + SERVICES.length + DEVICE_FAMILIES.length + Object.values(PRICES).reduce((total, row) => total + Object.keys(row).length, 0),
     models: MODELS
-  }, { headers: { "Cache-Control": "no-store" } });
+  }, { headers: { "Cache-Control": "no-store", "X-Concierge-Source": keys.length > 0 ? "gemini" : "unavailable" } });
 }

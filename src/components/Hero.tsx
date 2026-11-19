@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -7,18 +7,18 @@ import Phone3D from "./Phone3D";
 
 export default function Hero() {
   const devices = [
-    { label: "iPhone", sub: "Display · Back glass · Battery", icon: "phone" as IconName, img: "/images/v4/iphone-product.jpg", tone: "device-tone-orange" },
-    { label: "iPad", sub: "Screens & logic boards", icon: "ipad" as IconName, img: "/images/v3/ipad-repair.jpg", tone: "device-tone-blue" },
-    { label: "Apple Watch", sub: "Screens · Battery · Sensors", icon: "watch" as IconName, img: "/images/v4/apple-watch.jpg", tone: "device-tone-green" },
-    { label: "MacBook", sub: "Logic board · Keyboard · Screen", icon: "macbook" as IconName, img: "/images/v3/laptop-closeup.jpg", tone: "device-tone-violet" },
+    { label: "iPhone", sub: "Display Â· Back glass Â· Battery", icon: "phone" as IconName, img: "/images/v5/service-iphone.jpg", tone: "device-tone-orange" },
+    { label: "iPad", sub: "Screens & logic boards", icon: "ipad" as IconName, img: "/images/v5/ipad-pro-129.jpg", tone: "device-tone-blue" },
+    { label: "Apple Watch", sub: "Screens Â· Battery Â· Sensors", icon: "watch" as IconName, img: "/images/v5/service-watch.jpg", tone: "device-tone-green" },
+    { label: "MacBook", sub: "Logic board Â· Keyboard Â· Screen", icon: "macbook" as IconName, img: "/images/v5/macbook-pro-latest.jpg", tone: "device-tone-violet" },
   ];
 
-  /* Store hours: 10:00 – 24:00 (midnight), all 7 days (IST). Computed on the client so the
+  /* Store hours: 10:00 â€“ 24:00 (midnight), all 7 days (IST). Computed on the client so the
      badge never claims "Open now" at 2am. Falls back to the static label during
-     SSR, then corrects itself on mount — no hydration mismatch. */
+     SSR, then corrects itself on mount â€” no hydration mismatch. */
   const [status, setStatus] = useState<{ open: boolean; label: string }>({
     open: true,
-    label: "Open now · Bangalore · 10:00 AM – 12:00 AM",
+    label: "Open now Â· Bangalore Â· 10:00 AM â€“ 12:00 AM",
   });
 
   useEffect(() => {
@@ -36,9 +36,9 @@ export default function Hero() {
         const h = Math.floor(left / 60);
         const m = left % 60;
         const eta = h > 0 ? `${h}h ${m}m` : `${m}m`;
-        setStatus({ open: true, label: `Open now · closes in ${eta} · 10 AM – 12 AM` });
+        setStatus({ open: true, label: `Open now Â· closes in ${eta} Â· 10 AM â€“ 12 AM` });
       } else {
-        setStatus({ open: false, label: `Closed now · opens 10:00 AM · all 7 days` });
+        setStatus({ open: false, label: `Closed now Â· opens 10:00 AM Â· all 7 days` });
       }
     };
     compute();
@@ -52,7 +52,7 @@ export default function Hero() {
    *
    * It used to call getBoundingClientRect() on every pointermove. That forces
    * the browser to flush pending layout, and on a scroll-driven page it runs
-   * hundreds of times a second — a measurable part of the jank people feel.
+   * hundreds of times a second â€” a measurable part of the jank people feel.
    *
    * Now: the rect is measured once and cached (re-measured on resize), the
    * style writes are coalesced into a single rAF, and a touch pointer is
@@ -101,7 +101,7 @@ export default function Hero() {
       <div className="orb orb-reverse right-[-16%] bottom-[-12%] h-[520px] w-[520px] bg-[var(--accent2)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_50%_46%,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.72)_42%,rgba(255,255,255,0)_78%)]" />
 
-      {/* 3D depth layer — CSS only, no WebGL, no blur filter */}
+      {/* 3D depth layer â€” CSS only, no WebGL, no blur filter */}
       <div className="bg-3d">
         <div className="bg-grid" />
         <div className="bg-orb-3d one" />
@@ -109,7 +109,7 @@ export default function Hero() {
         <div className="bg-orb-3d three" />
       </div>
 
-      {/* pointer-following wash — transform only, never a blur filter */}
+      {/* pointer-following wash â€” transform only, never a blur filter */}
       <div
         ref={glowRef}
         className="hero-cursor-glow"
@@ -125,13 +125,13 @@ export default function Hero() {
         </div>
 
         <h1 className="hero-apple hero-title mb-6 text-balance">
-          Apple Device Repairs, <span className="hero-mastered">Perfected.</span>
+          Apple Device Repairs, <span className="hero-mastered">Mastered.</span>
         </h1>
         <p className="hero-sub hero-sub-rich mb-10 text-balance">
-          Component-level micro-soldering, OEM displays and front-glass restoration
-          on specialised TBK machinery - <strong>30-minute turnarounds</strong>, right
-          here in Bangalore. Backed by our{" "}
-          <strong>90-day repair service warranty</strong>.
+          Component-Level Micro-Soldering, OEM Displays &amp; Front-Glass Restoration
+          On Specialised TBK Machinery â€” <strong>30-Minute Turnarounds</strong>, Right
+          Here In Bengaluru. Backed By Our{" "}
+          <strong>6-Month Repair Service Warranty</strong>.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
@@ -173,7 +173,7 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* 3D iPhone — the centrepiece.
+        {/* 3D iPhone â€” the centrepiece.
             It used to be `hidden sm:block`. In landscape the viewport is wide
             enough to pass `sm:` but only ~390px tall, so the phone existed and
             was never reachable. It is always rendered now, and the hero
@@ -181,7 +181,7 @@ export default function Hero() {
         <div className="hero-phone-wrap hero-phone-live mt-14">
           <Phone3D />
           <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--orange-deep)]">
-            Built for every iPhone · 11 through 18 Pro Max
+            Built for every iPhone Â· 11 through 18 Pro Max
           </p>
         </div>
       </div>

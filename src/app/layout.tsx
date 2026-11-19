@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
@@ -10,7 +10,13 @@ import Script from "next/script";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space", display: "swap" });
+/* Plus Jakarta Sans gives headings a premium, modern 2026 voice while the
+   `--font-space` variable name keeps every existing heading style intact. */
+const space = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-space",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -131,7 +137,7 @@ const localBusinessSchema = {
   priceRange: "₹₹",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru",
+    streetAddress: SITE.address,
     addressLocality: "Bengaluru",
     addressRegion: "Karnataka",
     postalCode: SITE.pincode,
@@ -150,7 +156,14 @@ const localBusinessSchema = {
     { "@type": "Place", name: "MG Road" },
   ],
   hasMap: SITE.mapsUrl,
-  sameAs: [SITE.gmbUrl],
+  sameAs: [SITE.gmbUrl, `https://www.google.com/maps/place/?q=place_id:${SITE.placeId}`],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: SITE.rating,
+    reviewCount: SITE.ratingCount.replace(",", ""),
+    bestRating: "5",
+    worstRating: "1",
+  },
   currenciesAccepted: "INR",
   paymentAccepted: "Cash, UPI, Credit Card, Debit Card",
   knowsAbout: [
@@ -187,7 +200,7 @@ const organizationSchema = {
   telephone: SITE.phone,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru",
+    streetAddress: SITE.address,
     addressLocality: "Bengaluru",
     addressRegion: "Karnataka",
     postalCode: SITE.pincode,

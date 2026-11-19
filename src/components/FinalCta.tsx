@@ -1,5 +1,5 @@
 "use client";
-import BrandMark from "@/components/BrandMark";
+import SmartImg from "@/components/SmartImg";
 import Reveal from "./Reveal";
 import { SITE } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -7,36 +7,70 @@ import { LineIcon } from "./Icons";
 
 export default function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-[var(--cta-dark)] py-24 text-white">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="orb left-[15%] top-[-20%] h-[400px] w-[400px] bg-[var(--accent)] opacity-[0.18]" />
-        <div className="orb orb-reverse bottom-[-20%] right-[10%] h-[400px] w-[400px] bg-[var(--accent2)] opacity-[0.15]" />
-        <div className="chip-float left-[22%] top-[30%] h-3 w-3 bg-[var(--accent)]/50" />
-        <div className="chip-float right-[20%] bottom-[25%] h-2 w-2 bg-[var(--accent2)]/50" />
-        <div className="chip-float left-[40%] top-[15%] h-2 w-2 bg-white/20" />
+    <section className="cta-light relative overflow-hidden py-24">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="orb left-[12%] top-[-26%] h-[380px] w-[380px] bg-[var(--accent)] opacity-[0.13]" />
+        <div className="orb orb-reverse bottom-[-26%] right-[8%] h-[380px] w-[380px] bg-[var(--accent2)] opacity-[0.12]" />
+        <div className="chip-float left-[20%] top-[28%] h-3 w-3 bg-[var(--accent)]/40" />
+        <div className="chip-float right-[18%] bottom-[24%] h-2 w-2 bg-[var(--accent2)]/45" />
+        <div className="chip-float left-[42%] top-[14%] h-2 w-2 bg-[var(--accent)]/30" />
       </div>
-      <div className="relative mx-auto max-w-[820px] px-6 text-center lg:px-8">
+
+      <div className="relative mx-auto max-w-[900px] px-6 text-center lg:px-8">
         <Reveal>
-          <div className="mx-auto mb-7 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] shadow-2xl shadow-[var(--accent)]/40">
-            <BrandMark size={40} />
+          <div className="relative mx-auto mb-7 w-fit">
+            <div className="glass-premium grid h-20 w-20 place-items-center rounded-[26px] shadow-xl shadow-[var(--accent)]/15">
+              <SmartImg
+                src="/logo.png"
+                alt={`${SITE.name} logo`}
+                width={60}
+                height={60}
+                priority
+                className="h-[60px] w-[60px] rounded-[20%] object-contain"
+              />
+            </div>
+            <span className="absolute -right-3 -top-2 grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--accent)] shadow-md">
+              <LineIcon name="spark" size={17} />
+            </span>
           </div>
-          <h2 className="font-apple head-gradient text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
-            Your Apple Device,<br /><span className="gradient-text">Fixed Right.</span>
+
+          <span className="kicker">Apple repair · Halasuru, Bengaluru</span>
+          <h2 className="head-gradient breath-heading font-apple text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
+            Your Apple Device,<br /><span className="topic-gradient">Fixed Right.</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-[560px] text-[15px] leading-relaxed text-white/60">
-            Tell us the device and the issue — we&rsquo;ll reply with an exact estimate and a slot, usually within minutes.
+          <p className="mx-auto mt-6 max-w-[560px] text-[15px] leading-relaxed text-[var(--text-muted)]">
+            Tell us the device and the issue. We&rsquo;ll send an exact estimate and a
+            convenient slot — usually within minutes.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="#quote" onClick={() => track("quote_started", { source: "final_cta" })} className="cta-dark bg-white text-[var(--text)] hover:bg-white/90 press">
+          <div className="mt-5 flex justify-center">
+            <span className="gmb-badge">
+              <LineIcon name="star" size={13} />
+              {SITE.rating} from {SITE.ratingCount} Google reviews
+            </span>
+          </div>
+
+          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="#quote"
+              onClick={() => track("quote_started", { source: "final_cta" })}
+              className="cta-primary press"
+            >
               Get Instant Estimate
               <LineIcon name="arrow-right" size={16} />
             </a>
-            <a href={SITE.phoneHref} onClick={() => track("call_click", { source: "final_cta" })} className="inline-flex items-center gap-2 rounded-[var(--cta-radius)] border border-white/20 bg-white/15 px-7 py-3.5 text-[15px] font-bold transition duration-300 hover:bg-white/20">
+            <a
+              href={SITE.phoneHref}
+              onClick={() => track("call_click", { source: "final_cta" })}
+              className="cta-outline press"
+            >
               <LineIcon name="call" size={16} />
               {SITE.phone}
             </a>
           </div>
-          <p className="mt-6 text-[12.5px] text-white/40">Free diagnosis · No hidden charges · Pay only when it works</p>
+
+          <p className="mt-7 text-[12.5px] font-semibold text-[var(--text-muted)]">
+            Free diagnosis · No hidden charges · 6-month repair warranty
+          </p>
         </Reveal>
       </div>
     </section>

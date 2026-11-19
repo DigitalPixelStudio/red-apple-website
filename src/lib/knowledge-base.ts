@@ -20,8 +20,8 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
   {
     id: "shop-profile",
     title: "Shop profile, location and opening hours",
-    tags: ["shop", "address", "location", "hours", "timing", "Halasuru", "MG Road", "metro", "Bengaluru", "Bangalore"],
-    content: "Red Apple Mobile Repair Store is an independent Apple-device repair workshop at No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008. It is about one minute from Halasuru Metro. Opening hours are 10:00 AM to 12:00 AM, all seven days. Walk-ins are welcome. The workshop is independent and is not an Apple Authorised Service Provider."
+    tags: ["shop", "address", "location", "hours", "timing", "Halasuru", "MG Road", "metro", "Bengaluru", "Bangalore", "verified address", "Google My Business", "GMB", "Google reviews", "rating"],
+    content: "Red Apple Mobile Repair Store is an independent Apple-device repair workshop at Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008. This is the Google My Business & Maps Verified Address (https://share.google/EinJlCF6U63xVQhgI). It is about one minute from Halasuru Metro. Rated 4.9 from 1,103 Google reviews. Opening hours are 10:00 AM to 12:00 AM, all seven days. Walk-ins are welcome. The workshop is independent and is not an Apple Authorised Service Provider."
   },
   {
     id: "device-coverage",
@@ -55,9 +55,21 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
   },
   {
     id: "warranty-policy",
-    title: "Repair warranty and battery/display health cover",
-    tags: ["warranty", "guarantee", "90 days", "battery health", "display", "screen", "impact", "liquid", "policy"],
-    content: "Repairs carry a 90-day service warranty. Battery and display work also has six months of health cover under the stated policy. Battery health falling below 80% or a non-impact display fault may qualify for one replacement under policy. New impact damage, liquid damage and third-party repair are excluded. The customer should retain the repair invoice and contact the store for a warranty assessment."
+    title: "Six-month repair warranty, invoice and exclusions",
+    tags: ["warranty", "guarantee", "6 months", "six months", "invoice", "warranty record", "claim", "display", "battery", "glass", "motherboard", "exclusions", "impact", "liquid", "policy"],
+    content: "Every repair carries a six-month warranty: repair work, parts we replaced, displays, batteries and glass are all covered. Motherboard repairs are the only exclusion. The invoice is the warranty record — bring the invoice and the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice within six months. Exclusions are explicit: physical/impact damage after hand-back, liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults. Never quote a 90-day warranty or the old address."
+  },
+  {
+    id: "warranty-claim",
+    title: "How to claim the six-month warranty with your invoice",
+    tags: ["warranty claim", "claim", "invoice number", "photos", "six months", "6 months", "diagnosis", "same invoice", "exclusions", "motherboard", "proof of repair"],
+    content: "To claim under the six-month repair warranty, bring your invoice and the device to the store, or message us on WhatsApp at +91 86606 63776 with the invoice number and clear photos of the fault. We re-diagnose the device and, if the fault is covered, carry out the repair on the same invoice at no extra charge. The invoice is the only warranty record we need; motherboard repairs are excluded. A claim is not covered for physical/impact or liquid damage after hand-back, a repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults."
+  },
+  {
+    id: "crm-whatsapp-updates",
+    title: "CRM repair stage updates on WhatsApp for walk-in and pickup devices",
+    tags: ["CRM", "WhatsApp", "stage", "status", "repair status", "update", "tracking", "walk-in", "pickup", "doorstep", "job card", "handover", "delivered"],
+    content: "Every repair is logged as a job card in our CRM. Walk-in customers and doorstep-pickup customers receive WhatsApp stage updates as the device moves through received, free diagnosis, approved repair, quality check, ready for hand-back and delivered. The GST invoice is generated from the same CRM record and sent on WhatsApp. The assistant cannot confirm or invent a stage; direct the customer to the repair-status page or WhatsApp for the live status."
   },
   {
     id: "privacy-and-data",

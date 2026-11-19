@@ -21,7 +21,7 @@ import Reveal from "./Reveal";
 import { LineIcon, type IconName } from "./Icons";
 import { PRICES, TURNAROUND, getPrice, inr, priceLabel } from "@/lib/pricing";
 import { glassPriceFor } from "@/lib/glass-pricing";
-import { wa } from "@/lib/site";
+import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 
 type Symptom = {
@@ -137,8 +137,8 @@ export default function DeviceTriage() {
     `Issue: ${symptom.label} (${symptom.repair})\n` +
     `Published price: ${priceText}\n` +
     `Typical turnaround: ${turnaround}\n` +
-    `90-day repair warranty · 6 months on battery & front glass\n` +
-    `No. 1 Mahatma Gandhi Rd, Halasuru, Bengaluru 560008 · +91 86606 63776`;
+    `6-month repair warranty on all work incl. displays, batteries & glass · motherboard repairs excluded · invoice is the warranty record\n` +
+    `${SITE.address} · ${SITE.phone} · ${SITE.addressVerified}`;
 
   const copyEstimate = async () => {
     try {
@@ -332,7 +332,7 @@ export default function DeviceTriage() {
                   <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> Free diagnosis before any charge
                 </li>
                 <li className="flex items-center gap-1.5">
-                  <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> 90-day repair warranty
+                  <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> 6-month warranty · invoice is your record
                 </li>
                 <li className="flex items-center gap-1.5">
                   <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> Zero-password policy

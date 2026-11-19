@@ -172,7 +172,7 @@ function priceAnswer(text: string): string | null {
     ? model + " " + repairName.toLowerCase() + ": " + quote + ". This is the listed price."
     : model + " " + repairName.toLowerCase() + ": " + quote + ". The exact part grade/revision is confirmed during free diagnosis.";
   const turnaround = TURNAROUND_HINTS[repairName] ? " Typical turnaround: " + TURNAROUND_HINTS[repairName] + "." : "";
-  return priceText + turnaround + " The repair carries a 90-day service warranty. Would you like to arrange a visit or doorstep pickup?";
+  return priceText + turnaround + " Every repair carries a 6-month warranty — your invoice is the warranty record. Motherboard repairs are excluded. Would you like to arrange a visit or doorstep pickup?";
 }
 
 /* Typed input is matched through this synonym table, so "display kharab hai"
@@ -221,7 +221,7 @@ const SYNONYMS: Record<string, string[]> = {
   location: [],
   pickup: ["pickup", "pick up", "doorstep", "home", "collect", "drop", "delivery"],
   warranty: ["warranty", "guarantee", "guaranty", "warrenty", "full policy", "policy"],
-  invoice: ["invoice", "bill", "gst", "receipt", "crm", "record", "job card", "jobcard", "after handover", "what happens after"],
+  invoice: ["invoice", "bill", "gst", "receipt", "crm", "record", "job card", "jobcard", "warranty record", "repair status", "stage update", "whatsapp update", "where is my device", "tracking", "after handover", "what happens after"],
   diagnosis: ["diagnosis", "diagnose", "check", "inspect", "assessment", "estimate first"],
   notrepaired: ["not repairable", "cannot fix", "cant fix", "unrepairable", "worse", "damage your"],
   parts: ["genuine", "oem", "original", "copy", "aftermarket", "quality of part", "which part"],
@@ -252,18 +252,18 @@ function resolve(text: string): { topic: string; score: number } | null {
 const MENU: Record<string, { reply: string; chips: string[] }> = {
   start: {
     reply:
-      "Hi, I'm Forge AI — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
+      "Hi, I'm Forge AI — Red Apple's repair assistant. I can check prices, timing and warranty, and connect you to a technician. If my AI service is offline, I'll say so and use our verified offline answers instead. What's going on with your device?",
     chips: ["iPhone screen", "Glass price", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
   },
   about: {
     reply:
-      "Red Apple Mobile Repair has been on Mahatma Gandhi Road, Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10 AM to 12 AM midnight, all seven days. Rating is 4.9 from 1,099 Google reviews.",
-    chips: ["Price list", "Visit the store", "Talk to a technician"],
+      "Red Apple Mobile Repair has been in Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10 AM to 12 AM midnight, all seven days. Rated 4.9 from " + SITE.ratingCount + " Google reviews (" + SITE.addressVerified + "): " + SITE.gmbUrl,
+    chips: ["Price list", "Visit the store", "Google reviews", "Talk to a technician"],
   },
   store: {
     reply:
-      "We are at No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro, Metro Pillar 125. The workshop has glass walls so you can watch your repair. The store is open 10 AM – 12 AM midnight, every day, and WhatsApp assistance runs 24/7. Walk-ins welcome, no appointment needed.",
-    chips: ["Open in Maps", "Book doorstep pickup", "Talk to a technician"],
+      "We are at " + SITE.address + " — " + SITE.addressVerified + ". That's next to Vignesh Dresses, opposite Bhadra Landmark, about a minute from Halasuru Metro. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". The workshop has glass walls so you can watch your repair. Open 10 AM – 12 AM midnight, every day, with WhatsApp assistance 24/7. Walk-ins welcome, no appointment needed.",
+    chips: ["Open in Maps", "Google reviews", "Book doorstep pickup", "Talk to a technician"],
   },
   timing: {
     reply:
@@ -282,7 +282,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   booking: {
     reply:
-      "Two ways. Walk in any time between 10 AM and 12 AM midnight — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999.",
+      "Two ways. Walk in any time between 10 AM and 12 AM midnight — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999. Either way, our CRM sends you WhatsApp stage updates from collection through hand-back.",
     chips: ["Book doorstep pickup", "Visit the store", "Talk to a technician"],
   },
   device: {
@@ -317,7 +317,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   battery: {
     reply:
-      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model; battery repairs carry a 90-day service warranty plus the stated 6-month battery health cover. Which model do you have?",
+      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model. Batteries carry the same 6-month repair warranty as our other work — keep your invoice, as it is the warranty record. Which model do you have?",
     chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
   },
   camera: {
@@ -362,23 +362,23 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   location: {
     reply:
-      "No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro. The store is open 10 AM to 12 AM midnight, all seven days. WhatsApp assistance runs 24/7. Walk-ins welcome, no appointment needed.",
-    chips: ["Open in Maps", "Call the store", "Book doorstep pickup"],
+      SITE.address + " — " + SITE.addressVerified + ". About a minute from Halasuru Metro, next to Vignesh Dresses. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". Open 10 AM to 12 AM midnight, all seven days. WhatsApp assistance runs 24/7. Walk-ins welcome, no appointment needed.",
+    chips: ["Open in Maps", "Google reviews", "Call the store", "Book doorstep pickup"],
   },
   pickup: {
     reply:
-      "Doorstep pickup runs 24/7 across Bengaluru — any hour, any day. A rider collects the device, we repair it, and it comes back tested. Free for repairs above ₹2,999. Book it and you'll get a WhatsApp confirmation with the rider's details.",
+      "Doorstep pickup runs 24/7 across Bengaluru — any hour, any day. A rider collects the device, we repair it, and it comes back tested. Free for repairs above ₹2,999. You'll get a WhatsApp confirmation with the rider's details, then CRM stage updates as the device moves through diagnosis, repair, quality check and delivery.",
     chips: ["Book pickup", "Talk to a technician"],
   },
   warranty: {
     reply:
-      "90 days on every repair. Battery and display also carry 6 months of health cover — if battery health drops below 80% or the panel develops a non-impact fault, we replace it once free. Damage from a new drop or liquid isn't covered.",
+      "Six months on every repair — displays, batteries and glass included. Your invoice is the warranty record: bring it with the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice. Motherboard repairs are the only exclusion. Not covered: physical/impact or liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults.",
     chips: ["Read the full policy", "Talk to a technician"],
   },
   invoice: {
     reply:
-      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number — and the GST invoice is generated from that record, then sent to you on WhatsApp. Need it in your company's name? Give us the GSTIN at booking and we'll issue it that way.",
-    chips: ["What happens after handover?", "Price list", "Talk to a technician"],
+      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number, and the GST invoice is generated from that record and sent to you on WhatsApp. For walk-in and doorstep-pickup devices, the CRM also sends WhatsApp stage updates — received, diagnosis, in repair, quality check, ready for hand-back and delivered. That invoice is your 6-month warranty record, so keep it. Need it in your company's name? Give us the GSTIN at booking and we'll issue it that way.",
+    chips: ["What happens after handover?", "Read the full policy", "Talk to a technician"],
   },
   diagnosis: {
     reply:
@@ -412,7 +412,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   whyexpensive: {
     reply:
-      "I understand. The price reflects the part grade, labour and 90-day warranty. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
+      "I understand. The price reflects the part grade, labour and our 6-month warranty, with your invoice as the warranty record. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   human: {
@@ -451,7 +451,7 @@ function localKnowledgeAnswer(query: string): string | null {
   const answer = best.document.content.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ");
   // Cut on a word boundary so a truncated excerpt never stops mid-word.
   const trimmed = answer.length > 420 ? answer.slice(0, 417).replace(/\s+\S*$/, "") + "…" : answer;
-  return "From our repair guide: " + trimmed;
+  return "From our offline repair guide: " + trimmed;
 }
 
 export default function Concierge() {
@@ -713,7 +713,7 @@ export default function Concierge() {
 
     if (providerUnavailable) {
       setFailedTurns(0);
-      push("I’m temporarily having trouble reaching the AI service, and I don’t want to guess about your device. I can still help you check the published price information or connect you directly with a Red Apple technician.", ["Price list", "Talk to a technician"]);
+      push("That reply came from our verified offline answers, not the live AI service, which is temporarily unreachable. I can still check published prices or connect you directly with a Red Apple technician.", ["Price list", "Talk to a technician"]);
       return;
     }
 
@@ -766,6 +766,12 @@ export default function Concierge() {
       window.open(wa(msg), "_blank", "noopener,noreferrer");
       track("whatsapp_click", { source: "concierge", chip });
       setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opening WhatsApp in a new tab — our team usually replies within minutes.", chips: [] }]);
+      return;
+    }
+    if (/google reviews/i.test(chip)) {
+      window.open(SITE.gmbUrl, "_blank", "noopener,noreferrer");
+      track("map_click", { source: "concierge", chip: "google_reviews" });
+      setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opening our verified Google My Business & Maps listing — 4.9 from " + SITE.ratingCount + " reviews.", chips: [] }]);
       return;
     }
     if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
@@ -823,8 +829,9 @@ export default function Concierge() {
               <LineIcon name="close" size={11} />
             </button>
             <p className="text-[12.5px] font-semibold leading-relaxed text-[var(--text)]">
-              Hi — I&rsquo;m Forge AI. Tell me your iPhone model and what&rsquo;s wrong,
-              and I&rsquo;ll give you the published price in seconds.
+              Hi — I&rsquo;m Forge AI. Tell me your model and fault for a published
+              price — I can also connect you with a technician. If I&rsquo;m offline,
+              I&rsquo;ll say so and use our verified answers.
             </p>
             <button
               type="button"
@@ -863,7 +870,7 @@ export default function Concierge() {
             </span>
             <div>
               <div className="text-[14px] font-bold">Forge AI</div>
-              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Repair assistant · learns your wording · technician handoff</div>
+              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Repair assistant · prices &amp; warranty · technician handoff</div>
             </div>
             <button
               type="button"

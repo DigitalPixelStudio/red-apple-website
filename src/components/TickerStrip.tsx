@@ -12,7 +12,7 @@ const ITEMS = [
   "90-litre bubble remover",
   "TBK-958 cold UV laser",
   "Original OLED retained",
-  "6-month hardware warranty",
+  "6-month repair warranty",
   "Zero-password privacy",
   "Apple Diagnostic Mode testing",
   "Halasuru · Bengaluru",

@@ -94,7 +94,22 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <div className="footer-head">Contact</div>
             <ul className="mt-5 space-y-3 text-[13px] text-white/75">
-              <li className="flex items-start gap-2"><LineIcon name="pin" size={14} className="mt-0.5 shrink-0" /> {SITE.address}</li>
+              <li className="flex items-start gap-2">
+                <LineIcon name="pin" size={14} className="mt-0.5 shrink-0" />
+                <span>
+                  {SITE.address}
+                  <a
+                    href={SITE.gmbUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("map_click", { source: "footer_address" })}
+                    className="gmb-badge mt-1.5 flex w-fit"
+                  >
+                    <LineIcon name="verified" size={12} />
+                    {SITE.addressVerified}
+                  </a>
+                </span>
+              </li>
               <li className="flex items-center gap-2"><LineIcon name="clock" size={14} className="shrink-0" /> {SITE.hours}</li>
               <li><a href={SITE.phoneHref} className="hover:text-white flex items-center gap-2"><LineIcon name="call" size={14} /> {SITE.phone}</a></li>
               <li><a href={wa("Hi Red Apple Mobile Repair Store!")} target="_blank" rel="noopener noreferrer" className="font-semibold text-white/80 hover:text-white flex items-center gap-2"><LineIcon name="whatsapp" size={14} /> WhatsApp</a></li>
@@ -144,6 +159,23 @@ export default function Footer() {
               </span>
               96200 24812
             </a>
+          </div>
+
+          <div className="dev-line mt-4 text-center text-white/45">
+            <a
+              href="https://commons.wikimedia.org/wiki/File:IPhone_18_Pro_Max_(burgundy_model)_-_3.jpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white/75"
+            >
+              iPhone 18 Pro Max photo: Kyu3a / Wikimedia Commons, CC BY-SA 4.0
+            </a>
+          </div>
+          <div className="dev-line mt-3 text-center font-semibold text-white/75">
+            Developed by The Pixel Forge Studio · 96200 24812
+          </div>
+          <div className="dev-line mt-1 text-center text-white/45">
+            Contact Us for your Business Build - Website - App - CRM - Ai Integration &amp; All Business Management.
           </div>
         </div>
       </div>

@@ -4243,3 +4243,223 @@ html[data-motion="off"] .whyus-phone { filter: none; }
   .whyus-visual { min-height: 300px; }
   .whyus-phone { height: 300px; }
 }
+
+/* ==========================================================================
+   2026 PREMIUM UNIFORM SYSTEM — final design pass
+   Everything here is transform / opacity / color only. No blur, no layout
+   animation. Motion is disabled globally by html[data-motion="off"].
+   ========================================================================== */
+
+/* Head topics: the same gentle grow-and-settle on every section title. */
+@keyframes headingBreath {
+  0%, 100% { transform: scale(1); }
+  46%      { transform: scale(1.018); }
+  72%      { transform: scale(1.006); }
+}
+.head-gradient,
+.breath-heading {
+  animation: headDrift 22s ease-in-out infinite, headingBreath 5.6s ease-in-out infinite;
+  transform-origin: left center;
+  display: inline-block;
+}
+.text-center .head-gradient,
+.text-center .breath-heading { transform-origin: center center; }
+
+/* Small topic words / labels carry the same colour ramp. */
+.topic-gradient {
+  background-image: linear-gradient(100deg, #ff2d55, #ff7a1a 45%, #b45309 70%, #ff2d55);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: headDrift 9s ease-in-out infinite, headingBreath 5.6s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Small tiles with a slow, soft colour wash. */
+@keyframes tileWash {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.tile-wash {
+  background-image: linear-gradient(135deg,
+    rgba(255, 250, 245, 0.96) 0%,
+    rgba(255, 239, 243, 0.92) 33%,
+    rgba(255, 247, 232, 0.95) 66%,
+    rgba(255, 250, 245, 0.96) 100%);
+  background-size: 260% 260%;
+  animation: tileWash 9s ease-in-out infinite;
+}
+.tile-wash-violet {
+  background-image: linear-gradient(135deg,
+    rgba(248, 246, 255, 0.96) 0%,
+    rgba(255, 240, 246, 0.92) 40%,
+    rgba(240, 249, 255, 0.95) 100%);
+  background-size: 260% 260%;
+  animation: tileWash 11s ease-in-out infinite;
+}
+.tile-wash-mint {
+  background-image: linear-gradient(135deg,
+    rgba(244, 255, 250, 0.96) 0%,
+    rgba(255, 249, 236, 0.92) 45%,
+    rgba(240, 251, 255, 0.95) 100%);
+  background-size: 260% 260%;
+  animation: tileWash 10s ease-in-out infinite;
+}
+
+/* Premium glass surface — stronger edge, light interior. */
+.glass-premium {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(255, 250, 246, 0.62));
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 18px 46px -30px rgba(124, 45, 18, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  backdrop-filter: saturate(140%);
+}
+
+/* Icon treatment used on all premium cards. */
+.icon-glow {
+  position: relative;
+  background: linear-gradient(140deg, #ff6b00, #ff2d55 55%, #b45309);
+  color: #fff !important;
+  box-shadow: 0 10px 22px -12px rgba(255, 45, 85, 0.8);
+  animation: iconPulse 4.2s ease-in-out infinite;
+}
+@keyframes iconPulse {
+  0%, 100% { box-shadow: 0 10px 22px -12px rgba(255, 45, 85, 0.8); }
+  50%      { box-shadow: 0 12px 28px -10px rgba(255, 149, 0, 0.9); }
+}
+
+/* Light, aligned comparison tables. */
+.compare-grid { display: grid; grid-template-columns: 1.15fr 2fr 2fr; gap: 1px; }
+.compare-head {
+  padding: 1rem 1.35rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7c3f1d;
+  background: linear-gradient(120deg, #fff4ea, #fff0f3);
+}
+.compare-cell {
+  min-width: 0;
+  padding: 1rem 1.35rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #3f3f46;
+  background: rgba(255, 255, 255, 0.94);
+}
+.compare-cell--feature { font-weight: 800; color: #1d1d1f; background: #fffaf6; }
+.compare-cell--us {
+  font-weight: 750;
+  color: #1d1d1f;
+  background: linear-gradient(120deg, rgba(255, 244, 234, 0.96), rgba(255, 240, 244, 0.94));
+}
+.compare-cell--other { color: #6b7280; }
+.pricing-table { table-layout: fixed; }
+.pricing-table th:first-child,
+.pricing-table td:first-child { text-align: left; }
+.pricing-table th:not(:first-child),
+.pricing-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.pricing-table tbody tr:nth-child(even) td { background: rgba(255, 248, 244, 0.7); }
+.pricing-table tbody tr:hover td { background: rgba(255, 239, 243, 0.9); }
+
+/* Review cards — a continuous, pausable marquee of verified-source cards. */
+.review-track {
+  display: flex;
+  width: max-content;
+  gap: 1.25rem;
+  animation: reviewScroll 48s linear infinite;
+  will-change: transform;
+}
+.review-track:hover { animation-play-state: paused; }
+@keyframes reviewScroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.review-card {
+  width: 320px;
+  flex: none;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(255, 246, 240, 0.66));
+  box-shadow: 0 16px 40px -30px rgba(124, 45, 18, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease;
+}
+.review-card:hover {
+  transform: translate3d(0, -6px, 0) scale(1.015);
+  box-shadow: 0 26px 52px -30px rgba(124, 45, 18, 0.6);
+}
+
+/* Verified source badge. */
+.gmb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  background: rgba(236, 253, 245, 0.9);
+  padding: 0.35rem 0.7rem;
+  color: #15803d;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* CRM stage rail used in the handover / paired sections. */
+.stage-rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+@media (min-width: 768px) { .stage-rail { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.stage-pill {
+  display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+  border-radius: 16px; padding: 0.7rem 0.45rem;
+  border: 1px solid rgba(255, 122, 26, 0.16);
+  background: rgba(255, 252, 248, 0.9);
+  text-align: center;
+  transition: transform .25s cubic-bezier(.22,1,.36,1), background-color .25s ease;
+}
+.stage-pill:hover { transform: translate3d(0, -3px, 0); background: rgba(255, 240, 230, 0.95); }
+.stage-pill span { font-size: 10.5px; font-weight: 750; line-height: 1.25; color: #7c3f1d; }
+
+/* Light final CTA surface. */
+.cta-light {
+  background:
+    radial-gradient(80% 70% at 15% 10%, rgba(255, 237, 213, 0.85), transparent 65%),
+    radial-gradient(75% 70% at 85% 80%, rgba(255, 228, 236, 0.8), transparent 62%),
+    linear-gradient(140deg, #fffdfb, #fff7f2 55%, #fffafa);
+  color: #1d1d1f;
+}
+
+/* Tiny final developer line. */
+.dev-line { font-size: 10px; line-height: 1.5; letter-spacing: 0.01em; }
+
+/* Image glass motion used on display / parts / product cards. */
+.glass-image-shell { position: relative; overflow: hidden; }
+.glass-image-shell::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.35) 45%, transparent 70%);
+  transform: translate3d(-110%, 0, 0);
+  animation: glassSweep 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes glassSweep {
+  0%, 55% { transform: translate3d(-110%, 0, 0); }
+  100%    { transform: translate3d(110%, 0, 0); }
+}
+
+html[data-motion="off"] .head-gradient,
+html[data-motion="off"] .breath-heading,
+html[data-motion="off"] .topic-gradient,
+html[data-motion="off"] .icon-glow,
+html[data-motion="off"] .tile-wash,
+html[data-motion="off"] .tile-wash-violet,
+html[data-motion="off"] .tile-wash-mint,
+html[data-motion="off"] .review-track,
+html[data-motion="off"] .glass-image-shell::after {
+  animation: none !important;
+}
+html[data-motion="off"] .topic-gradient {
+  -webkit-text-fill-color: #b45309;
+  color: #b45309;
+}

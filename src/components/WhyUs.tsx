@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * WhyUs — the strategic section.
@@ -47,15 +47,18 @@ const PILLARS: Pillar[] = [
     icon: "eye",
     title: "You Watch the Whole Repair",
     body:
-      "Photo and video at every stage on WhatsApp. Your device never leaves the bench without you seeing what was done to it. We do not ask for your passcode and we never will.",
-    proof: "Live WhatsApp updates · zero password policy",
+      "Our repair CRM sends WhatsApp updates at every stage — whether you walked in or used free doorstep pickup — and you never need to call for a status update. We do not ask for your passcode and we never will.",
+    proof: "CRM WhatsApp updates · zero password policy",
   },
 ];
+
+/** Slow colour washes, rotated across the four pillars. */
+const PILLAR_WASHES = ["tile-wash", "tile-wash-violet", "tile-wash-mint", "tile-wash"];
 
 const PROOF_POINTS = [
   { k: "4.9", v: "Google Rating", s: "Verified Google reviews" },
   { k: "9+", v: "Years on MG Road", s: "Same location" },
-  { k: "90", v: "Day Warranty", s: "6-month on battery" },
+  { k: "6 Months", v: "Repair Warranty", s: "Claim with invoice" },
   { k: "32", v: "Quality Checks", s: "Before hand-back" },
 ];
 
@@ -75,7 +78,7 @@ export default function WhyUs() {
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
           <Reveal>
             <span className="kicker">The Standard</span>
-            <h2 className="head-gradient mt-3 font-apple text-[clamp(1.9rem,4vw,2.9rem)] font-extrabold leading-[1.08] tracking-tight">
+            <h2 className="breath-heading mt-3 font-apple text-[clamp(1.9rem,4vw,2.9rem)] font-extrabold leading-[1.08] tracking-tight text-[var(--text)]">
               Four Reasons People Hand Us a Phone Worth ₹1,00,000
             </h2>
             <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-[var(--text-muted)]">
@@ -84,7 +87,7 @@ export default function WhyUs() {
               board-level work.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {["Free diagnosis", "Written quote", "Photo updates", "90-day warranty"].map((tag) => (
+              {["Free diagnosis", "Written quote", "Photo updates", "6-Month Warranty"].map((tag) => (
                 <span key={tag} className="whyus-tag">
                   <LineIcon name="check" size={11} /> {tag}
                 </span>
@@ -95,15 +98,18 @@ export default function WhyUs() {
           <Reveal delay={120} className="hidden sm:block">
             <div className="whyus-visual" aria-hidden="true">
               <div className="whyus-visual-glow" />
-              <SmartImg
-                src="/images/v4/iphone-17-pro-max.jpg"
-                alt=""
-                width={1200}
-                height={800}
-                className="whyus-phone"
-              />
+              {/* Glass-shell sweep over the real burgundy iPhone photo; the glow behind breathes. */}
+              <div className="glass-image-shell w-full max-w-[420px] rounded-[26px] border border-white/85 shadow-[0_24px_48px_-26px_rgba(120,52,8,0.42)]">
+                <SmartImg
+                  src="/images/v5/iphone-pro-max-burgundy.jpg"
+                  alt=""
+                  width={1200}
+                  height={800}
+                  className="whyus-phone"
+                />
+              </div>
               <span className="whyus-float whyus-float-1">
-                <LineIcon name="shield" size={12} /> 90-Day Warranty
+                <LineIcon name="shield" size={12} /> 6-Month Warranty
               </span>
               <span className="whyus-float whyus-float-2">
                 <LineIcon name="clock" size={12} /> ~45 Min Display
@@ -116,13 +122,14 @@ export default function WhyUs() {
         <div className="mt-12 grid gap-4 md:grid-cols-2">
           {PILLARS.map((p, i) => (
             <Reveal key={p.title} delay={(i % 2) * 70}>
-              <article className="figma-card hv-lift hv-icon group relative h-full p-6 sm:p-7">
+              <article
+                className={`${PILLAR_WASHES[i % PILLAR_WASHES.length]} hv-lift hv-icon group relative flex h-full flex-col rounded-[26px] border border-white/90 p-6 shadow-[0_18px_46px_-32px_rgba(124,45,18,0.4)] sm:p-7`}
+              >
                 <div className="mb-4 flex items-start justify-between">
-                  <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-[var(--orange)]/10">
+                  <span className="icon-glow grid h-12 w-12 place-items-center rounded-[16px]">
                     <LineIcon
                       name={p.icon}
-                      size={21}
-                      color="var(--cosmic-deep)"
+                      size={23}
                       className="hv-icon-target"
                     />
                   </span>
@@ -131,14 +138,14 @@ export default function WhyUs() {
                   </span>
                 </div>
 
-                <h3 className="text-[16.5px] font-extrabold leading-snug tracking-tight text-[var(--text)]">
+                <h3 className="breath-heading text-[16.5px] font-extrabold leading-snug tracking-tight text-[var(--text)]">
                   {p.title}
                 </h3>
                 <p className="mt-2 text-[13.5px] leading-relaxed text-[var(--text-muted)]">
                   {p.body}
                 </p>
-                <p className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)]/8 px-3 py-1.5 text-[11px] font-bold text-[var(--cosmic-deep)]">
-                  <LineIcon name="check" size={12} color="var(--cosmic-deep)" />
+                <p className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/85 px-3 py-1.5 text-[11px] font-bold text-[var(--cosmic-deep)] ring-1 ring-[var(--orange)]/10">
+                  <LineIcon name="check" size={12} />
                   {p.proof}
                 </p>
               </article>
