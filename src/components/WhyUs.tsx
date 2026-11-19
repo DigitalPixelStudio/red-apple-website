@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 /**
  * WhyUs — the strategic section.

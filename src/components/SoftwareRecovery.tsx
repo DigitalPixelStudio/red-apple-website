@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import Reveal from "./Reveal";
 import SmartImg from "./SmartImg";
 import { wa } from "@/lib/site";
@@ -8,9 +8,9 @@ import { LineIcon, type IconName } from "./Icons";
 const ITEMS = [
   { icon: "settings" as IconName, title: "OS Installation", desc: "iOS, iPadOS and macOS installed from Apple-signed firmware. Clean, stable and fully updated." },
   { icon: "refresh" as IconName, title: "Firmware & Restore", desc: "DFU and Recovery-mode restores, firmware updates, boot loops and stuck-Apple fixes." },
-  { icon: "data" as IconName, title: "Data Recovery", desc: "Photos, contacts, WhatsApp chats and files recovered â€” logical or board-level." },
+  { icon: "data" as IconName, title: "Data Recovery", desc: "Photos, contacts, WhatsApp chats and files recovered — logical or board-level." },
   { icon: "unlock" as IconName, title: "Lawful Unlocking", desc: "Network unlocking and forgotten-passcode recovery with proof of ownership and account help." },
-  { icon: "cpu" as IconName, title: "Performance Repair", desc: "Slow devices, overheating and battery drain â€” diagnosed and tuned at OS level." },
+  { icon: "cpu" as IconName, title: "Performance Repair", desc: "Slow devices, overheating and battery drain — diagnosed and tuned at OS level." },
   { icon: "shield" as IconName, title: "Setup & Troubleshoot", desc: "iCloud setup, sync issues, app crashes, migration and configuration." },
 ];
 
@@ -28,12 +28,12 @@ export default function SoftwareRecovery() {
           <Reveal>
             <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Software &amp; Recovery</p>
             <h2 className="head-gradient section-title font-apple mt-3">
-              Not Just Hardware â€”{" "}
+              Not Just Hardware —{" "}
               <span className="gradient-text">Your Data &amp; OS Too.</span>
             </h2>
             <p className="section-subtitle mt-5">
               A dedicated desk for operating systems, firmware, recovery and everything
-              software â€” handled with Apple&rsquo;s standard, signed firmware workflow and a
+              software — handled with Apple&rsquo;s standard, signed firmware workflow and a
               data-safe-first process.
             </p>
             <div className="software-os-row">

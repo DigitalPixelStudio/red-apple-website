@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import Reveal from "./Reveal";
 import SmartImg from "./SmartImg";
 import { wa } from "@/lib/site";
@@ -7,10 +7,10 @@ import { LineIcon, type IconName } from "./Icons";
 
 const DEVICES = [
   { id: "iphone", name: "iPhone 17 Pro Max", icon: "phone", tag: "All models", desc: "Displays, batteries, cameras, back glass & full hardware service.", img: "/images/v5/iphone-pro-max-burgundy.jpg" },
-  { id: "ipad", name: "iPad", icon: "ipad", tag: "All models", desc: "iPad, iPad Pro, iPad Air & iPad mini â€” screens, battery & logic.", img: "/images/v5/ipad-pro-129.jpg" },
+  { id: "ipad", name: "iPad", icon: "ipad", tag: "All models", desc: "iPad, iPad Pro, iPad Air & iPad mini — screens, battery & logic.", img: "/images/v5/ipad-pro-129.jpg" },
   { id: "watch", name: "Apple Watch Ultra 3", icon: "watch", tag: "All series", desc: "Screens, batteries, sensors & straps across all Watch series.", img: "/images/v5/service-watch.jpg" },
   { id: "airpods", name: "AirPods", icon: "airpods", tag: "All generations", desc: "Battery, charging case, speaker & microphone repair.", img: "/images/v5/service-airpods.jpg" },
-  { id: "macbook", name: "MacBook", icon: "macbook", tag: "Pro / Air / Mini", desc: "MacBook Pro, Air, Mac mini & iMac â€” display, battery, board.", img: "/images/v5/service-macbook.jpg" },
+  { id: "macbook", name: "MacBook", icon: "macbook", tag: "Pro / Air / Mini", desc: "MacBook Pro, Air, Mac mini & iMac — display, battery, board.", img: "/images/v5/service-macbook.jpg" },
   { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS / macOS", desc: "OS install, firmware, boot loops, data recovery & unlocking.", img: "/images/v5/motherboard-macro.jpg" },
 ] as const;
 
@@ -21,7 +21,7 @@ export default function Ecosystem() {
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">The whole Apple ecosystem</p>
           <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">One Specialist Store for <span className="gradient-text">Every Apple Device.</span></h2>
-          <p className="section-subtitle mx-auto mt-5">From the latest iPhone 18 Pro Max to a classic MacBook â€” if Apple made it, we can fix it.</p>
+          <p className="section-subtitle mx-auto mt-5">From the latest iPhone 18 Pro Max to a classic MacBook — if Apple made it, we can fix it.</p>
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3">

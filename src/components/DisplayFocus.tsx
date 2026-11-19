@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import Reveal from "./Reveal";
 import SmartImg from "./SmartImg";
 import { wa } from "@/lib/site";
