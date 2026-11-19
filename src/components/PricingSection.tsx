@@ -18,8 +18,9 @@ export default function PricingSection() {
           </p>
           <h2 className="section-title">Apple India vs Red Apple</h2>
           <p className="section-subtitle mx-auto mt-4">
-            Typically 35% less than authorised service centres — with OEM-grade parts
-            and a 90-day warranty. All prices are indicative; confirm at store.
+            A like-for-like price comparison against authorised service centres, with
+            OEM-grade parts and a 90-day warranty. All prices are indicative — confirm
+            the final figure at the store before work begins.
           </p>
         </Reveal>
 
@@ -84,8 +85,11 @@ export default function PricingSection() {
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-4 bg-[var(--bg-alt)] text-xs text-[var(--text-muted)] border-t border-[var(--border)]">
-            All prices are indicative and subject to device condition. Red Apple pricing is typically around 35% lower than authorised service centre rates. Confirm exact pricing at store.
+          <div className="border-t border-[var(--border)] bg-[var(--bg-alt)] px-6 py-4 text-xs leading-relaxed text-[var(--text-muted)]">
+            All prices are indicative and subject to device condition. Comparative figures are
+            published for guidance only — confirm the exact price at the store before work
+            begins. Apple is a trademark of Apple Inc. Red Apple is an independent repair
+            service and is not affiliated with, authorised by or endorsed by Apple Inc.
           </div>
         </Reveal>
 

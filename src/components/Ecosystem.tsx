@@ -1,5 +1,6 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
@@ -19,8 +20,8 @@ export default function Ecosystem() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">The whole Apple ecosystem</p>
-          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">One specialist store for <span className="gradient-text">every Apple device.</span></h2>
-          <p className="section-subtitle mx-auto mt-5">From the latest iPhone 17 Pro Max to a classic MacBook — if Apple made it, we can fix it.</p>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">One Specialist Store for <span className="gradient-text">Every Apple Device.</span></h2>
+          <p className="section-subtitle mx-auto mt-5">From the latest iPhone 18 Pro Max to a classic MacBook — if Apple made it, we can fix it.</p>
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -32,7 +33,7 @@ export default function Ecosystem() {
                 className="spotlight-card hv-lift group block h-full rounded-[26px] overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
               >
                 <div className="relative h-44 overflow-hidden">
-                  <img src={d.img} alt={d.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  <SmartImg src={d.img} alt={d.name} width={900} height={600} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
                     <span className="grid h-10 w-10 place-items-center rounded-xl bg-black/35">

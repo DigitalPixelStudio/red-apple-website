@@ -15,6 +15,7 @@ import DisplayFocus from "@/components/DisplayFocus";
 import ServicesGrid from "@/components/ServicesGrid";
 import TechProcess from "@/components/TechProcess";
 import PartsCatalog from "@/components/PartsCatalog";
+import DeviceTriage from "@/components/DeviceTriage";
 import SoftwareRecovery from "@/components/SoftwareRecovery";
 import ProcessSection from "@/components/ProcessSection";
 import WhyChooseUs from "@/components/WhyChooseUs";
@@ -77,12 +78,21 @@ export default function Home() {
         <TechProcess />
         <ServicesGrid />
         <PartsCatalog />
+
+        {/* ---- the three gifts: instant triage, saved passport, shareable estimate ---- */}
+        <DeviceTriage />
+
         <SoftwareRecovery />
         <ProcessSection />
+
+        {/* ---- the comparison, then the price: same argument, one-after-another.
+               "Red Apple vs authorised service centres" answers *why us*;
+               "Apple India vs Red Apple" immediately answers *what it costs*. ---- */}
         <WhyChooseUs />
+        <PricingSection />
+
         <WhyUs />
         <TrustProof />
-        <PricingSection />
         <ServicePromise />
         <ReviewsSection />
         <FaqSection />

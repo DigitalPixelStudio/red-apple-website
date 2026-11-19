@@ -1,6 +1,7 @@
 "use client";
 import BrandMark from "@/components/BrandMark";
 import MotionToggle from "@/components/MotionToggle";
+import SmartImg from "@/components/SmartImg";
 import Link from "next/link";
 import { SITE, wa, SERVICE_PAGES } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -26,14 +27,32 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <div className="flex items-center gap-2.5">
               <span className="footer-brand-live grid h-12 w-12 place-items-center rounded-xl bg-white shadow-lg">
-                <BrandMark size={34} />
+                <BrandMark size={34} priority />
               </span>
               <div>
                 <div className="font-apple text-[18px] font-extrabold tracking-tight animate-brand-breathe">Red Apple</div>
                 <div className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--accent2)]">Mobile Repair Store</div>
               </div>
             </div>
-            <p className="mt-4 text-[13.5px] leading-relaxed text-white/70">Apple repairs, perfected. The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and data recovery.</p>
+            <p className="mt-4 text-[13.5px] leading-relaxed text-white/70">
+              <span className="footer-tagline">Apple repairs, perfected.</span>{" "}
+              The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch,
+              AirPods, Mac &amp; MacBook, hardware, software and data recovery.
+            </p>
+
+            <figure className="footer-store">
+              <SmartImg
+                src="/images/gallery/store-glass-front.webp"
+                alt="The Red Apple Mobile Repair Store glass frontage on MG Road, Halasuru"
+                width={480}
+                height={300}
+                className="footer-store-img"
+              />
+              <figcaption>
+                <span className="footer-store-dot" aria-hidden="true" />
+                MG Road, Halasuru · open 10 AM – 12 AM
+              </figcaption>
+            </figure>
           </div>
 
           {/* Services */}

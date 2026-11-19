@@ -1,5 +1,6 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon } from "./Icons";
@@ -17,8 +18,8 @@ export default function DisplayFocus() {
       <div className="relative mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Where we excel</p>
-          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">iPhone display &amp; back glass <span className="gradient-text">specialists.</span></h2>
-          <p className="section-subtitle mx-auto mt-5">Cracked glass is our daily bread. Every iPhone — from 6 to 16 Pro Max — restored to like-new with precision tools and genuine-grade panels.</p>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">iPhone Display &amp; Back Glass <span className="gradient-text">Specialists.</span></h2>
+          <p className="section-subtitle mx-auto mt-5">Cracked glass is our daily work. Every iPhone — from 6 to 18 Pro Max — restored to like-new with precision tools and genuine-grade panels.</p>
         </Reveal>
 
         <div className="mt-14 grid gap-5 lg:grid-cols-3">
@@ -26,7 +27,7 @@ export default function DisplayFocus() {
             <Reveal key={r.title} delay={i * 90}>
               <div className="ring-card relative h-full overflow-hidden rounded-[30px] bg-white shadow-sm transition duration-300 duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.08]">
                 <div className="relative h-48 overflow-hidden">
-                  <img src={r.img} alt={r.title} className="h-full w-full object-cover" loading="lazy" />
+                  <SmartImg src={r.img} alt={r.title} width={900} height={600} className="h-full w-full object-cover" />
                   <span className="absolute right-3 top-3 rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-3 py-1 text-[10.5px] font-bold uppercase tracking-wide text-white">{r.tag}</span>
                 </div>
                 <div className="p-8">

@@ -45,7 +45,10 @@ type AnalyticsEvent =
   | "nudge_shown"
   | "nudge_quote_click"
   | "nudge_whatsapp_click"
-  | "lead_captured";
+  | "lead_captured"
+  | "triage_model"
+  | "triage_symptom"
+  | "triage_share";
 
 declare global {
   interface Window {

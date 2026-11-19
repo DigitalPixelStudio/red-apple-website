@@ -10,12 +10,13 @@ export default function WhyChooseUs() {
       <div className="max-w-6xl mx-auto px-5">
         <Reveal className="text-center mb-16">
           <p className="text-sm font-semibold tracking-widest uppercase text-[var(--accent)] mb-3">
-            Why {SITE.name}
+            The Honest Comparison
           </p>
-          <h2 className="section-title">Red Apple vs authorised service centres</h2>
+          <h2 className="section-title">Red Apple vs Authorised Service Centres</h2>
           <p className="section-subtitle mx-auto mt-4">
-            We are not another repair shop. We are Apple specialists with OEM parts,
-            board-level skills, and a 90-day written warranty — at 35% lower cost.
+            We are not another repair shop. We are Apple specialists with OEM-grade
+            parts, board-level skills and a 90-day written warranty — usually at a
+            lower cost than an authorised centre.
           </p>
         </Reveal>
 

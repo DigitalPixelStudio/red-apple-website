@@ -1,5 +1,6 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { LineIcon } from "./Icons";
 
 const STEPS = [
@@ -15,16 +16,16 @@ export default function TechProcess() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Our Process</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Precision at <span className="gradient-text">every step.</span></h2>
+          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Precision at <span className="gradient-text">Every Step.</span></h2>
           <p className="section-subtitle mx-auto mt-5">From diagnosis to delivery, every stage is handled with Apple-level precision and care.</p>
         </Reveal>
 
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => (
             <Reveal key={i} delay={i * 80}>
-              <div className="group sweep-shine rounded-[22px] overflow-hidden bg-white border border-black/[0.04] hover:shadow-xl transition duration-300 duration-300 hover:-translate-y-1">
+              <div className="group sweep-shine overflow-hidden rounded-[22px] border border-black/[0.04] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl">
                 <div className="relative h-44 overflow-hidden">
-                  <img src={s.img} alt={s.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  <SmartImg src={s.img} alt={s.title} width={900} height={600} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <span className="absolute top-3 left-3 font-apple text-[32px] font-extrabold text-white/30">{s.step}</span>
                 </div>

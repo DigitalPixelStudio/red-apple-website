@@ -23,7 +23,7 @@ const STEPS: { key: Step; label: string }[] = [
   { key: "device", label: "Device" },
   { key: "model", label: "Model" },
   { key: "repair", label: "Repair" },
-  { key: "details", label: "Your details" },
+  { key: "details", label: "Your Details" },
 ];
 
 const URGENCY_LEVELS = [
@@ -165,7 +165,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
           {/* Step: Device */}
           {step === "device" && (
             <div>
-              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">Select your device</h3>
+              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">Select Your Device</h3>
               <p className="text-[13px] text-[var(--text-muted)] mb-6">Choose the Apple device you need repaired.</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {QUOTE_DEVICES.map((d) => (
@@ -187,7 +187,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <button onClick={() => setStep("device")} className="mb-4 flex items-center gap-1 text-[12px] font-semibold text-[var(--accent)] hover:underline">
                 <LineIcon name="arrow-right" size={12} className="rotate-180" /> Back
               </button>
-              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">Select your model</h3>
+              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">Select Your Model</h3>
               <p className="text-[13px] text-[var(--text-muted)] mb-6">Which {deviceDef?.label} model do you have?</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[400px] overflow-y-auto pr-1">
                 {deviceDef?.models.map((m) => (
@@ -206,7 +206,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <button onClick={() => setStep("model")} className="mb-4 flex items-center gap-1 text-[12px] font-semibold text-[var(--accent)] hover:underline">
                 <LineIcon name="arrow-right" size={12} className="rotate-180" /> Back
               </button>
-              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">What needs fixing?</h3>
+              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">What Needs Fixing?</h3>
               <p className="text-[13px] text-[var(--text-muted)] mb-6">Select the repair or service you need.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto pr-1">
                 {REPAIR_TYPES.map((r) => {
@@ -233,7 +233,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
               <button onClick={() => setStep("repair")} className="mb-4 flex items-center gap-1 text-[12px] font-semibold text-[var(--accent)] hover:underline">
                 <LineIcon name="arrow-right" size={12} className="rotate-180" /> Back
               </button>
-              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">Your details</h3>
+              <h3 className="font-apple text-[20px] font-bold text-[var(--text)] mb-1">Your Details</h3>
               <p className="text-[13px] text-[var(--text-muted)] mb-6">Share your info so we can prepare your estimate.</p>
 
               {/* Summary */}

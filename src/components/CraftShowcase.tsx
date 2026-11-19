@@ -14,6 +14,7 @@
  */
 
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { LineIcon } from "./Icons";
 
 type Pair = {
@@ -55,21 +56,21 @@ const TOOLS: Tool[] = [
   {
     src: "/images/craft/uv-laser-station.webp",
     alt: "UV laser back-glass separation machine and a vacuum autoclave on the Red Apple bench",
-    title: "UV laser separation",
+    title: "UV Laser Separation",
     body:
       "Back glass comes off with a laser, not a heat gun and a blade. The frame stays straight and the camera glass is never in the path.",
   },
   {
     src: "/images/craft/microsolder-setup.webp",
     alt: "Stereo microscope, hot air rework station and multimeter set up for board-level repair",
-    title: "Micro-soldering station",
+    title: "Micro-Soldering Station",
     body:
       "Microscope, hot air, and a bench multimeter reading to three decimals. This is what board-level repair actually looks like — and why most shops send it away.",
   },
   {
     src: "/images/craft/bench-overhead-tools.webp",
     alt: "Overhead view of the repair bench with parts drawers, precision tools and open iPhones",
-    title: "Organised by part, not by habit",
+    title: "Organised by Part, Not by Habit",
     body:
       "Every drawer is a different screw, bracket and flex. Nothing is fished out of a pile, so nothing gets fitted twice.",
   },
@@ -84,12 +85,12 @@ export default function CraftShowcase() {
           <div className="mx-auto max-w-[700px] text-center">
             <span className="kicker">The Work, Shown Plainly</span>
             <h2 className="head-gradient mt-3 font-apple text-[clamp(1.9rem,4vw,2.8rem)] font-extrabold leading-[1.08] tracking-tight">
-              Before, after, and the bench in between
+              Before, After, and the Bench in Between
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-muted)]">
-              Anyone can promise a repair. These are the two we are asked for
-              most, photographed on our own bench, followed by the machines that
-              make them possible.
+              Anyone can promise a repair. These are the two we are asked for most,
+              photographed on our own bench, followed by the machines that make them
+              possible.
             </p>
           </div>
         </Reveal>
@@ -98,16 +99,14 @@ export default function CraftShowcase() {
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {PAIRS.map((p) => (
             <Reveal key={p.src}>
-              <figure className="hv-lift overflow-hidden rounded-[20px] border border-black/[0.07] bg-[var(--bg-alt)]">
-                <div className="relative">
-                  <img
+              <figure className="hv-lift group overflow-hidden rounded-[20px] border border-black/[0.07] bg-[var(--bg-alt)]">
+                <div className="relative overflow-hidden">
+                  <SmartImg
                     src={p.src}
                     alt={p.alt}
                     width={1800}
                     height={1050}
-                    loading="lazy"
-                    decoding="async"
-                    className="block w-full object-cover"
+                    className="block w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/72 px-2.5 py-1 text-[9.5px] font-extrabold uppercase tracking-[0.14em] text-white">
                     {p.label}
@@ -136,9 +135,9 @@ export default function CraftShowcase() {
         {/* ------------------------------------------------------- equipment */}
         <Reveal>
           <div className="mt-16 text-center">
-            <span className="kicker">Inside The Bench</span>
+            <span className="kicker">Inside the Bench</span>
             <h3 className="head-gradient mt-3 font-apple text-[clamp(1.5rem,3vw,2rem)] font-extrabold leading-tight tracking-tight">
-              The machines most shops do not own
+              The Machines Most Shops Do Not Own
             </h3>
           </div>
         </Reveal>
@@ -146,15 +145,13 @@ export default function CraftShowcase() {
         <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {TOOLS.map((t) => (
             <Reveal key={t.src}>
-              <article className="hv-lift h-full overflow-hidden rounded-[20px] border border-black/[0.07] bg-[var(--bg-alt)]">
-                <img
+              <article className="hv-lift group h-full overflow-hidden rounded-[20px] border border-black/[0.07] bg-[var(--bg-alt)]">
+                <SmartImg
                   src={t.src}
                   alt={t.alt}
                   width={1200}
                   height={1500}
-                  loading="lazy"
-                  decoding="async"
-                  className="block aspect-[4/3] w-full object-cover"
+                  className="block aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
                 <div className="px-4 py-4">
                   <h4 className="text-[14px] font-bold leading-snug text-[var(--text)]">
@@ -173,20 +170,18 @@ export default function CraftShowcase() {
         <Reveal>
           <div className="mt-16 overflow-hidden rounded-[24px] border border-black/[0.07] bg-[var(--bg-alt)]">
             <div className="grid items-center gap-0 lg:grid-cols-[1.15fr_1fr]">
-              <img
+              <SmartImg
                 src="/images/craft/website-crm-desk.webp"
                 alt="Technician holding a phone beside a monitor showing the Red Apple website and a laptop running the repair CRM dashboard"
                 width={1800}
                 height={1350}
-                loading="lazy"
-                decoding="async"
                 className="block h-full w-full object-cover lg:aspect-auto"
               />
 
               <div className="px-6 py-8 sm:px-9 sm:py-10">
                 <span className="kicker">Every Repair, On Record</span>
                 <h3 className="head-gradient mt-3 font-apple text-[clamp(1.45rem,2.6vw,1.95rem)] font-extrabold leading-tight tracking-tight">
-                  Your job card lives in our CRM — and the invoice comes from it
+                  Your Job Card Lives in Our CRM — and the Invoice Comes from It
                 </h3>
                 <p className="mt-3.5 text-[13.5px] leading-relaxed text-[var(--text-muted)]">
                   The moment your device is booked in, it gets a job number in a

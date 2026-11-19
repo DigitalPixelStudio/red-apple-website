@@ -79,9 +79,44 @@ function retrieveKnowledge(query: string): string {
     "hai", "ka", "ki", "ke", "ko", "kya", "mera", "meri", "mere", "mujhe",
     "kaise", "kitna", "kitne", "karo", "karna", "chahiye", "theek",
   ]);
-  const terms = Array.from(new Set(query.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? []))
+  /* Query expansion: a customer's word is mapped onto the vocabulary the
+     documents actually use. This is the cheap half of RAG — no embedding
+     service, no cold start, and it never invents a fact. */
+  const EXPAND: Record<string, string[]> = {
+    screen: ["display", "oled", "lcd", "touch", "cracked"],
+    display: ["screen", "oled", "true tone"],
+    battery: ["charging", "drain", "health", "swollen"],
+    charge: ["charging port", "battery", "flex"],
+    glass: ["front glass", "restoration", "oca", "lamination"],
+    price: ["cost", "quote", "rate", "pricing", "kitna"],
+    cost: ["price", "quote", "rate"],
+    quote: ["price", "estimate", "cost"],
+    estimate: ["price", "quote", "cost"],
+    watch: ["apple watch", "ultra", "series"],
+    mac: ["macbook", "imac", "mac mini", "logic board"],
+    laptop: ["macbook", "logic board"],
+    tab: ["ipad", "tablet"],
+    water: ["liquid", "corrosion", "spill"],
+    data: ["recovery", "photos", "contacts", "backup"],
+    unlock: ["activation lock", "carrier", "network lock"],
+    open: ["hours", "timing", "opening"],
+    time: ["turnaround", "duration", "how long"],
+    warranty: ["guarantee", "policy", "cover", "90 days"],
+    genuine: ["oem", "original", "part grade"],
+    original: ["oem", "genuine", "part grade"],
+    fix: ["repair", "service"],
+    repair: ["fix", "service"],
+  };
+
+  const rawTerms = Array.from(new Set(query.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? []))
     .filter((term) => !stopWords.has(term));
-  if (!terms.length) return "";
+  if (!rawTerms.length) return "";
+
+  const terms = Array.from(new Set(rawTerms.flatMap((term) => [term, ...(EXPAND[term] ?? [])])));
+  const q = query.toLowerCase();
+  /* Bigrams catch "13 pro max", "front glass", "battery health" — phrases that
+     a bag-of-words score would otherwise split apart. */
+  const bigrams = rawTerms.slice(0, -1).map((term, i) => term + " " + rawTerms[i + 1]);
 
   return docs
     .map((doc) => {
@@ -94,13 +129,28 @@ function retrieveKnowledge(query: string): string {
         else if (tags.includes(term)) score += 3;
         else if (body.includes(term)) score += 1;
       }
-      if (query.toLowerCase().includes(title)) score += 8;
+      for (const phrase of bigrams) {
+        if (title.includes(phrase)) score += 6;
+        else if (tags.includes(phrase)) score += 4;
+        else if (body.includes(phrase)) score += 2;
+      }
+      /* A tag that appears verbatim in the question is a strong signal. */
+      for (const tag of doc.tags) {
+        const clean = tag.toLowerCase().trim();
+        if (clean.length >= 4 && q.includes(clean)) score += 2;
+      }
+      if (q.includes(title)) score += 8;
+      /* Exact model numbers matter more than prose length. */
+      if (/\b1[0-9]\b/.test(q) && /\biphone\b/.test(q) && /\biphone\b/.test(title)) score += 3;
       return { ...doc, score };
     })
     .filter((doc) => doc.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 6)
-    .map((doc) => doc.title + ": " + doc.body.slice(0, 900))
+    /* Deduplicate near-identical titles so one repeated FAQ cannot crowd out
+       the policy chunk that actually answers the question. */
+    .filter((doc, index, list) => list.findIndex((other) => other.title === doc.title) === index)
+    .slice(0, 8)
+    .map((doc) => doc.title + ": " + doc.body.slice(0, 760))
     .join("\n");
 }
 

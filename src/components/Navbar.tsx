@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon } from "./Icons";
+import SmartImg from "./SmartImg";
 
 const LINKS = [
   { href: "#ecosystem", label: "Devices" },
@@ -26,14 +27,13 @@ export default function Navbar() {
       <span className="header-beam" aria-hidden="true" />
       <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 md:pt-12 lg:px-8">
         <a href="#top" className="group flex items-center gap-2.5" aria-label="Red Apple Mobile Repair Store home">
-          <img
+          <SmartImg
             src="/logo.png"
             alt="Red Apple Mobile Repair Store"
             width={44}
             height={44}
+            priority
             className="h-11 w-11 shrink-0 rounded-[10px] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
-            loading="eager"
-            decoding="async"
           />
           <span className="leading-tight">
             <span className="brand-name block whitespace-nowrap font-apple text-[17px] font-extrabold tracking-tight">Red Apple</span>

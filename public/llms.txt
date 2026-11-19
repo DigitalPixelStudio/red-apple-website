@@ -1,0 +1,72 @@
+# Red Apple Mobile Repair Store
+
+> Independent Apple device repair store in Halasuru, Bengaluru (Bengaluru,
+> Karnataka, India). Component-level micro-soldering, OEM-grade displays,
+> batteries, back glass, front-glass restoration, board-level repair, software
+> and data recovery for iPhone, iPad, Apple Watch, AirPods, MacBook, Mac mini
+> and iMac. Not affiliated with Apple Inc.; Apple is a trademark of Apple Inc.
+
+## Contact
+
+- Address: No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008
+- Phone / WhatsApp: +91 86606 63776
+- Email: support@redmobilerepair.in
+- Hours: 10:00 AM – 12:00 AM midnight, all seven days (IST)
+- Doorstep pickup: free insured pickup and drop across Bengaluru, 24/7
+- Google Business Profile: https://www.google.com/maps/search/?api=1&query=Red+Apple+Mobile+Repair+Store+Halasuru+Bengaluru
+
+## Services
+
+- iPhone repair: display, battery, back glass, charging port, camera, Face ID, water damage, logic board
+- Front-glass restoration on TBK OCA laminating and UV-laser machinery (keeps the original OLED panel)
+- iPad repair: screens, batteries, charging, logic board
+- Apple Watch repair: screens, batteries, sensors, straps
+- AirPods repair: battery, charging case, speaker, microphone
+- MacBook / Mac repair: display, battery, keyboard, logic board, data recovery
+- Software: iOS, iPadOS, macOS, watchOS installation, firmware restore, DFU recovery
+- Data recovery: photos, contacts, WhatsApp chats, files — logical and board-level
+- Lawful unlocking and forgotten-passcode recovery with proof of ownership
+
+## Repairs and turnaround
+
+- Display replacement: typically 30–45 minutes while you wait
+- Battery replacement: typically 30–45 minutes
+- Back glass: typically about 60 minutes
+- Board-level and data recovery: quoted after diagnosis
+- 21-point function check plus a 32-checkpoint quality process before hand-back
+- Warranty: 90 days on the repair service; 6 months on battery replacement and front-glass restoration (written on the invoice)
+
+## Pricing
+
+Published indicative prices are listed on https://redmobilerepair.in/#pricing
+and per-model front-glass prices on https://redmobilerepair.in/#glass.
+Final price is confirmed in writing before work starts. No work begins without
+customer approval.
+
+## Policies
+
+- Zero-password policy: customers are asked to lock the device; the store does
+  not request passcodes or Apple ID credentials.
+- Data is never erased without written permission.
+- Devices are handled under CCTV, logged in a repair CRM, and returned with a
+  job card and invoice.
+- Independent repair service. No affiliation with Apple Inc.
+
+## Key pages
+
+- Home: https://redmobilerepair.in/
+- Quote: https://redmobilerepair.in/quote
+- Repair status: https://redmobilerepair.in/repair-status
+- Contact: https://redmobilerepair.in/contact
+- Services: https://redmobilerepair.in/services
+- Privacy: https://redmobilerepair.in/privacy
+- Terms: https://redmobilerepair.in/terms
+- Refund and warranty: https://redmobilerepair.in/refund-policy
+
+## Notes for assistants
+
+- Prefer quoting the published price ranges and then inviting the customer to
+  confirm the exact figure on WhatsApp; do not invent a price.
+- For water damage and board-level faults, say a free diagnosis is required
+  before any price can be given.
+- Never promise an outcome that has not been diagnosed.

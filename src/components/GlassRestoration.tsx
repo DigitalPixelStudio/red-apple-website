@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { LineIcon } from "./Icons";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -110,7 +111,7 @@ export default function GlassRestoration() {
             Front glass restoration · Halasuru lab
           </p>
           <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">
-            Keep the original OLED. <span className="gradient-text">Restore the glass.</span>
+            Keep the Original OLED. <span className="gradient-text">Restore the Glass.</span>
           </h2>
           <p className="section-subtitle mx-auto mt-5">
             We do not just replace screens — we restore them. Using specialised TBK machinery, we bond new glass to your
@@ -188,11 +189,9 @@ export default function GlassRestoration() {
           <Reveal delay={90}>
             <div className="glass-result-card">
               <div className="glass-result-media">
-                <img
+                <SmartImg
                   src="/images/craft/before-after-screen.webp"
                   alt="Two iPhone displays side by side: one with shattered front glass and one restored with flawless glass"
-                  loading="lazy"
-                  decoding="async"
                   width={1600}
                   height={900}
                 />
@@ -201,7 +200,7 @@ export default function GlassRestoration() {
                 <span className="glass-scanline" aria-hidden="true" />
               </div>
               <div className="p-6 sm:p-7">
-                <h3 className="font-apple text-[20px] font-bold text-[var(--text)]">What changes — and what does not</h3>
+                <h3 className="font-apple text-[20px] font-bold text-[var(--text)]">What Changes - and What Does Not</h3>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   {BENEFITS.map((b) => (
                     <div key={b.title} className="glass-benefit">
@@ -231,7 +230,7 @@ export default function GlassRestoration() {
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="glass-eyebrow">Full price list</p>
-                <h3 className="font-apple text-[22px] font-bold text-[var(--text)]">Every listed iPhone, one glance</h3>
+                <h3 className="font-apple text-[22px] font-bold text-[var(--text)]">Every Listed iPhone, One Glance</h3>
                 <p className="mt-1.5 text-[13px] text-[var(--text-muted)]">
                   Tap any model to load its price above. Fixed glass-restoration price, parts and labour included.
                 </p>
@@ -291,7 +290,7 @@ export default function GlassRestoration() {
               The equipment behind the finish
             </p>
             <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">
-              Three machines. <span className="gradient-text">One original display.</span>
+              Three Machines. <span className="gradient-text">One Original Display.</span>
             </h2>
             <p className="section-subtitle mx-auto mt-5">
               This is not a heat-gun and a suction cup. Glass restoration runs through a calibrated TBK line, photographed
@@ -304,13 +303,11 @@ export default function GlassRestoration() {
               <Reveal key={m.name} delay={i * 90}>
                 <article className="glass-machine ring-card">
                   <div className="glass-machine-media">
-                    <img
+                    <SmartImg
                       src={m.img}
                       alt={m.alt}
                       width={m.width}
                       height={m.height}
-                      loading="lazy"
-                      decoding="async"
                     />
                     <span className="glass-machine-scan" aria-hidden="true" />
                     <span className="glass-machine-index">0{i + 1}</span>

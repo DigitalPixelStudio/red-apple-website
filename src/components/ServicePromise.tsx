@@ -22,28 +22,28 @@ const PROMISES: Promise_[] = [
   {
     icon: "clipboard",
     step: "01",
-    title: "Free diagnosis, in writing",
+    title: "Free Diagnosis, in Writing",
     body:
       "We open the device, find the actual fault, and put a fixed figure in front of you before touching a screwdriver. If you walk away at that point, you pay nothing.",
   },
   {
     icon: "lock",
     step: "02",
-    title: "Your data never leaves your phone",
+    title: "Your Data Never Leaves Your Phone",
     body:
       "We never ask for your passcode, Apple ID or any account password. Repairs are done on the hardware, not your data. If a repair needs a wipe, we tell you first and get your written permission.",
   },
   {
     icon: "eye",
     step: "03",
-    title: "You watch the whole repair",
+    title: "You Watch the Whole Repair",
     body:
       "Photo and video on WhatsApp at every stage — board out, part fitted, tested. The workshop has glass walls for walk-ins. Nothing happens to your device that you cannot see.",
   },
   {
     icon: "shield",
     step: "04",
-    title: "Tested, then warrantied",
+    title: "Tested, Then Warrantied",
     body:
       "Every device passes 32 checkpoints before hand-back — touch, True Tone, Face ID, cameras, sensors, charging, thermals. Then you get 90 days of cover, and 6 months on battery and display.",
   },
@@ -57,7 +57,7 @@ export default function ServicePromise() {
         <Reveal className="mx-auto max-w-[680px] text-center">
           <span className="kicker">The Handover</span>
           <h2 className="head-gradient mt-3 font-apple text-[clamp(1.9rem,4vw,2.8rem)] font-extrabold leading-[1.08] tracking-tight">
-            What happens after you hand it over
+            What Happens After You Hand It Over
           </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-muted)]">
             Most people have never watched a phone get repaired. Here is exactly what

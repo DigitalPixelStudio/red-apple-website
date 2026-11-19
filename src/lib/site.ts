@@ -180,7 +180,7 @@ export const SERVICES: {
     desc: "iOS/iPadOS/macOS install, firmware restore, boot loops, DFU & setup issues.",
     time: "30–120 min", devices: "All Apple devices",
     img: "/images/v3/laptop-closeup.jpg",
-    points: ["Genuine Apple OS", "Data-safe first", "Full testing"],
+    points: ["Apple-Signed OS", "Data-Safe First", "Full Testing"],
   },
   {
     id: "data", title: "Data Recovery", icon: "data",
@@ -221,7 +221,7 @@ export const STATS = [
 
 // ---------- Why Choose Us vs Local Market ----------
 export const WHY_VS_LOCAL = [
-  { feature: "Price", us: "Typically 35% less than authorised service centres", apple: "Full Apple India official pricing" },
+  { feature: "Price", us: "Usually below authorised service centre rates", apple: "Apple India official pricing" },
   { feature: "Turnaround", us: "30 min avg for screen/battery — while you wait", apple: "3–7 days, device must be left at store" },
   { feature: "Walk-In Service", us: "No appointment needed, walk in anytime", apple: "Appointment required, slot availability limited" },
   { feature: "OEM-Grade Parts", us: "True Tone panels, MagSafe back glass, genuine battery cells", apple: "Apple-sourced parts only" },
@@ -331,6 +331,6 @@ export const SERVICE_PAGES: {
   { slug: "apple-watch-repair", title: "Apple Watch Repair", icon: "watch", short: "Screens, batteries & sensors", desc: "Apple Watch screen, battery, sensor repairs.", keywords: ["Apple Watch repair Bangalore"] },
   { slug: "airpods-repair", title: "AirPods Repair", icon: "airpods", short: "Battery, case, audio issues", desc: "AirPods and AirPods Pro battery replacement.", keywords: ["AirPods repair Bangalore"] },
   { slug: "macbook-repair", title: "MacBook & Mac Repair", icon: "macbook", short: "Displays, batteries & logic boards", desc: "MacBook Pro, Air, Mac mini and iMac repairs.", keywords: ["MacBook repair Bangalore"] },
-  { slug: "software-recovery", title: "Apple Software & Firmware", icon: "settings", short: "iOS, macOS, restore & firmware", desc: "Genuine Apple OS installation, restore.", keywords: ["iPhone software fix", "iOS restore Bangalore"] },
+  { slug: "software-recovery", title: "Apple Software & Firmware", icon: "settings", short: "iOS, macOS, restore & firmware", desc: "Apple-signed OS installation and restore.", keywords: ["iPhone software fix", "iOS restore Bangalore"] },
   { slug: "data-recovery", title: "Data Recovery for Apple Devices", icon: "data", short: "Photos, contacts, chats & files", desc: "Professional data recovery from damaged devices.", keywords: ["iPhone data recovery Bangalore"] },
 ] as const;

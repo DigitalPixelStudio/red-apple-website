@@ -32,8 +32,18 @@ export default function TrustBar() {
             <span className="connect-status">Paired</span>
           </div>
           <div className="text-left">
-            <div className="text-[13.5px] font-extrabold text-[var(--text)]">Your device, connected to a master technician</div>
-            <div className="mt-0.5 text-[12px] text-[var(--text-muted)]">Live updates on WhatsApp while we work — photo and video at every stage.</div>
+            <div className="text-[13.5px] font-extrabold text-[var(--text)]">Your Device, Connected to a Master Technician</div>
+            <div className="mt-1 max-w-[430px] text-[12px] leading-relaxed text-[var(--text-muted)]">
+              Our in-house technician team sends photo and video updates on WhatsApp while we work — and your payment invoice doubles as your warranty record.
+            </div>
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)]/10 px-2.5 py-1 text-[10.5px] font-bold text-[var(--cosmic-deep)]">
+                <LineIcon name="whatsapp" size={11} /> Live WhatsApp updates
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)]/10 px-2.5 py-1 text-[10.5px] font-bold text-[var(--cosmic-deep)]">
+                <LineIcon name="shield" size={11} /> Invoice = warranty record
+              </span>
+            </div>
           </div>
         </div>
       </Reveal>

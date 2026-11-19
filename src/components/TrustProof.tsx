@@ -6,7 +6,7 @@ import { LineIcon, type IconName } from "./Icons";
 const CERTS = [
   { icon: "verified" as IconName, title: "Experienced Repair Technicians", desc: "9+ years of Apple-device repair experience, including component-level diagnostics." },
   { icon: "shield" as IconName, title: "90-Day Written Warranty", desc: "Every repair backed by a documented warranty. No verbal promises — written proof." },
-  { icon: "lock" as IconName, title: "Data Privacy Guarantee", desc: "Your passcode stays with you. We never access your data, photos, or accounts." },
+  { icon: "lock" as IconName, title: "Data Privacy Promise", desc: "Your passcode stays with you. We never access your data, photos or accounts." },
   { icon: "badge" as IconName, title: "OEM-Grade Parts", desc: "Genuine-quality panels, batteries, and components — with full disclosure on sourcing." },
   { icon: "clock" as IconName, title: "Same-Day Repairs", desc: "Most screen, battery, and port repairs completed in 30–60 minutes while you wait." },
   { icon: "heart" as IconName, title: "Doorstep Pickup & Drop", desc: "Pickup across Bengaluru; free for eligible repairs above ₹2,999. WhatsApp to confirm coverage." },
@@ -18,7 +18,7 @@ export default function TrustProof() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Why trust us</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Built on <span className="gradient-text">trust & precision.</span></h2>
+          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Built on <span className="gradient-text">Trust &amp; Precision.</span></h2>
           <p className="section-subtitle mx-auto mt-5">More than 1,000 Google reviews and a 4.9 rating. Here&apos;s what customers value about our repair service.</p>
         </Reveal>
 
@@ -41,7 +41,7 @@ export default function TrustProof() {
 
         {/* Link visitors to the original source instead of publishing unverified testimonials. */}
         <Reveal className="mt-16 text-center" delay={100}>
-          <h3 className="mb-3 font-apple text-[22px] font-bold text-[var(--text)]">Read real customer feedback</h3>
+          <h3 className="mb-3 font-apple text-[22px] font-bold text-[var(--text)]">Read Real Customer Feedback</h3>
           <p className="mx-auto mb-5 max-w-xl text-sm leading-relaxed text-[var(--text-muted)]">
             See the original customer reviews and current rating directly on our Google Business Profile.
           </p>

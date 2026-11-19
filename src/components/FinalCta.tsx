@@ -21,7 +21,7 @@ export default function FinalCta() {
             <BrandMark size={40} />
           </div>
           <h2 className="font-apple head-gradient text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
-            Your Apple device,<br /><span className="gradient-text">fixed right.</span>
+            Your Apple Device,<br /><span className="gradient-text">Fixed Right.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-[560px] text-[15px] leading-relaxed text-white/60">
             Tell us the device and the issue — we&rsquo;ll reply with an exact estimate and a slot, usually within minutes.

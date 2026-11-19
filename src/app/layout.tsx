@@ -35,6 +35,17 @@ export const metadata: Metadata = {
     "Apple repair specialist Bangalore", "Red Apple Mobile Repair Store",
   ],
   authors: [{ name: SITE.name }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  applicationName: SITE.name,
+  category: "Electronics Repair",
+  /* Legacy but still read by some local-search crawlers. */
+  other: {
+    "geo.region": "IN-KA",
+    "geo.placename": "Halasuru, Bengaluru",
+    "geo.position": `${SITE.geo.lat};${SITE.geo.lng}`,
+    ICBM: `${SITE.geo.lat}, ${SITE.geo.lng}`,
+  },
   openGraph: {
     title: "Red Apple Mobile Repair Store — Apple Repair Specialists, Halasuru Bengaluru",
     description: SITE.shortDescription,
@@ -100,10 +111,20 @@ const serviceSchema = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["LocalBusiness", "Store", "Organization"],
   "@id": `${baseUrl}/#business`,
   name: SITE.legalName,
-  image: `${baseUrl}/icon-512.png`,
+  alternateName: SITE.shortName,
+  // Google reads `logo` from the Organization/Company entity to build the
+  // logo it can show beside a search result. Absolute URL, >=112px square.
+  logo: {
+    "@type": "ImageObject",
+    url: `${baseUrl}/logo.png`,
+    width: 512,
+    height: 512,
+    caption: SITE.legalName,
+  },
+  image: [`${baseUrl}/logo.png`, `${baseUrl}/og-image.png`],
   url: baseUrl,
   telephone: SITE.phone,
   email: SITE.email,
@@ -122,9 +143,64 @@ const localBusinessSchema = {
     longitude: SITE.geo.lng,
   },
   openingHours: SITE.hoursSchema,
-  areaServed: "Bengaluru",
+  areaServed: [
+    { "@type": "City", name: "Bengaluru" },
+    { "@type": "Place", name: "Halasuru" },
+    { "@type": "Place", name: "Indiranagar" },
+    { "@type": "Place", name: "MG Road" },
+  ],
   hasMap: SITE.mapsUrl,
   sameAs: [SITE.gmbUrl],
+  currenciesAccepted: "INR",
+  paymentAccepted: "Cash, UPI, Credit Card, Debit Card",
+  knowsAbout: [
+    "iPhone screen replacement",
+    "iPhone battery replacement",
+    "iPhone back glass repair",
+    "iPad repair",
+    "MacBook logic board repair",
+    "Apple Watch repair",
+    "AirPods repair",
+    "Front glass restoration",
+    "Data recovery",
+  ],
+};
+
+/* Organization is a separate entity so Google can attach the brand logo,
+   contact point and social profiles to the business in search results. */
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${baseUrl}/#organization`,
+  name: SITE.legalName,
+  alternateName: SITE.shortName,
+  url: baseUrl,
+  logo: {
+    "@type": "ImageObject",
+    url: `${baseUrl}/logo.png`,
+    width: 512,
+    height: 512,
+  },
+  image: `${baseUrl}/og-image.png`,
+  description: SITE.shortDescription,
+  email: SITE.email,
+  telephone: SITE.phone,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "No. 1, Mahatma Gandhi Rd, opp. Bhadra Landmark, Halasuru",
+    addressLocality: "Bengaluru",
+    addressRegion: "Karnataka",
+    postalCode: SITE.pincode,
+    addressCountry: SITE.country,
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: SITE.phone,
+    contactType: "customer service",
+    areaServed: "IN",
+    availableLanguage: ["en", "hi", "kn"],
+  },
+  sameAs: [SITE.gmbUrl, SITE.instagramUrl, SITE.facebookUrl, SITE.youtubeUrl].filter(Boolean),
 };
 
 const serviceListSchema = {
@@ -160,7 +236,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="light-beam" aria-hidden="true" />
         {children}
         <PWAInstallPrompt />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, organizationSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
           <>
