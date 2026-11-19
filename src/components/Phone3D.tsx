@@ -4,8 +4,8 @@
  * Phone3D — a realistic, slowly rotating iPhone 17 Pro in pure CSS 3D.
  *
  * Why CSS and not Three.js: Three.js is ~600 KB and needs a WebGL context, which
- * stutters on mid-range Android. This is ~4 KB, runs on the compositor, and holds
- * 60–120fps because it only ever animates `transform`.
+ * can stutter on mid-range Android. This is ~4 KB, runs on the compositor, and
+ * stays smooth because it only animates `transform` and `opacity`.
  *
  * It also degrades cleanly: with `prefers-reduced-motion` the phone simply sits
  * still at a three-quarter angle instead of spinning.
@@ -13,7 +13,7 @@
 
 export default function Phone3D({ className = "" }: { className?: string }) {
   return (
-    <div className={`phone-stage ${className}`} aria-hidden="true">
+    <div className={`phone-stage hero-phone-live ${className}`} aria-hidden="true">
       <div className="phone-float">
         <div className="phone-spin">
           {/* ---- back shell ---- */}

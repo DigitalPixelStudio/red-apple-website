@@ -161,16 +161,9 @@ export default function Footer() {
             </a>
           </div>
 
-          <div className="dev-line mt-4 text-center text-white/45">
-            <a
-              href="https://commons.wikimedia.org/wiki/File:IPhone_18_Pro_Max_(burgundy_model)_-_3.jpg"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-white/75"
-            >
-              iPhone 18 Pro Max photo: Kyu3a / Wikimedia Commons, CC BY-SA 4.0
-            </a>
-          </div>
+          {/* Image attribution kept in source only: iPhone 18 Pro Max photo by
+              Kyu3a / Wikimedia Commons, CC BY-SA 4.0.
+              https://commons.wikimedia.org/wiki/File:IPhone_18_Pro_Max_(burgundy_model)_-_3.jpg */}
           <div className="dev-line mt-3 text-center font-semibold text-white/75">
             Developed by The Pixel Forge Studio · 96200 24812
           </div>

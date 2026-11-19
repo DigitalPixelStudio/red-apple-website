@@ -230,7 +230,7 @@ export default function GlassRestoration() {
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="glass-eyebrow">Full price list</p>
-                <h3 className="font-apple text-[22px] font-bold text-[var(--text)]">Every Listed iPhone, One Glance</h3>
+                <h3 className="font-apple text-[22px] font-bold text-[var(--text)]">Every Listed iPhone, <span className="one-glance-red">One Glance</span></h3>
                 <p className="mt-1.5 text-[13px] text-[var(--text-muted)]">
                   Tap any model to load its price above. Fixed glass-restoration price, parts and labour included.
                 </p>

@@ -4463,3 +4463,476 @@ html[data-motion="off"] .topic-gradient {
   -webkit-text-fill-color: #b45309;
   color: #b45309;
 }
+
+/* ==========================================================================
+   2026 ELITE POLISH — FINAL AUTHORITATIVE LAYER
+   --------------------------------------------------------------------------
+   This layer wins over every stacked override above it. It uses transform,
+   opacity and colour only — no blur filters, no layout animation and no
+   box-shadow tweening. It is designed to stay smooth on ordinary hardware;
+   it deliberately makes no fixed frame-rate promise.
+   ========================================================================== */
+
+/* --- sitewide light atmosphere, from the first section to the footer --- */
+.light-3d { opacity: 1; }
+.light-3d::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  background:
+    radial-gradient(ellipse 40% 30% at 18% 22%, rgba(255,45,85,.10), transparent 70%),
+    radial-gradient(ellipse 36% 28% at 82% 70%, rgba(255,149,0,.09), transparent 70%);
+  transform: translate3d(0,0,0) scale(1);
+  animation: siteAtmosphere 26s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes siteAtmosphere {
+  0%, 100% { transform: translate3d(-1.5%,0,0) scale(1);    opacity: .55; }
+  50%      { transform: translate3d(1.5%,1%,0) scale(1.06); opacity: .95; }
+}
+
+/* --- header shares the hero palette and a quiet travelling highlight --- */
+.site-header { background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,247,242,.84)); }
+.site-header .brand-name {
+  background-image: linear-gradient(95deg, #1d1d1f 0%, #ff2d55 52%, #ff6b00 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.site-header .brand-sub { color: #c2410c; }
+.header-beam {
+  animation: eliteHeaderBeam 9s linear infinite, eliteHeaderFade 5.5s ease-in-out infinite !important;
+}
+@keyframes eliteHeaderBeam {
+  0%   { transform: translate3d(-120%,0,0); }
+  100% { transform: translate3d(520%,0,0); }
+}
+@keyframes eliteHeaderFade {
+  0%, 100% { opacity: .45; }
+  50%      { opacity: 1; }
+}
+
+/* --- the four requested kickers --- */
+.kicker-red {
+  color: #e11d48 !important;
+  animation: redKickerBreath 5.4s ease-in-out infinite !important;
+}
+@keyframes redKickerBreath {
+  0%, 100% { color: #e11d48; opacity: 1; }
+  50%      { color: #ff2d55; opacity: .82; }
+}
+.one-glance-red { color: #e11d48 !important; font-weight: 800; }
+
+/* --- cool rectangular icons with a subtle, uniform breath --- */
+.icon-glow,
+.stage-icon,
+.proof-icon,
+.display-icon,
+.parts-icon,
+.tech-icon,
+.location-icon {
+  border-radius: 11px !important;
+  transform-origin: center center;
+  animation: eliteIconBreath 5.2s ease-in-out infinite !important;
+}
+@keyframes eliteIconBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.055); }
+}
+.stage-icon       { background: linear-gradient(140deg, #f97316, #dc2626) !important; }
+.stage-pill:nth-child(2) .stage-icon { background: linear-gradient(140deg, #0ea5e9, #7c3aed) !important; }
+.stage-pill:nth-child(3) .stage-icon { background: linear-gradient(140deg, #16a34a, #0f766e) !important; }
+.stage-pill:nth-child(4) .stage-icon { background: linear-gradient(140deg, #ff6b00, #b45309) !important; }
+.stage-pill:nth-child(5) .stage-icon { background: linear-gradient(140deg, #2563eb, #4f46e5) !important; }
+.stage-pill:nth-child(6) .stage-icon { background: linear-gradient(140deg, #db2777, #f59e0b) !important; }
+.display-icon { background: linear-gradient(140deg, #e11d48, #ff6b00) !important; }
+.parts-icon   { background: linear-gradient(140deg, #0f766e, #2563eb) !important; }
+.tech-icon    { background: linear-gradient(140deg, #ff6b00, #b91c1c) !important; }
+.location-icon { background: linear-gradient(140deg, #dc2626, #ff9500) !important; }
+
+/* --- one breathing wash for every plain card --- */
+.breathe-card,
+.breathe-tile { position: relative; }
+.breathe-card::after,
+.breathe-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 22% 12%, rgba(255,255,255,.55), transparent 62%);
+  opacity: .05;
+  pointer-events: none;
+  animation: breatheWash 6.4s ease-in-out infinite;
+}
+@keyframes breatheWash {
+  0%, 100% { opacity: .04; }
+  50%      { opacity: .16; }
+}
+
+/* --- CRM stage rail: modern rectangles, stronger type --- */
+.stage-pill {
+  border-radius: 12px !important;
+  background: linear-gradient(145deg, rgba(255,252,248,.96), rgba(255,239,243,.88)) !important;
+}
+.stage-label { font-size: 10.5px; font-weight: 800; line-height: 1.25; color: #7c2d12; }
+.stage-live { border-radius: 999px; }
+
+/* --- section-specific glass sweeps --- */
+.display-image::after,
+.parts-image::after,
+.tech-image::after,
+.proof-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.display-image::after {
+  background: linear-gradient(105deg, transparent 18%, rgba(255,255,255,.42) 44%, transparent 68%);
+  transform: translate3d(-115%,0,0);
+  animation: displayGlass 6.5s ease-in-out infinite;
+}
+.parts-image::after {
+  background: linear-gradient(120deg, transparent 22%, rgba(255,244,236,.38) 46%, transparent 70%);
+  transform: translate3d(-115%,0,0) skewX(-8deg);
+  animation: partsGlass 8s ease-in-out infinite;
+}
+.tech-image::after {
+  background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,.34) 48%, transparent 72%);
+  transform: translate3d(110%,0,0);
+  animation: techGlass 7.4s ease-in-out infinite;
+}
+.proof-image::after {
+  background: linear-gradient(100deg, transparent 26%, rgba(255,237,213,.32) 48%, transparent 70%);
+  transform: translate3d(-115%,0,0);
+  animation: proofGlass 9s ease-in-out infinite;
+}
+@keyframes displayGlass {
+  0%, 54% { transform: translate3d(-115%,0,0); }
+  100%    { transform: translate3d(115%,0,0); }
+}
+@keyframes partsGlass {
+  0%, 62% { transform: translate3d(-115%,0,0) skewX(-8deg); }
+  100%    { transform: translate3d(115%,0,0) skewX(-8deg); }
+}
+@keyframes techGlass {
+  0%, 58% { transform: translate3d(110%,0,0); }
+  100%    { transform: translate3d(-110%,0,0); }
+}
+@keyframes proofGlass {
+  0%, 66% { transform: translate3d(-115%,0,0); }
+  100%    { transform: translate3d(115%,0,0); }
+}
+
+/* --- heading spacing fixes: no overlap, no joined words --- */
+.display-heading,
+.parts-heading,
+.location-heading,
+.final-cta-heading {
+  display: block !important;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+  line-height: 1.14 !important;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.display-heading .topic-gradient,
+.parts-heading .topic-gradient,
+.location-heading .topic-gradient,
+.final-cta-heading .topic-gradient { display: inline; }
+.parts-kicker,
+.location-kicker,
+.final-cta-kicker { display: block; margin-bottom: .1rem; }
+.final-cta-heading { text-align: center; }
+.final-cta-copy,
+.display-subtitle,
+.parts-subtitle,
+.location-subtitle { text-wrap: pretty; }
+.proof-card-title,
+.display-card-title,
+.parts-card-title,
+.tech-card-title,
+.stage-title { font-family: var(--font-space), var(--font-inter), sans-serif; }
+
+/* --- WhyUs colour hierarchy --- */
+.whyus-heading { line-height: 1.16 !important; }
+.why-head-red { color: #e11d48 !important; }
+.why-rupee { color: #dc2626 !important; }
+.why-burgundy { color: #7f1d1d !important; }
+
+/* --- location: aligned copy, brighter icons, glass map on hover --- */
+.location-intro { max-width: 900px; margin-inline: auto; }
+.location-info-label { color: #7c2d12; font-weight: 850; }
+.location-info-value { color: #3f3f46; }
+.map-shell { transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.map-shell:hover { transform: translate3d(0,-2px,0); }
+.map-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 18%, rgba(255,255,255,.45) 46%, transparent 72%);
+  transform: translate3d(-115%,0,0);
+  animation: mapGlass 9.5s ease-in-out infinite;
+}
+@keyframes mapGlass {
+  0%, 64% { transform: translate3d(-115%,0,0); }
+  100%    { transform: translate3d(115%,0,0); }
+}
+
+/* --- hero phone: glass, shadow, bigger float and a gentle tilt --- */
+.hero-phone-live .phone-stage { perspective: 1400px !important; transform-style: preserve-3d !important; }
+.hero-phone-live .phone-float { animation: elitePhoneFloat 8s ease-in-out infinite !important; will-change: transform; }
+.hero-phone-live .phone-spin { animation: elitePhoneTilt 11s ease-in-out infinite !important; will-change: transform; }
+.hero-phone-live .phone-shadow {
+  animation: elitePhoneShadow 8s ease-in-out infinite !important;
+  background: radial-gradient(ellipse, rgba(120,53,15,.32) 0%, rgba(255,107,0,.12) 48%, transparent 76%) !important;
+}
+.hero-phone-live .phone-shadow::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 45%;
+  width: 250px; height: 38px;
+  margin-left: -125px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0,0,0,.14), transparent 72%);
+}
+.hero-phone-live .phone-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 24%, rgba(255,255,255,.30) 45%, transparent 66%);
+  transform: translate3d(-120%,0,0);
+  opacity: .25;
+  pointer-events: none;
+  animation: elitePhoneGlass 7.5s ease-in-out infinite;
+}
+.hero-phone-live .phone-sheen { animation: eliteSheen 7.5s ease-in-out infinite !important; }
+@keyframes elitePhoneFloat {
+  0%, 100% { transform: translate3d(0,0,0) rotate(-.8deg) rotateX(1deg); }
+  50%      { transform: translate3d(0,-18px,0) rotate(.9deg) rotateX(-1.5deg); }
+}
+@keyframes elitePhoneTilt {
+  0%, 100% { transform: rotateY(-22deg) rotateX(4deg) translateZ(0); }
+  50%      { transform: rotateY(-14deg) rotateX(7deg) translateZ(0); }
+}
+@keyframes elitePhoneShadow {
+  0%, 100% { opacity: .62; transform: scaleX(1); }
+  50%      { opacity: .32; transform: scaleX(.86); }
+}
+@keyframes elitePhoneGlass {
+  0%, 48% { transform: translate3d(-120%,0,0); opacity: .12; }
+  100%    { transform: translate3d(120%,0,0); opacity: .52; }
+}
+@keyframes eliteSheen {
+  0%, 100% { transform: translate3d(-4%,0,0) scale(1.04); opacity: .35; }
+  50%      { transform: translate3d(4%,0,0) scale(1.04); opacity: .80; }
+}
+
+/* --- calmer assistant teaser --- */
+.concierge-teaser { backdrop-filter: saturate(130%); }
+.concierge-teaser button { transition: transform .2s ease, background-color .2s ease; }
+.concierge-teaser button:hover { transform: translate3d(0,-1px,0); }
+
+/* --- one switch turns every effect off --- */
+html[data-motion="off"] .light-3d::after,
+html[data-motion="off"] .header-beam,
+html[data-motion="off"] .kicker-red,
+html[data-motion="off"] .icon-glow,
+html[data-motion="off"] .display-image::after,
+html[data-motion="off"] .parts-image::after,
+html[data-motion="off"] .tech-image::after,
+html[data-motion="off"] .proof-image::after,
+html[data-motion="off"] .map-sheen,
+html[data-motion="off"] .hero-phone-live .phone-float,
+html[data-motion="off"] .hero-phone-live .phone-spin,
+html[data-motion="off"] .hero-phone-live .phone-shadow,
+html[data-motion="off"] .hero-phone-live .phone-face::before,
+html[data-motion="off"] .hero-phone-live .phone-sheen {
+  animation: none !important;
+}
+html[data-motion="off"] .breathe-card::after,
+html[data-motion="off"] .breathe-tile::after { animation: none !important; opacity: .06 !important; }
+html[data-motion="off"] .hero-phone-live .phone-spin { transform: rotateY(-18deg) rotateX(6deg) !important; }
+html[data-motion="off"] .hero-phone-live .phone-face::before { transform: translate3d(-120%,0,0); opacity: .16; }
+html[data-motion="off"] .map-shell:hover { transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .light-3d::after,
+  .header-beam,
+  .kicker-red,
+  .icon-glow,
+  .display-image::after,
+  .parts-image::after,
+  .tech-image::after,
+  .proof-image::after,
+  .map-sheen,
+  .hero-phone-live .phone-float,
+  .hero-phone-live .phone-spin,
+  .hero-phone-live .phone-shadow,
+  .hero-phone-live .phone-face::before,
+  .hero-phone-live .phone-sheen,
+  .breathe-card::after,
+  .breathe-tile::after {
+    animation: none !important;
+  }
+  .hero-phone-live .phone-spin { transform: rotateY(-18deg) rotateX(6deg) !important; }
+  .map-shell:hover { transform: none !important; }
+}
+
+/* --- final guardrails: no sideways scroll, signature in brand colours --- */
+html,
+body {
+  overflow-x: clip;
+}
+.final-cta-signature {
+  text-wrap: balance;
+}
+.final-cta-signature span {
+  color: #e11d48;
+}
+
+/* ==========================================================================
+   SHARED ELITE IMAGE TREATMENT — the Software & Recovery scan, reused
+   --------------------------------------------------------------------------
+   One vertical scan + one breathing glass sheen, shared by the store, device,
+   machinery, parts and proof galleries. Transform/opacity only; no blur and
+   no layout animation. Reduced motion and the footer switch disable it all.
+   ========================================================================== */
+.elite-media {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.elite-media > :not(img):not(.elite-media-scan) {
+  z-index: 4;
+}
+.elite-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 28% 10%, rgba(255,255,255,.42), transparent 58%),
+    linear-gradient(118deg, transparent 52%, rgba(255,255,255,.20) 72%, transparent 88%);
+  opacity: .16;
+  animation: eliteGlassBreath 6.8s ease-in-out infinite;
+  will-change: opacity;
+}
+.elite-media-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(255,176,103,.17) 62%, rgba(255,45,85,.27) 100%);
+  animation: softwareScan 7s cubic-bezier(.45, 0, .55, 1) infinite;
+  will-change: transform, opacity;
+}
+@keyframes eliteGlassBreath {
+  0%, 100% { opacity: .10; }
+  50%      { opacity: .30; }
+}
+/* Align the glass-restoration machines with the same scan signature. */
+.glass-machine-scan {
+  height: 34%;
+  background: linear-gradient(180deg, transparent, rgba(255,176,103,.17) 62%, rgba(255,45,85,.27) 100%);
+  animation: softwareScan 7s cubic-bezier(.45, 0, .55, 1) infinite !important;
+}
+
+/* --- Reviews: a larger red-apple mark on the right of the section --- */
+.reviews-brand {
+  position: absolute;
+  right: -2%;
+  top: -18px;
+  width: 190px;
+  pointer-events: none;
+}
+.reviews-brand-glow {
+  position: absolute;
+  inset: -22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,45,85,.20), rgba(255,149,0,.08) 46%, transparent 70%);
+  animation: softwareGlow 9s ease-in-out infinite;
+}
+.reviews-brand-glass {
+  position: relative;
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,.92);
+  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(255,237,213,.66));
+  box-shadow: 0 24px 48px -30px rgba(225,29,72,.55);
+  animation: eliteLogoFloat 7s ease-in-out infinite;
+  will-change: transform;
+}
+.reviews-brand-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 14px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 16px rgba(120,20,40,.18));
+}
+.reviews-brand-caption {
+  position: relative;
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+  font-family: var(--font-space), var(--font-inter), sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #9f1239;
+  animation: eliteCaptionPulse 5.5s ease-in-out infinite;
+}
+@keyframes eliteLogoFloat {
+  0%, 100% { transform: translate3d(0,0,0) rotate(-1deg); }
+  50%      { transform: translate3d(0,-8px,0) rotate(1deg); }
+}
+@keyframes eliteCaptionPulse {
+  0%, 100% { opacity: .72; }
+  50%      { opacity: 1; }
+}
+@media (max-width: 1139px) {
+  .reviews-brand {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 120px;
+    margin: 0 auto 14px;
+  }
+}
+
+html[data-motion="off"] .elite-media::after,
+html[data-motion="off"] .elite-media-scan,
+html[data-motion="off"] .glass-machine-scan,
+html[data-motion="off"] .reviews-brand-glow,
+html[data-motion="off"] .reviews-brand-glass,
+html[data-motion="off"] .reviews-brand-caption {
+  animation: none !important;
+}
+html[data-motion="off"] .elite-media::after { opacity: .12 !important; }
+html[data-motion="off"] .elite-media-scan,
+html[data-motion="off"] .glass-machine-scan { opacity: 0 !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .elite-media::after,
+  .elite-media-scan,
+  .glass-machine-scan,
+  .reviews-brand-glow,
+  .reviews-brand-glass,
+  .reviews-brand-caption {
+    animation: none !important;
+  }
+  .elite-media-scan,
+  .glass-machine-scan { opacity: 0 !important; }
+}

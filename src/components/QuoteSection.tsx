@@ -40,12 +40,13 @@ export default function QuoteSection() {
                   ends in a band of empty cream below the caption */}
               <div className="estimate-stage">
                 <SmartImg
-                  src="/images/v5/iphone-pro-max-burgundy.jpg"
+                  src="/images/v4/iphone-17-pro-max.jpg"
                   alt=""
                   width={640}
                   height={900}
                   className="estimate-phone"
                 />
+                <span className="elite-media-scan" aria-hidden="true" />
                 <span className="estimate-tag estimate-tag-1">
                   <LineIcon name="display" size={12} /> Front Glass ₹16,500
                 </span>

@@ -13,7 +13,7 @@ type Cert = {
 
 const CERTS: Cert[] = [
   {
-    icon: "verified",
+    icon: "spark",
     title: "Experienced Repair Technicians",
     desc: "9+ years of Apple-device repair experience, including component-level diagnostics.",
     wash: "tile-wash",
@@ -26,25 +26,25 @@ const CERTS: Cert[] = [
     wash: "tile-wash-violet",
   },
   {
-    icon: "lock",
+    icon: "key",
     title: "Data Privacy Promise",
     desc: "Your passcode stays with you. We never access your data, photos or accounts.",
     wash: "tile-wash-mint",
   },
   {
-    icon: "badge",
+    icon: "cpu",
     title: "OEM-Grade Parts",
     desc: "Genuine-quality panels, batteries, and components — with full disclosure on sourcing.",
     wash: "tile-wash-violet",
   },
   {
-    icon: "clock",
+    icon: "zap",
     title: "Same-Day Repairs",
     desc: "Most screen, battery, and port repairs completed in 30–60 minutes while you wait.",
     wash: "tile-wash",
   },
   {
-    icon: "heart",
+    icon: "care",
     title: "Doorstep Pickup & Drop",
     desc: "Pickup across Bengaluru; free for eligible repairs above ₹2,999. WhatsApp to confirm coverage.",
     wash: "tile-wash-mint",
@@ -53,11 +53,11 @@ const CERTS: Cert[] = [
 
 export default function TrustProof() {
   return (
-    <section className="section-apple bg-white">
+    <section className="proof-section section-apple bg-white">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="kicker">Why trust us</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">
+          <h2 className="proof-heading breath-heading font-apple section-title mt-3 text-[var(--text)]">
             Built on <span className="topic-gradient">Trust &amp; Precision.</span>
           </h2>
           <p className="section-subtitle mx-auto mt-5">
@@ -72,12 +72,12 @@ export default function TrustProof() {
             {CERTS.map((c, i) => (
               <Reveal key={c.title} delay={i * 50}>
                 <article
-                  className={`${c.wash} hv-lift group flex h-full flex-col rounded-[24px] border border-white/90 p-5 shadow-[0_18px_46px_-32px_rgba(124,45,18,0.4)]`}
+                  className={`${c.wash} proof-card breathe-card hv-lift group flex h-full flex-col rounded-[22px] border border-white/90 p-5 shadow-[0_18px_46px_-32px_rgba(124,45,18,0.4)]`}
                 >
-                  <span className="icon-glow mb-5 grid h-14 w-14 place-items-center rounded-[18px]">
+                  <span className="proof-icon icon-glow mb-5 grid h-14 w-14 place-items-center">
                     <LineIcon name={c.icon} size={26} />
                   </span>
-                  <h3 className="breath-heading font-apple text-[15.5px] font-extrabold leading-snug tracking-tight text-[var(--text)]">
+                  <h3 className="proof-card-title breath-heading font-apple text-[15.5px] font-extrabold leading-snug tracking-tight text-[var(--text)]">
                     {c.title}
                   </h3>
                   <p className="mt-2 text-[12.5px] leading-relaxed text-[var(--text-muted)]">
@@ -88,17 +88,17 @@ export default function TrustProof() {
             ))}
           </div>
 
-          {/* Glass-motion image panel — a real iPad Pro 12.9" photo. */}
+          {/* Glass-motion image panel — a real technician at the Red Apple bench. */}
           <Reveal delay={100}>
-            <div className="glass-image-shell relative h-full min-h-[340px] overflow-hidden rounded-[28px] border border-white/90 shadow-[0_18px_46px_-30px_rgba(124,45,18,0.4)]">
+            <div className="proof-image glass-image-shell relative h-full min-h-[340px] overflow-hidden rounded-[24px] border border-white/90 shadow-[0_18px_46px_-30px_rgba(124,45,18,0.4)]">
               <SmartImg
-                src="/images/v5/ipad-pro-129.jpg"
-                alt="iPad Pro 12.9-inch repaired at Red Apple"
+                src="/images/gallery/tech-under-red-apple-sign.webp"
+                alt="Red Apple technician at the repair bench under the store sign"
                 width={900}
                 height={1200}
                 className="h-full w-full object-cover"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white/95 via-white/75 to-transparent px-5 pb-5 pt-14">
+              <div className="proof-image-overlay absolute inset-x-0 bottom-0 bg-gradient-to-t from-white/95 via-white/75 to-transparent px-5 pb-5 pt-14">
                 <span className="gmb-badge">
                   <LineIcon name="verified" size={13} /> {SITE.addressVerified}
                 </span>

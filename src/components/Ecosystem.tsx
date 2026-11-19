@@ -32,8 +32,9 @@ export default function Ecosystem() {
                 onClick={() => track("service_view", { service: d.name })}
                 className="spotlight-card hv-lift group block h-full rounded-[26px] overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
               >
-                <div className="relative h-44 overflow-hidden">
+                <div className="elite-media relative h-44 overflow-hidden">
                   <SmartImg src={d.img} alt={d.name} width={900} height={600} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <span className="elite-media-scan" aria-hidden="true" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
                     <span className="grid h-10 w-10 place-items-center rounded-xl bg-black/35">

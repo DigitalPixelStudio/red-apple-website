@@ -467,15 +467,15 @@ export default function Concierge() {
   const [teaser, setTeaser] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  /* Proactive, but polite: one teaser per browser session, only after the
-     visitor has had 18 seconds to read the page, and never on top of an open
-     chat. Dismissal is remembered for the session. */
+  /* Proactive, but polite: one teaser per browser session, only after two
+     minutes on the page, and never on top of an open chat. Dismissal is
+     remembered for the session. */
   useEffect(() => {
     if (open) { setTeaser(false); return; }
     let seen = false;
     try { seen = window.sessionStorage.getItem("ramr-concierge-teaser") === "1"; } catch {}
     if (seen) return;
-    const timer = window.setTimeout(() => setTeaser(true), 18_000);
+    const timer = window.setTimeout(() => setTeaser(true), 120_000);
     return () => window.clearTimeout(timer);
   }, [open]);
 
@@ -776,7 +776,6 @@ export default function Concierge() {
     }
     if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
     if (chip.includes("Call")) { window.open(SITE.phoneHref, "_self"); track("call_click", { source: "concierge" }); return; }
-    if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
     if (chip.includes("policy")) { window.open("/refund-policy", "_blank", "noopener,noreferrer"); setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opened our Refund & Warranty Policy in a new tab.", chips: [] }]); return; }
     const modelMatch = chip.match(/iPhone\s+\d+[^,]*/i);
     if (modelMatch) {
@@ -818,20 +817,18 @@ export default function Concierge() {
     <>
       {/* Proactive teaser — one per session, never covers an open chat */}
       {teaser && !open && (
-        <div className="fixed bottom-[11.5rem] right-4 z-[69] w-[calc(100vw-2rem)] max-w-[286px] md:bottom-24 md:right-8">
-          <div className="concierge-teaser relative rounded-2xl bg-white p-3.5 pr-8 shadow-2xl ring-1 ring-black/[0.08]">
+        <div className="fixed bottom-[9.5rem] right-4 z-[69] w-[calc(100vw-2rem)] max-w-[240px] md:bottom-[5.5rem] md:right-8">
+          <div className="concierge-teaser relative rounded-[14px] bg-white p-3 pr-7 shadow-xl ring-1 ring-black/[0.08]">
             <button
               type="button"
               onClick={dismissTeaser}
               aria-label="Dismiss assistant message"
-              className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full text-[var(--text-muted)] hover:bg-black/[0.05] hover:text-[var(--text)]"
+              className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full text-[var(--text-muted)] hover:bg-black/[0.05] hover:text-[var(--text)]"
             >
-              <LineIcon name="close" size={11} />
+              <LineIcon name="close" size={10} />
             </button>
-            <p className="text-[12.5px] font-semibold leading-relaxed text-[var(--text)]">
-              Hi — I&rsquo;m Forge AI. Tell me your model and fault for a published
-              price — I can also connect you with a technician. If I&rsquo;m offline,
-              I&rsquo;ll say so and use our verified answers.
+            <p className="text-[11.5px] font-semibold leading-snug text-[var(--text)]">
+              Hi — I&rsquo;m Forge AI. Ask for a published price or a technician.
             </p>
             <button
               type="button"
@@ -841,10 +838,10 @@ export default function Concierge() {
                 setOpen(true);
                 track("ai_chat_started", { source: "proactive_teaser" });
               }}
-              className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)] px-3 py-1.5 text-[11.5px] font-bold text-white"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)] px-2.5 py-1 text-[11px] font-bold text-white"
             >
               Check my price
-              <LineIcon name="arrow-right" size={12} color="#fff" />
+              <LineIcon name="arrow-right" size={11} color="#fff" />
             </button>
           </div>
         </div>
@@ -855,14 +852,14 @@ export default function Concierge() {
         id="concierge-open"
         onClick={() => { if (!open) restoreMemory(); setTeaser(false); setOpen(!open); }}
         aria-label="Open Forge AI chat"
-        className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
+        className="fixed bottom-24 right-5 z-[70] grid h-12 w-12 place-items-center rounded-[13px] bg-[var(--cta-dark)] text-white shadow-xl transition-transform hover:scale-105 md:bottom-8 md:right-8"
       >
         {open ? <LineIcon name="close" size={20} /> : <LineIcon name="bot" size={22} />}
       </button>
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-36 right-4 z-[70] flex h-[540px] w-[calc(100vw-2rem)] max-w-[400px] flex-col overflow-hidden rounded-[28px] bg-white shadow-2xl ring-1 ring-black/[0.08] md:bottom-24 md:right-8">
+        <div className="fixed bottom-32 right-4 z-[70] flex h-[460px] w-[calc(100vw-2rem)] max-w-[360px] flex-col overflow-hidden rounded-[22px] bg-white shadow-xl ring-1 ring-black/[0.08] md:bottom-24 md:right-8">
           {/* Header */}
           <div className="relative flex items-center gap-3 bg-[var(--cta-dark)] px-5 py-4 text-white">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10">

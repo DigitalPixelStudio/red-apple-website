@@ -100,7 +100,7 @@ export default function CraftShowcase() {
           {PAIRS.map((p) => (
             <Reveal key={p.src}>
               <figure className="hv-lift group overflow-hidden rounded-[20px] border border-black/[0.07] bg-[var(--bg-alt)]">
-                <div className="relative overflow-hidden">
+                <div className="elite-media relative overflow-hidden">
                   <SmartImg
                     src={p.src}
                     alt={p.alt}
@@ -108,6 +108,7 @@ export default function CraftShowcase() {
                     height={1050}
                     className="block w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
+                  <span className="elite-media-scan" aria-hidden="true" />
                   <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/72 px-2.5 py-1 text-[9.5px] font-extrabold uppercase tracking-[0.14em] text-white">
                     {p.label}
                   </span>
@@ -135,7 +136,7 @@ export default function CraftShowcase() {
         {/* ------------------------------------------------------- equipment */}
         <Reveal>
           <div className="mt-16 text-center">
-            <span className="kicker">Inside the Bench</span>
+            <span className="kicker kicker-red">Inside the Bench</span>
             <h3 className="head-gradient mt-3 font-apple text-[clamp(1.5rem,3vw,2rem)] font-extrabold leading-tight tracking-tight">
               The Machines Most Shops Do Not Own
             </h3>
@@ -146,13 +147,16 @@ export default function CraftShowcase() {
           {TOOLS.map((t) => (
             <Reveal key={t.src}>
               <article className="hv-lift group h-full overflow-hidden rounded-[20px] border border-black/[0.07] bg-[var(--bg-alt)]">
-                <SmartImg
-                  src={t.src}
-                  alt={t.alt}
-                  width={1200}
-                  height={1500}
-                  className="block aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
+                <div className="elite-media">
+                  <SmartImg
+                    src={t.src}
+                    alt={t.alt}
+                    width={1200}
+                    height={1500}
+                    className="block aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                  <span className="elite-media-scan" aria-hidden="true" />
+                </div>
                 <div className="px-4 py-4">
                   <h4 className="text-[14px] font-bold leading-snug text-[var(--text)]">
                     {t.title}
@@ -170,13 +174,16 @@ export default function CraftShowcase() {
         <Reveal>
           <div className="mt-16 overflow-hidden rounded-[24px] border border-black/[0.07] bg-[var(--bg-alt)]">
             <div className="grid items-center gap-0 lg:grid-cols-[1.15fr_1fr]">
-              <SmartImg
-                src="/images/craft/website-crm-desk.webp"
-                alt="Technician holding a phone beside a monitor showing the Red Apple website and a laptop running the repair CRM dashboard"
-                width={1800}
-                height={1350}
-                className="block h-full w-full object-cover lg:aspect-auto"
-              />
+              <div className="elite-media h-full">
+                <SmartImg
+                  src="/images/craft/website-crm-desk.webp"
+                  alt="Technician holding a phone beside a monitor showing the Red Apple website and a laptop running the repair CRM dashboard"
+                  width={1800}
+                  height={1350}
+                  className="block h-full w-full object-cover lg:aspect-auto"
+                />
+                <span className="elite-media-scan" aria-hidden="true" />
+              </div>
 
               <div className="px-6 py-8 sm:px-9 sm:py-10">
                 <span className="kicker">Every Repair, On Record</span>

@@ -11,46 +11,46 @@ const REPAIRS: {
 }[] = [
   {
     title: "Front Display", time: "~45 min",
-    desc: "OEM-grade OLED with True Tone. Clear, bright, exact-fit panels for every iPhone model.",
+    desc: "OEM-grade OLED with True Tone, fitted and calibrated for a clean, factory-like finish.",
     tag: "Most popular", img: "/images/v5/display-panel.jpg",
     icon: "display", wash: "tile-wash",
   },
   {
     title: "Back Glass", time: "~60 min",
-    desc: "Laser-aligned factory-grade back glass. MagSafe-compatible with a seamless finish.",
-    tag: "Pro Max specialist", img: "/images/v5/back-glass.jpg",
-    icon: "backglass", wash: "tile-wash-violet",
+    desc: "Laser-aligned factory-grade back glass, MagSafe-compatible with a seamless finish.",
+    tag: "Pro Max specialist", img: "/images/v3/iphone-backglass.jpg",
+    icon: "spark", wash: "tile-wash-violet",
   },
   {
     title: "Screen + Back Combo", time: "Same day",
-    desc: "Both sides of your iPhone restored in one visit — with a priority lane for Pro & Pro Max.",
-    tag: "Best value", img: "/images/v5/charging-port-flex.jpg",
-    icon: "refresh", wash: "tile-wash-mint",
+    desc: "Both sides restored in one careful visit, with priority handling for Pro and Pro Max models.",
+    tag: "Best value", img: "/images/v3/smartphone-repair.jpg",
+    icon: "shield", wash: "tile-wash-mint",
   },
 ];
 
 export default function DisplayFocus() {
   return (
-    <section id="display" className="section-apple relative overflow-hidden bg-[var(--bg-alt)]">
+    <section id="display" className="display-section section-apple relative overflow-hidden bg-[var(--bg-alt)]">
       <div className="red-blob pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
-          <span className="kicker">Where we excel</span>
-          <h2 className="head-gradient breath-heading section-title font-apple mt-3 text-[var(--text)]">
-            iPhone Display &amp; Back Glass <span className="topic-gradient">Specialists.</span>
+          <span className="kicker kicker-red">Where we excel</span>
+          <h2 className="display-heading breath-heading section-title font-apple mt-3 text-[var(--text)]">
+            iPhone Display &amp; Back Glass <span className="topic-gradient">Restored Right.</span>
           </h2>
-          <p className="section-subtitle mx-auto mt-5">
+          <p className="display-subtitle section-subtitle mx-auto mt-5">
             Cracked glass is our daily work. Every iPhone — from 6 to 18 Pro Max —
-            restored to like-new with precision tools and genuine-grade panels.
+            restored with precision tools and genuine-grade panels.
           </p>
         </Reveal>
 
         <div className="mt-14 grid gap-5 lg:grid-cols-3">
           {REPAIRS.map((r, i) => (
             <Reveal key={r.title} delay={i * 90}>
-              <div className={`ring-card ${r.wash} hv-lift relative h-full overflow-hidden rounded-[30px] border border-white/90 shadow-sm transition duration-300 hover:shadow-xl`}>
+              <div className={`display-card ring-card ${r.wash} breathe-card hv-lift relative h-full overflow-hidden rounded-[26px] border border-white/90 shadow-sm transition duration-300 hover:shadow-xl`}>
                 <div className="relative h-48 overflow-hidden">
-                  <div className="glass-image-shell h-full w-full">
+                  <div className="display-image elite-media glass-image-shell h-full w-full">
                     <SmartImg
                       src={r.img}
                       alt={r.title}
@@ -58,16 +58,17 @@ export default function DisplayFocus() {
                       height={600}
                       className="h-full w-full object-cover"
                     />
+                    <span className="elite-media-scan" aria-hidden="true" />
                   </div>
-                  <span className="absolute right-3 top-3 rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-3 py-1 text-[10.5px] font-bold uppercase tracking-wide text-white">
+                  <span className="absolute right-3 top-3 rounded-[10px] bg-[var(--cta-dark)] px-3 py-1 text-[10.5px] font-bold uppercase tracking-wide text-white">
                     {r.tag}
                   </span>
                 </div>
                 <div className="p-8">
-                  <span className="icon-glow grid h-12 w-12 place-items-center rounded-[16px]">
+                  <span className="display-icon icon-glow grid h-12 w-12 place-items-center">
                     <LineIcon name={r.icon} size={22} />
                   </span>
-                  <h3 className="breath-heading mt-5 font-apple text-[20px] font-extrabold leading-tight tracking-tight">
+                  <h3 className="display-card-title breath-heading mt-5 font-apple text-[20px] font-extrabold leading-tight tracking-tight">
                     <span className="topic-gradient">{r.title}</span>
                   </h3>
                   <p className="mt-2 text-[13.5px] leading-relaxed text-[var(--text-muted)]">{r.desc}</p>

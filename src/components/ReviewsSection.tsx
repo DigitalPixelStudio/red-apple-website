@@ -1,5 +1,6 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { SITE } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
@@ -66,7 +67,24 @@ export default function ReviewsSection() {
   return (
     <section id="reviews" className="section-apple bg-white">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
-        <Reveal className="text-center">
+        <Reveal className="reviews-header relative text-center">
+          {/* Larger red-apple mark on the right, with the same glass + scan
+              treatment used across the proof galleries. Decorative only. */}
+          <div className="reviews-brand" aria-hidden="true">
+            <div className="reviews-brand-glow" />
+            <div className="reviews-brand-glass elite-media">
+              <SmartImg
+                src="/logo.png"
+                alt=""
+                width={220}
+                height={220}
+                className="reviews-brand-img"
+              />
+              <span className="elite-media-scan" />
+            </div>
+            <span className="reviews-brand-caption">Red Apple · Halasuru</span>
+          </div>
+
           <p className="kicker">Reviews</p>
           <h2 className="section-title font-apple mt-3 text-[var(--text)]">
             Trusted by <span className="topic-gradient">Halasuru &amp; Bengaluru.</span>

@@ -78,8 +78,8 @@ export default function WhyUs() {
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
           <Reveal>
             <span className="kicker">The Standard</span>
-            <h2 className="breath-heading mt-3 font-apple text-[clamp(1.9rem,4vw,2.9rem)] font-extrabold leading-[1.08] tracking-tight text-[var(--text)]">
-              Four Reasons People Hand Us a Phone Worth ₹1,00,000
+            <h2 className="whyus-heading breath-heading mt-3 font-apple text-[clamp(1.9rem,4vw,2.9rem)] font-extrabold leading-[1.16] tracking-tight text-[var(--text)]">
+              <span className="why-head-red">Four Reasons</span> People Hand Us a Phone Worth <span className="why-rupee">₹</span><span className="why-burgundy">1,00,000</span>
             </h2>
             <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-[var(--text-muted)]">
               Every repair shop says they are careful. These are the four things we can
@@ -99,7 +99,7 @@ export default function WhyUs() {
             <div className="whyus-visual" aria-hidden="true">
               <div className="whyus-visual-glow" />
               {/* Glass-shell sweep over the real burgundy iPhone photo; the glow behind breathes. */}
-              <div className="glass-image-shell w-full max-w-[420px] rounded-[26px] border border-white/85 shadow-[0_24px_48px_-26px_rgba(120,52,8,0.42)]">
+              <div className="elite-media glass-image-shell w-full max-w-[420px] rounded-[26px] border border-white/85 shadow-[0_24px_48px_-26px_rgba(120,52,8,0.42)]">
                 <SmartImg
                   src="/images/v5/iphone-pro-max-burgundy.jpg"
                   alt=""
@@ -107,6 +107,7 @@ export default function WhyUs() {
                   height={800}
                   className="whyus-phone"
                 />
+                <span className="elite-media-scan" aria-hidden="true" />
               </div>
               <span className="whyus-float whyus-float-1">
                 <LineIcon name="shield" size={12} /> 6-Month Warranty

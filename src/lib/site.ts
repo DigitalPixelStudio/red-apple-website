@@ -200,11 +200,11 @@ export const SERVICES: {
 
 // ---------- Repair journey ----------
 export const PROCESS_STEPS = [
-  { step: "01", title: "Walk In or WhatsApp", desc: "Tell us your device & issue. Free inspection & honest diagnosis.", icon: "chat", img: "/images/v5/tech-walkin.jpg" },
+  { step: "01", title: "Walk In or WhatsApp", desc: "Tell us your device & issue. Free inspection & honest diagnosis.", icon: "chat", img: "/images/v3/store-interior.jpg" },
   { step: "02", title: "Free Diagnosis", desc: "We open, test and show you exactly what's wrong — with photos.", icon: "search", img: "/images/v5/motherboard-macro.jpg" },
   { step: "03", title: "Transparent Quote", desc: "Fixed price confirmed before any work. No hidden charges, ever.", icon: "price", img: "/images/v5/quote-desk.jpg" },
-  { step: "04", title: "Expert Repair", desc: "Certified technicians repair with genuine-grade parts & precision tools.", icon: "wrench", img: "/images/v5/tech-workbench-v2.jpg" },
-  { step: "05", title: "Quality Check", desc: "Every repair passes a 32-point test — display, battery, sensors, audio.", icon: "check", img: "/images/v5/quality-bench.jpg" },
+  { step: "04", title: "Expert Repair", desc: "Certified technicians repair with genuine-grade parts & precision tools.", icon: "wrench", img: "/images/v3/tech-workbench.jpg" },
+  { step: "05", title: "Quality Check", desc: "Every repair passes a 32-point test — display, battery, sensors, audio.", icon: "check", img: "/images/v4/quality-testing.jpg" },
   { step: "06", title: "6-Month Warranty", desc: "Collect your device with a written invoice. Claim any covered issue for six months.", icon: "shield", img: "/images/v5/store-warranty.jpg" },
 ] as const;
 

@@ -7,7 +7,7 @@ import { LineIcon } from "./Icons";
 
 export default function FinalCta() {
   return (
-    <section className="cta-light relative overflow-hidden py-24">
+    <section className="final-cta-section cta-light relative overflow-hidden py-24">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="orb left-[12%] top-[-26%] h-[380px] w-[380px] bg-[var(--accent)] opacity-[0.13]" />
         <div className="orb orb-reverse bottom-[-26%] right-[8%] h-[380px] w-[380px] bg-[var(--accent2)] opacity-[0.12]" />
@@ -34,13 +34,16 @@ export default function FinalCta() {
             </span>
           </div>
 
-          <span className="kicker">Apple repair · Halasuru, Bengaluru</span>
-          <h2 className="head-gradient breath-heading font-apple text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-tight">
+          <span className="final-cta-kicker kicker">Apple repair · Halasuru, Bengaluru</span>
+          <h2 className="final-cta-heading breath-heading font-apple text-[clamp(2rem,5vw,3.6rem)] font-extrabold leading-[1.14] tracking-tight text-[var(--text)]">
             Your Apple Device,<br /><span className="topic-gradient">Fixed Right.</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-[560px] text-[15px] leading-relaxed text-[var(--text-muted)]">
-            Tell us the device and the issue. We&rsquo;ll send an exact estimate and a
+          <p className="final-cta-copy font-apple mx-auto mt-6 max-w-[560px] text-[15px] font-medium leading-relaxed text-[var(--text-muted)]">
+            Tell us the device and the fault. We&rsquo;ll send a fixed estimate and a
             convenient slot — usually within minutes.
+          </p>
+          <p className="final-cta-signature mt-4 font-apple text-[13px] font-extrabold tracking-[0.16em] text-[var(--text)]">
+            Apple Device Repairs, <span>Perfected.</span>
           </p>
           <div className="mt-5 flex justify-center">
             <span className="gmb-badge">

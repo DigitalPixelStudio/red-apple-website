@@ -135,7 +135,7 @@ export default function Gallery() {
               key={s.src}
               onClick={() => setOpen(i)}
               aria-label={`Open photo: ${s.caption}`}
-              className="hv-zoom hv-lift gallery-tile group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-[18px] border border-black/[0.06] bg-[var(--bg-alt)] text-left"
+              className="elite-media hv-zoom hv-lift gallery-tile group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-[18px] border border-black/[0.06] bg-[var(--bg-alt)] text-left"
             >
               <SmartImg
                 src={s.src}
@@ -144,6 +144,7 @@ export default function Gallery() {
                 height={s.tall ? 1400 : 700}
                 className={`w-full object-cover ${s.wide ? "aspect-[16/10]" : s.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}
               />
+              <span className="elite-media-scan" aria-hidden="true" />
               {/* caption veil — solid gradient, no backdrop blur */}
               <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/28 to-transparent px-3.5 pb-3 pt-10">
                 <span className="block text-[11.5px] font-bold leading-snug text-white">

@@ -6,11 +6,11 @@ import { LineIcon, type IconName } from "./Icons";
 /** The six stages our repair CRM posts to WhatsApp, in order. */
 const STAGES: { label: string; icon: IconName }[] = [
   { label: "Received", icon: "box" },
-  { label: "Diagnosis", icon: "search" },
-  { label: "Quote Approved", icon: "price" },
-  { label: "Repair", icon: "wrench" },
-  { label: "Quality Check", icon: "check" },
-  { label: "Ready For Handover", icon: "verified" },
+  { label: "Diagnosis", icon: "scan" },
+  { label: "Quote Approved", icon: "badge" },
+  { label: "Repair", icon: "tool" },
+  { label: "Quality Check", icon: "shield" },
+  { label: "Ready For Handover", icon: "spark" },
 ];
 
 export default function TrustBar() {
@@ -49,7 +49,7 @@ export default function TrustBar() {
             </div>
 
             <div className="min-w-0 flex-1">
-              <h3 className="breath-heading font-apple text-[18px] font-extrabold tracking-tight text-[var(--text)] md:text-[20px]">
+              <h3 className="stage-title breath-heading font-apple text-[18px] font-extrabold tracking-tight text-[var(--text)] md:text-[20px]">
                 Paired — your device, tracked live
               </h3>
               <p className="mt-2 max-w-[800px] text-[12.5px] leading-relaxed text-[var(--text-muted)]">
@@ -63,17 +63,17 @@ export default function TrustBar() {
               {/* CRM progress rail: the exact stages a customer is told about. */}
               <div className="stage-rail mt-5" aria-label="Live repair stages">
                 {STAGES.map((stage) => (
-                  <div key={stage.label} className="stage-pill">
-                    <span className="icon-glow grid h-8 w-8 place-items-center rounded-xl">
+                  <div key={stage.label} className="stage-pill breathe-tile">
+                    <span className="stage-icon icon-glow grid h-8 w-8 place-items-center">
                       <LineIcon name={stage.icon} size={16} />
                     </span>
-                    <span>{stage.label}</span>
+                    <span className="stage-label font-apple">{stage.label}</span>
                   </div>
                 ))}
               </div>
 
               <div className="mt-5 flex flex-wrap gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--orange)]/15 bg-white/90 px-3 py-1.5 text-[10.5px] font-bold text-[var(--cosmic-deep)]">
+                <span className="stage-live inline-flex items-center gap-1.5 rounded-full border border-[var(--orange)]/15 bg-white/90 px-3 py-1.5 text-[10.5px] font-bold text-[var(--cosmic-deep)]">
                   <LineIcon name="whatsapp" size={12} /> Live WhatsApp updates
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--orange)]/15 bg-white/90 px-3 py-1.5 text-[10.5px] font-bold text-[var(--cosmic-deep)]">
