@@ -1,13 +1,7 @@
 ﻿// Generated from the owner-approved final HTML. Do not hand-edit.
 export const finalSiteHtml = `
-  <!-- Edge-to-Edge Top iPhone 12 Pro Max Notch -->
-  <div class="iphone-top-notch" aria-hidden="true">
-    <span class="notch-speaker"></span>
-    <span class="notch-led"></span>
-  </div>
-
   <!-- Left-Side Dark Breathing Page Indicator (Desktop) -->
-  <aside class="fixed left-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-2 rounded-full bg-zinc-950/90 px-2 py-3 text-[10px] font-bold text-zinc-300 shadow-xl backdrop-blur xl:flex">
+  <aside class="fixed left-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-2 rounded-full bg-zinc-950 px-2 py-3 text-[10px] font-bold text-zinc-300 shadow-xl xl:flex">
     <span id="rail-label" class="heading-breathe mb-1 [writing-mode:vertical-rl] rotate-180 tracking-widest text-orange-400">HERO</span>
     <a href="#hero" data-rail="HERO" class="page-rail-dot is-active h-2 w-2 rounded-full bg-zinc-600" title="Hero"></a>
     <a href="#real-shop" data-rail="SHOP" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Real Shop"></a>
@@ -21,7 +15,9 @@ export const finalSiteHtml = `
   </aside>
 
   <!-- STICKY HEADER (No "Visit Us" in Header per Client Lock) -->
-  <header class="sticky top-0 z-40 border-b border-zinc-200/80 bg-white/90 pt-4 backdrop-blur-md">
+  <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white pt-0 shadow-[0_1px_0_rgba(220,38,38,0.08)]">
+    <div class="h-[3px] w-full bg-gradient-to-r from-red-600 via-orange-500 to-red-600"></div>
+    <div class="pt-4">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
         <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-9 w-9 rounded-xl border border-red-200 object-contain shadow-sm" onerror="this.src='/icon-512.png'">
@@ -50,6 +46,7 @@ export const finalSiteHtml = `
           Get Quote
         </a>
       </div>
+    </div>
     </div>
   </header>
 
@@ -102,8 +99,8 @@ export const finalSiteHtml = `
           <div class="lg:col-span-6">
             <div class="stage-3d-box relative h-[380px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[430px]">
               <canvas id="canvas-hero" aria-label="3D iPhone 17 Pro Max Orange"></canvas>
-              <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200 backdrop-blur">Drag to orbit 360° · HD Keynote Animation</div>
-              <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300 backdrop-blur">iPhone 17 Pro Max · Orange</div>
+              <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360° · HD Keynote Animation</div>
+              <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
             </div>
           </div>
         </div>
@@ -164,7 +161,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 2. TECHNICAL TICKER STRIP -->
-    <div class="border-b border-zinc-800 bg-zinc-950 py-2.5 text-xs font-semibold text-zinc-300">
+    <div class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2 text-[11px] font-bold text-zinc-700">
       <div class="marquee-track flex flex-wrap items-center justify-center gap-x-6 gap-y-1.5">
         <span>Front glass restoration</span><span class="text-red-500">•</span>
         <span>TBK OCA vacuum lamination</span><span class="text-orange-500">•</span>
@@ -191,7 +188,7 @@ export const finalSiteHtml = `
         <div class="mt-9 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/store-glass-front.webp" alt="Walk in off MG Road — Halasuru Storefront" class="h-full w-full object-cover" onerror="this.src='/images/gallery/store-glass-front.webp'">
+              <img loading="lazy" decoding="async" src="/images/gallery/store-glass-front.webp" alt="Walk in off MG Road — Halasuru Storefront" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · Store</span>
             </div>
@@ -203,7 +200,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/lab-wide-three-techs.webp" alt="Three benches, three technicians, one room" class="h-full w-full object-cover" onerror="this.src='/images/gallery/lab-wide-three-techs.webp'">
+              <img loading="lazy" decoding="async" src="/images/gallery/lab-wide-three-techs.webp" alt="Three benches, three technicians, one room" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/lab-wide-three-techs.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · Store</span>
             </div>
@@ -215,7 +212,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/tech-at-microscope.webp" alt="Board-level work under the microscope" class="h-full w-full object-cover" onerror="this.src='/images/gallery/tech-at-microscope.webp'">
+              <img loading="lazy" decoding="async" src="/images/gallery/tech-at-microscope.webp" alt="Board-level work under the microscope" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/tech-at-microscope.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · Bench</span>
             </div>
@@ -227,7 +224,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/v4/quality-check-tech.jpg" alt="The bench — laser, rework station, microscope" class="h-full w-full object-cover" onerror="this.src='/images/v4/quality-check-tech.jpg'">
+              <img loading="lazy" decoding="async" src="/images/v4/quality-check-tech.jpg" alt="The bench — laser, rework station, microscope" class="h-full w-full object-cover object-center" onerror="this.src='/images/v4/quality-check-tech.jpg'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">04 · Bench</span>
             </div>
@@ -239,7 +236,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/tech-under-red-apple-sign.webp" alt="Our own sign, our own bench" class="h-full w-full object-cover" onerror="this.src='/images/gallery/tech-under-red-apple-sign.webp'">
+              <img loading="lazy" decoding="async" src="/images/gallery/tech-under-red-apple-sign.webp" alt="Our own sign, our own bench" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/tech-under-red-apple-sign.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">05 · Store</span>
             </div>
@@ -251,7 +248,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/logo-counter.jpg" alt="Where Repair Meets Connectivity" class="h-full w-full object-cover" onerror="this.src='/images/gallery/logo-counter.jpg'">
+              <img loading="lazy" decoding="async" src="/images/gallery/logo-counter.jpg" alt="Where Repair Meets Connectivity" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/logo-counter.jpg'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">06 · Store</span>
             </div>
@@ -263,7 +260,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-orange-200 bg-orange-50/40 shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-orange-600 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/orange-wall.jpg" alt="The orange wall" class="h-full w-full object-cover" onerror="this.src='/images/gallery/orange-wall.jpg'">
+              <img loading="lazy" decoding="async" src="/images/gallery/orange-wall.jpg" alt="The orange wall" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/orange-wall.jpg'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">07 · Store</span>
             </div>
@@ -275,7 +272,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/gallery/waiting-area.jpg" alt="Diagnostics desk" class="h-full w-full object-cover" onerror="this.src='/images/gallery/waiting-area.jpg'">
+              <img loading="lazy" decoding="async" src="/images/gallery/waiting-area.jpg" alt="Diagnostics desk" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/waiting-area.jpg'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">08 · Store</span>
             </div>
@@ -476,7 +473,7 @@ export const finalSiteHtml = `
             <canvas id="canvas-pickup-iphone" aria-label="Animated 3D iPhone 24/7 Insured Pickup"></canvas>
             <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-red-600 px-3 py-1 text-[11px] font-extrabold text-white shadow">24/7 Pickup</div>
             <div class="pointer-events-none absolute right-3 top-14 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-zinc-900 shadow">Insured &amp; Tracked</div>
-            <div class="pointer-events-none absolute bottom-3 left-3 right-3 rounded-xl bg-zinc-950/80 px-3 py-2 text-center text-[11px] font-semibold text-orange-200 backdrop-blur">Your device never travels unaccounted for.</div>
+            <div class="pointer-events-none absolute bottom-3 left-3 right-3 rounded-xl bg-zinc-950/80 px-3 py-2 text-center text-[11px] font-semibold text-orange-200">Your device never travels unaccounted for.</div>
           </div>
         </div>
       </div>
@@ -494,7 +491,7 @@ export const finalSiteHtml = `
         <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
             <div class="orange-glass-wrap relative h-72 bg-amber-500/20 sm:h-80">
-              <img loading="lazy" decoding="async" src="/images/craft/before-after-screen.webp" alt="Screen replacement Before and After" class="h-full w-full object-cover" onerror="this.src='/images/craft/before-after-screen.webp'">
+              <img loading="lazy" decoding="async" src="/images/craft/before-after-screen.webp" alt="Screen replacement Before and After" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/before-after-screen.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-3 py-1 text-[10px] font-bold uppercase text-white">Screen Replacement · Before / After</span>
             </div>
@@ -506,7 +503,7 @@ export const finalSiteHtml = `
 
           <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
             <div class="orange-glass-wrap relative h-72 bg-amber-500/20 sm:h-80">
-              <img loading="lazy" decoding="async" src="/images/craft/before-after-backglass.webp" alt="Back glass Before and After" class="h-full w-full object-cover" onerror="this.src='/images/craft/before-after-backglass.webp'">
+              <img loading="lazy" decoding="async" src="/images/craft/before-after-backglass.webp" alt="Back glass Before and After" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/before-after-backglass.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-3 py-1 text-[10px] font-bold uppercase text-white">Back Glass · Before / After</span>
             </div>
@@ -557,7 +554,7 @@ export const finalSiteHtml = `
         <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
           <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
             <div class="orange-glass-wrap h-56 bg-zinc-900">
-              <img loading="lazy" decoding="async" src="/images/craft/uv-laser-station.webp" alt="UV Laser Separation" class="h-full w-full object-cover" onerror="this.src='/images/craft/uv-laser-station.webp'">
+              <img loading="lazy" decoding="async" src="/images/craft/uv-laser-station.webp" alt="UV Laser Separation" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/uv-laser-station.webp'">
               <div class="orange-glass-sweep"></div>
             </div>
             <div class="p-4">
@@ -567,7 +564,7 @@ export const finalSiteHtml = `
           </div>
           <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
             <div class="orange-glass-wrap h-56 bg-zinc-900">
-              <img loading="lazy" decoding="async" src="/images/craft/microsolder-setup.webp" alt="Micro-Soldering Station" class="h-full w-full object-cover" onerror="this.src='/images/craft/microsolder-setup.webp'">
+              <img loading="lazy" decoding="async" src="/images/craft/microsolder-setup.webp" alt="Micro-Soldering Station" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/microsolder-setup.webp'">
               <div class="orange-glass-sweep"></div>
             </div>
             <div class="p-4">
@@ -577,7 +574,7 @@ export const finalSiteHtml = `
           </div>
           <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
             <div class="orange-glass-wrap h-56 bg-zinc-900">
-              <img loading="lazy" decoding="async" src="/images/craft/bench-overhead-tools.webp" alt="Organised by Part, Not by Habit" class="h-full w-full object-cover" onerror="this.src='/images/craft/bench-overhead-tools.webp'">
+              <img loading="lazy" decoding="async" src="/images/craft/bench-overhead-tools.webp" alt="Organised by Part, Not by Habit" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/bench-overhead-tools.webp'">
               <div class="orange-glass-sweep"></div>
             </div>
             <div class="p-4">
@@ -590,7 +587,7 @@ export const finalSiteHtml = `
         <!-- Every Repair, On Record (Preserved CRM Editorial Collage with Signature Orange Glass Effect) -->
         <div class="mt-8 grid grid-cols-1 items-stretch overflow-hidden rounded-3xl border border-orange-200 bg-white shadow-md lg:grid-cols-12">
           <div class="orange-glass-wrap min-h-[260px] bg-zinc-900 lg:col-span-6">
-            <img loading="lazy" decoding="async" src="/images/craft/website-crm-desk.webp" alt="Every Repair On Record CRM Desk" class="h-full w-full object-cover" onerror="this.src='/images/craft/website-crm-desk.webp'">
+            <img loading="lazy" decoding="async" src="/images/craft/website-crm-desk.webp" alt="Every Repair On Record CRM Desk" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/website-crm-desk.webp'">
             <div class="orange-glass-sweep"></div>
           </div>
           <div class="flex flex-col justify-center p-6 sm:p-8 lg:col-span-6">
@@ -689,7 +686,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 10. THREE MACHINES. ONE ORIGINAL DISPLAY (LARGE REAL PHOTO ON TOP + HIGH-CONTRAST METALLIC 3D BELOW) -->
-    <section id="tbk-machines" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+    <section id="tbk-machines" class="laser-stage ambient-warm border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Equipment Behind the Finish</div>
@@ -699,9 +696,9 @@ export const finalSiteHtml = `
 
         <div class="mt-9 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <!-- Machine 01 -->
-          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
-            <div class="orange-glass-wrap relative h-52 bg-zinc-900">
-              <img loading="lazy" decoding="async" src="/images/machines/tbk-oca-press.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-oca-press.webp'">
+          <div class="reveal-up flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="orange-glass-wrap relative aspect-[4/5] w-full overflow-hidden bg-zinc-950">
+              <img loading="lazy" decoding="async" src="/images/machines/tbk-oca-press.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-contain object-center p-2" onerror="this.src='/images/machines/tbk-oca-press.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
             </div>
@@ -709,16 +706,16 @@ export const finalSiteHtml = `
               <h3 class="font-display text-base font-extrabold text-zinc-950">TBK OCA Laminating Vacuum Hydraulic Press</h3>
               <p class="mt-1 text-xs text-zinc-600">Aligns and bonds new front glass to your original OLED under vacuum and controlled hydraulic pressure.</p>
             </div>
-            <div class="stage-3d-box relative mt-auto h-72 border-t border-zinc-800 sm:h-80">
+            <div class="stage-3d-box relative mt-auto h-96 border-t border-zinc-800 sm:h-[28rem]">
               <canvas id="canvas-tbk-oca" aria-label="3D TBK OCA Press"></canvas>
               <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-zinc-950/80 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">Interactive 3D · Drag to Orbit</span>
             </div>
           </div>
 
           <!-- Machine 02 -->
-          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
-            <div class="orange-glass-wrap relative h-52 bg-zinc-900">
-              <img loading="lazy" decoding="async" src="/images/machines/tbk-bubble-chamber.webp" alt="TBK 90-Litre Bubble Remover Chamber" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
+          <div class="reveal-up flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="orange-glass-wrap relative aspect-[4/5] w-full overflow-hidden bg-zinc-950">
+              <img loading="lazy" decoding="async" src="/images/machines/tbk-bubble-chamber.webp" alt="TBK 90-Litre Bubble Remover Chamber" class="h-full w-full object-contain object-center p-2" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
             </div>
@@ -726,16 +723,16 @@ export const finalSiteHtml = `
               <h3 class="font-display text-base font-extrabold text-zinc-950">TBK 90-Litre High-Pressure Bubble Remover</h3>
               <p class="mt-1 text-xs text-zinc-600">Cures OCA under high pressure inside a 90-litre chamber, eliminating microscopic air bubbles permanently.</p>
             </div>
-            <div class="stage-3d-box relative mt-auto h-72 border-t border-zinc-800 sm:h-80">
+            <div class="stage-3d-box relative mt-auto h-96 border-t border-zinc-800 sm:h-[28rem]">
               <canvas id="canvas-tbk-90l" aria-label="3D TBK 90L Chamber"></canvas>
               <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-zinc-950/80 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">Interactive 3D · Drag to Orbit</span>
             </div>
           </div>
 
           <!-- Machine 03 -->
-          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
-            <div class="orange-glass-wrap relative h-52 bg-zinc-900">
-              <img loading="lazy" decoding="async" src="/images/machines/tbk-uv-laser.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
+          <div class="reveal-up flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="orange-glass-wrap relative aspect-[4/5] w-full overflow-hidden bg-zinc-950">
+              <img loading="lazy" decoding="async" src="/images/machines/tbk-uv-laser.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-contain object-center p-2" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
             </div>
@@ -743,7 +740,7 @@ export const finalSiteHtml = `
               <h3 class="font-display text-base font-extrabold text-zinc-950">TBK-958 Cold UV Purple Laser</h3>
               <p class="mt-1 text-xs text-zinc-600">Separates front bezel and removes back glass with 355nm low-temperature UV laser precision.</p>
             </div>
-            <div class="stage-3d-box relative mt-auto h-72 border-t border-zinc-800 sm:h-80">
+            <div class="stage-3d-box relative mt-auto h-96 border-t border-zinc-800 sm:h-[28rem]">
               <canvas id="canvas-tbk-958" aria-label="3D TBK-958 UV Laser"></canvas>
               <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-purple-950/90 px-2.5 py-0.5 text-[10px] font-bold text-purple-300">Interactive 3D · 355nm Beam</span>
             </div>
@@ -773,7 +770,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 11. STACKED APPLE ECOSYSTEM 3D SUITE (ALL DEVICES ONE BELOW ANOTHER SO VISITORS INTERACT DIRECTLY) -->
-    <section id="ecosystem-3d" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+    <section id="ecosystem-3d" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-3xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Mastered Inside &amp; Out · Every Apple Device</div>
@@ -1059,7 +1056,7 @@ export const finalSiteHtml = `
             </div>
           </div>
           <div class="orange-glass-wrap relative h-56 rounded-2xl border-2 border-orange-300 bg-zinc-900 shadow-lg lg:col-span-6">
-            <img loading="lazy" decoding="async" src="/images/gallery/waiting-area.jpg" alt="Software and Signed Restore Desk" class="h-full w-full object-cover" onerror="this.src='/images/gallery/waiting-area.jpg'">
+            <img loading="lazy" decoding="async" src="/images/gallery/waiting-area.jpg" alt="Software and Signed Restore Desk" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/waiting-area.jpg'">
             <div class="orange-glass-sweep"></div>
             <span class="absolute bottom-3 left-3 z-20 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-orange-800 shadow">Data-Safe First</span>
           </div>
@@ -1135,7 +1132,7 @@ export const finalSiteHtml = `
               </div>
               <div class="relative z-10 mt-5 font-display text-2xl font-extrabold">Written Repair Warranty</div>
               <p id="holo-device-line" class="relative z-10 mt-1 text-xs text-zinc-200">iPhone 17 Pro Max · Front Glass &amp; OLED Coverage — Linked to your Halasuru CRM Job ID &amp; serial-tracked part record.</p>
-              <div class="relative z-10 mt-4 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 font-mono-num text-[11px] text-orange-200 backdrop-blur-sm">
+              <div class="relative z-10 mt-4 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 font-mono-num text-[11px] text-orange-200">
                 <span id="holo-job-id">JOB ID: RA-2048-CERT</span>
                 <span class="text-emerald-300">✓ 32-PT QC PASSED</span>
               </div>
@@ -1330,7 +1327,7 @@ export const finalSiteHtml = `
   </footer>
 
   <!-- SLEEK MATTE CHARCOAL FLOATING ACTION DOCK (Get Estimate · WhatsApp · Call) + RIGHT AI BENCH BUTTON -->
-  <div class="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md">
+  <div class="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white/95 p-1.5 shadow-2xl">
     <a href="#estimate" class="dock-dark-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
       <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
       <span>Get Estimate</span>
@@ -1368,7 +1365,7 @@ export const finalSiteHtml = `
   <div id="ai-drawer" class="fixed bottom-20 right-4 z-50 hidden w-[360px] max-w-[94vw] flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
     <div class="dock-ai-header flex items-center justify-between px-4 py-3.5 text-white">
       <div class="flex items-center gap-2.5">
-        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 text-sm font-black backdrop-blur">✦</span>
+        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 text-sm font-black">✦</span>
         <div>
           <div class="text-xs font-extrabold leading-tight">Red Apple AI Bench</div>
           <div class="flex items-center gap-1.5 text-[10px] text-white/85"><span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-300"></span>Online · Halasuru Specialist Assistant</div>
@@ -1401,7 +1398,7 @@ export const finalSiteHtml = `
   </div>
 
   <!-- PWA INSTALL MODAL -->
-  <div id="pwa-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+  <div id="pwa-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4">
     <div class="w-full max-w-sm rounded-3xl border border-zinc-200 bg-white p-6 text-center shadow-2xl">
       <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple App Icon" class="mx-auto h-16 w-16 rounded-2xl border border-red-200 shadow-md" onerror="this.src='/icon-512.png'">
       <h3 class="mt-3 font-display text-lg font-extrabold text-zinc-950">Install Red Apple App</h3>

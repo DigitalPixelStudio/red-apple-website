@@ -52,14 +52,9 @@
     /* True Red Apple Crimson-to-Orange Gradient (Zero Pink) */
     .text-brand-grad {
       background: linear-gradient(90deg, #dc2626 0%, #ea580c 38%, #f59e0b 65%, #dc2626 100%);
-      background-size: 240% auto;
+      background-size: 100% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradFlow 5s ease-in-out infinite;
-    }
-    @keyframes gradFlow {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
     }
 
     /* Kinetic Breathing + Color-Shifting Headings (GPU-Only, Zero CLS) */
@@ -83,8 +78,8 @@
       will-change: transform;
     }
     @keyframes priceGlow {
-      0%, 100% { transform: scale(1); text-shadow: 0 0 0 rgba(234, 88, 12, 0); }
-      50% { transform: scale(1.025); text-shadow: 0 0 18px rgba(234, 88, 12, 0.32); }
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: .92; }
     }
     .badge-breathe {
       animation: badgePulse 4.6s ease-in-out infinite;
@@ -98,7 +93,7 @@
     .ambient-orb {
       position: absolute;
       border-radius: 9999px;
-      filter: blur(56px);
+      filter: blur(28px);
       opacity: 0.2;
       pointer-events: none;
       will-change: transform;
@@ -108,11 +103,6 @@
       0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
       50% { transform: translate3d(22px, -16px, 0) scale(1.07); }
     }
-    @keyframes bgMeshShift {
-      0%, 100% { background-position: 0% 0%, 100% 100%, 0 0; }
-      50% { background-position: 100% 40%, 0% 60%, 28px 28px; }
-    }
-
     /* Signature Orange Glass-Sweep Shimmer */
     /* Section Backgrounds with Smooth Ambient Motion */
     .ambient-warm {
@@ -123,8 +113,7 @@
         radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.075), transparent 52%),
         radial-gradient(circle at 88% 82%, rgba(234, 88, 12, 0.095), transparent 52%),
         radial-gradient(rgba(220, 38, 38, 0.07) 1px, transparent 1px);
-      background-size: 160% 160%, 160% 160%, 28px 28px;
-      animation: bgMeshShift 18s ease-in-out infinite;
+      background-size: 100% 100%, 100% 100%, 28px 28px;
     }
     .ambient-clean {
       position: relative;
@@ -134,8 +123,7 @@
         radial-gradient(circle at 82% 15%, rgba(234, 88, 12, 0.06), transparent 50%),
         radial-gradient(circle at 18% 85%, rgba(220, 38, 38, 0.045), transparent 50%),
         radial-gradient(rgba(24, 24, 27, 0.05) 1px, transparent 1px);
-      background-size: 160% 160%, 160% 160%, 32px 32px;
-      animation: bgMeshShift 22s ease-in-out infinite reverse;
+      background-size: 100% 100%, 100% 100%, 32px 32px;
     }
     .orange-glass-sweep {
       display: none;
@@ -290,17 +278,13 @@
     }
 
     /* ================= FINAL POLISH: ELITE TYPE, MOTION & SMOOTHNESS ================= */
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
     section[id] { scroll-margin-top: 88px; }
 
     /* Premium heading voice: heavier, tighter, richer colour at rest */
     .font-display { font-weight: 800; letter-spacing: -0.025em; }
     h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
-    .heading-breathe { animation: headingBreathe 5.5s ease-in-out infinite, headingTone 8s ease-in-out infinite; }
-    @keyframes headingTone {
-      0%, 100% { filter: drop-shadow(0 0 0 rgba(220,38,38,0)); }
-      50%      { filter: drop-shadow(0 2px 12px rgba(234,88,12,0.14)); }
-    }
+    .heading-breathe { animation: headingBreathe 6.5s ease-in-out infinite; }
     .kicker-shift { font-weight: 800; letter-spacing: 0.16em; }
 
     /* Laser-red vertical sweep on the trusted-by logo */
@@ -337,8 +321,7 @@
       html { scroll-behavior: auto; }
       .heading-breathe, .kicker-shift, .price-breathe, .badge-breathe,
       .ambient-orb, .ambient-warm, .ambient-clean, .aura-ring,
-      .pulse-ring, .logo-laser::after, .logo-laser img,
-      .text-brand-grad { animation: none !important; }
+      .pulse-ring, .logo-laser::after, .logo-laser img { animation: none !important; }
       .reveal-up { opacity: 1 !important; transform: none !important; }
       .stage-3d-box canvas, .stage-3d-white canvas { will-change: auto; }
     }
@@ -349,3 +332,39 @@
     .marquee-track > .reveal-up:nth-child(2) { --stagger: 90ms; }
     .marquee-track > .reveal-up:nth-child(3) { --stagger: 180ms; }
     .marquee-track > .reveal-up:nth-child(4) { --stagger: 270ms; }
+
+
+    /* ===== LIGHTWEIGHT LASER LINE (transform-only, one instance per section) ===== */
+    .laser-stage { position: relative; isolation: isolate; }
+    .laser-line {
+      position: absolute;
+      z-index: 0;
+      left: -18%;
+      top: 28%;
+      width: 42%;
+      height: 2px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(220,38,38,.55), rgba(249,115,22,.75), transparent);
+      box-shadow: 0 0 12px 1px rgba(234,88,12,.25);
+      transform: translate3d(0,0,0) rotate(-4deg);
+      will-change: transform;
+      animation: laserDrift 9s ease-in-out infinite;
+      contain: strict;
+    }
+    @keyframes laserDrift {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); opacity: .25; }
+      50%      { transform: translate3d(260%, 34px, 0) rotate(-4deg); opacity: .55; }
+    }
+    .laser-stage > *:not(.laser-line) { position: relative; z-index: 1; }
+
+    /* Lazy reveal for machine cards & 3D stages */
+    .laser-stage .reveal-up:nth-child(2) { transition-delay: 70ms; }
+    .laser-stage .reveal-up:nth-child(3) { transition-delay: 140ms; }
+    .laser-stage .reveal-up:nth-child(4) { transition-delay: 210ms; }
+
+    @media (max-width: 767px) {
+      .laser-line { width: 60%; animation-duration: 12s; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .laser-line { animation: none !important; opacity: .18; }
+    }
