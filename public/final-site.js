@@ -197,9 +197,11 @@
         if (baKnob) baKnob.style.left = pct + '%';
         if (baPctLbl) baPctLbl.textContent = `${Math.round(100 - pct)}% Restored`;
       }
-      baBox?.addEventListener('pointerdown', (e) => { baDragging = true; setBaSplit(e.clientX); });
-      window.addEventListener('pointermove', (e) => { if (baDragging) setBaSplit(e.clientX); });
-      window.addEventListener('pointerup', () => { baDragging = false; });
+      baBox?.addEventListener('pointerdown', (e) => { if (e.button !== undefined && e.button !== 0) return; baDragging = true; setBaSplit(e.clientX); });
+      window.addEventListener('pointermove', (e) => { if (baDragging) setBaSplit(e.clientX); }, { passive: true });
+      const stopBa = () => { baDragging = false; };
+      window.addEventListener('pointerup', stopBa);
+      window.addEventListener('pointercancel', stopBa);
 
       // All 32 Listed iPhone Front Glass Restoration Prices + Savings Calculator
       const fullPrices = [

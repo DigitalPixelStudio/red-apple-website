@@ -14,6 +14,7 @@
 
     /* Edge-to-Edge iPhone 12 Pro Max Top Notch with Live Green/Red LED */
     .iphone-top-notch {
+      display: none;
       position: fixed;
       top: 0;
       left: 50%;
@@ -231,12 +232,10 @@
 
     /* Smooth Infinite Marquee (Technical Ticker + Google Reviews) */
     .marquee-track {
-      display: flex;
-      width: max-content;
-      animation: marqueeScroll 32s linear infinite;
-      will-change: transform;
+      width: 100%;
+      animation: none !important;
+      will-change: auto;
     }
-    .marquee-track:hover { animation-play-state: paused; }
     @keyframes marqueeScroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -289,3 +288,64 @@
       transform: scale(1.35);
       box-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
     }
+
+    /* ================= FINAL POLISH: ELITE TYPE, MOTION & SMOOTHNESS ================= */
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 88px; }
+
+    /* Premium heading voice: heavier, tighter, richer colour at rest */
+    .font-display { font-weight: 800; letter-spacing: -0.025em; }
+    h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
+    .heading-breathe { animation: headingBreathe 5.5s ease-in-out infinite, headingTone 8s ease-in-out infinite; }
+    @keyframes headingTone {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(220,38,38,0)); }
+      50%      { filter: drop-shadow(0 2px 12px rgba(234,88,12,0.14)); }
+    }
+    .kicker-shift { font-weight: 800; letter-spacing: 0.16em; }
+
+    /* Laser-red vertical sweep on the trusted-by logo */
+    .logo-laser { position: relative; isolation: isolate; }
+    .logo-laser::after {
+      content: "";
+      position: absolute;
+      left: 12%; right: 12%;
+      height: 3px;
+      top: 12%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, #dc2626 20%, #fb923c 50%, #dc2626 80%, transparent);
+      box-shadow: 0 0 14px 3px rgba(220,38,38,0.55);
+      animation: logoLaser 2.9s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+    @keyframes logoLaser {
+      0%, 100% { transform: translateY(0); opacity: .25; }
+      50%      { transform: translateY(100px); opacity: .95; }
+    }
+    .logo-laser img { animation: logoFloat 4.6s ease-in-out infinite; }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-3px) scale(1.03); }
+    }
+
+    /* Touch-friendly 3D + slider handling */
+    #ba-slider-box { touch-action: pan-y; }
+    .stage-3d-box canvas, .stage-3d-white canvas { touch-action: pan-y; }
+
+    /* Gift: honour device motion preference — stops all continuous GPU work */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .heading-breathe, .kicker-shift, .price-breathe, .badge-breathe,
+      .ambient-orb, .ambient-warm, .ambient-clean, .aura-ring,
+      .pulse-ring, .logo-laser::after, .logo-laser img,
+      .text-brand-grad { animation: none !important; }
+      .reveal-up { opacity: 1 !important; transform: none !important; }
+      .stage-3d-box canvas, .stage-3d-white canvas { will-change: auto; }
+    }
+
+    /* Gift: one-time, GPU-only stagger for trust cards */
+    .marquee-track > .reveal-up { transition-delay: var(--stagger, 0ms); }
+    .marquee-track > .reveal-up:nth-child(1) { --stagger: 0ms; }
+    .marquee-track > .reveal-up:nth-child(2) { --stagger: 90ms; }
+    .marquee-track > .reveal-up:nth-child(3) { --stagger: 180ms; }
+    .marquee-track > .reveal-up:nth-child(4) { --stagger: 270ms; }
