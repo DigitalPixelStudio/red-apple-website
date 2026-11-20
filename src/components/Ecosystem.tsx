@@ -11,7 +11,7 @@ const DEVICES = [
   { id: "watch", name: "Apple Watch Ultra 3", icon: "watch", tag: "All series", desc: "Screens, batteries, sensors & straps across all Watch series.", img: "/images/v5/service-watch.jpg" },
   { id: "airpods", name: "AirPods", icon: "airpods", tag: "All generations", desc: "Battery, charging case, speaker & microphone repair.", img: "/images/v5/service-airpods.jpg" },
   { id: "macbook", name: "MacBook", icon: "macbook", tag: "Pro / Air / Mini", desc: "MacBook Pro, Air, Mac mini & iMac — display, battery, board.", img: "/images/v5/service-macbook.jpg" },
-  { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS / macOS", desc: "OS install, firmware, boot loops, data recovery & unlocking.", img: "/images/v5/motherboard-macro.jpg" },
+  { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS / macOS", desc: "System diagnostics, signed firmware restore, boot loops and board-level storage IC repair.", img: "/images/v5/motherboard-macro.jpg" },
 ] as const;
 
 export default function Ecosystem() {

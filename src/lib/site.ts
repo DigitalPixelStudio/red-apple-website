@@ -43,9 +43,33 @@ export const SITE = {
   facebookUrl: "https://www.facebook.com/RedAppleMobileRepairStore",
   instagramUrl: "https://www.instagram.com/RedAppleMobileRepairStore",
   telegramUrl: "https://t.me/RedAppleMobileRepairStore",
+  appleMapsUrl:
+    "https://maps.apple.com/?q=Red+Apple+Mobile+Repair+Store+Halasuru+Bengaluru",
+  bingPlacesUrl:
+    "https://www.bing.com/maps?q=Red+Apple+Mobile+Repair+Store+Halasuru+Bengaluru",
+  xUrl: "",
 } as const;
 
-export const baseUrl = "https://redmobilerepair.in";
+export const baseUrl = "https://www.redmobilerepair.in";
+
+type SocialLink = {
+  label: string;
+  icon: string;
+  href: string;
+  short?: string;
+};
+
+export const SOCIAL_LINKS: readonly SocialLink[] = [
+  { label: "Instagram", icon: "instagram", href: SITE.instagramUrl },
+  { label: "Facebook", icon: "facebook", href: SITE.facebookUrl },
+  { label: "YouTube", icon: "youtube", href: SITE.youtubeUrl },
+  { label: "X (Twitter)", icon: "twitter", href: SITE.xUrl },
+  { label: "Telegram", icon: "telegram", href: SITE.telegramUrl },
+  { label: "Google Business Profile / Maps", icon: "gmb", href: SITE.gmbUrl },
+  { label: "JustDial", icon: "store", href: SITE.justdialUrl, short: "JD" },
+  { label: "Apple Maps", icon: "pin", href: SITE.appleMapsUrl },
+  { label: "Bing Places", icon: "location", href: SITE.bingPlacesUrl },
+];
 
 export const wa = (message: string) =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
@@ -57,7 +81,7 @@ export const DEVICE_FAMILIES = [
   { id: "watch", name: "Apple Watch", icon: "watch", tag: "All series", desc: "Screens, batteries, sensors & straps across all Watch series.", img: "/images/v5/service-watch.jpg" },
   { id: "airpods", name: "AirPods", icon: "airpods", tag: "All generations", desc: "Battery, charging case, speaker & microphone repair.", img: "/images/v5/service-airpods.jpg" },
   { id: "macbook", name: "MacBook", icon: "macbook", tag: "Pro · Air · Mini", desc: "MacBook Pro, Air, Mac mini & iMac — display, battery, board.", img: "/images/v5/service-macbook.jpg" },
-  { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS · macOS · firmware", desc: "OS install, firmware, boot loops, data recovery & unlocking.", img: "/images/v5/motherboard-macro.jpg" },
+  { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS · macOS · firmware", desc: "System diagnostics, signed firmware restore, boot loops and board-level storage IC repair.", img: "/images/v5/motherboard-macro.jpg" },
 ] as const;
 
 // ---------- Devices for the quote engine ----------
@@ -107,9 +131,9 @@ export const REPAIR_TYPES = [
   "Motherboard / IC Repair",
   "Water Damage Revival",
   "Software / iOS Issue",
-  "Data Recovery",
-  "Unlocking (lawful)",
-  "OS / Firmware Installation",
+  "Board-Level Storage IC Repair",
+  "Owner-Verified Factory Restore Assistance",
+  "System Diagnostics & Signed Firmware Restore",
   "Dent / Body / Frame Repair",
   "Other / Not sure",
 ] as const;
@@ -183,18 +207,18 @@ export const SERVICES: {
     points: ["Full audio system", "OEM parts", "6-month warranty"],
   },
   {
-    id: "os", title: "OS · Firmware · Recovery", icon: "settings",
-    desc: "iOS/iPadOS/macOS install, firmware restore, boot loops, DFU & setup issues.",
+    id: "os", title: "System Diagnostics & Signed Firmware Restore", icon: "settings",
+    desc: "Signed iOS/iPadOS/macOS restore workflows, boot-loop diagnosis, DFU recovery and setup troubleshooting.",
     time: "30–120 min", devices: "All Apple devices",
     img: "/images/v5/macbook-pro-latest.jpg",
-    points: ["Apple-Signed OS", "Data-Safe First", "6-Month Warranty"],
+    points: ["Apple-Signed Restore", "Zero-Passcode Workflow", "6-Month Warranty"],
   },
   {
-    id: "data", title: "Data Recovery", icon: "data",
-    desc: "Recover photos, chats, files & documents from damaged or locked devices.",
+    id: "data", title: "Board-Level Storage IC Repair", icon: "data",
+    desc: "Board-level diagnosis and storage IC repair when photos, chats or files are inaccessible because of hardware faults. No data outcome is promised before assessment.",
     time: "1–3 days", devices: "iPhone · iPad · Mac",
     img: "/images/v5/data-recovery-bench.jpg",
-    points: ["Logical + board-level", "Confidential handling", "6-Month Warranty"],
+    points: ["Board-Level Diagnosis", "Confidential Handling", "6-Month Warranty"],
   },
 ];
 
@@ -203,7 +227,7 @@ export const PROCESS_STEPS = [
   { step: "01", title: "Walk In or WhatsApp", desc: "Tell us your device & issue. Free inspection & honest diagnosis.", icon: "chat", img: "/images/v3/store-interior.jpg" },
   { step: "02", title: "Free Diagnosis", desc: "We open, test and show you exactly what's wrong — with photos.", icon: "search", img: "/images/v5/motherboard-macro.jpg" },
   { step: "03", title: "Transparent Quote", desc: "Fixed price confirmed before any work. No hidden charges, ever.", icon: "price", img: "/images/v5/quote-desk.jpg" },
-  { step: "04", title: "Expert Repair", desc: "Certified technicians repair with genuine-grade parts & precision tools.", icon: "wrench", img: "/images/v3/tech-workbench.jpg" },
+  { step: "04", title: "Expert Repair", desc: "Certified technicians work with OEM-grade parts, Precision TBK Lab Equipment & signed restore workflows.", icon: "wrench", img: "/images/v3/tech-workbench.jpg" },
   { step: "05", title: "Quality Check", desc: "Every repair passes a 32-point test — display, battery, sensors, audio.", icon: "check", img: "/images/v4/quality-testing.jpg" },
   { step: "06", title: "6-Month Warranty", desc: "Collect your device with a written invoice. Claim any covered issue for six months.", icon: "shield", img: "/images/v5/store-warranty.jpg" },
 ] as const;
@@ -233,10 +257,10 @@ export const WHY_VS_LOCAL = [
   { feature: "Walk-In Service", us: "No appointment needed, walk in anytime", apple: "Appointment required, slot availability limited" },
   { feature: "OEM-Grade Parts", us: "True Tone panels, MagSafe back glass, genuine battery cells", apple: "Apple-sourced parts only" },
   { feature: "Board-Level Repair", us: "Micro-soldering under microscope, chip-level diagnosis", apple: "Full unit replacement, no component repair" },
-  { feature: "Warranty", us: "6-month repair warranty on every repair, display & battery — claim with your invoice (motherboard work excepted)", apple: "90-day Apple service warranty" },
+  { feature: "Warranty", us: "6-month repair warranty on every repair, display & battery — claim with your invoice (motherboard work excepted)", apple: "Apple's standard service warranty" },
   { feature: "Free Diagnosis", us: "Open inspection with photos, no charge", apple: "Paid diagnostic at Apple Store" },
   { feature: "Doorstep Pickup", us: "Free 24/7 pickup & drop across Bengaluru", apple: "Not available — you visit the store" },
-  { feature: "Data Privacy", us: "Your data is never accessed — sealed workflow", apple: "Apple may access data during service" },
+  { feature: "Data Handling", us: "Sealed Zero-Passcode Bench Workflow (Passcode Never Requested)", apple: "Standard service policies vary" },
   { feature: "Google Rating", us: "4.9 stars from 1,103 Google reviews", apple: "Varies by Apple Store location" },
 ];
 
@@ -317,7 +341,7 @@ export const FAQS: { q: string; a: string }[] = [
   { q: "What Does the Warranty Not Cover?", a: "It does not cover physical or accidental damage after hand-back, liquid damage after hand-back, a later repair or opening by another shop, normal wear and tear, cosmetic marks, software issues unrelated to the repair, or damage caused by misuse. Motherboard repairs are excluded from the standard cover. The full policy is on our Refund & Warranty page." },
   { q: "Are Parts Genuine?", a: "We use genuine-grade, OEM-quality parts and explain your options before any work so you can choose what fits your budget." },
   { q: "Do I Need an Appointment?", a: "Walk-ins are welcome all day. For faster service, WhatsApp us your device model and issue." },
-  { q: "Can You Recover My Data After a Screen or Water Issue?", a: "Yes — data recovery is one of our specialities. We never wipe data without your permission." },
+  { q: "Can You Diagnose Inaccessible Photos or Files?", a: "Yes — we inspect the storage hardware first and can quote board-level storage IC repair when a hardware fault is found. A data outcome is never promised before diagnosis, and we never wipe data without your permission." },
   { q: "Do You Offer Pickup and Delivery?", a: "Yes — doorstep pickup runs 24/7 across Bengaluru, any hour and any day. Free for repairs above ₹2,999. You get live CRM-driven WhatsApp updates at every repair stage until final handover." },
   { q: "Where Are You Located?", a: "Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008 — our Google My Business & Maps Verified Address, one minute from Halasuru Metro, open 10 AM – 12 AM midnight daily." },
   { q: "Will My Data Stay Safe?", a: "Absolutely. We keep your data private, never access your accounts, and return your device with locks intact." },
@@ -341,5 +365,5 @@ export const SERVICE_PAGES: {
   { slug: "airpods-repair", title: "AirPods Repair", icon: "airpods", short: "Battery, case, audio issues", desc: "AirPods and AirPods Pro battery replacement.", keywords: ["AirPods repair Bangalore"] },
   { slug: "macbook-repair", title: "MacBook & Mac Repair", icon: "macbook", short: "Displays, batteries & logic boards", desc: "MacBook Pro, Air, Mac mini and iMac repairs.", keywords: ["MacBook repair Bangalore"] },
   { slug: "software-recovery", title: "Apple Software & Firmware", icon: "settings", short: "iOS, macOS, restore & firmware", desc: "Apple-signed OS installation and restore.", keywords: ["iPhone software fix", "iOS restore Bangalore"] },
-  { slug: "data-recovery", title: "Data Recovery for Apple Devices", icon: "data", short: "Photos, contacts, chats & files", desc: "Professional data recovery from damaged devices.", keywords: ["iPhone data recovery Bangalore"] },
+  { slug: "data-recovery", title: "Board-Level Storage IC Repair", icon: "data", short: "Photos, contacts, chats & files", desc: "Board-level diagnosis and storage IC repair for inaccessible data. The outcome is confirmed only after assessment and is never promised in advance.", keywords: ["board-level storage IC repair Bangalore", "iPhone storage IC repair"] },
 ] as const;

@@ -22,7 +22,7 @@ const MODEL_HINTS = Array.from(new Set([
 
 const REPAIR_HINTS: [RegExp, string][] = [
   [/water|liquid|paani|geela|dropped in/i, "Water Damage Revival"],
-  [/data recover|recover photos|photos|contacts|backup|dead phone data/i, "Data Recovery"],
+  [/data recover|recover photos|photos|contacts|backup|dead phone data/i, "Board-Level Storage IC Repair"],
   [/back ?glass|backside|back side|back panel|rear glass|rear panel|back cover/i, "Back Glass Replacement"],
   [/front ?glass|glass ?only|glass restor|outer glass|touch glass|glass repair|glass price|glass cost|cracked glass|broken glass|sirf glass|only glass/i, "Front Glass Restoration"],
   // Bare "glass" after a model ("iphone 18 pro max glass") means front glass:
@@ -35,7 +35,7 @@ const REPAIR_HINTS: [RegExp, string][] = [
   [/speaker|mic|haptic|sound|earpiece/i, "Speaker / Mic / Haptics"],
   [/motherboard|logic board|\bboard\b|\bic\b|chip/i, "Motherboard / IC Repair"],
   [/software|ios|update|boot loop|firmware/i, "Software / iOS Issue"],
-  [/unlock|activation lock|icloud/i, "Unlocking (lawful)"],
+  [/unlock|activation lock|icloud/i, "Owner-Verified Factory Restore Assistance"],
   [/dent|body|frame|housing/i, "Dent / Body / Frame Repair"],
 ];
 
@@ -51,7 +51,8 @@ const TURNAROUND_HINTS: Record<string, string> = {
   "Motherboard / IC Repair": "2–3 days",
   "Water Damage Revival": "24–48 hours",
   "Software / iOS Issue": "about 2 hours",
-  "Data Recovery": "1–2 days",
+  "Board-Level Storage IC Repair": "1–2 days",
+  "Owner-Verified Factory Restore Assistance": "same day after ownership verification",
   "Dent / Body / Frame Repair": "1–2 days",
   "Other / Not sure": "confirmed after diagnosis",
 };
@@ -142,7 +143,7 @@ function priceAnswer(text: string): string | null {
   if (!model && repairName) {
     const unlisted = text.match(/\biphone\s*(5s|5c|5|4s|4)\b/i);
     if (unlisted) return "iPhone " + unlisted[1] + " — " + repairName + " is not listed in the approved price matrix. We can quote it after a free diagnosis.";
-    if (repairName === "Data Recovery") return "Data recovery starts at ₹2,999 and the assessment is free. Recovery is not guaranteed; the technician checks whether the data is reachable before any work.";
+    if (repairName === "Board-Level Storage IC Repair") return "Board-level storage IC work starts at ₹2,999 and the assessment is free. A data outcome is never promised; the technician checks the hardware first.";
     if (repairName === "Motherboard / IC Repair") return "Board-level work is quoted after a free diagnosis. Which exact device and model is it?";
     if (repairName === "Front Glass Restoration") {
       return "Front glass restoration on listed iPhones is ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + " — the exact price depends on the model. Tell me your exact iPhone and I will check the glass list. Every glass restoration carries a 6-month hardware warranty, and eligibility is confirmed on inspection.";
@@ -157,8 +158,8 @@ function priceAnswer(text: string): string | null {
   if (repairName === "Water Damage Revival") {
     return "Water damage needs a free assessment first, and we cannot promise a recovery outcome. Please do not charge the device or apply heat. Typical assessment and treatment time is 24–48 hours.";
   }
-  if (repairName === "Data Recovery") {
-    return "Data recovery starts at ₹2,999 and the assessment is free. Recovery is not guaranteed; the technician checks whether the data is reachable before any work. Typical turnaround is 1–2 days.";
+  if (repairName === "Board-Level Storage IC Repair") {
+    return "Board-level storage IC work starts at ₹2,999 and the assessment is free. A data outcome is never promised; the technician checks the hardware first. Typical turnaround is 1–2 days.";
   }
 
   const price = getPrice(model, repairName);
@@ -221,7 +222,7 @@ const SYNONYMS: Record<string, string[]> = {
   location: [],
   pickup: ["pickup", "pick up", "doorstep", "home", "collect", "drop", "delivery"],
   warranty: ["warranty", "guarantee", "guaranty", "warrenty", "full policy", "policy"],
-  invoice: ["invoice", "bill", "gst", "receipt", "crm", "record", "job card", "jobcard", "warranty record", "repair status", "stage update", "whatsapp update", "where is my device", "tracking", "after handover", "what happens after"],
+  invoice: ["invoice", "bill", "receipt", "crm", "crm invoice", "record", "job card", "jobcard", "warranty record", "repair status", "stage update", "whatsapp update", "where is my device", "tracking", "after handover", "what happens after"],
   diagnosis: ["diagnosis", "diagnose", "check", "inspect", "assessment", "estimate first"],
   notrepaired: ["not repairable", "cannot fix", "cant fix", "unrepairable", "worse", "damage your"],
   parts: ["genuine", "oem", "original", "copy", "aftermarket", "quality of part", "which part"],
@@ -267,7 +268,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   timing: {
     reply:
-      "Display, back glass and battery are usually same-day, about 45–60 minutes. Front glass restoration is same-day after the eligibility check. Charging port and camera take about an hour; board-level work takes 2–3 days, water-damage work about 24–48 hours, data recovery 1–2 days, and iPad screens 1–3 days.",
+      "Display, back glass and battery are usually same-day, about 45–60 minutes. Front glass restoration is same-day after the eligibility check. Charging port and camera take about an hour; board-level work takes 2–3 days, water-damage work about 24–48 hours, board-level storage IC work 1–2 days, and iPad screens 1–3 days.",
     chips: ["Price list", "Book doorstep pickup", "Talk to a technician"],
   },
   payment: {
@@ -287,7 +288,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   device: {
     reply:
-      "We repair supported iPhone models listed on our website, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and data recovery. Which device and model do you have?",
+      "We repair supported iPhone models listed on our website, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and board-level storage IC repair. Which device and model do you have?",
     chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Talk to a technician"],
   },
   iphone: {
@@ -377,7 +378,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   invoice: {
     reply:
-      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number, and the GST invoice is generated from that record and sent to you on WhatsApp. For walk-in and doorstep-pickup devices, the CRM also sends WhatsApp stage updates — received, diagnosis, in repair, quality check, ready for hand-back and delivered. That invoice is your 6-month warranty record, so keep it. Need it in your company's name? Give us the GSTIN at booking and we'll issue it that way.",
+      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number, and the CRM tracked invoice is generated from that record and sent to you on WhatsApp. For walk-in and doorstep-pickup devices, the CRM also sends WhatsApp stage updates — received, diagnosis, in repair, quality check, ready for hand-back and delivered. That invoice is your 6-month warranty record, so keep it. Need it in your company's name? Add those details at booking and we'll issue it that way.",
     chips: ["What happens after handover?", "Read the full policy", "Talk to a technician"],
   },
   diagnosis: {
@@ -407,7 +408,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   insurance: {
     reply:
-      "We supply the itemised GST invoice and a written damage report, which is what an insurance claim actually needs. We don't file the claim for you, but we'll give you everything the insurer asks for.",
+      "We supply the itemised CRM tracked invoice and a written damage report, which is what an insurance claim actually needs. We don't file the claim for you, but we'll give you everything the insurer asks for.",
     chips: ["Talk to a technician", "Price list"],
   },
   whyexpensive: {
@@ -567,7 +568,7 @@ export default function Concierge() {
       return;
     }
     if (/(icloud|activation lock).*(bypass|unlock)|(bypass|unlock).*(icloud|activation lock)/i.test(text)) {
-      push("We cannot bypass iCloud Activation Lock. If this is a carrier/network lock, a technician can explain the lawful option with proof of ownership.", ["Talk to a technician"]);
+      push("We cannot bypass iCloud Activation Lock. Ask a technician about owner-verified factory restore assistance with proof of ownership.", ["Talk to a technician"]);
       return;
     }
     if (/(talk to (a )?(human|person|technician)|speak to (a )?(human|person|technician)|call me|agent|staff)/i.test(text)) {

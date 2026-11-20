@@ -27,7 +27,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "device-coverage",
     title: "Supported devices and repair services",
     tags: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Mac", "iPod", "screen", "display", "battery", "camera", "charging", "speaker", "microphone", "motherboard", "water", "software", "repair"],
-    content: "The workshop services iPhone, iPad, Apple Watch, AirPods, iPod and MacBook/Mac devices. Repair categories include front glass restoration, front display replacement, back glass replacement, battery replacement, camera repair, charging port and flex repair, speaker/microphone/haptics, motherboard and IC-level work, water-damage assessment, software and iOS issues, data recovery, lawful unlocking, OS/firmware installation and body/frame repair. Exact model and fault must be confirmed before quoting."
+    content: "The workshop services iPhone, iPad, Apple Watch, AirPods, iPod and MacBook/Mac devices. Repair categories include front glass restoration, front display replacement, back glass replacement, battery replacement, camera repair, charging port and flex repair, speaker/microphone/haptics, motherboard and IC-level work, water-damage assessment, software and iOS diagnostics, signed firmware restore, board-level storage IC repair, owner-verified factory restore assistance and body/frame repair. Exact model and fault must be confirmed before quoting."
   },
   {
     id: "front-glass-restoration",
@@ -45,7 +45,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "glass-lab-machinery",
     title: "TBK glass restoration machinery and process",
     tags: ["machinery", "machines", "TBK", "OCA", "laminating", "vacuum", "hydraulic press", "bubble remover", "autoclave", "chamber", "laser", "UV laser", "cold laser", "purple laser", "TBK-958", "90 litre", "bezel", "lamination", "factory finish", "OLED"],
-    content: "Front glass restoration is performed on three specialised TBK systems at the Halasuru lab. (1) TBK OCA Laminating Vacuum Compressed Hydraulic Press: aligns and bonds the new glass to the original OLED under vacuum and controlled hydraulic pressure for factory-level optical lamination. (2) TBK 90-Litre High-Pressure Bubble Remover Chamber: removes microscopic air bubbles and cures the OCA for a crystal-clear, zero-defect finish with permanent adhesion. (3) TBK-958 Cold UV Purple Laser: separates the front bezel and removes back glass with low-temperature UV laser precision, so the logic board and internal components receive no thermal stress. The process preserves the original OLED panel and touch sensitivity wherever the display is suitable. All post-repair diagnostics run through Apple Diagnostic Mode under a zero-password policy: the customer is never asked for a passcode, Apple ID, OTP, UPI PIN or card details."
+    content: "Front glass restoration is performed on three specialised TBK systems at the Halasuru lab. (1) TBK OCA Laminating Vacuum Compressed Hydraulic Press: aligns and bonds the new glass to the original OLED under vacuum and controlled hydraulic pressure for factory-level optical lamination. (2) TBK 90-Litre High-Pressure Bubble Remover Chamber: removes microscopic air bubbles and cures the OCA for a crystal-clear, zero-defect finish with permanent adhesion. (3) TBK-958 Cold UV Purple Laser: separates the front bezel and removes back glass with low-temperature UV laser precision, so the logic board and internal components receive no thermal stress. The process preserves the original OLED panel and touch sensitivity wherever the display is suitable. All post-repair work uses Precision TBK Lab Equipment & Signed Restore Workflows under a Sealed Zero-Passcode Bench Workflow (Passcode Never Requested): the customer is never asked for a passcode, Apple ID, OTP, UPI PIN or card details."
   },
   {
     id: "diagnosis-and-quote",
@@ -57,7 +57,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "warranty-policy",
     title: "Six-month repair warranty, invoice and exclusions",
     tags: ["warranty", "guarantee", "6 months", "six months", "invoice", "warranty record", "claim", "display", "battery", "glass", "motherboard", "exclusions", "impact", "liquid", "policy"],
-    content: "Every repair carries a six-month warranty: repair work, parts we replaced, displays, batteries and glass are all covered. Motherboard repairs are the only exclusion. The invoice is the warranty record — bring the invoice and the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice within six months. Exclusions are explicit: physical/impact damage after hand-back, liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults. Never quote a 90-day warranty or the old address."
+    content: "Every repair carries a six-month warranty: repair work, parts we replaced, displays, batteries and glass are all covered. Motherboard repairs are the only exclusion. The invoice is the warranty record — bring the invoice and the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice within six months. Exclusions are explicit: physical/impact damage after hand-back, liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults. Never quote any shorter warranty period or the old address."
   },
   {
     id: "warranty-claim",
@@ -69,7 +69,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "crm-whatsapp-updates",
     title: "CRM repair stage updates on WhatsApp for walk-in and pickup devices",
     tags: ["CRM", "WhatsApp", "stage", "status", "repair status", "update", "tracking", "walk-in", "pickup", "doorstep", "job card", "handover", "delivered"],
-    content: "Every repair is logged as a job card in our CRM. Walk-in customers and doorstep-pickup customers receive WhatsApp stage updates as the device moves through received, free diagnosis, approved repair, quality check, ready for hand-back and delivered. The GST invoice is generated from the same CRM record and sent on WhatsApp. The assistant cannot confirm or invent a stage; direct the customer to the repair-status page or WhatsApp for the live status."
+    content: "Every repair is logged as a job card in our CRM. Walk-in customers and doorstep-pickup customers receive WhatsApp stage updates as the device moves through received, free diagnosis, approved repair, quality check, ready for hand-back and delivered. The CRM tracked invoice is generated from the same CRM record and sent on WhatsApp. The assistant cannot confirm or invent a stage; direct the customer to the repair-status page or WhatsApp for the live status."
   },
   {
     id: "privacy-and-data",
@@ -92,8 +92,8 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
   {
     id: "turnaround",
     title: "Typical repair turnaround times",
-    tags: ["time", "duration", "turnaround", "same day", "minutes", "hours", "days", "screen", "battery", "board", "water", "data recovery", "iPad"],
-    content: "Typical turnaround from the approved repair guide: front display about 60 minutes; back glass about 60 minutes; battery about 45 minutes; camera about 60 minutes; charging port/flex about 60 minutes; speaker/mic/haptics about 45 minutes; motherboard/IC work 2–3 days; water-damage work 24–48 hours; software/iOS about 2 hours; data recovery 1–2 days; lawful unlocking same day; OS/firmware installation about 2 hours; body/frame repair 1–2 days. Parts availability and diagnosis can change timing, so do not promise a completion time."
+    tags: ["time", "duration", "turnaround", "same day", "minutes", "hours", "days", "screen", "battery", "board", "water", "storage IC repair", "iPad"],
+    content: "Typical turnaround from the approved repair guide: front display about 60 minutes; back glass about 60 minutes; battery about 45 minutes; camera about 60 minutes; charging port/flex about 60 minutes; speaker/mic/haptics about 45 minutes; motherboard/IC work 2–3 days; water-damage work 24–48 hours; software/iOS diagnostics and signed restore about 2 hours; board-level storage IC repair 1–2 days; owner-verified factory restore assistance same day; OS/firmware installation about 2 hours; body/frame repair 1–2 days. Parts availability and diagnosis can change timing, so do not promise a completion time."
   },
   {
     id: "water-damage",
@@ -103,21 +103,21 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
   },
   {
     id: "data-recovery",
-    title: "Data recovery scope and limitations",
-    tags: ["data recovery", "photos", "contacts", "files", "backup", "dead phone", "water damage", "recovery"],
-    content: "Data recovery starts at ₹2,999 and the assessment is free. The technician first checks whether the data is reachable. Recovery is not guaranteed and no success promise should be made before assessment. Do not ask for account credentials or passwords."
+    title: "Board-level storage IC repair scope and limitations",
+    tags: ["storage IC repair", "storage IC", "photos", "contacts", "files", "backup", "dead phone", "water damage", "board-level"],
+    content: "Board-level storage IC repair starts at ₹2,999 and the assessment is free. The technician first checks the storage hardware and whether the data is reachable. A data outcome is never promised before assessment. Do not ask for account credentials or passwords."
   },
   {
     id: "activation-lock",
-    title: "Activation Lock and lawful unlocking",
-    tags: ["iCloud", "Activation Lock", "unlock", "bypass", "carrier", "network lock", "ownership"],
-    content: "Never offer to bypass iCloud Activation Lock or defeat device security. Refuse briefly and respectfully. Carrier/network unlocking may be discussed only through a lawful process and with proof of ownership."
+    title: "Activation Lock and owner-verified restore",
+    tags: ["iCloud", "Activation Lock", "factory restore", "bypass", "carrier", "network lock", "ownership"],
+    content: "Never offer to bypass iCloud Activation Lock or defeat device security. Refuse briefly and respectfully. Owner-verified factory restore assistance may be discussed only with proof of ownership; never offer a security bypass."
   },
   {
     id: "bulk-and-insurance",
     title: "Corporate, bulk and insurance enquiries",
-    tags: ["bulk", "B2B", "corporate", "school", "office", "multiple devices", "insurance", "GST invoice", "damage report"],
-    content: "Enquiries for five or more devices should be handed to the owner or a technician for a written custom quote. The workshop can provide an itemised GST invoice and a written damage report for an insurance claim, but it does not file the claim on the customer's behalf."
+    tags: ["bulk", "B2B", "corporate", "school", "office", "multiple devices", "insurance", "CRM tracked invoice", "damage report"],
+    content: "Enquiries for five or more devices should be handed to the owner or a technician for a written custom quote. The workshop can provide an itemised CRM tracked invoice and a written damage report for an insurance claim, but it does not file the claim on the customer's behalf."
   },
   {
     id: "human-escalation",

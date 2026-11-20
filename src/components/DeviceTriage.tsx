@@ -41,7 +41,7 @@ const SYMPTOMS: Symptom[] = [
   { id: "dead", label: "Dead / Won't Turn On", icon: "board", repair: "Motherboard / IC Repair" },
   { id: "water", label: "Water Damage", icon: "water", repair: "Water Damage Revival" },
   { id: "software", label: "Stuck on Apple Logo", icon: "settings", repair: "Software / iOS Issue" },
-  { id: "data", label: "Lost Photos / Data", icon: "data", repair: "Data Recovery" },
+  { id: "data", label: "Lost Photos / Files", icon: "data", repair: "Board-Level Storage IC Repair" },
   { id: "sound", label: "No Sound or Mic", icon: "speaker", repair: "Speaker / Mic / Haptics" },
 ];
 
@@ -125,7 +125,7 @@ export default function DeviceTriage() {
     ? "Quoted after a free diagnosis"
     : price
       ? priceLabel(price)
-      : symptom.repair === "Data Recovery"
+      : symptom.repair === "Board-Level Storage IC Repair"
         ? "From ₹2,999"
         : symptom.repair === "Water Damage Revival"
           ? "Free assessment first"

@@ -6,12 +6,12 @@ import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 
 const ITEMS = [
-  { icon: "settings" as IconName, title: "OS Installation", desc: "iOS, iPadOS and macOS installed from Apple-signed firmware. Clean, stable and fully updated." },
+  { icon: "settings" as IconName, title: "System Diagnostics & Signed Firmware Restore", desc: "Signed iOS, iPadOS and macOS restore workflows with boot-loop and update-failure diagnosis." },
   { icon: "refresh" as IconName, title: "Firmware & Restore", desc: "DFU and Recovery-mode restores, firmware updates, boot loops and stuck-Apple fixes." },
-  { icon: "data" as IconName, title: "Data Recovery", desc: "Photos, contacts, WhatsApp chats and files recovered — logical or board-level." },
-  { icon: "unlock" as IconName, title: "Lawful Unlocking", desc: "Network unlocking and forgotten-passcode recovery with proof of ownership and account help." },
+  { icon: "data" as IconName, title: "Board-Level Storage IC Repair", desc: "Storage IC and board-level diagnosis for inaccessible photos, chats and files. Outcome is never promised before assessment." },
+  { icon: "shield" as IconName, title: "Owner-Verified Factory Restore Assistance", desc: "Factory restore guidance for owner-verified devices, with proof of ownership and account-side help. No passcode or security bypass." },
   { icon: "cpu" as IconName, title: "Performance Repair", desc: "Slow devices, overheating and battery drain — diagnosed and tuned at OS level." },
-  { icon: "shield" as IconName, title: "Setup & Troubleshoot", desc: "iCloud setup, sync issues, app crashes, migration and configuration." },
+  { icon: "shield" as IconName, title: "Setup & Troubleshoot", desc: "Device migration, sync and configuration help. No passcode is requested at any point." },
 ];
 
 export default function SoftwareRecovery() {
@@ -26,15 +26,15 @@ export default function SoftwareRecovery() {
       <div className="relative mx-auto max-w-[1200px] px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <Reveal>
-            <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Software &amp; Recovery</p>
+            <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Software &amp; Signed Restore</p>
             <h2 className="head-gradient section-title font-apple mt-3">
               Not Just Hardware —{" "}
               <span className="gradient-text">Your Data &amp; OS Too.</span>
             </h2>
             <p className="section-subtitle mt-5">
-              A dedicated desk for operating systems, firmware, recovery and everything
-              software — handled with Apple&rsquo;s standard, signed firmware workflow and a
-              data-safe-first process.
+              A dedicated desk for operating systems, firmware and board-level storage
+              faults — handled with Precision TBK Lab Equipment &amp; Signed Restore
+              Workflows under a zero-passcode-first process.
             </p>
             <div className="software-os-row">
               {["iOS", "iPadOS", "macOS", "watchOS", "tvOS", "Firmware"].map((os) => (

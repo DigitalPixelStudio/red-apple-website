@@ -3,17 +3,14 @@ import BrandMark from "@/components/BrandMark";
 import MotionToggle from "@/components/MotionToggle";
 import SmartImg from "@/components/SmartImg";
 import Link from "next/link";
-import { SITE, wa, SERVICE_PAGES } from "@/lib/site";
+import { SITE, SOCIAL_LINKS, wa, SERVICE_PAGES } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 
-const SOCIALS = [
-  { label: "Instagram", icon: "instagram" as IconName, href: SITE.instagramUrl || "#" },
-  { label: "Facebook", icon: "facebook" as IconName, href: SITE.facebookUrl || "#" },
-  { label: "YouTube", icon: "youtube" as IconName, href: SITE.youtubeUrl || "#" },
-  { label: "Telegram", icon: "telegram" as IconName, href: SITE.telegramUrl || "#" },
-  { label: "Google Business", icon: "gmb" as IconName, href: SITE.gmbUrl },
-];
+const SOCIALS = SOCIAL_LINKS.filter((s) => s.href).map((s) => ({
+  ...s,
+  icon: s.icon as IconName,
+}));
 
 export default function Footer() {
   return (
@@ -37,7 +34,7 @@ export default function Footer() {
             <p className="mt-4 text-[13.5px] leading-relaxed text-white/70">
               <span className="footer-tagline">Apple repairs, perfected.</span>{" "}
               The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch,
-              AirPods, Mac &amp; MacBook, hardware, software and data recovery.
+              AirPods, Mac &amp; MacBook, hardware, software and board-level storage IC repair.
             </p>
 
             <figure className="footer-store">
@@ -117,15 +114,14 @@ export default function Footer() {
             <div className="mt-5 flex flex-wrap gap-2">
               {SOCIALS.map((s) => (
                 <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label}
-                  className="footer-chip h-10 w-10 text-white/75">
-                  <LineIcon name={s.icon} size={18} />
+                  aria-label={s.label} className="footer-chip h-10 w-10 text-white/75">
+                  {s.short ? (
+                    <span className="text-[10px] font-bold text-white">{s.short}</span>
+                  ) : (
+                    <LineIcon name={s.icon} size={18} />
+                  )}
                 </a>
               ))}
-              {/* JustDial icon */}
-              <a href={SITE.justdialUrl || "#"} target="_blank" rel="noopener noreferrer" title="JustDial"
-                className="footer-chip h-10 w-10 text-white/75">
-                <span className="text-[10px] font-bold text-white">JD</span>
-              </a>
             </div>
           </div>
         </div>
@@ -135,7 +131,7 @@ export default function Footer() {
             <div>&copy; {new Date().getFullYear()} Red Apple Mobile Repair Store &middot; Halasuru, Bengaluru 560008</div>
             <MotionToggle />
           </div>
-          <div className="mt-4 text-center text-[11.5px] leading-relaxed text-white/45">Apple is a trademark of Apple Inc. We are an independent repair service — not affiliated with Apple Inc.</div>
+          <div className="mt-4 text-center text-[11.5px] leading-relaxed text-white/45">Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</div>
           <div className="mt-4 text-center text-[11px] text-white/45">
             Built with care by{" "}
             <a

@@ -30,7 +30,7 @@ export default function RefundPage() {
 
           <h2>Your invoice is the warranty record</h2>
           <p>
-            We keep the job card in our repair CRM, and the GST invoice issued
+            We keep the job card in our repair CRM, and the CRM tracked invoice issued
             after the repair is your warranty record. Keep it safe: it carries
             the repair date, the work done and the invoice number we use to find
             your job.

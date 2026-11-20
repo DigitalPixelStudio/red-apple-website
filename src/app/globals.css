@@ -4516,14 +4516,14 @@ html[data-motion="off"] .topic-gradient {
 
 /* --- the four requested kickers --- */
 .kicker-red {
-  color: #e11d48 !important;
+  color: #dc2626 !important;
   animation: redKickerBreath 5.4s ease-in-out infinite !important;
 }
 @keyframes redKickerBreath {
-  0%, 100% { color: #e11d48; opacity: 1; }
-  50%      { color: #ff2d55; opacity: .82; }
+  0%, 100% { color: #dc2626; opacity: 1; }
+  50%      { color: #ea580c; opacity: .82; }
 }
-.one-glance-red { color: #e11d48 !important; font-weight: 800; }
+.one-glance-red { color: #dc2626 !important; font-weight: 800; }
 
 /* --- cool rectangular icons with a subtle, uniform breath --- */
 .icon-glow,
@@ -4546,8 +4546,8 @@ html[data-motion="off"] .topic-gradient {
 .stage-pill:nth-child(3) .stage-icon { background: linear-gradient(140deg, #16a34a, #0f766e) !important; }
 .stage-pill:nth-child(4) .stage-icon { background: linear-gradient(140deg, #ff6b00, #b45309) !important; }
 .stage-pill:nth-child(5) .stage-icon { background: linear-gradient(140deg, #2563eb, #4f46e5) !important; }
-.stage-pill:nth-child(6) .stage-icon { background: linear-gradient(140deg, #db2777, #f59e0b) !important; }
-.display-icon { background: linear-gradient(140deg, #e11d48, #ff6b00) !important; }
+.stage-pill:nth-child(6) .stage-icon { background: linear-gradient(140deg, #dc2626, #ea580c) !important; }
+.display-icon { background: linear-gradient(140deg, #dc2626, #ea580c) !important; }
 .parts-icon   { background: linear-gradient(140deg, #0f766e, #2563eb) !important; }
 .tech-icon    { background: linear-gradient(140deg, #ff6b00, #b91c1c) !important; }
 .location-icon { background: linear-gradient(140deg, #dc2626, #ff9500) !important; }
@@ -4659,7 +4659,7 @@ html[data-motion="off"] .topic-gradient {
 
 /* --- WhyUs colour hierarchy --- */
 .whyus-heading { line-height: 1.16 !important; }
-.why-head-red { color: #e11d48 !important; }
+.why-head-red { color: #dc2626 !important; }
 .why-rupee { color: #dc2626 !important; }
 .why-burgundy { color: #7f1d1d !important; }
 
@@ -4794,7 +4794,7 @@ body {
   text-wrap: balance;
 }
 .final-cta-signature span {
-  color: #e11d48;
+  color: #dc2626;
 }
 
 /* ==========================================================================

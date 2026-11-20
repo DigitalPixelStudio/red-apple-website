@@ -194,12 +194,12 @@ export default function CraftShowcase() {
                   The moment your device is booked in, it gets a job number in a
                   CRM built for this shop. Every part fitted, every technician
                   note, every status change is logged against that number — the
-                  same number on your GST invoice.
+                  same number on your CRM tracked invoice.
                 </p>
 
                 <ul className="mt-5 grid gap-2.5">
                   {[
-                    "GST invoice generated from the CRM, not written by hand",
+                    "CRM Tracked Invoice generated from the CRM, not written by hand",
                     "Serial-tracked parts, so the warranty claim is one lookup",
                     "Status updates sent to you on WhatsApp at each stage",
                     "Your repair history stays on file for the next visit",

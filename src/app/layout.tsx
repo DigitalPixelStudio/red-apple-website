@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { SITE, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
+import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
 
 /* GA4 — dormant until NEXT_PUBLIC_GA_ID is set in Vercel.
@@ -22,12 +22,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-      { url: "/logo.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: ["/icon-192.png"],
+    shortcut: ["/favicon.ico"],
   },
   title: {
     default: "Red Apple Mobile Repair Store | iPhone, iPad, MacBook & Apple Watch Repair in Halasuru, Bengaluru",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   keywords: [
     "iPhone repair Bangalore", "iPhone screen replacement Halasuru", "iPhone back glass repair",
     "iPad repair Bangalore", "MacBook repair Halasuru", "Apple Watch repair Bengaluru",
-    "AirPods repair", "iPhone battery replacement", "iPhone data recovery", "Mac repair store",
+    "AirPods repair", "iPhone battery replacement", "board-level storage IC repair", "Mac repair store",
     "Apple repair specialist Bangalore", "Red Apple Mobile Repair Store",
   ],
   authors: [{ name: SITE.name }],
@@ -117,7 +117,7 @@ const serviceSchema = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": ["LocalBusiness", "Store", "Organization"],
+  "@type": ["LocalBusiness", "Store", "Organization", "MobilePhoneRepair"],
   "@id": `${baseUrl}/#business`,
   name: SITE.legalName,
   alternateName: SITE.shortName,
@@ -125,7 +125,7 @@ const localBusinessSchema = {
   // logo it can show beside a search result. Absolute URL, >=112px square.
   logo: {
     "@type": "ImageObject",
-    url: `${baseUrl}/logo.png`,
+    url: `${baseUrl}/icon-512.png`,
     width: 512,
     height: 512,
     caption: SITE.legalName,
@@ -156,7 +156,7 @@ const localBusinessSchema = {
     { "@type": "Place", name: "MG Road" },
   ],
   hasMap: SITE.mapsUrl,
-  sameAs: [SITE.gmbUrl, `https://www.google.com/maps/place/?q=place_id:${SITE.placeId}`],
+  sameAs: SOCIAL_LINKS.map((s) => s.href).filter(Boolean),
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: SITE.rating,
@@ -175,7 +175,9 @@ const localBusinessSchema = {
     "Apple Watch repair",
     "AirPods repair",
     "Front glass restoration",
-    "Data recovery",
+    "Board-level storage IC repair",
+    "Signed firmware restore",
+    "Owner-verified factory restore assistance",
   ],
 };
 
@@ -190,7 +192,7 @@ const organizationSchema = {
   url: baseUrl,
   logo: {
     "@type": "ImageObject",
-    url: `${baseUrl}/logo.png`,
+    url: `${baseUrl}/icon-512.png`,
     width: 512,
     height: 512,
   },
@@ -213,7 +215,7 @@ const organizationSchema = {
     areaServed: "IN",
     availableLanguage: ["en", "hi", "kn"],
   },
-  sameAs: [SITE.gmbUrl, SITE.instagramUrl, SITE.facebookUrl, SITE.youtubeUrl].filter(Boolean),
+  sameAs: SOCIAL_LINKS.map((s) => s.href).filter(Boolean),
 };
 
 const serviceListSchema = {
