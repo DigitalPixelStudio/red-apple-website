@@ -891,7 +891,8 @@
         }, 0.4, 0.12);
 
         // 4. TBK OCA Hydraulic Press 3D
-        registerSlot('canvas-tbk-oca', 6.2, (root) => {
+        registerSlot('canvas-tbk-oca', 4.9, (root) => {
+          root.scale.setScalar(1.25);
           root.position.y = -0.2;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.9, 1.8), silverMat); base.position.y = -0.8;
           const top = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, 1.8), slateMat); top.position.y = 1.05;
@@ -903,7 +904,8 @@
         }, -0.4, 0.2);
 
         // 5. TBK 90L Autoclave Bubble Chamber 3D
-        registerSlot('canvas-tbk-90l', 6.0, (root) => {
+        registerSlot('canvas-tbk-90l', 4.9, (root) => {
+          root.scale.setScalar(1.25);
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.42, 2.0), darkObs); base.position.y = -1.15;
           const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.98, 0.98, 2.05, 32), slateMat); tank.rotation.x = Math.PI / 2;
           const dPivot = new THREE.Group(); dPivot.position.set(-0.98, 0, 1.04);
@@ -916,7 +918,8 @@
         }, -0.35, 0.18);
 
         // 6. TBK-958 Cold UV Purple Laser 3D
-        registerSlot('canvas-tbk-958', 6.2, (root) => {
+        registerSlot('canvas-tbk-958', 4.9, (root) => {
+          root.scale.setScalar(1.25);
           root.position.y = -0.25;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.4, 2.2), silverMat); base.position.y = -1.05;
           const bed = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.08, 1.5), darkObs); bed.position.set(0, -0.82, 0.2);

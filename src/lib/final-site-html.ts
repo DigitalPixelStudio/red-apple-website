@@ -161,18 +161,18 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 2. TECHNICAL TICKER STRIP -->
-    <div class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2 text-[11px] font-bold text-zinc-700">
-      <div class="marquee-track flex flex-wrap items-center justify-center gap-x-6 gap-y-1.5">
-        <span>Front glass restoration</span><span class="text-red-500">•</span>
-        <span>TBK OCA vacuum lamination</span><span class="text-orange-500">•</span>
-        <span>90-litre bubble remover</span><span class="text-red-500">•</span>
-        <span>TBK-958 cold UV laser</span><span class="text-orange-500">•</span>
-        <span>Original OLED retained</span><span class="text-red-500">•</span>
-        <span>6 Months repair warranty</span><span class="text-orange-500">•</span>
-        <span>Zero-password privacy</span><span class="text-red-500">•</span>
-        <span>Apple Diagnostic Mode testing</span><span class="text-orange-500">•</span>
-        <span>Halasuru · Bengaluru</span>
-        </div>
+    <div class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-1.5 px-4 text-center text-[11px] font-bold text-zinc-700">
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">Front glass restoration</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">TBK OCA vacuum lamination</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">90-litre bubble remover</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">TBK-958 cold UV laser</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">Original OLED retained</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">6 Months repair warranty</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">Zero-password privacy</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">Apple Diagnostic Mode testing</span>
+        <span class="rounded-full border border-red-100 bg-white/80 px-2.5 py-1 shadow-sm">Halasuru · Bengaluru</span>
+      </div>
     </div>
 
     <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
@@ -696,53 +696,68 @@ export const finalSiteHtml = `
 
         <div class="mt-9 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <!-- Machine 01 -->
-          <div class="reveal-up flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
-            <div class="orange-glass-wrap relative aspect-[4/5] w-full overflow-hidden bg-zinc-950">
-              <img loading="lazy" decoding="async" src="/images/machines/tbk-oca-press.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-contain object-center p-2" onerror="this.src='/images/machines/tbk-oca-press.webp'">
-              <div class="orange-glass-sweep"></div>
-              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
+          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
+            <div class="flex flex-col lg:col-span-6">
+              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+                <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-oca-press.webp'">
+                <div class="orange-glass-sweep"></div>
+                <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
+              </div>
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest text-red-600">Bench equipment 01 of 03</div>
+                <h3 class="mt-1 font-display text-xl font-extrabold text-zinc-950 sm:text-2xl">TBK OCA Laminating Vacuum Hydraulic Press</h3>
+                <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">Aligns and bonds new front glass to your original OLED under vacuum and controlled hydraulic pressure.</p>
+                <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">OCA VACUUM LAMINATION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">VACUUM PRESS</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ORIGINAL OLED SAFE</span></div>
+              </div>
             </div>
-            <div class="p-4">
-              <h3 class="font-display text-base font-extrabold text-zinc-950">TBK OCA Laminating Vacuum Hydraulic Press</h3>
-              <p class="mt-1 text-xs text-zinc-600">Aligns and bonds new front glass to your original OLED under vacuum and controlled hydraulic pressure.</p>
-            </div>
-            <div class="stage-3d-box relative mt-auto h-96 border-t border-zinc-800 sm:h-[28rem]">
-              <canvas id="canvas-tbk-oca" aria-label="3D TBK OCA Press"></canvas>
-              <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-zinc-950/80 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">Interactive 3D · Drag to Orbit</span>
+            <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
+              <canvas id="canvas-tbk-oca" aria-label="Interactive 3D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 3D · Drag to Orbit</span>
+              <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
             </div>
           </div>
 
           <!-- Machine 02 -->
-          <div class="reveal-up flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
-            <div class="orange-glass-wrap relative aspect-[4/5] w-full overflow-hidden bg-zinc-950">
-              <img loading="lazy" decoding="async" src="/images/machines/tbk-bubble-chamber.webp" alt="TBK 90-Litre Bubble Remover Chamber" class="h-full w-full object-contain object-center p-2" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
-              <div class="orange-glass-sweep"></div>
-              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
+          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
+            <div class="flex flex-col lg:col-span-6">
+              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+                <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
+                <div class="orange-glass-sweep"></div>
+                <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
+              </div>
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest text-red-600">Bench equipment 02 of 03</div>
+                <h3 class="mt-1 font-display text-xl font-extrabold text-zinc-950 sm:text-2xl">TBK 90-Litre High-Pressure Bubble Remover</h3>
+                <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">Cures OCA under high pressure inside a 90-litre chamber, eliminating microscopic air bubbles permanently.</p>
+                <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">90-LITRE AUTOCLAVE</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ZERO-BUBBLE OCA</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">PRESSURE CURVED</span></div>
+              </div>
             </div>
-            <div class="p-4">
-              <h3 class="font-display text-base font-extrabold text-zinc-950">TBK 90-Litre High-Pressure Bubble Remover</h3>
-              <p class="mt-1 text-xs text-zinc-600">Cures OCA under high pressure inside a 90-litre chamber, eliminating microscopic air bubbles permanently.</p>
-            </div>
-            <div class="stage-3d-box relative mt-auto h-96 border-t border-zinc-800 sm:h-[28rem]">
-              <canvas id="canvas-tbk-90l" aria-label="3D TBK 90L Chamber"></canvas>
-              <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-zinc-950/80 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">Interactive 3D · Drag to Orbit</span>
+            <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
+              <canvas id="canvas-tbk-90l" aria-label="Interactive 3D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 3D · Drag to Orbit</span>
+              <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
             </div>
           </div>
 
           <!-- Machine 03 -->
-          <div class="reveal-up flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
-            <div class="orange-glass-wrap relative aspect-[4/5] w-full overflow-hidden bg-zinc-950">
-              <img loading="lazy" decoding="async" src="/images/machines/tbk-uv-laser.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-contain object-center p-2" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
-              <div class="orange-glass-sweep"></div>
-              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
+          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
+            <div class="flex flex-col lg:col-span-6">
+              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+                <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
+                <div class="orange-glass-sweep"></div>
+                <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
+              </div>
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest text-red-600">Bench equipment 03 of 03</div>
+                <h3 class="mt-1 font-display text-xl font-extrabold text-zinc-950 sm:text-2xl">TBK-958 Cold UV Purple Laser</h3>
+                <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">Separates front bezel and removes back glass with 355nm low-temperature UV laser precision.</p>
+                <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">COLD UV LASER</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">355NM PRECISION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">BACK GLASS SAFE</span></div>
+              </div>
             </div>
-            <div class="p-4">
-              <h3 class="font-display text-base font-extrabold text-zinc-950">TBK-958 Cold UV Purple Laser</h3>
-              <p class="mt-1 text-xs text-zinc-600">Separates front bezel and removes back glass with 355nm low-temperature UV laser precision.</p>
-            </div>
-            <div class="stage-3d-box relative mt-auto h-96 border-t border-zinc-800 sm:h-[28rem]">
-              <canvas id="canvas-tbk-958" aria-label="3D TBK-958 UV Laser"></canvas>
-              <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-purple-950/90 px-2.5 py-0.5 text-[10px] font-bold text-purple-300">Interactive 3D · 355nm Beam</span>
+            <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
+              <canvas id="canvas-tbk-958" aria-label="Interactive 3D TBK-958 Cold UV Purple Laser"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 3D · 355nm Beam</span>
+              <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
             </div>
           </div>
         </div>
