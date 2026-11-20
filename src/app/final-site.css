@@ -14,7 +14,7 @@
 
     /* Edge-to-Edge iPhone 12 Pro Max Top Notch with Live Green/Red LED */
     .iphone-top-notch {
-      display: none;
+      display: none !important;
       position: fixed;
       top: 0;
       left: 50%;
@@ -25,7 +25,7 @@
       background: #09090b;
       border-bottom-left-radius: 16px;
       border-bottom-right-radius: 16px;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       gap: 10px;
