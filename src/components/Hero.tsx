@@ -131,7 +131,7 @@ export default function Hero() {
           Component-Level Micro-Soldering, OEM Displays &amp; Front-Glass Restoration
           On Specialised TBK Machinery — <strong>30-Minute Turnarounds</strong>, Right
           Here In Bengaluru. Backed By Our{" "}
-          <strong>6-Month Repair Service Warranty</strong>.
+          <strong>6 Months Repair Service Warranty</strong>.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">

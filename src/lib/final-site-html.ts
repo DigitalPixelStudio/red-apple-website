@@ -1,725 +1,854 @@
-﻿// Generated from the owner-approved final preview HTML. Do not hand-edit.
+﻿// Generated from the owner-approved final HTML. Do not hand-edit.
 export const finalSiteHtml = `
-  <!-- EDGE-TO-EDGE iPHONE 12 PRO MAX NOTCH BAR WITH LIVE GREEN/RED LED -->
-  <div class="iphone-notch-bar" aria-hidden="true">
-    <div class="iphone-notch-pill">
-      <span class="notch-led" title="Live Lab Sensor"></span>
-      <span class="notch-speaker"></span>
-      <span class="notch-camera"></span>
-    </div>
+  <!-- Edge-to-Edge Top iPhone 12 Pro Max Notch -->
+  <div class="iphone-top-notch" aria-hidden="true">
+    <span class="notch-speaker"></span>
+    <span class="notch-led"></span>
   </div>
 
-  <!-- LEFT-SIDE DARK BREATHING PAGE SECTION INDICATOR (DESKTOP XL+) -->
-  <aside class="left-rail hidden flex-col gap-2 rounded-2xl border border-zinc-800 bg-zinc-950/92 px-2.5 py-3 shadow-2xl backdrop-blur-md xl:flex" aria-label="Section progress">
-    <a href="#hero" data-rail="hero" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">Hero</span></a>
-    <a href="#real-shop" data-rail="real-shop" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">Shop</span></a>
-    <a href="#estimate" data-rail="estimate" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">Quote</span></a>
-    <a href="#paired-crm" data-rail="paired-crm" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">CRM</span></a>
-    <a href="#oled-restore" data-rail="oled-restore" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">OLED</span></a>
-    <a href="#tbk-lab" data-rail="tbk-lab" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">TBK 3D</span></a>
-    <a href="#ecosystem" data-rail="ecosystem" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">Devices</span></a>
-    <a href="#reviews" data-rail="reviews" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">Reviews</span></a>
-    <a href="#halasuru-map" data-rail="halasuru-map" class="rail-item group flex items-center gap-2 text-[10px] font-semibold text-zinc-400 transition hover:text-white"><span class="rail-dot h-2 w-2 rounded-full bg-zinc-600"></span><span class="breathing-heading">Map</span></a>
+  <!-- Left-Side Dark Breathing Page Indicator (Desktop) -->
+  <aside class="fixed left-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-2 rounded-full bg-zinc-950/90 px-2 py-3 text-[10px] font-bold text-zinc-300 shadow-xl backdrop-blur xl:flex">
+    <span id="rail-label" class="heading-breathe mb-1 [writing-mode:vertical-rl] rotate-180 tracking-widest text-orange-400">HERO</span>
+    <a href="#hero" data-rail="HERO" class="page-rail-dot is-active h-2 w-2 rounded-full bg-zinc-600" title="Hero"></a>
+    <a href="#real-shop" data-rail="SHOP" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Real Shop"></a>
+    <a href="#estimate" data-rail="ESTIMATE" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="30s Estimate"></a>
+    <a href="#glass-lab" data-rail="GLASS LAB" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Glass Lab"></a>
+    <a href="#tbk-machines" data-rail="TBK 3D" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="TBK Lab"></a>
+    <a href="#ecosystem-3d" data-rail="DEVICES" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Apple Ecosystem"></a>
+    <a href="#comparison" data-rail="COMPARE" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Comparison"></a>
+    <a href="#reviews" data-rail="REVIEWS" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Reviews"></a>
+    <a href="#halasuru-map" data-rail="VISIT" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Halasuru Map"></a>
   </aside>
 
-  <!-- STICKY TOP NAVBAR (PWA INSTALL BUTTON + NO "VISIT US" IN HEADER) -->
-  <header class="sticky top-[22px] z-40 border-b border-zinc-200/80 bg-white/92 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+  <!-- STICKY HEADER (No "Visit Us" in Header per Client Lock) -->
+  <header class="sticky top-0 z-40 border-b border-zinc-200/80 bg-white/90 pt-4 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-red-200 bg-red-50/70">
-          <img src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-full w-full object-contain p-0.5" onerror="window.handleLogoFallback && window.handleLogoFallback(this)">
-        </div>
-        <div class="leading-tight">
-          <div class="font-display text-sm font-extrabold tracking-tight text-red-600 sm:text-base">
-            Red Apple <span class="text-zinc-900">Mobile Repair</span>
-          </div>
-          <div class="text-[11px] text-zinc-500">Halasuru · MG Road, Bengaluru</div>
+        <img src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-9 w-9 rounded-xl border border-red-200 object-contain shadow-sm" onerror="this.src='/icon-512.png'">
+        <div>
+          <div class="font-display text-sm font-extrabold leading-none text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair</div>
+          <div class="mt-0.5 text-[11px] font-medium text-zinc-500">Halasuru · MG Road, Bengaluru</div>
         </div>
       </a>
 
-      <nav class="hidden items-center gap-5 text-xs font-medium text-zinc-600 lg:flex">
-        <a href="#real-shop" class="transition hover:text-red-600">Our Shop</a>
-        <a href="#estimate" class="transition hover:text-red-600">30s Estimate</a>
-        <a href="#paired-crm" class="transition hover:text-red-600">Track Repair</a>
-        <a href="#oled-restore" class="transition hover:text-red-600">Glass Restore</a>
-        <a href="#tbk-lab" class="transition hover:text-red-600">TBK Lab</a>
-        <a href="#ecosystem" class="transition hover:text-red-600">All Devices</a>
-        <a href="#reviews" class="transition hover:text-red-600">Reviews</a>
+      <nav class="hidden items-center gap-5 text-xs font-semibold text-zinc-600 lg:flex">
+        <a href="#real-shop" class="hover:text-red-600">Our Shop</a>
+        <a href="#estimate" class="hover:text-red-600">30s Estimate</a>
+        <a href="#paired-crm" class="hover:text-red-600">Track Repair</a>
+        <a href="#glass-lab" class="hover:text-red-600">Glass Lab</a>
+        <a href="#tbk-machines" class="hover:text-red-600">TBK 3D</a>
+        <a href="#ecosystem-3d" class="hover:text-red-600">Devices</a>
+        <a href="#reviews" class="hover:text-red-600">Reviews</a>
+        <a href="#faq" class="hover:text-red-600">FAQ</a>
       </nav>
 
       <div class="flex items-center gap-2">
-        <!-- PWA Install App Button (Triggers Chrome beforeinstallprompt / Install Modal) -->
-        <button type="button" id="btn-pwa-install" class="inline-flex items-center gap-1.5 rounded-full border border-zinc-300 bg-zinc-950 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition hover:bg-red-600 hover:border-red-600 active:scale-95">
-          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-          <span>Install App</span>
+        <button type="button" id="btn-pwa-open" class="inline-flex items-center gap-1.5 rounded-full bg-zinc-950 px-3 py-2 text-[11px] font-bold text-white transition hover:bg-zinc-800">
+          <span>⬇</span><span>Install App</span>
         </button>
-        <a href="#estimate" class="dock-quote-btn rounded-full px-4 py-1.5 text-xs font-bold text-white transition hover:opacity-95 active:scale-95">
+        <a href="#estimate" class="dock-quote-btn rounded-full px-3.5 py-2 text-[11px] font-bold text-white transition hover:opacity-95">
           Get Quote
         </a>
       </div>
     </div>
   </header>
 
-  <main class="w-full">
+  <main>
 
-    <!-- 1. HERO SECTION: iPhone 17 Pro Max Orange 3D + 6 PILLS -->
-    <section id="hero" class="ambient-shift-warm relative overflow-hidden border-b border-zinc-100 py-8 sm:py-12">
-      <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-12">
-        <div class="flex flex-col gap-4 lg:col-span-6">
-          <div class="inline-flex w-fit items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 font-mono-num text-[11px] font-bold uppercase tracking-wider text-red-700">
-            Halasuru Flagship Apple Lab · 1 Min from Halasuru Metro
+    <!-- 1. HERO SECTION (PROPERLY FRAMED iPhone 17 Pro Max · Orange 3D) -->
+    <section id="hero" class="ambient-warm border-b border-zinc-100 py-8 sm:py-12">
+      <div class="ambient-orb -left-20 -top-20 h-72 w-72 bg-red-500"></div>
+      <div class="ambient-orb -bottom-24 right-10 h-80 w-80 bg-orange-400" style="animation-delay: -4s;"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+          <div class="flex flex-col gap-4 lg:col-span-6">
+            <div class="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
+              <span class="relative flex h-2 w-2"><span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-emerald-500"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>
+              <span id="live-ist-clock">Open now · 10 AM – 12 AM · Halasuru, Bengaluru</span>
+            </div>
+
+            <h1 class="heading-breathe font-display text-4xl font-extrabold leading-[1.06] tracking-tight text-zinc-950 sm:text-5xl">
+              Apple Device Repairs, <span class="text-brand-grad">Mastered.</span>
+            </h1>
+
+            <p class="text-sm leading-relaxed text-zinc-600 sm:text-base">
+              Independent Apple repair studio on MG Road, Halasuru — component-level micro-soldering, OEM-grade displays &amp; front-glass restoration on specialised TBK machinery. 30-minute turnarounds, backed by our written 6 Months repair warranty.
+            </p>
+
+            <!-- 6 Trust Pills  -->
+            <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+              <span class="badge-breathe rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-900">★ 4.9/5 · 1,103 Google Reviews</span>
+              <span class="badge-breathe rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800" style="animation-delay: 0.4s;">32-Point QC</span>
+              <span class="badge-breathe rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-orange-800" style="animation-delay: 0.8s;">CRM Invoice</span>
+              <span class="badge-breathe rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-700" style="animation-delay: 1.2s;">6 Months Warranty</span>
+              <span class="badge-breathe rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800" style="animation-delay: 1.6s;">Zero-Password Privacy</span>
+              <span class="badge-breathe rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-emerald-800" style="animation-delay: 2s;">Free 24/7 Pickup</span>
+            </div>
+
+            <!-- Hero CTAs including Visit Us -->
+            <div class="flex flex-wrap items-center gap-2.5 pt-1">
+              <a href="#estimate" class="dock-quote-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">Get 30-Second Estimate</a>
+              <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">WhatsApp Bench 24/7</a>
+              <a href="#halasuru-map" class="rounded-full border border-zinc-300 bg-white px-4 py-3 text-xs font-bold text-zinc-900 shadow-sm transition hover:border-red-500 hover:text-red-600">📍 Visit Us</a>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-1 text-[11px]">
+              <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:border-red-400">Switch to Scroll-Safe BG</button>
+              <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:border-red-400">Reset 3D Angle</button>
+            </div>
           </div>
 
-          <h1 class="breathing-heading font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-zinc-950 sm:text-5xl">
-            Apple Device Repairs, <span class="text-brand-grad">Mastered.</span>
-          </h1>
-
-          <p class="text-sm leading-relaxed text-zinc-600 sm:text-base">
-            Independent Apple repair studio on MG Road, Halasuru — iPhone front glass restoration, OLED displays, TBK-958 cold UV laser back glass, MacBook logic boards, iPad, Watch &amp; AirPods serviced in-house.
-          </p>
-
-          <div class="flex flex-wrap gap-2 text-xs font-semibold">
-            <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-900">★ 4.9/5 · 1,103 Google Reviews</span>
-            <span class="rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800">32-Point QC</span>
-            <span class="rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-orange-900">CRM Invoice</span>
-            <span class="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-700">6-Month Warranty</span>
-            <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-emerald-800">Zero-Password Privacy</span>
-            <span class="rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800">Free 24/7 Pickup</span>
-          </div>
-
-          <div class="mt-1 flex flex-wrap items-center gap-2.5">
-            <a href="#estimate" class="dock-quote-btn inline-flex items-center gap-2 rounded-full px-5 py-3 text-xs font-bold text-white transition hover:opacity-95 active:scale-95 sm:text-sm">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-              <span>Get 30-Second Estimate</span>
-            </a>
-            <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn inline-flex items-center gap-2 rounded-full px-5 py-3 text-xs font-bold text-white transition hover:opacity-95 active:scale-95 sm:text-sm">
-              <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.03 2C6.5 2 2 6.5 2 12c0 1.77.46 3.45 1.28 4.92L2 22l5.25-1.25A9.96 9.96 0 0012.03 22C17.55 22 22 17.5 22 12S17.55 2 12.03 2zm5.82 14.12c-.25.7-1.45 1.34-2 1.42-.52.08-1.18.11-1.9-.12-.44-.14-1-.33-1.72-.64-3.03-1.31-5-4.38-5.15-4.58-.15-.2-1.23-1.64-1.23-3.13 0-1.49.78-2.22 1.06-2.52.28-.3.61-.38.81-.38.2 0 .41.01.59.01.19.01.44-.07.69.53.25.61.86 2.1.94 2.25.08.15.13.33.03.53-.1.2-.15.33-.3.51-.15.18-.32.4-.45.53-.15.15-.31.32-.13.62.18.3.79 1.3 1.7 2.11 1.17 1.04 2.15 1.37 2.45 1.52.3.15.48.13.66-.08.18-.2.76-.89.96-1.19.2-.3.41-.25.69-.15.28.1 1.77.84 2.08.99.3.15.51.23.58.35.08.13.08.73-.17 1.43z"/></svg>
-              <span>WhatsApp Bench 24/7</span>
-            </a>
-            <a href="#halasuru-map" class="inline-flex items-center gap-1.5 rounded-full border border-zinc-300 bg-white px-4 py-3 text-xs font-bold text-zinc-800 transition hover:border-red-600 hover:text-red-600 sm:text-sm">
-              <svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <span>Visit Us</span>
-            </a>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2 pt-1">
-            <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-300 bg-white px-3.5 py-1.5 text-[11px] font-semibold text-zinc-700 transition hover:border-red-500 hover:text-red-600">
-              Switch to Scroll-Safe BG
-            </button>
-            <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-zinc-50 px-3.5 py-1.5 text-[11px] font-semibold text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-900">
-              Reset 3D Angle
-            </button>
+          <!-- Hero 3D Stage (HD Flagship iPhone 17 Pro Max · Orange) -->
+          <div class="lg:col-span-6">
+            <div class="stage-3d-box relative h-[380px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[430px]">
+              <canvas id="canvas-hero" aria-label="3D iPhone 17 Pro Max Orange"></canvas>
+              <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200 backdrop-blur">Drag to orbit 360° · HD Keynote Animation</div>
+              <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300 backdrop-blur">iPhone 17 Pro Max · Orange</div>
+            </div>
           </div>
         </div>
 
-        <div class="studio-3d-stage relative h-[380px] w-full overflow-hidden rounded-3xl border border-zinc-800 shadow-2xl sm:h-[440px] lg:col-span-6">
-          <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 z-10 rounded-full border border-white/15 bg-black/55 px-3 py-1 text-[11px] font-medium text-zinc-200 backdrop-blur">
-            Drag to orbit 360° · Soft studio floor shadow
+        <!-- Clean Full-Width Live Bench Availability (MagSafe 3D Core Removed) -->
+        <div class="mt-8">
+          <div class="flex flex-col justify-between rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">● Right Now on Our Halasuru Bench</span>
+              <span class="rounded-full bg-zinc-100 px-3 py-1 font-mono-num text-[11px] font-bold text-zinc-700">Open 10 AM – 12 AM · All 7 Days</span>
+            </div>
+            <h2 class="mt-2 font-display text-xl font-extrabold text-zinc-950">Walk-In &amp; Same-Day Bench Availability</h2>
+            <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div class="rounded-2xl border border-orange-200 bg-orange-50/70 p-3.5">
+                <div class="text-[10px] font-bold uppercase text-orange-700">Display &amp; Battery</div>
+                <div class="mt-0.5 font-display text-base font-extrabold text-zinc-950">~35–45 mins</div>
+                <div class="text-[11px] text-zinc-600">2 technicians ready</div>
+              </div>
+              <div class="rounded-2xl border border-red-200 bg-red-50/70 p-3.5">
+                <div class="text-[10px] font-bold uppercase text-red-700">TBK-958 Glass Lab</div>
+                <div class="mt-0.5 font-display text-base font-extrabold text-zinc-950">Same Day</div>
+                <div class="text-[11px] text-zinc-600">UV Laser &amp; OCA open</div>
+              </div>
+              <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-3.5">
+                <div class="text-[10px] font-bold uppercase text-zinc-700">Board-Level IC Lab</div>
+                <div class="mt-0.5 font-display text-base font-extrabold text-zinc-950">Microscope Ready</div>
+                <div class="text-[11px] text-zinc-600">Free diagnosis first</div>
+              </div>
+              <div class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3.5">
+                <div class="text-[10px] font-bold uppercase text-emerald-700">Free 24/7 Pickup</div>
+                <div class="mt-0.5 font-display text-base font-extrabold text-zinc-950">All Bengaluru</div>
+                <div class="text-[11px] text-zinc-600">Insured &amp; sealed</div>
+              </div>
+            </div>
           </div>
-          <div class="font-mono-num pointer-events-none absolute right-3 top-3 z-10 rounded-full border border-orange-500/50 bg-orange-950/80 px-3 py-1 text-[11px] font-semibold text-orange-200 backdrop-blur">
-            iPhone 17 Pro Max · Orange
+        </div>
+
+        <!-- Surprise: Scroll-Triggered Tabular Stat Roll-Up Bar (Zero CLS) -->
+        <div id="stat-rollup-bar" class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div class="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
+            <div class="stat-counter font-display text-2xl font-black text-zinc-950 font-mono-num" data-target="4.9" data-dec="1" data-suf="/5">4.9/5</div>
+            <div class="mt-0.5 text-[11px] font-semibold text-zinc-500">Google Rating</div>
           </div>
-          <canvas id="canvas-hero" class="three-slot"></canvas>
+          <div class="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
+            <div class="stat-counter font-display text-2xl font-black text-red-600 font-mono-num" data-target="1103" data-dec="0" data-suf="">1,103</div>
+            <div class="mt-0.5 text-[11px] font-semibold text-zinc-500">Verified Reviews</div>
+          </div>
+          <div class="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
+            <div class="stat-counter font-display text-2xl font-black text-zinc-950 font-mono-num" data-target="30" data-dec="0" data-suf=" min">30 min</div>
+            <div class="mt-0.5 text-[11px] font-semibold text-zinc-500">Avg. Repair Time</div>
+          </div>
+          <div class="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
+            <div class="stat-counter font-display text-2xl font-black text-orange-600 font-mono-num" data-target="32" data-dec="0" data-suf=" pts">32 pts</div>
+            <div class="mt-0.5 text-[11px] font-semibold text-zinc-500">QC Checkpoints</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 1B. POST-HEADER 3D CALIBRATION CORE + SURPRISE #1 LIVE BENCH BOARD -->
-    <section class="ambient-shift-cool border-b border-zinc-100 py-8">
-      <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-6 px-4 sm:px-6 lg:grid-cols-12">
-        <div class="studio-3d-stage relative h-52 overflow-hidden rounded-3xl border border-zinc-800 shadow-lg lg:col-span-5">
-          <span class="pointer-events-none absolute left-3 top-3 z-10 rounded-full border border-orange-400/30 bg-black/60 px-2.5 py-1 text-[10px] font-semibold text-orange-200">
-            3D Optical &amp; MagSafe Calibration Core · Drag 360°
-          </span>
-          <canvas id="canvas-posthero" class="three-slot"></canvas>
+    <!-- 2. TECHNICAL TICKER STRIP -->
+    <div class="overflow-hidden border-b border-zinc-800 bg-zinc-950 py-2.5 text-xs font-semibold text-zinc-300">
+      <div class="marquee-track flex items-center gap-8">
+        <span>Front glass restoration</span><span class="text-red-500">•</span>
+        <span>TBK OCA vacuum lamination</span><span class="text-orange-500">•</span>
+        <span>90-litre bubble remover</span><span class="text-red-500">•</span>
+        <span>TBK-958 cold UV laser</span><span class="text-orange-500">•</span>
+        <span>Original OLED retained</span><span class="text-red-500">•</span>
+        <span>6 Months repair warranty</span><span class="text-orange-500">•</span>
+        <span>Zero-password privacy</span><span class="text-red-500">•</span>
+        <span>Apple Diagnostic Mode testing</span><span class="text-orange-500">•</span>
+        <span>Halasuru · Bengaluru</span><span class="text-red-500">•</span>
+        <span>Front glass restoration</span><span class="text-red-500">•</span>
+        <span>TBK OCA vacuum lamination</span><span class="text-orange-500">•</span>
+        <span>90-litre bubble remover</span><span class="text-red-500">•</span>
+        <span>TBK-958 cold UV laser</span><span class="text-orange-500">•</span>
+        <span>Original OLED retained</span><span class="text-red-500">•</span>
+        <span>6 Months repair warranty</span><span class="text-orange-500">•</span>
+        <span>Zero-password privacy</span><span class="text-red-500">•</span>
+        <span>Apple Diagnostic Mode testing</span><span class="text-orange-500">•</span>
+        <span>Halasuru · Bengaluru</span>
+      </div>
+    </div>
+
+    <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
+    <section id="real-shop" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+      <div class="ambient-orb -right-16 top-20 h-72 w-72 bg-orange-400"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-2xl text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Real Store</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">A Real Shop, a Real Bench &amp; <span class="text-brand-grad">The Real People</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Before you hand over a ₹80,000 phone, you should know where it goes. This is our store on MG Road, our benches, and the people who will open it — <strong class="text-zinc-900">photographed, not illustrated.</strong></p>
         </div>
 
-        <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6 lg:col-span-7">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="relative flex h-2.5 w-2.5">
-                <span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-emerald-500"></span>
-                <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-              </span>
-              <span class="font-mono-num text-[11px] font-bold uppercase tracking-wider text-emerald-700">Right Now on Our Halasuru Bench</span>
+        <div class="mt-9 grid grid-cols-1 gap-5 md:grid-cols-2">
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/gallery/store-glass-front.webp" alt="Walk in off MG Road — Halasuru Storefront" class="h-full w-full object-cover" onerror="this.src='/images/gallery/store-glass-front.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · Store</span>
             </div>
-            <span id="live-ist-clock" class="font-mono-num rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-[11px] font-semibold text-zinc-700">IST Live · Open till 12:00 AM</span>
-          </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Walk in off MG Road — 1 min from Halasuru Metro</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Opposite Bhadra Landmark, Metro Pillar No. 125. Walk right in 10 AM – 12 AM midnight, all 7 days.</p>
+            </div>
+          </article>
 
-          <h2 class="mt-2 font-display text-xl font-extrabold text-zinc-950 sm:text-2xl">
-            Walk-In &amp; Same-Day Bench Availability
-          </h2>
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/gallery/lab-wide-three-techs.webp" alt="Three benches, three technicians, one room" class="h-full w-full object-cover" onerror="this.src='/images/gallery/lab-wide-three-techs.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · Store</span>
+            </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Three benches, three technicians, one room</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">ESD-safe open repair floor so you see your Apple device handled transparently in-house.</p>
+            </div>
+          </article>
 
-          <div class="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-            <div class="rounded-2xl border border-orange-200 bg-orange-50/70 p-3">
-              <div class="text-[10px] font-bold uppercase text-orange-700">Display &amp; Battery</div>
-              <div class="font-mono-num mt-0.5 text-sm font-extrabold text-zinc-950">~35–45 mins</div>
-              <div class="text-[11px] text-zinc-600">2 technicians ready</div>
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/gallery/tech-at-microscope.webp" alt="Board-level work under the microscope" class="h-full w-full object-cover" onerror="this.src='/images/gallery/tech-at-microscope.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · Bench</span>
             </div>
-            <div class="rounded-2xl border border-red-200 bg-red-50/70 p-3">
-              <div class="text-[10px] font-bold uppercase text-red-700">TBK-958 Glass Lab</div>
-              <div class="font-mono-num mt-0.5 text-sm font-extrabold text-zinc-950">Same Day</div>
-              <div class="text-[11px] text-zinc-600">UV Laser &amp; OCA open</div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Board-level work under the microscope</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Micro-soldering, logic board shorts, PMIC &amp; water-damage revival done on our own bench.</p>
             </div>
-            <div class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3">
-              <div class="text-[10px] font-bold uppercase text-emerald-700">Free 24/7 Pickup</div>
-              <div class="font-mono-num mt-0.5 text-sm font-extrabold text-zinc-950">All Bengaluru</div>
-              <div class="text-[11px] text-zinc-600">Insured &amp; sealed</div>
+          </article>
+
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/v3/tech-workbench.jpg" alt="The bench — laser, rework station, microscope" class="h-full w-full object-cover" onerror="this.src='/images/v3/tech-workbench.jpg'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">04 · Bench</span>
             </div>
-          </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">The bench — laser, rework station, microscope</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Calibrated hot-air stations, TBK laser alignment, and bench multimeters at every workstation.</p>
+            </div>
+          </article>
+
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/gallery/tech-under-red-apple-sign.webp" alt="Our own sign, our own bench" class="h-full w-full object-cover" onerror="this.src='/images/gallery/tech-under-red-apple-sign.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">05 · Store</span>
+            </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Our own sign, our own bench</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">9+ years of dedicated Apple technicians working in-house under one MG Road roof.</p>
+            </div>
+          </article>
+
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/v3/circuit-board.jpg" alt="Where Repair Meets Connectivity" class="h-full w-full object-cover" onerror="this.src='/images/v3/circuit-board.jpg'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">06 · Store</span>
+            </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Where Repair Meets Connectivity</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">CRM job card accountability and live WhatsApp stage updates from check-in to handover.</p>
+            </div>
+          </article>
+
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-orange-200 bg-orange-50/40 shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-orange-600 sm:h-auto sm:w-[52%]">
+              <img src="/images/gallery/orange-wall.jpg" alt="The orange wall" class="h-full w-full object-cover" onerror="this.src='/images/gallery/orange-wall.jpg'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">07 · Store</span>
+            </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">The orange wall</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-700">Our iconic Halasuru studio landmark — the exact inspiration behind our Orange Titanium theme.</p>
+            </div>
+          </article>
+
+          <article class="reveal-up card-sheen flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm sm:flex-row">
+            <div class="orange-glass-wrap relative h-52 w-full shrink-0 bg-zinc-900 sm:h-auto sm:w-[52%]">
+              <img src="/images/v5/quote-desk.jpg" alt="Diagnostics desk" class="h-full w-full object-cover" onerror="this.src='/images/v5/quote-desk.jpg'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">08 · Store</span>
+            </div>
+            <div class="flex flex-col justify-center p-4 sm:p-5">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Diagnostics desk</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Immediate fault inspection, fixed written estimate, and 32-point QC under zero-passcode privacy.</p>
+            </div>
+          </article>
         </div>
+
+        <p class="mt-6 text-center text-xs font-semibold text-zinc-500">Open 10:00 AM – 12:00 AM, all seven days · one minute from Halasuru Metro</p>
       </div>
     </section>
 
-    <!-- 2. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (ENLARGED PHOTOS) -->
-    <section id="real-shop" class="ambient-shift-cool py-12 sm:py-16">
+    <!-- 4. GET YOUR ESTIMATE IN 30 SECONDS (ANIMATED 3D iPAD PRO ON LEFT + EXACT OWNER WHATSAPP FORMAT) -->
+    <section id="estimate" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">The Real Stuff</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            A Real Shop, a Real Bench &amp; <span class="text-brand-grad">The Real People</span>
-          </h2>
-          <p class="mt-2 text-sm leading-relaxed text-zinc-600">
-            Before you hand over a ₹80,000 phone, you should know where it goes. This is our store on MG Road, our benches, and the people who will open it — <strong class="text-zinc-900">photographed, not illustrated.</strong>
-          </p>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Smart Estimate</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Get Your Estimate in <span class="text-brand-grad">30 Seconds.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">No forms to fill from memory — tap your device, model and issue. Sends the exact structured repair ticket straight to our Halasuru bench WhatsApp.</p>
         </div>
 
-        <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12">
-          <div class="laser-card group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm lg:col-span-4">
-            <div class="relative h-60 overflow-hidden bg-zinc-100">
-              <img src="/images/gallery/store-glass-front.webp" alt="Walk in off MG Road — one minute from Halasuru Metro" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/gallery/store-glass-front.webp'">
-              <span class="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold uppercase text-zinc-800">01 · Storefront</span>
+        <div class="mt-9 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
+          <!-- Left: Animated 3D iPad Pro Carrying Live Info Badges -->
+          <div class="flex flex-col justify-between overflow-hidden rounded-3xl border border-orange-200 bg-white p-4 shadow-md lg:col-span-5">
+            <div class="stage-3d-box relative h-[360px] w-full rounded-2xl sm:h-[420px]">
+              <canvas id="canvas-estimate-ipad" aria-label="Animated 3D iPad Pro Estimate Showcase"></canvas>
+              <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-extrabold text-zinc-900 shadow">Front Glass from ₹2,500</div>
+              <div class="pointer-events-none absolute right-3 top-14 rounded-full bg-red-600/95 px-3 py-1 text-[11px] font-bold text-white shadow">OLED Display ~45 min</div>
+              <div class="pointer-events-none absolute bottom-14 left-3 rounded-full bg-emerald-600/95 px-3 py-1 text-[11px] font-bold text-white shadow">6 Months Written Warranty</div>
+              <div class="pointer-events-none absolute bottom-3 right-3 rounded-full bg-zinc-950/90 px-3 py-1 text-[11px] font-bold text-orange-300 shadow">Motherboard ₹10,500–₹14,500</div>
             </div>
-            <div class="p-4"><h3 class="text-sm font-bold text-zinc-900">Walk in off MG Road — 1 min from Halasuru Metro</h3><p class="mt-0.5 text-xs text-zinc-500">Opposite Bhadra Landmark, Metro Pillar No. 125.</p></div>
-          </div>
-
-          <div class="laser-card group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm lg:col-span-4">
-            <div class="relative h-60 overflow-hidden bg-zinc-100">
-              <img src="/images/v3/tech-workbench.jpg" alt="The bench — laser, rework station, microscope" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/v3/tech-workbench.jpg'">
-              <span class="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold uppercase text-zinc-800">02 · The Bench</span>
-            </div>
-            <div class="p-4"><h3 class="text-sm font-bold text-zinc-900">The Bench — Laser, Rework Station, Microscope</h3><p class="mt-0.5 text-xs text-zinc-500">In-house Apple repair lab built for precision hardware.</p></div>
-          </div>
-
-          <div class="laser-card group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm lg:col-span-4">
-            <div class="relative h-60 overflow-hidden bg-zinc-100">
-              <img src="/images/v5/quote-desk.jpg" alt="Diagnostic desk" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/v5/quote-desk.jpg'">
-              <span class="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold uppercase text-zinc-800">03 · Diagnostics</span>
-            </div>
-            <div class="p-4"><h3 class="text-sm font-bold text-zinc-900">Diagnostic &amp; CRM Intake Desk</h3><p class="mt-0.5 text-xs text-zinc-500">Immediate fault inspection and digital job card creation.</p></div>
-          </div>
-
-          <div class="laser-card group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm lg:col-span-3">
-            <div class="relative h-56 overflow-hidden bg-zinc-100">
-              <img src="/images/gallery/tech-at-microscope.webp" alt="Board-level work under the microscope" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/gallery/tech-at-microscope.webp'">
-              <span class="absolute left-2.5 top-2.5 rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-bold uppercase text-zinc-800">04 · Board-Level</span>
-            </div>
-            <div class="p-3.5"><h3 class="text-xs font-bold text-zinc-900">Board-Level Work Under Microscope</h3><p class="mt-0.5 text-[11px] text-zinc-500">IC rework &amp; micro-soldering in-house.</p></div>
-          </div>
-
-          <div class="laser-card group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm lg:col-span-3">
-            <div class="relative h-56 overflow-hidden bg-zinc-100">
-              <img src="/images/gallery/workbench.jpg" alt="Walk-in counter and repair bay" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/gallery/workbench.jpg'">
-              <span class="absolute left-2.5 top-2.5 rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-bold uppercase text-zinc-800">05 · Repair Bay</span>
-            </div>
-            <div class="p-3.5"><h3 class="text-xs font-bold text-zinc-900">Open Counter &amp; Clean Bench</h3><p class="mt-0.5 text-[11px] text-zinc-500">Watch your device repaired transparently.</p></div>
-          </div>
-
-          <div class="laser-card group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm lg:col-span-3">
-            <div class="relative h-56 overflow-hidden bg-zinc-100">
-              <img src="/images/gallery/tech-under-red-apple-sign.webp" alt="Our specialist at the bench" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/gallery/tech-under-red-apple-sign.webp'">
-              <span class="absolute left-2.5 top-2.5 rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-bold uppercase text-zinc-800">06 · The People</span>
-            </div>
-            <div class="p-3.5"><h3 class="text-xs font-bold text-zinc-900">Our Specialists at the Bench</h3><p class="mt-0.5 text-[11px] text-zinc-500">9+ years dedicated Apple experience.</p></div>
-          </div>
-
-          <div class="laser-card group overflow-hidden rounded-2xl border border-orange-200 bg-orange-50/40 shadow-sm lg:col-span-3">
-            <div class="relative h-56 overflow-hidden bg-orange-100">
-              <img src="/images/gallery/orange-wall.jpg" alt="The orange wall at Red Apple Halasuru" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='/images/gallery/orange-wall.jpg'">
-              <span class="absolute left-2.5 top-2.5 rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-bold uppercase text-orange-800">07 · Halasuru</span>
-            </div>
-            <div class="p-3.5"><h3 class="text-xs font-bold text-zinc-900">The Iconic Orange Wall</h3><p class="mt-0.5 text-[11px] text-zinc-500">Our unmistakable Halasuru studio identity.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. GET YOUR ESTIMATE IN 30 SECONDS + FINAL GIFT: 1-CLICK DIGITAL SLIP -->
-    <section id="estimate" class="ambient-shift-warm border-y border-zinc-100 py-12 sm:py-16">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="mx-auto max-w-2xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Smart Estimate</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            Get Your Estimate in <span class="text-brand-grad">30 Seconds.</span>
-          </h2>
-          <p class="mt-2 text-sm text-zinc-600">
-            Select your device, model, repair and details below — sends the exact structured repair request directly to our Halasuru bench WhatsApp.
-          </p>
-        </div>
-
-        <div class="mt-7 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
-          <!-- Left Enlarged Glass-Effect Visual Card -->
-          <div class="orange-glass-wrap flex flex-col justify-between rounded-3xl border border-orange-200 bg-gradient-to-b from-orange-50 via-white to-red-50 p-5 shadow-md lg:col-span-5">
-            <div class="orange-glass-sweep"></div>
-            <div class="relative flex min-h-[380px] flex-1 flex-col items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-red-950 p-6 text-center text-white shadow-inner">
-              <div class="absolute left-4 top-6 rounded-full border border-orange-300/60 bg-white/95 px-3.5 py-1.5 text-xs font-bold text-zinc-900 shadow-md">Front Glass from ₹2,500</div>
-              <div class="absolute right-4 top-24 rounded-full border border-red-300/60 bg-white/95 px-3.5 py-1.5 text-xs font-bold text-red-700 shadow-md">OLED Display ~45 min</div>
-              <div class="absolute bottom-20 left-4 rounded-full border border-emerald-300/60 bg-white/95 px-3.5 py-1.5 text-xs font-bold text-emerald-800 shadow-md">6-Month Warranty</div>
-              <div class="absolute bottom-6 right-4 rounded-full border border-amber-300/60 bg-white/95 px-3.5 py-1.5 text-xs font-bold text-amber-900 shadow-md">Motherboard ₹10,500–₹14,500</div>
-              <div class="font-display text-lg font-extrabold tracking-tight text-white">Real Prices. Zero Surprises.</div>
-              <p class="mt-1 max-w-xs text-xs text-zinc-300">Preserved high-resolution estimate showcase photo with vibrant orange-red glass sheen.</p>
-            </div>
-            <div class="mt-4 text-center">
-              <div class="text-xs font-bold text-zinc-900">Halasuru Bench · Open 10 AM – 12 AM (All 7 Days)</div>
-              <div class="text-[11px] text-zinc-500">Exact structured WhatsApp ticket sent instantly to +91 86606 63776</div>
+            <div class="mt-3 text-center">
+              <div class="font-display text-sm font-extrabold text-zinc-950">Real prices, no surprises.</div>
+              <div class="text-xs text-zinc-500">10 AM – 12 AM midnight (Open all 7 days) · +91 86606 63776</div>
             </div>
           </div>
 
-          <!-- Right Complete Model + 15 Bench Services + Exact WhatsApp Format -->
-          <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6 lg:col-span-7">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 pb-3">
-              <h3 class="text-base font-bold text-zinc-900">1. Choose Device &amp; Model</h3>
-              <div class="flex flex-wrap gap-1.5 text-xs">
-                <button type="button" data-dev="iPhone" class="dev-tab rounded-lg bg-red-600 px-3 py-1.5 font-semibold text-white">iPhone</button>
-                <button type="button" data-dev="iPad" class="dev-tab rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-semibold text-zinc-700">iPad</button>
-                <button type="button" data-dev="MacBook" class="dev-tab rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-semibold text-zinc-700">MacBook</button>
-                <button type="button" data-dev="Watch" class="dev-tab rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-semibold text-zinc-700">Watch</button>
-                <button type="button" data-dev="AirPods" class="dev-tab rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-semibold text-zinc-700">AirPods</button>
+          <!-- Right: Full 15-Repair Structured WhatsApp Form -->
+          <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-md sm:p-6 lg:col-span-7">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-900">1. Choose Device &amp; Model</span>
+              <div id="est-device-tabs" class="flex flex-wrap gap-1.5 text-[11px] font-bold">
+                <button type="button" data-dev="iPhone" class="est-dev-btn rounded-full bg-red-600 px-3 py-1 text-white">iPhone</button>
+                <button type="button" data-dev="iPad" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">iPad</button>
+                <button type="button" data-dev="MacBook" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">MacBook</button>
+                <button type="button" data-dev="Apple Watch" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">Watch</button>
+                <button type="button" data-dev="AirPods" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">AirPods</button>
               </div>
             </div>
 
-            <div id="model-grid" class="mt-3 grid grid-cols-2 gap-1.5 sm:grid-cols-3"></div>
+            <div id="est-models-grid" class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3"></div>
 
-            <!-- Verified 15 Bench Services -->
-            <div class="mt-4 border-t border-zinc-100 pt-4">
-              <label for="est-issue" class="mb-1.5 block text-xs font-bold text-zinc-800">2. Select Repair Type (All 15 Bench Services)</label>
-              <select id="est-issue" class="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2.5 text-xs font-semibold text-zinc-900 focus:border-red-600 focus:bg-white focus:outline-none">
-                <option value="Front Display Replacement" data-p="From ₹4,500">Front Display Replacement — From ₹4,500</option>
-                <option value="Front Glass Restoration" data-p="₹2,500 – ₹18,500">Front Glass Restoration (Keep OLED) — ₹2,500 – ₹18,500</option>
-                <option value="Back Glass Replacement" data-p="From ₹3,500">Back Glass Replacement (TBK-958) — From ₹3,500</option>
-                <option value="Battery Replacement" data-p="From ₹2,500">Battery Replacement — From ₹2,500</option>
-                <option value="Camera Repair" data-p="Quote">Camera Repair — Quote</option>
-                <option value="Charging Port / Flex" data-p="Quote">Charging Port / Flex — Quote</option>
-                <option value="Speaker / Mic / Haptics" data-p="Quote">Speaker / Mic / Haptics — Quote</option>
-                <option value="Motherboard / IC Repair" data-p="₹10,500 – ₹14,500">Motherboard / IC Repair — ₹10,500 – ₹14,500</option>
-                <option value="Water Damage Revival" data-p="Quote">Water Damage Revival — Quote</option>
-                <option value="System Diagnostics & Performance Tune" data-p="Quote">System Diagnostics &amp; Performance Tune — Quote</option>
-                <option value="Board-Level Storage IC Hardware Repair" data-p="Quote">Board-Level Storage IC Hardware Repair — Quote</option>
-                <option value="Owner-Verified Factory Restore Assistance" data-p="Quote">Owner-Verified Factory Restore Assistance — Quote</option>
-                <option value="Signed Firmware & DFU Restore" data-p="Quote">Signed Firmware &amp; DFU Restore — Quote</option>
-                <option value="Dent / Body / Frame Repair" data-p="Quote">Dent / Body / Frame Repair — Quote</option>
-                <option value="Other / Not sure" data-p="Quote">Other / Not sure — Quote</option>
+            <div class="mt-4">
+              <label for="est-repair" class="text-xs font-extrabold uppercase tracking-wider text-zinc-900">2. Select Repair Type (All 15 Bench Services)</label>
+              <select id="est-repair" class="mt-1.5 w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2.5 text-xs font-semibold text-zinc-900 outline-none focus:border-red-600">
+                <option value="Front Display Replacement" data-price="From ₹4,500">Front Display Replacement — From ₹4,500</option>
+                <option value="Front Glass Restoration (Keep Original OLED)" data-price="₹2,500 – ₹19,500">Front Glass Restoration (Keep OLED) — ₹2,500 – ₹19,500</option>
+                <option value="Back Glass Replacement (TBK-958 Cold UV Laser)" data-price="From ₹3,500">Back Glass Replacement (TBK-958 Laser) — From ₹3,500</option>
+                <option value="Battery Replacement" data-price="From ₹2,400">Battery Replacement — From ₹2,400</option>
+                <option value="Camera Repair (Lens / OIS Module)" data-price="Quote">Camera Repair — Quote</option>
+                <option value="Charging Port / Flex" data-price="From ₹2,200">Charging Port / Flex — From ₹2,200</option>
+                <option value="Speaker / Mic / Haptics" data-price="Quote">Speaker / Mic / Haptics — Quote</option>
+                <option value="Motherboard / IC Repair" data-price="₹10,500 – ₹14,500">Motherboard / IC Repair — ₹10,500 – ₹14,500</option>
+                <option value="Water Damage Revival" data-price="Quote">Water Damage Revival — Quote</option>
+                <option value="Software / iOS Issue" data-price="Quote">Software / iOS Issue — Quote</option>
+                <option value="Data Recovery" data-price="Quote">Data Recovery — Quote</option>
+                <option value="Owner-Verified Factory Restore" data-price="Quote">Owner-Verified Factory Restore — Quote</option>
+                <option value="OS / Firmware Installation" data-price="Quote">OS / Firmware Installation — Quote</option>
+                <option value="Dent / Body / Frame Repair" data-price="Quote">Dent / Body / Frame Repair — Quote</option>
+                <option value="Other / Not sure" data-price="Quote">Other / Not sure — Quote</option>
               </select>
             </div>
 
             <div class="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-              <input id="est-cond" type="text" value="Cracked glass / working display" placeholder="Device Condition" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
-              <input id="est-wrong" type="text" placeholder="What is wrong? (e.g. Phone fell down)" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
-              <select id="est-mode" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
+              <input id="est-condition" type="text" value="Cracked glass / working display" placeholder="Device Condition" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <input id="est-wrong" type="text" placeholder="What is wrong? (e.g. Fell down)" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <select id="est-mode" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs font-medium outline-none focus:border-red-600">
                 <option value="Walk-in at store">Walk-in at store</option>
-                <option value="Free Doorstep Pickup (Bengaluru)">Free Doorstep Pickup (Bengaluru)</option>
+                <option value="Free 24/7 Doorstep Pickup">Free 24/7 Doorstep Pickup</option>
               </select>
-              <input id="est-when" type="text" value="Today at 2 PM" placeholder="Preferred Time (e.g. Tomorrow at 12pm)" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
-              <select id="est-urgency" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
+              <input id="est-when" type="text" value="Today at 2 PM" placeholder="Preferred Time" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <select id="est-urgency" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs font-medium outline-none focus:border-red-600">
                 <option value="Urgent — Need it fixed today">Urgent — Need it fixed today</option>
-                <option value="Standard — Within 1-2 days">Standard — Within 1-2 days</option>
+                <option value="Standard — Within 24 hours">Standard — Within 24 hours</option>
               </select>
-              <input id="est-name" type="text" placeholder="Your Name" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
-              <input id="est-phone" type="text" placeholder="Your Phone (+91...)" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
-              <input id="est-email" type="email" placeholder="Your Email (Optional)" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs focus:border-red-600 focus:bg-white focus:outline-none">
+              <input id="est-name" type="text" placeholder="Your Name" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <input id="est-phone" type="tel" placeholder="Your Phone (+91...)" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <input id="est-email" type="email" placeholder="Your Email (Optional)" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
             </div>
 
-            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/75 p-3.5">
-              <div class="text-xs text-zinc-700">
-                Ticket: <strong id="est-summary" class="text-zinc-950">iPhone 17 Pro Max · Front Display Replacement</strong>
-                <div id="est-price-line" class="font-mono-num mt-0.5 text-sm font-extrabold text-red-600">Indicative: From ₹4,500 · 6-Month Warranty</div>
+            <div class="mt-4 flex flex-col justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3.5 sm:flex-row sm:items-center">
+              <div>
+                <div id="est-summary-title" class="text-xs font-bold text-zinc-900">Ticket: iPhone 17 Pro Max · Front Display Replacement</div>
+                <div id="est-summary-price" class="font-mono-num text-xs font-extrabold text-red-600">Indicative: From ₹4,500 · 6 Months Warranty</div>
               </div>
-              <div class="flex flex-wrap items-center gap-2">
-                <!-- FINAL GIFT: 1-Click Copy Digital Bench Slip -->
-                <button type="button" id="btn-copy-slip" class="rounded-full border border-zinc-300 bg-white px-3.5 py-2 text-xs font-bold text-zinc-800 transition hover:border-red-600 hover:text-red-600">
-                  📋 Copy Estimate Slip
-                </button>
-                <a id="est-wa-link" href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn rounded-full px-5 py-2.5 text-xs font-bold text-white transition hover:opacity-95 active:scale-95">
-                  Send Exact WhatsApp Request
-                </a>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" id="btn-copy-slip" class="rounded-full border border-zinc-300 bg-white px-3.5 py-2 text-[11px] font-bold text-zinc-800 hover:border-zinc-900">📋 Copy Estimate Slip</button>
+                <button type="button" id="btn-send-wa" class="dock-wa-btn rounded-full px-4 py-2 text-[11px] font-extrabold text-white">Send Exact WhatsApp Request</button>
               </div>
             </div>
+            <div id="copy-slip-msg" class="mt-2 hidden text-center text-[11px] font-bold text-emerald-700">✓ Exact structured repair ticket copied to clipboard!</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. PAIRED — YOUR DEVICE, TRACKED LIVE -->
-    <section id="paired-crm" class="ambient-shift-cool py-12">
+    <!-- 5. PAIRED — YOUR DEVICE, TRACKED LIVE (CONNECTED TO red-apple-crm.vercel.app) -->
+    <section id="paired-crm" class="ambient-clean border-b border-zinc-100 py-12">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
-          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Paired — Your Device, Tracked Live</div>
-              <h2 class="breathing-heading mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">
-                Live Repair Status from <span class="text-brand-grad">Our Halasuru Bench</span>
-              </h2>
+        <div class="grid grid-cols-1 items-center gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-md lg:grid-cols-12">
+          <div class="lg:col-span-7">
+            <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Paired · Live Repair Status from Our Halasuru Bench</div>
+            <h2 class="heading-breathe mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Paired — your device, <span class="text-brand-grad">tracked live</span></h2>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">Red Apple sends live WhatsApp updates from our repair CRM at every repair stage — for walk-in and free doorstep pickup customers alike. Your CRM invoice is your 6 Months warranty record.</p>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-bold">
+              <span class="rounded-full bg-zinc-900 px-3 py-1 text-white">1. Received</span>
+              <span class="rounded-full bg-zinc-900 px-3 py-1 text-white">2. Diagnosis</span>
+              <span class="rounded-full bg-red-600 px-3 py-1 text-white">3. Quote Approved</span>
+              <span class="rounded-full bg-orange-600 px-3 py-1 text-white">4. Repair</span>
+              <span class="rounded-full bg-emerald-600 px-3 py-1 text-white">5. Quality Check</span>
+              <span class="rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1 text-emerald-800">6. Ready For Handover</span>
             </div>
-            <span class="font-mono-num rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-[11px] text-zinc-600">Linked to red-apple-crm.vercel.app</span>
           </div>
-
-          <div class="mt-5 grid grid-cols-2 gap-2 text-xs sm:grid-cols-5">
-            <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 font-semibold text-emerald-800">01 · Job Card Logged</div>
-            <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 font-semibold text-emerald-800">02 · Bench Diagnosis</div>
-            <div class="rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 font-semibold text-orange-800">03 · TBK / Lab Repair</div>
-            <div class="rounded-xl border border-red-200 bg-red-50 px-3 py-2 font-bold text-red-800">04 · 32-Point QC</div>
-            <div class="col-span-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-medium text-zinc-700 sm:col-span-1">05 · CRM Invoice Ready</div>
-          </div>
-
-          <div class="mt-4 flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 sm:flex-row sm:items-center">
-            <div class="flex flex-1 flex-wrap gap-2">
-              <input id="crm-input" type="text" value="RA-2048" aria-label="Enter Repair Job ID" placeholder="Enter Job ID (RA-2048, RA-2051)" class="font-mono-num min-w-[180px] flex-1 rounded-xl border border-zinc-300 bg-white px-3.5 py-2.5 text-xs text-zinc-900 focus:border-red-600 focus:outline-none">
-              <button type="button" id="btn-track" class="rounded-xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-red-700 active:scale-95">Track Live Status</button>
+          <div class="rounded-2xl border border-orange-200 bg-orange-50/50 p-4 lg:col-span-5">
+            <div class="text-xs font-extrabold text-zinc-900">Track Live Job ID (<span class="font-mono-num text-red-600">red-apple-crm.vercel.app</span>)</div>
+            <div class="mt-2 flex gap-2">
+              <input id="crm-job-id" type="text" value="RA-2048" placeholder="e.g. RA-2048" class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 font-mono-num text-xs font-bold uppercase outline-none focus:border-red-600">
+              <button type="button" id="btn-crm-lookup" class="dock-quote-btn shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-white">Track</button>
             </div>
-            <div id="crm-out" class="flex-1 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-xs leading-relaxed text-zinc-700">
-              Job <strong class="text-zinc-950">RA-2048</strong> · iPhone 16 Pro Max Display · <strong class="text-emerald-700">32-Point QC Passed</strong> (Ready for Halasuru handover · Zero PII exposed).
+            <div id="crm-lookup-res" class="mt-2.5 rounded-xl border border-zinc-200 bg-white p-3 text-xs text-zinc-700">
+              <strong>RA-2048</strong> · iPhone 16 Pro Max Display · <span class="font-bold text-emerald-700">32-Point QC Passed</span> · Ready for Halasuru pickup. (Try RA-2051 or RA-2055)
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. FREE DOORSTEP PICKUP, 24/7 + SURPRISE #5 LIVE BENGALURU ZONE & ETA CHECKER -->
-    <section id="pickup" class="ambient-shift-warm border-y border-zinc-100 py-12 sm:py-16">
+    <!-- 6. FREE DOORSTEP PICKUP, 24/7 (ANIMATED 3D iPHONE ON RIGHT + LIVE BENGALURU ETA CHECKER) -->
+    <section id="pickup" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
-          <h2 class="breathing-heading font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            Free Doorstep <span class="text-brand-grad">Pickup, 24/7.</span>
-          </h2>
-          <p class="mt-2 text-sm text-zinc-600">
-            Free insured pickup and drop across Bengaluru — <strong class="text-zinc-900">24 hours a day, 7 days a week.</strong> Zero password policy, live status tracking and an expert diagnosis before we touch a screw.
-          </p>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Doorstep Convenience</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Free Doorstep <span class="text-brand-grad">Pickup, 24/7.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Free insured pickup and drop across Bengaluru — 24 hours a day, 7 days a week. Zero password policy, live status tracking and expert diagnosis before we touch a screw.</p>
         </div>
 
-        <!-- SURPRISE #5: Live Bengaluru Pickup Zone & Rider ETA Checker -->
-        <div class="mx-auto mt-6 max-w-4xl rounded-3xl border border-emerald-200 bg-white p-4 shadow-sm sm:p-5">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="font-mono-num text-[11px] font-bold uppercase tracking-wider text-emerald-700">Live Bengaluru Rider ETA Checker</span>
-            <span id="eta-badge" class="font-mono-num rounded-full bg-emerald-50 px-3 py-1 text-xs font-extrabold text-emerald-800">Halasuru / MG Road · Free Pickup · ~20 mins</span>
-          </div>
-          <div class="mt-3 flex flex-wrap gap-1.5 text-xs">
-            <button type="button" data-zone="Halasuru / MG Road" data-eta="~20 mins" class="zone-chip rounded-full bg-emerald-600 px-3 py-1 font-bold text-white">Halasuru / MG Road</button>
-            <button type="button" data-zone="Indiranagar" data-eta="~25 mins" class="zone-chip rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-semibold text-zinc-700">Indiranagar</button>
-            <button type="button" data-zone="Koramangala" data-eta="~35 mins" class="zone-chip rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-semibold text-zinc-700">Koramangala</button>
-            <button type="button" data-zone="HSR Layout" data-eta="~40 mins" class="zone-chip rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-semibold text-zinc-700">HSR Layout</button>
-            <button type="button" data-zone="Whitefield" data-eta="~45 mins" class="zone-chip rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-semibold text-zinc-700">Whitefield</button>
-            <button type="button" data-zone="Jayanagar / JP Nagar" data-eta="~40 mins" class="zone-chip rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-semibold text-zinc-700">Jayanagar / JP Nagar</button>
-            <button type="button" data-zone="Hebbal / Yelahanka" data-eta="~45 mins" class="zone-chip rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-semibold text-zinc-700">Hebbal / Yelahanka</button>
-          </div>
-        </div>
-
-        <div class="mt-6 grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12">
+        <div class="mt-9 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
+          <!-- Left: 4 Policies + Live Rider ETA Checker -->
           <div class="flex flex-col gap-3 lg:col-span-4">
-            <div class="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><h3 class="text-xs font-bold text-zinc-900">Zero Password Policy</h3><p class="mt-1 text-xs text-zinc-500">Lock your device before handing it over. We repair hardware, not your data.</p></div>
-            <div class="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><h3 class="text-xs font-bold text-zinc-900">Live WhatsApp Updates</h3><p class="mt-1 text-xs text-zinc-500">Photos and updates from our in-house technician at every stage of the repair.</p></div>
-            <div class="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><h3 class="text-xs font-bold text-zinc-900">Insured Handling</h3><p class="mt-1 text-xs text-zinc-500">Sealed, tracked and insured from your door to our Halasuru bench and back again.</p></div>
-            <div class="rounded-2xl border border-orange-200 bg-orange-50/70 p-4"><h3 class="text-xs font-bold text-zinc-900">Same-Address Return</h3><p class="mt-1 text-xs text-zinc-600">Tested across every checkpoint, then handed back at your doorstep. Pickup runs 24/7 · Store bench hours: 10 AM – 12 AM.</p></div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-sm">
+              <div class="text-xs font-extrabold text-zinc-950">Zero Password Policy</div>
+              <p class="mt-0.5 text-[11px] text-zinc-600">Lock your device before handing it over. We repair hardware, not your data.</p>
+            </div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-sm">
+              <div class="text-xs font-extrabold text-zinc-950">Live WhatsApp Updates</div>
+              <p class="mt-0.5 text-[11px] text-zinc-600">Photo and video from our in-house technician team at every stage.</p>
+            </div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-sm">
+              <div class="text-xs font-extrabold text-zinc-950">Insured Handling &amp; Same-Address Return</div>
+              <p class="mt-0.5 text-[11px] text-zinc-600">Sealed, tracked, tested across 32 checkpoints, and returned to your doorstep.</p>
+            </div>
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3.5">
+              <div class="text-[11px] font-extrabold uppercase text-emerald-800">Live Bengaluru Pickup ETA</div>
+              <select id="eta-zone" class="mt-1.5 w-full rounded-xl border border-emerald-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900">
+                <option value="20–30 mins · Free Insured">Halasuru / Indiranagar / MG Road</option>
+                <option value="35–45 mins · Free Insured">Koramangala / HSR / Domlur</option>
+                <option value="45–60 mins · Free Insured">Whitefield / Marathahalli / Bellandur</option>
+                <option value="40–55 mins · Free Insured">Jayanagar / JP Nagar / Hebbal</option>
+              </select>
+              <div id="eta-output" class="mt-1.5 font-mono-num text-xs font-bold text-emerald-900">Rider dispatch ETA: 20–30 mins · Free Insured</div>
+            </div>
           </div>
 
-          <div class="flex flex-col justify-between rounded-3xl border border-zinc-200 bg-white p-6 shadow-md lg:col-span-5">
-            <div>
-              <h3 class="text-center text-base font-bold text-zinc-900">Book Free Doorstep Pickup</h3>
-              <p class="mt-0.5 text-center text-xs text-zinc-500">Select your device and provide pickup address details.</p>
-              <div class="mt-4 grid grid-cols-3 gap-2 text-xs">
-                <button type="button" class="pk-dev rounded-xl bg-red-600 py-2 font-bold text-white" data-pdev="iPhone">iPhone</button>
-                <button type="button" class="pk-dev rounded-xl bg-zinc-100 py-2 font-semibold text-zinc-700" data-pdev="iPad">iPad</button>
-                <button type="button" class="pk-dev rounded-xl bg-zinc-100 py-2 font-semibold text-zinc-700" data-pdev="MacBook">MacBook</button>
-              </div>
-              <div class="mt-4 grid grid-cols-2 gap-2.5 text-xs">
-                <input id="pk-flat" type="text" placeholder="Flat / Floor / Apt (Optional)" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 focus:border-red-600 focus:bg-white focus:outline-none">
-                <input id="pk-bldg" type="text" placeholder="Building Name (Optional)" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 focus:border-red-600 focus:bg-white focus:outline-none">
-                <input id="pk-addr" type="text" placeholder="Street Address * (e.g. 12th Main Indiranagar)" class="col-span-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 focus:border-red-600 focus:bg-white focus:outline-none">
-                <input id="pk-pin" type="text" placeholder="Pincode (6 Digits) *" class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 focus:border-red-600 focus:bg-white focus:outline-none">
-                <input type="text" value="Bengaluru" readonly class="rounded-xl border border-zinc-200 bg-zinc-100 px-3 py-2.5 text-zinc-600">
-              </div>
+          <!-- Center: Pickup Booking Form -->
+          <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-md lg:col-span-4">
+            <h3 class="font-display text-base font-extrabold text-zinc-950">Book Free Doorstep Pickup</h3>
+            <p class="mt-0.5 text-[11px] text-zinc-500">Pickup runs 24/7. Store bench hours: 10 AM – 12 AM.</p>
+            <div class="mt-3 flex gap-1.5 text-[11px] font-bold">
+              <button type="button" data-pdev="iPhone" class="p-dev-btn flex-1 rounded-xl bg-red-600 py-2 text-white">iPhone</button>
+              <button type="button" data-pdev="iPad" class="p-dev-btn flex-1 rounded-xl bg-zinc-100 py-2 text-zinc-700">iPad</button>
+              <button type="button" data-pdev="MacBook" class="p-dev-btn flex-1 rounded-xl bg-zinc-100 py-2 text-zinc-700">MacBook</button>
             </div>
-            <button type="button" id="btn-book-pickup" class="mt-5 w-full rounded-xl bg-red-600 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-red-700 active:scale-95">Book Pickup via WhatsApp</button>
+            <div class="mt-3 space-y-2.5">
+              <input id="pick-flat" type="text" placeholder="Flat / Floor / Apt (Optional)" class="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <input id="pick-street" type="text" placeholder="Street Address *" class="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+              <div class="grid grid-cols-2 gap-2">
+                <input id="pick-pin" type="text" placeholder="Pincode (560008) *" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs outline-none focus:border-red-600">
+                <input type="text" value="Bengaluru" readonly class="rounded-xl border border-zinc-200 bg-zinc-100 px-3 py-2 text-xs text-zinc-600">
+              </div>
+              <button type="button" id="btn-book-pickup" class="dock-quote-btn w-full rounded-xl py-2.5 text-xs font-extrabold text-white">Book Pickup via WhatsApp</button>
+            </div>
           </div>
 
-          <div class="relative flex min-h-[260px] flex-col justify-between overflow-hidden rounded-3xl bg-zinc-900 p-5 text-white shadow-md lg:col-span-3">
-            <div class="flex flex-wrap gap-2">
-              <span class="rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold text-orange-700">24/7 Pickup</span>
-              <span class="rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold text-emerald-700">Insured &amp; Tracked</span>
-            </div>
-            <div class="rounded-2xl bg-black/50 p-3 backdrop-blur-sm">
-              <div class="text-xs font-bold">Sealed &amp; Tracked Transit</div>
-              <div class="mt-0.5 text-[11px] text-zinc-300">Your device never travels unaccounted for.</div>
-            </div>
+          <!-- Right: Animated 3D iPhone Carrying Pickup Badges -->
+          <div class="stage-3d-box relative min-h-[340px] rounded-3xl border border-zinc-800 shadow-lg lg:col-span-4">
+            <canvas id="canvas-pickup-iphone" aria-label="Animated 3D iPhone 24/7 Insured Pickup"></canvas>
+            <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-red-600 px-3 py-1 text-[11px] font-extrabold text-white shadow">24/7 Pickup</div>
+            <div class="pointer-events-none absolute right-3 top-14 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-zinc-900 shadow">Insured &amp; Tracked</div>
+            <div class="pointer-events-none absolute bottom-3 left-3 right-3 rounded-xl bg-zinc-950/80 px-3 py-2 text-center text-[11px] font-semibold text-orange-200 backdrop-blur">Your device never travels unaccounted for.</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 6. BEFORE, AFTER, & THE BENCH IN BETWEEN -->
-    <section class="ambient-shift-cool py-12 sm:py-16">
+    <!-- 7. BEFORE, AFTER, & THE BENCH IN BETWEEN + WIDE GLASS RESTORATION VISUALISER -->
+    <section class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-600">The Work, Shown Plainly</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            Before, After, &amp; the <span class="text-brand-grad">Bench in Between</span>
-          </h2>
-          <p class="mt-2 text-sm text-zinc-600">Photographed on our own bench, followed by the machines that make them possible.</p>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Work, Shown Plainly</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Before, After, &amp; the <span class="text-brand-grad">Bench in Between</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Anyone can promise a repair. These are the two we are asked for most, photographed on our own bench.</p>
         </div>
 
         <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div class="laser-card overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="relative h-72 bg-amber-400/90">
-              <img src="/images/craft/before-after-screen.webp" alt="Shattered to Flawless Screen Replacement" class="h-full w-full object-cover" onerror="this.src='/images/craft/before-after-screen.webp'">
-              <span class="absolute left-3 top-3 rounded-full bg-zinc-900/90 px-3 py-1 text-[10px] font-bold uppercase text-white">Screen Replacement</span>
-              <span class="absolute right-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase text-red-700">Before · After</span>
+          <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+            <div class="orange-glass-wrap relative h-64 bg-amber-500/20">
+              <img src="/images/craft/before-after-screen.webp" alt="Screen replacement Before and After" class="h-full w-full object-cover" onerror="this.src='/images/craft/before-after-screen.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-3 py-1 text-[10px] font-bold uppercase text-white">Screen Replacement · Before / After</span>
             </div>
-            <div class="p-4"><div class="text-sm font-bold text-zinc-900"><span class="text-red-600">Shattered</span> → Flawless</div><p class="mt-0.5 text-xs text-zinc-500">OEM-grade display, True Tone preserved, fitted the same day.</p></div>
+            <div class="p-4">
+              <div class="font-display text-base font-extrabold text-zinc-950"><span class="text-red-600">Shattered</span> → Flawless</div>
+              <p class="mt-1 text-xs text-zinc-600">OEM-grade display, True Tone preserved, fitted the same day.</p>
+            </div>
           </div>
 
-          <div class="laser-card overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="relative h-72 bg-amber-400/90">
-              <img src="/images/craft/before-after-backglass.webp" alt="Cracked to Factory Finish Back Glass" class="h-full w-full object-cover" onerror="this.src='/images/craft/before-after-backglass.webp'">
-              <span class="absolute left-3 top-3 rounded-full bg-zinc-900/90 px-3 py-1 text-[10px] font-bold uppercase text-white">Back Glass</span>
-              <span class="absolute right-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase text-red-700">Before · After</span>
+          <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+            <div class="orange-glass-wrap relative h-64 bg-amber-500/20">
+              <img src="/images/craft/before-after-backglass.webp" alt="Back glass Before and After" class="h-full w-full object-cover" onerror="this.src='/images/craft/before-after-backglass.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-3 py-1 text-[10px] font-bold uppercase text-white">Back Glass · Before / After</span>
             </div>
-            <div class="p-4"><div class="text-sm font-bold text-zinc-900"><span class="text-red-600">Cracked</span> → Factory Finish</div><p class="mt-0.5 text-xs text-zinc-500">Laser-separated, not chiselled. Camera module untouched.</p></div>
+            <div class="p-4">
+              <div class="font-display text-base font-extrabold text-zinc-950"><span class="text-red-600">Cracked</span> → Factory finish</div>
+              <p class="mt-1 text-xs text-zinc-600">Laser-separated, not chiselled. Camera module untouched.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="mx-auto mt-7 max-w-7xl px-4 sm:px-6">
-        <div class="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 shadow-sm">
+        <!-- Wide Interactive Glass Restoration Visualiser (Honest UI Illustration) -->
+        <div class="mt-7 rounded-3xl border border-zinc-200 bg-zinc-950 p-5 text-white shadow-lg">
           <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
             <div>
-              <div class="text-sm font-extrabold text-zinc-900">Interactive Glass Restoration Visualiser</div>
-              <div class="text-xs text-zinc-500">Slide across to experience how top-glass restoration restores clarity while preserving your original OLED.</div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-orange-400">Interactive Glass Restoration Visualiser</div>
+              <div class="text-xs text-zinc-400">Drag slider left or right to see how outer-glass OCA restoration preserves your original OLED underneath (illustrative UI).</div>
             </div>
-            <span class="font-mono-num rounded-full border border-red-200 bg-red-50 px-3 py-1 text-[11px] font-semibold text-red-700">Interactive UI Preview</span>
+            <span id="ba-pct-lbl" class="rounded-full bg-zinc-800 px-3 py-1 font-mono-num text-xs font-bold text-orange-300">50% Restored</span>
           </div>
-          <div id="ba-frame" class="ba-frame relative h-56 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-            <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-slate-950 via-zinc-900 to-red-950 text-white">
-              <div class="text-center"><div class="font-display text-lg font-extrabold">Restored Glass · Original OLED Retained</div><div class="text-xs text-amber-300">OCA Vacuum Laminated · Zero Bubbles · True Tone Intact</div></div>
+          <div id="ba-slider-box" class="relative h-44 w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-52">
+            <div class="flex h-full w-full items-center justify-center text-center">
+              <div>
+                <div class="font-display text-lg font-extrabold text-white sm:text-2xl">Factory-Grade OLED &amp; Glass Engineering</div>
+                <div class="text-xs text-blue-200">Original OLED · True Tone · 90L Zero-Bubble OCA Finish</div>
+              </div>
             </div>
-            <div id="ba-before" class="absolute inset-0 flex items-center justify-center bg-zinc-800 text-red-200" style="clip-path: inset(0 50% 0 0);">
-              <div class="text-center"><div class="font-display text-lg font-extrabold">Cracked Outer Glass Layer</div><div class="text-xs text-zinc-300">Display &amp; Touch Underneath Still Intact</div></div>
+            <div id="ba-overlay" class="absolute inset-0 flex items-center justify-center bg-zinc-900/95" style="clip-path: inset(0 50% 0 0);">
+              <svg class="h-full w-full opacity-50" viewBox="0 0 800 220" preserveAspectRatio="none">
+                <path d="M120,20 L260,110 L420,40 M260,110 L180,210 M260,110 L470,190 M260,110 L650,90 M60,130 L260,110" stroke="#f87171" stroke-width="2" fill="none"/>
+              </svg>
+              <span class="absolute font-display text-lg font-extrabold text-red-400 sm:text-2xl">Cracked Outer Glass Layer</span>
             </div>
-            <span class="pointer-events-none absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-zinc-900 shadow">Cracked Glass</span>
-            <span class="pointer-events-none absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-zinc-900 shadow">Restored Finish</span>
-            <div id="ba-divider" class="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-red-600"></div>
-            <div id="ba-knob" class="pointer-events-none absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-red-600 font-mono-num text-xs font-bold text-white shadow-lg">&lt;&gt;</div>
+            <div id="ba-line" class="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 bg-red-500"></div>
+            <div id="ba-knob" class="pointer-events-none absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white shadow-lg">&lt;&gt;</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 7. KEEP THE ORIGINAL OLED (ALL 36 MODELS) + 8. FULL PRICE LIST -->
-    <section id="oled-restore" class="ambient-shift-warm border-y border-orange-100 py-12 sm:py-16">
+    <!-- 8. INSIDE THE BENCH + EVERY REPAIR ON RECORD (CRM COLLAGE) -->
+    <section class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Inside the Bench</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">The Machines Most Shops <span class="text-brand-grad">Do Not Own</span></h2>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+            <div class="orange-glass-wrap h-56 bg-zinc-900">
+              <img src="/images/craft/uv-laser-station.webp" alt="UV Laser Separation" class="h-full w-full object-cover" onerror="this.src='/images/craft/uv-laser-station.webp'">
+              <div class="orange-glass-sweep"></div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">UV Laser Separation</h3>
+              <p class="mt-1 text-xs text-zinc-600">Back glass comes off with a laser, not a heat gun and a blade. The frame stays straight and the camera glass is never in the path.</p>
+            </div>
+          </div>
+          <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+            <div class="orange-glass-wrap h-56 bg-zinc-900">
+              <img src="/images/craft/microsolder-setup.webp" alt="Micro-Soldering Station" class="h-full w-full object-cover" onerror="this.src='/images/craft/microsolder-setup.webp'">
+              <div class="orange-glass-sweep"></div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Micro-Soldering Station</h3>
+              <p class="mt-1 text-xs text-zinc-600">Microscope, hot air, and a bench multimeter reading to three decimals — real board-level repair in-house.</p>
+            </div>
+          </div>
+          <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+            <div class="orange-glass-wrap h-56 bg-zinc-900">
+              <img src="/images/craft/bench-overhead-tools.webp" alt="Organised by Part, Not by Habit" class="h-full w-full object-cover" onerror="this.src='/images/craft/bench-overhead-tools.webp'">
+              <div class="orange-glass-sweep"></div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">Organised by Part, Not by Habit</h3>
+              <p class="mt-1 text-xs text-zinc-600">Every drawer is a different screw, bracket and flex. Nothing is fished out of a pile, so nothing gets fitted twice.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Every Repair, On Record (Preserved CRM Editorial Collage with Signature Orange Glass Effect) -->
+        <div class="mt-8 grid grid-cols-1 items-stretch overflow-hidden rounded-3xl border border-orange-200 bg-white shadow-md lg:grid-cols-12">
+          <div class="orange-glass-wrap min-h-[260px] bg-zinc-900 lg:col-span-6">
+            <img src="/images/craft/website-crm-desk.webp" alt="Every Repair On Record CRM Desk" class="h-full w-full object-cover" onerror="this.src='/images/craft/website-crm-desk.webp'">
+            <div class="orange-glass-sweep"></div>
+          </div>
+          <div class="flex flex-col justify-center p-6 sm:p-8 lg:col-span-6">
+            <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Every Repair, On Record</div>
+            <h3 class="mt-1 font-display text-2xl font-extrabold text-zinc-950">Your Job Card Lives in Our CRM — and the Invoice Comes from It</h3>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">The moment your device is booked in, it gets a job number in a CRM built for this shop. Every part fitted, technician note, and status change is logged against that number.</p>
+            <ul class="mt-3 space-y-1.5 text-xs font-medium text-zinc-700">
+              <li>• CRM Tracked Invoice generated from the CRM, not written by hand</li>
+              <li>• Serial-tracked parts, so warranty claim is one lookup</li>
+              <li>• Status updates sent to you on WhatsApp at each stage</li>
+              <li>• Your repair history stays on file for the next visit</li>
+            </ul>
+            <a href="#estimate" class="dock-quote-btn mt-4 w-fit rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get an instant estimate</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. KEEP THE ORIGINAL OLED. RESTORE THE GLASS + SAVINGS CALCULATOR + ZERO-JITTER FULL PRICE LIST -->
+    <section id="glass-lab" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Front Glass Restoration · Halasuru Lab</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            Keep the Original OLED. <span class="text-brand-grad">Restore the Glass.</span>
-          </h2>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Front Glass Restoration · Halasuru Lab</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Keep the Original OLED. <span class="text-brand-grad">Restore the Glass.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Why replace a ₹1,40,000 iPhone when only the top glass is cracked? Using specialised TBK machinery, we bond new glass to your original OLED and preserve touch sensitivity and True Tone.</p>
         </div>
 
         <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <!-- Interactive Price Card (All 32 Models) -->
           <div class="flex flex-col justify-between rounded-3xl bg-zinc-950 p-6 text-white shadow-xl lg:col-span-5">
             <div>
-              <div class="flex items-center justify-between gap-2">
-                <span class="font-mono-num text-[11px] uppercase tracking-wider text-zinc-400">Select Any iPhone Model</span>
-                <span class="rounded-full border border-orange-500/40 bg-orange-950/50 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">6-MONTH WARRANTY</span>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Select Your iPhone</span>
+                <span class="rounded-full border border-orange-500/40 bg-orange-500/15 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">6 Months WARRANTY</span>
               </div>
-              <select id="glass-model-sel" class="mt-3 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-sm font-semibold text-white focus:border-orange-500 focus:outline-none"></select>
-              <div id="glass-price-big" class="font-display font-mono-num mt-4 text-4xl font-extrabold text-orange-400">₹16,500</div>
-              <div id="glass-price-sub" class="mt-1 text-xs text-zinc-400">iPhone 17 Pro Max — front glass restoration only</div>
-              <p class="mt-4 rounded-xl border border-zinc-800 bg-zinc-900/80 p-3 text-[11px] leading-relaxed text-zinc-400">
+              <select id="glass-model-select" class="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2.5 text-sm font-bold text-white outline-none focus:border-orange-500"></select>
+              <div id="glass-price-display" class="price-breathe mt-4 font-display text-4xl font-black text-orange-400 font-mono-num">₹16,500</div>
+              <div id="glass-model-sub" class="mt-1 text-xs text-zinc-400">iPhone 17 Pro Max · front glass restoration only</div>
+              <p class="mt-3 rounded-xl border border-zinc-800 bg-zinc-900/80 p-3 text-[11px] leading-relaxed text-zinc-300">
                 Eligibility is confirmed on inspection. If the OLED or touch layer itself is damaged, we recommend a full display replacement instead.
               </p>
             </div>
             <div class="mt-5">
-              <a href="#estimate" class="block w-full rounded-xl bg-gradient-to-r from-orange-500 to-red-600 py-3 text-center text-xs font-bold text-white transition hover:opacity-95">Book Front Glass Restoration</a>
+              <a id="btn-book-glass" href="#estimate" class="dock-quote-btn block w-full rounded-xl py-3 text-center text-xs font-extrabold text-white">Book iPhone 17 Pro Max glass restoration</a>
+              <div class="mt-2.5 flex items-center justify-between text-[11px] text-zinc-400">
+                <span>Published range ₹2,500 – ₹19,500</span>
+                <span class="font-bold text-amber-400">★ 4.9 · 1,103 reviews</span>
+              </div>
             </div>
           </div>
 
-          <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm lg:col-span-7">
-            <h3 class="text-base font-bold text-zinc-900">What Changes — and What Does Not</h3>
-            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div class="rounded-2xl border border-zinc-100 bg-zinc-50 p-3.5"><div class="text-xs font-bold text-zinc-900">6-Month Hardware Warranty</div><p class="mt-0.5 text-[11px] text-zinc-500">Covers front glass restoration &amp; lamination.</p></div>
-              <div class="rounded-2xl border border-zinc-100 bg-zinc-50 p-3.5"><div class="text-xs font-bold text-zinc-900">Zero-Password Privacy</div><p class="mt-0.5 text-[11px] text-zinc-500">We never ask for your passcode.</p></div>
-              <div class="rounded-2xl border border-zinc-100 bg-zinc-50 p-3.5"><div class="text-xs font-bold text-zinc-900">Apple Diagnostic Mode</div><p class="mt-0.5 text-[11px] text-zinc-500">Post-repair testing without device access.</p></div>
-              <div class="rounded-2xl border border-zinc-100 bg-zinc-50 p-3.5"><div class="text-xs font-bold text-zinc-900">Original OLED Retained</div><p class="mt-0.5 text-[11px] text-zinc-500">Touch sensitivity &amp; True Tone preserved.</p></div>
+          <!-- Repair vs New iPhone Savings Calculator + What Changes -->
+          <div class="flex flex-col justify-between rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm lg:col-span-7">
+            <div>
+              <div class="text-xs font-extrabold uppercase tracking-wider text-red-600">Repair vs. Replace Savings Calculator</div>
+              <h3 class="mt-1 font-display text-lg font-extrabold text-zinc-950">See How Much You Save Keeping Your Original OLED</h3>
+              <div class="mt-3 rounded-2xl border border-orange-200 bg-orange-50/60 p-4">
+                <div class="flex items-center justify-between text-xs font-bold">
+                  <span>Selected: <span id="calc-model-name" class="text-red-600">iPhone 17 Pro Max</span></span>
+                  <span class="font-mono-num text-emerald-700">You Save: <strong id="calc-savings">₹1,28,400</strong></span>
+                </div>
+                <div class="mt-2 grid grid-cols-2 gap-3 text-xs">
+                  <div class="rounded-xl bg-white p-2.5 shadow-sm">
+                    <div class="text-[10px] text-zinc-500">New iPhone Cost</div>
+                    <div id="calc-new-price" class="font-mono-num text-sm font-extrabold text-zinc-900">₹1,44,900</div>
+                  </div>
+                  <div class="rounded-xl bg-white p-2.5 shadow-sm">
+                    <div class="text-[10px] text-zinc-500">Red Apple Glass Restore</div>
+                    <div id="calc-restore-price" class="font-mono-num text-sm font-extrabold text-red-600">₹16,500</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="mt-5 rounded-2xl border border-orange-200 bg-orange-50/60 p-4">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div class="text-xs font-extrabold text-zinc-900">Why Replace a ₹1,40,000 iPhone When Only the Top Glass Is Cracked?</div>
-                <span id="calc-model-lbl" class="font-mono-num text-xs font-bold text-red-600">iPhone 16 Pro Max</span>
-              </div>
-              <input id="in-savings" type="range" min="0" max="5" step="1" value="3" class="studio-slider mt-3" aria-label="Savings calculator model">
-              <div class="mt-3 grid grid-cols-3 gap-2 text-center">
-                <div class="rounded-xl border border-zinc-200 bg-white p-2.5"><div class="text-[10px] text-zinc-500">New Device</div><div id="calc-new" class="font-mono-num text-xs font-bold text-zinc-700">₹1,44,900</div></div>
-                <div class="rounded-xl border border-zinc-200 bg-white p-2.5"><div class="text-[10px] text-zinc-500">Glass Restore</div><div id="calc-fix" class="font-mono-num text-xs font-bold text-zinc-900">₹14,500</div></div>
-                <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-2.5"><div class="text-[10px] font-semibold text-emerald-800">You Save</div><div id="calc-save" class="font-mono-num text-xs font-extrabold text-emerald-700">₹1,30,400</div></div>
-              </div>
+            <div class="mt-5 grid grid-cols-2 gap-3 text-xs">
+              <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-3"><strong>6 Months hardware warranty</strong><div class="text-[11px] text-zinc-500">On every glass restoration</div></div>
+              <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-3"><strong>Zero-password privacy</strong><div class="text-[11px] text-zinc-500">We never ask for your passcode</div></div>
+              <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-3"><strong>Apple Diagnostic Mode</strong><div class="text-[11px] text-zinc-500">Post-repair testing, no account access</div></div>
+              <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-3"><strong>Original OLED retained</strong><div class="text-[11px] text-zinc-500">Touch and True Tone preserved</div></div>
             </div>
           </div>
         </div>
 
-        <!-- Zero-Jitter Full 36-Model Price List -->
-        <div class="mt-8 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-7">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <!-- Zero-Jitter Full Price List (All 32 Listed iPhones — Zero Nested Scroll Trap) -->
+        <div class="mt-8 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Full Price List</div>
-              <h3 class="mt-0.5 font-display text-2xl font-extrabold text-zinc-950">Every Listed iPhone, <span class="text-brand-grad">One Glance</span></h3>
+              <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest">Full Price List · Zero Scroll Jitter</div>
+              <h3 class="font-display text-xl font-extrabold text-zinc-950">Every Listed iPhone, <span class="text-red-600">One Glance</span></h3>
             </div>
-            <input id="price-search" type="text" placeholder="🔍 Find your iPhone..." class="rounded-full border border-zinc-300 bg-zinc-50 px-4 py-2 text-xs text-zinc-900 focus:border-red-600 focus:bg-white focus:outline-none sm:w-56">
+            <input id="price-search" type="text" placeholder="Filter model (e.g. 16 Pro)..." class="rounded-full border border-zinc-300 bg-zinc-50 px-4 py-2 text-xs outline-none focus:border-red-600">
           </div>
-          <div id="price-grid" class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4"></div>
-          <div class="mt-4 flex justify-center">
-            <button type="button" id="btn-toggle-prices" class="rounded-full border border-zinc-300 bg-white px-5 py-2 text-xs font-bold text-zinc-800 transition hover:border-red-600 hover:text-red-600">Show All Models</button>
-          </div>
+          <div id="full-price-grid" class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4"></div>
         </div>
       </div>
     </section>
 
-    <!-- 9. THREE MACHINES. ONE ORIGINAL DISPLAY. (REAL PHOTO ABOVE + 3D BELOW) -->
-    <section id="tbk-lab" class="ambient-shift-cool py-12 sm:py-16">
+    <!-- 10. THREE MACHINES. ONE ORIGINAL DISPLAY (LARGE REAL PHOTO ON TOP + HIGH-CONTRAST METALLIC 3D BELOW) -->
+    <section id="tbk-machines" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">The Equipment Behind the Finish</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Three Machines. <span class="text-brand-grad">One Original Display.</span></h2>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Equipment Behind the Finish</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Three Machines. <span class="text-brand-grad">One Original Display.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">This is not a heat-gun and a suction cup. Glass restoration runs through a calibrated TBK line photographed on our Halasuru bench, paired with live interactive 3D models below each machine.</p>
         </div>
 
-        <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="relative h-56 bg-zinc-100"><img src="/images/machines/tbk-oca-press.webp" alt="TBK OCA Press" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-oca-press.webp'"><span class="absolute left-3 top-3 rounded-full bg-zinc-900/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span></div>
-            <div class="p-5"><h3 class="text-base font-extrabold text-zinc-950">TBK OCA Laminating Vacuum Hydraulic Press</h3><p class="mt-1.5 text-xs text-zinc-600">Aligns and bonds new front glass to your original OLED under vacuum and controlled pressure.</p></div>
-            <div class="studio-3d-stage relative mt-auto h-60 border-t border-zinc-800"><span class="pointer-events-none absolute left-3 top-2.5 z-10 rounded-full bg-black/55 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-200">Interactive 3D · Drag to Orbit</span><canvas id="canvas-oca" class="three-slot"></canvas></div>
+        <div class="mt-9 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <!-- Machine 01 -->
+          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="orange-glass-wrap relative h-52 bg-zinc-900">
+              <img src="/images/machines/tbk-oca-press.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-oca-press.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">TBK OCA Laminating Vacuum Hydraulic Press</h3>
+              <p class="mt-1 text-xs text-zinc-600">Aligns and bonds new front glass to your original OLED under vacuum and controlled hydraulic pressure.</p>
+            </div>
+            <div class="stage-3d-box relative mt-auto h-52 border-t border-zinc-800">
+              <canvas id="canvas-tbk-oca" aria-label="3D TBK OCA Press"></canvas>
+              <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-zinc-950/80 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">Interactive 3D · Drag to Orbit</span>
+            </div>
           </div>
 
-          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="relative h-56 bg-zinc-100"><img src="/images/machines/tbk-bubble-chamber.webp" alt="TBK 90L Chamber" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'"><span class="absolute left-3 top-3 rounded-full bg-zinc-900/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span></div>
-            <div class="p-5"><h3 class="text-base font-extrabold text-zinc-950">TBK 90-Litre High-Pressure Bubble Remover</h3><p class="mt-1.5 text-xs text-zinc-600">Cures OCA under high pressure, eliminating microscopic air bubbles for a zero-defect finish.</p></div>
-            <div class="studio-3d-stage relative mt-auto h-60 border-t border-zinc-800"><span class="pointer-events-none absolute left-3 top-2.5 z-10 rounded-full bg-black/55 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-200">Interactive 3D · Drag to Orbit</span><canvas id="canvas-bubble" class="three-slot"></canvas></div>
+          <!-- Machine 02 -->
+          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="orange-glass-wrap relative h-52 bg-zinc-900">
+              <img src="/images/machines/tbk-bubble-chamber.webp" alt="TBK 90-Litre Bubble Remover Chamber" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">TBK 90-Litre High-Pressure Bubble Remover</h3>
+              <p class="mt-1 text-xs text-zinc-600">Cures OCA under high pressure inside a 90-litre chamber, eliminating microscopic air bubbles permanently.</p>
+            </div>
+            <div class="stage-3d-box relative mt-auto h-52 border-t border-zinc-800">
+              <canvas id="canvas-tbk-90l" aria-label="3D TBK 90L Chamber"></canvas>
+              <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-zinc-950/80 px-2.5 py-0.5 text-[10px] font-bold text-orange-300">Interactive 3D · Drag to Orbit</span>
+            </div>
           </div>
 
-          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="relative h-56 bg-zinc-100"><img src="/images/machines/tbk-uv-laser.webp" alt="TBK-958 Cold UV Laser" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-uv-laser.webp'"><span class="absolute left-3 top-3 rounded-full bg-purple-900/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span></div>
-            <div class="p-5"><h3 class="text-base font-extrabold text-zinc-950">TBK-958 Cold UV Purple Laser</h3><p class="mt-1.5 text-xs text-zinc-600">Separates front bezel and removes back glass with zero-heat 355nm UV laser precision.</p></div>
-            <div class="studio-3d-stage relative mt-auto h-60 border-t border-zinc-800"><span class="pointer-events-none absolute left-3 top-2.5 z-10 rounded-full bg-purple-950/75 px-2.5 py-0.5 text-[10px] font-semibold text-purple-200">Interactive 3D · 355nm Beam</span><canvas id="canvas-tbk958" class="three-slot"></canvas></div>
+          <!-- Machine 03 -->
+          <div class="flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="orange-glass-wrap relative h-52 bg-zinc-900">
+              <img src="/images/machines/tbk-uv-laser.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
+              <div class="orange-glass-sweep"></div>
+              <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-display text-base font-extrabold text-zinc-950">TBK-958 Cold UV Purple Laser</h3>
+              <p class="mt-1 text-xs text-zinc-600">Separates front bezel and removes back glass with 355nm low-temperature UV laser precision.</p>
+            </div>
+            <div class="stage-3d-box relative mt-auto h-52 border-t border-zinc-800">
+              <canvas id="canvas-tbk-958" aria-label="3D TBK-958 UV Laser"></canvas>
+              <span class="pointer-events-none absolute left-2.5 top-2.5 rounded-full bg-purple-950/90 px-2.5 py-0.5 text-[10px] font-bold text-purple-300">Interactive 3D · 355nm Beam</span>
+            </div>
           </div>
+        </div>
+
+        <!-- Upgraded Hashtag Strip & Lab Hours Banner -->
+        <div class="mt-8 rounded-3xl border border-red-200 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 p-5 text-center shadow-sm">
+          <div class="flex flex-wrap justify-center gap-1.5 text-[11px] font-bold text-zinc-700">
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#PremiumMobileRepair</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#iPhoneGlassReplacement</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#FactoryLevelRepair</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#OLEDRepair</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#TBK958</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#ColdUVLaser</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#OCALamination</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#Halasuru</span>
+            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#ZeroPasswordPolicy</span>
+          </div>
+          <div class="mt-4 flex flex-wrap justify-center gap-3">
+            <a href="#estimate" class="dock-quote-btn rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get a glass-restoration quote</a>
+            <a href="tel:+918660663776" class="rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-xs font-bold text-zinc-900 hover:border-red-500">Call the lab · +91 86606 63776</a>
+          </div>
+          <p class="mt-2.5 text-[11px] font-semibold text-zinc-600">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
         </div>
       </div>
     </section>
 
-    <!-- 10. STACKED APPLE ECOSYSTEM 3D SUITE -->
-    <section id="ecosystem" class="ambient-shift-warm border-y border-zinc-100 py-12 sm:py-16">
+    <!-- 11. STACKED APPLE ECOSYSTEM 3D SUITE (ALL DEVICES ONE BELOW ANOTHER SO VISITORS INTERACT DIRECTLY) -->
+    <section id="ecosystem-3d" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-3xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">The Whole Apple Ecosystem</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            We Know Apple Inside &amp; Out — <span class="text-brand-grad">Perfected Every Device in the Ecosystem.</span>
-          </h2>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Mastered Inside &amp; Out · Every Apple Device</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">We Know &amp; Master Every <span class="text-brand-grad">Apple Device Inside Out.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">From the latest iPhone Pro Max teardown to AirPods Pro, iPad Pro, Apple Watch &amp; MacBook Pro — explore and rotate every Apple architecture we service in Halasuru.</p>
         </div>
 
-        <div class="mt-8 flex flex-col gap-6">
+        <div class="mt-9 flex flex-col gap-5">
+          <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
+            <div class="stage-3d-box relative h-64 lg:col-span-7">
+              <canvas id="canvas-internals" aria-label="3D iPhone Internal Teardown"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
+            </div>
             <div class="p-6 lg:col-span-5">
-              <span class="font-mono-num rounded-full bg-red-50 px-3 py-1 text-[11px] font-bold text-red-700">01 · Board-Level Mastery</span>
-              <h3 class="mt-3 font-display text-xl font-extrabold text-zinc-950">iPhone 17 Pro Max — Internal Component Architecture</h3>
-              <p class="mt-2 text-xs text-zinc-600">OLED assembly, A19 Pro logic board, copper vapor chamber, L-shaped battery, Taptic Engine, and MagSafe coil.</p>
-              <div class="mt-4"><label class="text-[11px] font-semibold text-zinc-700">Explode Internal Layers</label><input id="sl-internals" type="range" min="0" max="100" value="72" class="studio-slider mt-1.5"></div>
-            </div>
-            <div class="studio-3d-stage relative h-72 lg:col-span-7"><span class="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-black/60 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to rotate 360°</span><canvas id="canvas-internals" class="three-slot"></canvas></div>
-          </div>
-
-          <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="studio-3d-stage relative order-2 h-72 lg:order-1 lg:col-span-7"><span class="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-black/60 px-3 py-1 text-[11px] font-semibold text-zinc-200">Realistic Apple AirPods Pro 3D · Drag 360°</span><canvas id="canvas-airpods" class="three-slot"></canvas></div>
-            <div class="order-1 p-6 lg:order-2 lg:col-span-5">
-              <span class="font-mono-num rounded-full bg-orange-50 px-3 py-1 text-[11px] font-bold text-orange-700">02 · Acoustic Precision</span>
-              <h3 class="mt-3 font-display text-xl font-extrabold text-zinc-950">AirPods Pro &amp; MagSafe Charging Case</h3>
-              <p class="mt-2 text-xs text-zinc-600">Precision battery cell replacement, charging case hinge &amp; USB-C repair, acoustic mesh restoration, and microphone diagnostics.</p>
-              <div class="mt-4"><label class="text-[11px] font-semibold text-zinc-700">Open Case Lid &amp; Lift AirPods Pro</label><input id="sl-airpods" type="range" min="0" max="100" value="75" class="studio-slider mt-1.5"></div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="p-6 lg:col-span-5"><span class="font-mono-num rounded-full bg-red-50 px-3 py-1 text-[11px] font-bold text-red-700">03 · Flagship iPhone Specialist</span><h3 class="mt-3 font-display text-xl font-extrabold text-zinc-950">iPhone 6 through 18 Pro Max</h3><p class="mt-2 text-xs text-zinc-600">Front OLED displays, top-glass restoration, TBK-958 laser back glass, triple-camera modules, Face ID flex, and high-capacity batteries.</p></div>
-            <div class="studio-3d-stage relative h-72 lg:col-span-7"><canvas id="canvas-iphone17" class="three-slot"></canvas></div>
-          </div>
-
-          <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="studio-3d-stage relative order-2 h-72 lg:order-1 lg:col-span-7"><canvas id="canvas-ipad" class="three-slot"></canvas></div>
-            <div class="order-1 p-6 lg:order-2 lg:col-span-5"><span class="font-mono-num rounded-full bg-sky-50 px-3 py-1 text-[11px] font-bold text-sky-700">04 · iPad Pro / Air / Mini</span><h3 class="mt-3 font-display text-xl font-extrabold text-zinc-950">iPad Pro 13-inch &amp; All iPad Models</h3><p class="mt-2 text-xs text-zinc-600">Laminated OLED &amp; Liquid Retina displays, digitizer glass, USB-C charging ports, batteries, and logic board power-rail repairs.</p></div>
-          </div>
-
-          <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="p-6 lg:col-span-5"><span class="font-mono-num rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700">05 · Watch Ultra &amp; Series</span><h3 class="mt-3 font-display text-xl font-extrabold text-zinc-950">Apple Watch Ultra &amp; All Series</h3><p class="mt-2 text-xs text-zinc-600">Sapphire &amp; Ion-X glass restoration, OLED screens, battery replacement, Digital Crown, and rear heart-rate sensor assemblies.</p></div>
-            <div class="studio-3d-stage relative h-72 lg:col-span-7"><canvas id="canvas-watch" class="three-slot"></canvas></div>
-          </div>
-
-          <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="studio-3d-stage relative order-2 h-72 lg:order-1 lg:col-span-7"><canvas id="canvas-macbook" class="three-slot"></canvas></div>
-            <div class="order-1 p-6 lg:order-2 lg:col-span-5">
-              <span class="font-mono-num rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-bold text-zinc-800">06 · MacBook Pro / Air / iMac</span>
-              <h3 class="mt-3 font-display text-xl font-extrabold text-zinc-950">MacBook Pro, Air, Mac mini &amp; Mac Studio</h3>
-              <p class="mt-2 text-xs text-zinc-600">Retina displays, backlit keyboards, batteries, liquid-spill ultrasonic cleaning, and logic board micro-soldering.</p>
-              <div class="mt-4"><label class="text-[11px] font-semibold text-zinc-700">Open / Close MacBook Lid</label><input id="sl-macbook" type="range" min="0" max="100" value="76" class="studio-slider mt-1.5"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11. 32-POINT QC INSPECTOR + 3D HOLOGRAPHIC CRM WARRANTY CARD -->
-    <section class="ambient-shift-cool border-b border-zinc-100 py-12 sm:py-16">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
-          <div class="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm lg:col-span-7">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Apple Diagnostic Mode · Zero-Passcode</div>
-                <h2 class="breathing-heading mt-0.5 font-display text-2xl font-extrabold text-zinc-950">Interactive <span class="text-brand-grad">32-Point Quality Check</span></h2>
+              <h3 class="font-display text-xl font-extrabold text-zinc-950">Component-Level Architecture</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Slide to separate the OLED display, A-series logic board, copper vapor chamber, L-shaped battery &amp; MagSafe coil.</p>
+              <div class="mt-4">
+                <label for="sl-internals" class="flex justify-between text-[11px] font-bold text-zinc-700"><span>Explode Internal Layers</span><span id="val-internals" class="font-mono-num text-red-600">65%</span></label>
+                <input id="sl-internals" type="range" min="0" max="100" value="65" class="mt-1 w-full accent-red-600">
               </div>
-              <button type="button" id="btn-run-qc" class="rounded-full bg-red-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-700 active:scale-95">Run Live QC Check</button>
-            </div>
-            <div id="qc-grid" class="mt-4 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ True Tone</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ Face ID / Touch ID</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ LiDAR &amp; OIS</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ MagSafe Alignment</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ Taptic Engine</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ Gasket Reseal</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ Charging Curve</div>
-              <div class="qc-chip rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 font-semibold text-zinc-700">✓ Stereo Speakers</div>
-            </div>
-            <div class="mt-4 flex items-center justify-between rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs">
-              <span id="qc-status-text" class="font-semibold text-emerald-900">All 32 hardware checkpoints verified prior to CRM invoice issue.</span>
-              <span id="qc-score" class="font-mono-num font-extrabold text-emerald-700">32 / 32 PASS</span>
+              <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get iPhone Quote →</a>
             </div>
           </div>
 
-          <div class="flex flex-col justify-center rounded-3xl border border-orange-200 bg-orange-50/40 p-6 shadow-sm lg:col-span-5">
-            <div class="mb-3 flex items-center justify-between">
-              <span class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-700">Your Digital CRM Protection</span>
-              <span class="text-[11px] text-zinc-500">Move cursor to tilt 3D</span>
+          <!-- Stacked 3D #2: Realistic AirPods Pro + Opening Case (Matched Dark Obsidian-Crimson-Orange Studio Backdrop) -->
+          <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
+            <div class="order-2 p-6 lg:order-1 lg:col-span-5">
+              <h3 class="font-display text-xl font-extrabold text-zinc-950">AirPods Pro &amp; Charging Case</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Battery cell replacement, charging case port &amp; hinge repair, acoustic mesh cleaning, and microphone calibration.</p>
+              <div class="mt-4">
+                <label for="sl-airpods" class="flex justify-between text-[11px] font-bold text-zinc-700"><span>Open Case &amp; Lift Buds</span><span id="val-airpods" class="font-mono-num text-red-600">70%</span></label>
+                <input id="sl-airpods" type="range" min="0" max="100" value="70" class="mt-1 w-full accent-red-600">
+              </div>
+              <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
-            <div id="holo-card" class="holo-card cursor-pointer rounded-3xl border border-orange-400/40 p-6 text-white shadow-2xl">
-              <div class="holo-sheen"></div>
-              <div class="relative z-10 flex items-start justify-between">
-                <div>
-                  <div class="font-mono-num text-[10px] uppercase tracking-widest text-orange-300">Red Apple · Halasuru Lab</div>
-                  <div class="font-display mt-0.5 text-lg font-extrabold tracking-tight">6-Month Hardware Warranty</div>
+            <div class="stage-3d-box relative order-1 h-72 border-b border-zinc-800 lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
+              <canvas id="canvas-airpods" aria-label="3D Realistic AirPods Pro"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 3D</span>
+            </div>
+          </div>
+
+          <!-- Stacked 3D #3: Apple Watch & MacBook Pro Pair -->
+          <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+              <div class="stage-3d-box relative h-56">
+                <canvas id="canvas-watch" aria-label="3D Apple Watch Ultra"></canvas>
+                <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
+              </div>
+              <div class="p-5">
+                <h3 class="font-display text-lg font-extrabold text-zinc-950">Apple Watch Display, Glass &amp; Sensors</h3>
+                <p class="mt-1 text-xs text-zinc-600">Front glass restoration, OLED panels, battery cells, Digital Crown &amp; water-resistance resealing.</p>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
+              <div class="stage-3d-box relative h-56">
+                <canvas id="canvas-macbook" aria-label="3D MacBook Pro"></canvas>
+                <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
+              </div>
+              <div class="p-5">
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="font-display text-lg font-extrabold text-zinc-950">MacBook Pro, Air, iMac &amp; Mini</h3>
+                  <input id="sl-macbook" type="range" min="10" max="100" value="75" class="w-24 accent-red-600" title="Open/close MacBook lid">
                 </div>
-                <span class="rounded-full border border-emerald-400/40 bg-emerald-500/20 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-emerald-200">VERIFIED</span>
-              </div>
-              <div class="relative z-10 mt-6 grid grid-cols-2 gap-3 text-[11px]">
-                <div><div class="text-zinc-400">CRM Job Card</div><div class="font-mono-num font-bold text-white">RA-2048 · SERIAL TRACKED</div></div>
-                <div><div class="text-zinc-400">Privacy Standard</div><div class="font-mono-num font-bold text-emerald-300">ZERO-PASSCODE</div></div>
-              </div>
-              <div class="relative z-10 mt-5 flex items-center justify-between border-t border-white/15 pt-3 text-[10px] text-orange-200">
-                <span>Claim with CRM Invoice · One Lookup</span>
-                <span class="font-mono-num">redmobilerepair.in</span>
+                <p class="mt-1 text-xs text-zinc-600">Retina displays, batteries, keyboards, USB-C power ICs &amp; liquid-spill logic board recovery.</p>
               </div>
             </div>
           </div>
@@ -727,352 +856,572 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 12. TRUSTED BY HALASURU & BENGALURU (ENLARGED LOGO + PRECISION AURA) -->
-    <section id="reviews" class="ambient-shift-warm py-12 sm:py-16">
-      <div class="mx-auto max-w-6xl px-4 text-center sm:px-6">
-        <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">
-          Trusted by Halasuru &amp; Bengaluru · Apple Device Repairs, Perfected.
+    <!-- 12. WHERE WE EXCEL + OUR PROCESS + SURPRISE #2: 32-POINT QC INSPECTOR -->
+    <section class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Where We Excel</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">iPhone Display &amp; Back Glass <span class="text-brand-grad">Restored Right.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Every iPhone — from 6 to 18 Pro Max — restored with precision tools and OEM-grade panels.</p>
         </div>
-        <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-          4.9 / 5 Stars Across <span class="text-brand-grad">1,103 Verified Google Reviews</span>
-        </h2>
 
-        <div class="mx-auto mt-7 flex flex-col items-center justify-center gap-7 rounded-3xl border border-red-100 bg-white p-7 shadow-md sm:flex-row sm:text-left">
-          <div class="logo-aura-stage relative flex h-56 w-56 shrink-0 items-center justify-center overflow-hidden rounded-3xl border-2 border-orange-500/40 shadow-2xl sm:h-64 sm:w-64">
+        <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <div class="card-sheen rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <span class="rounded-full bg-red-600 px-2.5 py-0.5 text-[10px] font-bold uppercase text-white">Most Popular</span>
+            <h3 class="mt-3 font-display text-lg font-extrabold text-zinc-950">Front Display</h3>
+            <p class="mt-1 text-xs text-zinc-600">OEM-grade OLED with True Tone, fitted and calibrated for a clean, factory-like finish.</p>
+            <div class="mt-3 text-xs font-bold text-emerald-700">● ~45 min while you wait</div>
+          </div>
+          <div class="card-sheen rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <span class="rounded-full bg-zinc-900 px-2.5 py-0.5 text-[10px] font-bold uppercase text-white">Pro Max Specialist</span>
+            <h3 class="mt-3 font-display text-lg font-extrabold text-zinc-950">Back Glass</h3>
+            <p class="mt-1 text-xs text-zinc-600">Laser-aligned factory-grade back glass, MagSafe-compatible with a seamless finish.</p>
+            <div class="mt-3 text-xs font-bold text-emerald-700">● ~60 min while you wait</div>
+          </div>
+          <div class="card-sheen rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <span class="rounded-full bg-orange-600 px-2.5 py-0.5 text-[10px] font-bold uppercase text-white">Best Value</span>
+            <h3 class="mt-3 font-display text-lg font-extrabold text-zinc-950">Screen + Back Combo</h3>
+            <p class="mt-1 text-xs text-zinc-600">Both sides restored in one careful visit, with priority handling for Pro and Pro Max models.</p>
+            <div class="mt-3 text-xs font-bold text-emerald-700">● Same day while you wait</div>
+          </div>
+        </div>
+
+        <!-- Our Process + Interactive 32-Point QC Inspector -->
+        <div class="mt-12 rounded-3xl border border-zinc-200 bg-white p-6 shadow-md">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Our Process · Precision at Every Step</div>
+              <h3 class="font-display text-2xl font-extrabold text-zinc-950">Interactive 32-Point Quality Check Inspector</h3>
+            </div>
+            <button type="button" id="btn-run-qc" class="dock-quote-btn rounded-full px-5 py-2.5 text-xs font-extrabold text-white">▶ Run Live QC Check</button>
+          </div>
+          <div id="qc-grid" class="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">01. True Tone Calibration</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">02. Face ID &amp; Flood IR</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">03. 120Hz ProMotion Touch</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">04. MagSafe &amp; Qi Coil</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">05. LiDAR &amp; OIS Cameras</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">06. Battery Peak Current</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">07. Earpiece, Mics &amp; Haptics</div>
+            <div class="qc-item rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs font-semibold text-zinc-700">08. Water-Seal Gasket</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. EVERY REPAIR. ONE EXPERT TEAM (ALL 11 SERVICES) + ONLY THE BEST PARTS -->
+    <section class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Repair Services</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Every Repair. <span class="text-brand-grad">One Expert Team.</span></h2>
+        </div>
+
+        <div id="services-grid" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+        <!-- Only the Best Parts (Sleek Dark Hardware Grid) -->
+        <div class="mt-12 rounded-3xl bg-zinc-950 p-6 text-white shadow-xl sm:p-8">
+          <div class="text-center">
+            <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-400">Quality Parts</div>
+            <h3 class="mt-1 font-display text-2xl font-extrabold sm:text-3xl">Only the Best Parts for Your Device.</h3>
+            <p class="mt-1 text-xs text-zinc-400">OEM-grade, precision-tested components inspected before installation.</p>
+          </div>
+          <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4"><div class="text-[10px] font-bold text-orange-400">OEM-GRADE TRUE TONE</div><div class="mt-1 font-bold text-sm">OLED Display Panel</div><div class="text-[11px] text-zinc-400">iPhone 11 – 18 Series</div></div>
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4"><div class="text-[10px] font-bold text-emerald-400">TESTED CAPACITY CELLS</div><div class="mt-1 font-bold text-sm">Battery Cell</div><div class="text-[11px] text-zinc-400">iPhone, iPad, MacBook</div></div>
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4"><div class="text-[10px] font-bold text-red-400">MAGSAFE COMPATIBLE</div><div class="mt-1 font-bold text-sm">Back Glass Panel</div><div class="text-[11px] text-zinc-400">Laser-aligned fit</div></div>
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4"><div class="text-[10px] font-bold text-orange-400">OEM SENSOR ASSEMBLY</div><div class="mt-1 font-bold text-sm">Camera Module</div><div class="text-[11px] text-zinc-400">OIS &amp; LiDAR calibrated</div></div>
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4"><div class="text-[10px] font-bold text-blue-400">PRECISION CONNECTOR</div><div class="mt-1 font-bold text-sm">Charging Port Flex</div><div class="text-[11px] text-zinc-400">Fast-charge &amp; data tested</div></div>
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4"><div class="text-[10px] font-bold text-purple-400">MICRO-SOLDERED IC</div><div class="mt-1 font-bold text-sm">Logic Board Components</div><div class="text-[11px] text-zinc-400">PMIC, NAND &amp; Baseband</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. REPAIR TRIAGE + SOFTWARE & SIGNED RESTORE (ORANGE GLASS EFFECT) -->
+    <section class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Repair Triage</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Not Sure What’s Wrong? <span class="text-brand-grad">Start Here.</span></h2>
+        </div>
+
+        <div class="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm lg:col-span-7">
+            <label for="triage-device" class="text-[11px] font-bold uppercase text-zinc-500">Your Device (All Apple Models)</label>
+            <select id="triage-device" class="mt-1 w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-zinc-900 outline-none focus:border-red-600">
+              <optgroup label="iPhone — All Models">
+                <option>iPhone 18 Pro Max</option>
+                <option>iPhone 18 Pro</option>
+                <option>iPhone 18 Plus</option>
+                <option>iPhone 18</option>
+                <option>iPhone 17 Pro Max</option>
+                <option>iPhone 17 Pro</option>
+                <option>iPhone 17 Slim/Air</option>
+                <option>iPhone 17 Plus</option>
+                <option>iPhone 17</option>
+                <option>iPhone 16 Pro Max</option>
+                <option>iPhone 16 Pro</option>
+                <option>iPhone 16 Plus</option>
+                <option>iPhone 16</option>
+                <option>iPhone 15 Pro Max</option>
+                <option>iPhone 15 Pro</option>
+                <option>iPhone 15 Plus</option>
+                <option>iPhone 15</option>
+                <option>iPhone 14 Pro Max</option>
+                <option>iPhone 14 Pro</option>
+                <option>iPhone 14 Plus</option>
+                <option selected>iPhone 14</option>
+                <option>iPhone 13 Pro Max</option>
+                <option>iPhone 13 Pro</option>
+                <option>iPhone 13 mini</option>
+                <option>iPhone 13</option>
+                <option>iPhone 12 Pro Max</option>
+                <option>iPhone 12 Pro</option>
+                <option>iPhone 12 mini</option>
+                <option>iPhone 12</option>
+                <option>iPhone 11 Pro Max</option>
+                <option>iPhone 11 Pro</option>
+                <option>iPhone 11</option>
+                <option>iPhone XS Max</option>
+                <option>iPhone XS</option>
+                <option>iPhone XR</option>
+                <option>iPhone X</option>
+                <option>iPhone SE (3rd Gen)</option>
+                <option>iPhone SE (2nd Gen)</option>
+                <option>iPhone 8 Plus</option>
+                <option>iPhone 8</option>
+                <option>iPhone 7 Plus</option>
+                <option>iPhone 7</option>
+                <option>iPhone 6s Plus</option>
+                <option>iPhone 6s</option>
+                <option>iPhone 6 Plus</option>
+                <option>iPhone 6</option>
+              </optgroup>
+              <optgroup label="iPad — All Models">
+                <option>iPad Pro 13" M4</option>
+                <option>iPad Pro 12.9"</option>
+                <option>iPad Pro 11"</option>
+                <option>iPad Air (M2 / M1)</option>
+                <option>iPad 10th Gen</option>
+                <option>iPad 9th Gen</option>
+                <option>iPad Mini (6th / 7th Gen)</option>
+              </optgroup>
+              <optgroup label="Apple Watch — All Series">
+                <option>Apple Watch Ultra 3</option>
+                <option>Apple Watch Ultra 2</option>
+                <option>Apple Watch Ultra</option>
+                <option>Apple Watch Series 10</option>
+                <option>Apple Watch Series 9</option>
+                <option>Apple Watch Series 8</option>
+                <option>Apple Watch Series 7</option>
+                <option>Apple Watch SE 2</option>
+              </optgroup>
+              <optgroup label="Mac & MacBook">
+                <option>MacBook Pro (M4 / M3 / M2 / M1)</option>
+                <option>MacBook Air (M3 / M2 / M1)</option>
+                <option>Mac mini</option>
+                <option>iMac</option>
+                <option>Mac Studio</option>
+              </optgroup>
+              <optgroup label="AirPods & iPod">
+                <option>AirPods Pro (2nd Gen)</option>
+                <option>AirPods Pro (1st Gen)</option>
+                <option>AirPods (4th / 3rd Gen)</option>
+                <option>AirPods Max</option>
+                <option>iPod Touch 7th Gen</option>
+                <option>iPod Touch 6th Gen</option>
+                <option>iPod Classic</option>
+              </optgroup>
+            </select>
+            <div class="mt-3 text-[11px] font-bold uppercase text-zinc-500">What's Happening?</div>
+            <div id="triage-symptoms" class="mt-2 flex flex-wrap gap-2 text-xs font-semibold"></div>
+          </div>
+          <div class="flex flex-col justify-between rounded-3xl border border-orange-200 bg-white p-5 shadow-md lg:col-span-5">
+            <div>
+              <span class="rounded-full bg-orange-100 px-2.5 py-0.5 text-[10px] font-bold uppercase text-orange-800">Likely Service</span>
+              <h3 id="triage-service" class="mt-2 font-display text-xl font-extrabold text-zinc-950">Front Display Replacement</h3>
+              <div id="triage-price" class="price-breathe mt-2 font-mono-num text-3xl font-black text-red-600">₹11,600</div>
+              <div id="triage-alt" class="mt-1 text-xs font-semibold text-orange-700">Front Glass Restoration option: ₹5,500 if OLED is intact</div>
+              <ul class="mt-3 space-y-1 text-xs text-zinc-600">
+                <li>✓ Free diagnosis before any charge</li>
+                <li>✓ 6 Months warranty · CRM invoice is your record</li>
+                <li>✓ Zero-password privacy policy</li>
+              </ul>
+            </div>
+            <a id="triage-wa-btn" href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-quote-btn mt-4 block w-full rounded-xl py-3 text-center text-xs font-extrabold text-white">Confirm on WhatsApp</a>
+          </div>
+        </div>
+
+        <!-- Software & Signed Restore (Preserved Orange Glass Effect) -->
+        <div class="mt-12 grid grid-cols-1 items-center gap-6 rounded-3xl border border-orange-200 bg-white p-6 shadow-md lg:grid-cols-12">
+          <div class="lg:col-span-6">
+            <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Software &amp; Signed Restore</div>
+            <h3 class="mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Not Just Hardware — <span class="text-brand-grad">Your Data &amp; OS Too.</span></h3>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">A dedicated desk for operating systems, signed firmware restores, and board-level storage IC faults — handled under a strict zero-passcode-first process.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5 text-[11px] font-bold text-zinc-700">
+              <span class="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5">iOS</span>
+              <span class="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5">iPadOS</span>
+              <span class="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5">macOS</span>
+              <span class="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5">watchOS</span>
+              <span class="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5">Firmware</span>
+            </div>
+          </div>
+          <div class="orange-glass-wrap relative h-56 rounded-2xl border-2 border-orange-300 bg-zinc-900 shadow-lg lg:col-span-6">
+            <img src="/images/v5/quote-desk.jpg" alt="Software and Signed Restore Desk" class="h-full w-full object-cover" onerror="this.src='/images/v5/quote-desk.jpg'">
+            <div class="orange-glass-sweep"></div>
+            <span class="absolute bottom-3 left-3 z-20 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-orange-800 shadow">Data-Safe First</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15. COMPARISON + FOUR REASONS ₹1,00,000 + SURPRISE #3: 3D HOLOGRAPHIC WARRANTY CARD -->
+    <section id="comparison" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Honest Comparison</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Red Apple vs <span class="text-brand-grad">Authorised Service Centres</span></h2>
+        </div>
+
+        <div class="mt-7 overflow-x-auto rounded-3xl border border-zinc-200 bg-white shadow-sm">
+          <table class="w-full min-w-[540px] text-left text-xs">
+            <thead class="border-b border-zinc-200 bg-zinc-50 text-[11px] uppercase text-zinc-500">
+              <tr>
+                <th class="px-4 py-3">Feature</th>
+                <th class="px-4 py-3 text-red-600">Red Apple Mobile Repair Store</th>
+                <th class="px-4 py-3">Authorised Service Centre</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-100">
+              <tr><td class="px-4 py-3 font-bold">Turnaround</td><td class="px-4 py-3 font-semibold text-emerald-700">30–45 min avg while you wait</td><td class="px-4 py-3 text-zinc-500">3–7 days leave-at-store</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Board-Level Repair</td><td class="px-4 py-3 font-semibold text-emerald-700">Micro-soldering &amp; chip-level fix</td><td class="px-4 py-3 text-zinc-500">Full unit replacement</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Doorstep Pickup</td><td class="px-4 py-3 font-semibold text-emerald-700">Free 24/7 pickup &amp; drop</td><td class="px-4 py-3 text-zinc-500">Not available</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Data Privacy</td><td class="px-4 py-3 font-semibold text-emerald-700">Sealed Zero-Passcode Workflow</td><td class="px-4 py-3 text-zinc-500">Standard service policies vary</td></tr>
+              <tr><td class="px-4 py-3 font-bold">Warranty</td><td class="px-4 py-3 font-semibold text-emerald-700">6 Months Written CRM Warranty</td><td class="px-4 py-3 text-zinc-500">Standard service warranty</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2.5 text-center text-[11px] text-zinc-500">Apple is a trademark of Apple Inc. Red Apple is an independent repair service and is not affiliated with, authorised by, or endorsed by Apple Inc.</p>
+
+        <!-- Four Reasons People Hand Us a Phone Worth ₹1,00,000 + Surprise #3 Holographic Warranty Card -->
+        <div class="mt-12 grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+          <div class="lg:col-span-7">
+            <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Standard</div>
+            <h3 class="mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Four Reasons People Hand Us a Phone Worth <span class="text-red-600">₹1,00,000</span></h3>
+            <p class="mt-2 text-xs leading-relaxed text-zinc-600">Every repair shop says they are careful. These are the four things we can actually prove — and why other shops quietly send us their board-level work.</p>
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+                <div class="text-[11px] font-extrabold text-red-600">01 · BOARD-LEVEL</div>
+                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">Board-Level, Not Part-Swapping</div>
+                <p class="mt-1 text-[11px] text-zinc-600">We micro-solder at component level under stereo microscopes instead of writing off logic boards.</p>
+              </div>
+              <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+                <div class="text-[11px] font-extrabold text-orange-600">02 · FIXED QUOTE</div>
+                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">One Price, Quoted Before Opening</div>
+                <p class="mt-1 text-[11px] text-zinc-600">Written estimate before any screw comes out. Nothing added to the bill after work is done.</p>
+              </div>
+              <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+                <div class="text-[11px] font-extrabold text-red-600">03 · SAME-DAY</div>
+                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">Same-Day, Because You Need It</div>
+                <p class="mt-1 text-[11px] text-zinc-600">Display and battery work done in 30–45 mins while you wait, plus 24/7 doorstep pickup.</p>
+              </div>
+              <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+                <div class="text-[11px] font-extrabold text-emerald-700">04 · FULL TRANSPARENCY</div>
+                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">You Watch the Whole Repair</div>
+                <p class="mt-1 text-[11px] text-zinc-600">CRM WhatsApp updates at every stage with strict Zero-Password Privacy.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Surprise #3: Interactive 3D-Tilt Holographic 6 Months CRM Warranty Card -->
+          <div class="lg:col-span-5">
+            <div id="holo-warranty" class="holo-card relative overflow-hidden rounded-3xl border border-orange-500/40 p-6 text-white shadow-2xl">
+              <div class="holo-glare"></div>
+              <div class="relative z-10 flex items-center justify-between">
+                <span class="font-mono-num text-[10px] font-bold uppercase tracking-widest text-orange-300">RED APPLE · CRM VERIFIED</span>
+                <span class="rounded-full bg-red-600 px-2.5 py-0.5 text-[10px] font-bold shadow">6 Months</span>
+              </div>
+              <div class="relative z-10 mt-5 font-display text-2xl font-extrabold">Written Repair Warranty</div>
+              <p id="holo-device-line" class="relative z-10 mt-1 text-xs text-zinc-200">iPhone 17 Pro Max · Front Glass &amp; OLED Coverage — Linked to your Halasuru CRM Job ID &amp; serial-tracked part record.</p>
+              <div class="relative z-10 mt-4 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 font-mono-num text-[11px] text-orange-200 backdrop-blur-sm">
+                <span id="holo-job-id">JOB ID: RA-2048-CERT</span>
+                <span class="text-emerald-300">✓ 32-PT QC PASSED</span>
+              </div>
+              <div class="relative z-10 mt-3 flex items-center justify-between text-[10px] text-zinc-400">
+                <span>Halasuru · MG Road, Bengaluru</span>
+                <span>Excludes physical/liquid &amp; board work</span>
+              </div>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+              <div class="flex gap-1.5">
+                <button type="button" data-wcard="RA-2048-CERT|iPhone 17 Pro Max · Front Glass & OLED Coverage" class="wcard-btn rounded-full bg-zinc-900 px-2.5 py-1 font-bold text-white">Display</button>
+                <button type="button" data-wcard="RA-2051-CERT|iPhone 16 Pro Max · TBK-958 Cold UV Back Glass" class="wcard-btn rounded-full border border-zinc-300 bg-white px-2.5 py-1 font-bold text-zinc-700">Back Glass</button>
+                <button type="button" data-wcard="RA-2064-CERT|MacBook Pro M3 · Battery & Port Service" class="wcard-btn rounded-full border border-zinc-300 bg-white px-2.5 py-1 font-bold text-zinc-700">MacBook</button>
+              </div>
+              <button type="button" id="btn-demo-toast" class="rounded-full border border-orange-300 bg-orange-50 px-2.5 py-1 font-bold text-orange-800 hover:bg-orange-100">Preview 10s AI Toast</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 16. TRUSTED BY HALASURU & BENGALURU (ENLARGED ORIGINAL LOGO IN PRECISION AURA + MOVING REVIEWS MARQUEE) -->
+    <section id="reviews" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="flex flex-col items-center text-center">
+          <div class="relative mb-6 flex h-32 w-32 items-center justify-center rounded-3xl border border-red-200 bg-white p-3 shadow-xl">
             <span class="aura-ring"></span>
             <span class="aura-ring aura-ring-2"></span>
-            <span class="aura-ring aura-ring-3"></span>
-            <div class="logo-float-wrap relative z-10 flex h-44 w-44 items-center justify-center rounded-2xl bg-white/95 p-3 shadow-[0_12px_36px_rgba(220,38,38,0.45)] sm:h-48 sm:w-48">
-              <img src="/icon-512.png" alt="Red Apple Mobile Repair Original Brand Logo" class="h-full w-full object-contain" onerror="window.handleLogoFallback && window.handleLogoFallback(this)">
-            </div>
-            <div class="logo-laser"></div>
-            <span class="font-mono-num absolute bottom-2.5 z-20 rounded-full bg-black/75 px-3 py-0.5 text-[10px] font-bold tracking-wider text-orange-200 backdrop-blur">RED APPLE · HALASURU</span>
+            <img src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-24 w-24 object-contain" onerror="this.src='/logo.png'">
           </div>
-          <div class="flex flex-col gap-2">
-            <span class="w-fit rounded-full border border-emerald-200 bg-emerald-50 px-3 py-0.5 text-[11px] font-bold text-emerald-800">Google My Business &amp; Maps Verified Address</span>
-            <div class="font-display text-4xl font-extrabold text-zinc-950">4.9 <span class="text-2xl text-amber-500">★★★★★</span></div>
-            <p class="max-w-lg text-xs leading-relaxed text-zinc-600">
-              We link straight to our original Google Business Profile. We never write, edit, or stage testimonials on this site — the real reviews stay where customers left them.
-            </p>
-            <div class="mt-2 flex flex-wrap gap-2.5">
-              <a href="https://www.google.com/maps/search/?api=1&query=Red+Apple+Mobile+Repair+Halasuru+Bengaluru" target="_blank" rel="noopener noreferrer" class="rounded-full bg-red-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-red-700">Read the Original Reviews on Google →</a>
-              <button type="button" id="btn-test-concierge" class="rounded-full border border-zinc-300 bg-white px-4 py-2.5 text-xs font-semibold text-zinc-700 hover:border-zinc-900">Preview 10s AI Popup</button>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Reviews · Apple Device Repairs, Perfected.</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
+          <div class="mt-3 inline-flex items-center gap-3 rounded-2xl border border-amber-200 bg-white px-5 py-3 shadow-sm">
+            <span class="font-display text-3xl font-black text-zinc-950 font-mono-num">4.9</span>
+            <div class="text-left text-xs">
+              <div class="font-bold text-amber-500">★★★★★</div>
+              <div class="font-bold text-zinc-800">1,103 Verified Google Reviews</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="mt-8 overflow-hidden py-2">
-        <div class="marquee-track gap-4">
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-red-600">✓ Verified Address</div><p class="mt-1 text-xs text-zinc-600">Google My Business &amp; Maps Verified Store at Metro Pillar No. 125, Halasuru.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-amber-600">★ 4.9 / 5 Rating</div><p class="mt-1 text-xs text-zinc-600">1,103+ verified customer ratings live on Google Maps.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-emerald-700">🛡 Zero Staged Quotes</div><p class="mt-1 text-xs text-zinc-600">Reviews stay at source on Google — one tap opens the original profile.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-orange-600">⚡ Same-Day Bench</div><p class="mt-1 text-xs text-zinc-600">30–60 min display, battery &amp; back-glass repairs while you wait.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-red-600">✓ Verified Address</div><p class="mt-1 text-xs text-zinc-600">Google My Business &amp; Maps Verified Store at Metro Pillar No. 125, Halasuru.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-amber-600">★ 4.9 / 5 Rating</div><p class="mt-1 text-xs text-zinc-600">1,103+ verified customer ratings live on Google Maps.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-emerald-700">🛡 Zero Staged Quotes</div><p class="mt-1 text-xs text-zinc-600">Reviews stay at source on Google — one tap opens the original profile.</p></div>
-          <div class="w-72 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-bold text-orange-600">⚡ Same-Day Bench</div><p class="mt-1 text-xs text-zinc-600">30–60 min display, battery &amp; back-glass repairs while you wait.</p></div>
+        <div class="mt-7 overflow-hidden py-2">
+          <div class="marquee-track flex gap-4">
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-red-600">Verified Rating 4.9 / 5</div><p class="mt-1 text-xs text-zinc-600">Our public Google rating, shown exactly as Google displays it.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-orange-600">1,103 Google Reviews</div><p class="mt-1 text-xs text-zinc-600">Genuine customer feedback live on our Google Business Profile.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-emerald-700">Verified Halasuru Address</div><p class="mt-1 text-xs text-zinc-600">Google My Business &amp; Maps verified studio at Metro Pillar 125.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-zinc-900">Reviews Stay at Source</div><p class="mt-1 text-xs text-zinc-600">We never invent, stage or edit testimonials on this site.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-red-600">Verified Rating 4.9 / 5</div><p class="mt-1 text-xs text-zinc-600">Our public Google rating, shown exactly as Google displays it.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-orange-600">1,103 Google Reviews</div><p class="mt-1 text-xs text-zinc-600">Genuine customer feedback live on our Google Business Profile.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-emerald-700">Verified Halasuru Address</div><p class="mt-1 text-xs text-zinc-600">Google My Business &amp; Maps verified studio at Metro Pillar 125.</p></div>
+            <div class="w-64 shrink-0 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"><div class="text-xs font-extrabold text-zinc-900">Reviews Stay at Source</div><p class="mt-1 text-xs text-zinc-600">We never invent, stage or edit testimonials on this site.</p></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================================================================== -->
-    <!-- 13. LARGE GOOGLE MAPS EMBED — EASY TO REACH. RIGHT IN HALASURU.      -->
-    <!-- ==================================================================== -->
-    <section id="halasuru-map" class="ambient-shift-cool border-t border-zinc-100 py-14">
+    <!-- 17. FAQ — ALL 16 POLICY QUESTIONS -->
+    <section id="faq" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6">
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">FAQ</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Questions? <span class="text-brand-grad">Answered.</span></h2>
+          <p class="mt-1 text-xs text-zinc-600">Straight answers on warranty, claims, WhatsApp updates and pickup.</p>
+        </div>
+        <div id="faq-list" class="mt-7 space-y-2.5"></div>
+      </div>
+    </section>
+
+    <!-- 18. LARGE HALASURU GOOGLE MAPS EMBED (#halasuru-map) -->
+    <section id="halasuru-map" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="mx-auto max-w-2xl text-center">
-          <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Visit Us</div>
-          <h2 class="breathing-heading mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">
-            Easy to Reach. <span class="text-brand-grad">Right in Halasuru.</span>
-          </h2>
-          <p class="mt-2 text-sm text-zinc-600">
-            Metro Pillar No 125, No.38 — next to Vignesh Dresses, opposite Bhadra Landmark, Halasuru, Bengaluru 560008. One minute from Halasuru Metro.
-          </p>
+        <div class="text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Visit Us</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Easy to Reach. <span class="text-brand-grad">Right in Halasuru.</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Metro Pillar No 125, No.38 — next to Vignesh Dresses, opposite Bhadra Landmark, Halasuru, Bengaluru 560008.</p>
         </div>
 
         <div class="mt-8 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
-          <!-- Large Real Interactive Google Maps Embed -->
-          <div class="overflow-hidden rounded-3xl border-2 border-orange-200/80 bg-zinc-100 shadow-lg lg:col-span-8">
+          <div class="overflow-hidden rounded-3xl border-2 border-orange-200 bg-white shadow-md lg:col-span-7">
             <iframe
               title="Red Apple Mobile Repair Halasuru Bengaluru Google Map"
-              src="https://maps.google.com/maps?q=Red%20Apple%20Mobile%20Repair%20Halasuru%20Bengaluru%20560008&t=&z=16&ie=UTF8&iwloc=&output=embed"
-              class="h-[380px] w-full border-0 lg:h-[430px]"
+              src="https://www.google.com/maps?q=Red+Apple+Mobile+Repair+Halasuru+Bengaluru+560008&output=embed"
+              class="h-[360px] w-full border-0"
               loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              allowfullscreen
-            ></iframe>
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
-
-          <!-- Verified Address, Timings, Metro & Direct Actions -->
-          <div class="flex flex-col justify-between rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm lg:col-span-4">
-            <div class="space-y-4 text-xs">
-              <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-bold text-emerald-800">
-                ✓ Google My Business &amp; Maps Verified · 4.9 ★
-              </span>
-              <div>
-                <div class="font-mono-num text-[10px] font-bold uppercase text-zinc-400">Address</div>
-                <div class="mt-0.5 font-semibold text-zinc-900">Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008</div>
-              </div>
-              <div>
-                <div class="font-mono-num text-[10px] font-bold uppercase text-zinc-400">Timings</div>
-                <div class="mt-0.5 font-semibold text-zinc-900">10 AM – 12 AM midnight (Open all 7 days)</div>
-              </div>
-              <div>
-                <div class="font-mono-num text-[10px] font-bold uppercase text-zinc-400">Metro</div>
-                <div class="mt-0.5 font-semibold text-zinc-900">Halasuru Metro Station — 1 min walk</div>
-              </div>
-              <div>
-                <div class="font-mono-num text-[10px] font-bold uppercase text-zinc-400">Pickup &amp; Drop</div>
-                <div class="mt-0.5 font-semibold text-emerald-700">Free across Bengaluru · 24/7</div>
-              </div>
+          <div class="flex flex-col justify-between rounded-3xl border border-zinc-200 bg-white p-6 shadow-md lg:col-span-5">
+            <div class="space-y-3 text-xs">
+              <span class="inline-block rounded-full bg-emerald-50 px-3 py-1 font-bold text-emerald-800">✓ Google My Business &amp; Maps Verified · 4.9 (1,103)</span>
+              <div><strong class="text-zinc-950">Address:</strong><div class="text-zinc-600">Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008</div></div>
+              <div><strong class="text-zinc-950">Timings:</strong><div class="text-zinc-600">10 AM – 12 AM midnight (Open all 7 days)</div></div>
+              <div><strong class="text-zinc-950">Metro:</strong><div class="text-zinc-600">Halasuru Metro — 1 min walk</div></div>
+              <div><strong class="text-zinc-950">Pickup &amp; Drop:</strong><div class="text-zinc-600">Free across Bengaluru (24/7)</div></div>
             </div>
-
-            <div class="mt-6 flex flex-col gap-2.5">
-              <a href="https://www.google.com/maps/search/?api=1&query=Red+Apple+Mobile+Repair+Halasuru+Bengaluru" target="_blank" rel="noopener noreferrer" class="dock-quote-btn rounded-xl py-3 text-center text-xs font-bold text-white transition hover:opacity-95">
-                Get Directions on Google Maps →
-              </a>
-              <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn rounded-xl py-3 text-center text-xs font-bold text-white transition hover:opacity-95">
-                WhatsApp Bench (+91 86606 63776)
-              </a>
+            <div class="mt-5 flex flex-wrap gap-2.5">
+              <a href="https://maps.google.com/?q=Red+Apple+Mobile+Repair+Halasuru+Bengaluru" target="_blank" rel="noopener noreferrer" class="dock-quote-btn flex-1 rounded-xl py-3 text-center text-xs font-extrabold text-white">Get Directions</a>
+              <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn flex-1 rounded-xl py-3 text-center text-xs font-extrabold text-white">WhatsApp</a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 14. FINAL CTA BAND + TECHNICAL TICKER STRIP -->
-    <section id="visit-us" class="ambient-shift-warm border-t border-zinc-100 py-14">
-      <div class="mx-auto max-w-4xl px-4 text-center sm:px-6">
-        <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-red-600">Apple repair · Halasuru, Bengaluru</div>
-        <h2 class="breathing-heading mt-2 font-display text-3xl font-extrabold text-zinc-950 sm:text-5xl">
-          Your Apple Device, <span class="text-brand-grad">Fixed Right.</span>
-        </h2>
-        <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-600">
-          Tell us the device and the fault. We’ll send a fixed estimate and a convenient slot — usually within minutes.
-        </p>
-        <div class="mt-1 text-xs font-bold uppercase tracking-wider text-zinc-800">Apple Device Repairs, Perfected.</div>
-        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <a href="#estimate" class="dock-quote-btn rounded-full px-7 py-3.5 text-xs font-bold text-white transition hover:opacity-95 sm:text-sm">Get Instant Estimate</a>
-          <a href="tel:+918660663776" class="font-mono-num rounded-full border border-zinc-300 bg-white px-6 py-3.5 text-xs font-bold text-zinc-900 transition hover:border-red-600 hover:text-red-600 sm:text-sm">+91 86606 63776</a>
-        </div>
-      </div>
-
-      <div class="mt-10 overflow-hidden border-y border-zinc-200 bg-zinc-950 py-3 text-xs font-semibold text-zinc-200">
-        <div class="marquee-track gap-6">
-          <span>Front glass restoration</span><span class="text-red-500">•</span>
-          <span>TBK OCA vacuum lamination</span><span class="text-orange-500">•</span>
-          <span>90-litre bubble remover</span><span class="text-red-500">•</span>
-          <span>TBK-958 cold UV laser</span><span class="text-orange-500">•</span>
-          <span>Original OLED retained</span><span class="text-red-500">•</span>
-          <span>6-month repair warranty</span><span class="text-orange-500">•</span>
-          <span>Zero-password privacy</span><span class="text-red-500">•</span>
-          <span>Apple Diagnostic Mode testing</span><span class="text-orange-500">•</span>
-          <span>Halasuru · Bengaluru</span><span class="text-red-500">•</span>
-          <span>Front glass restoration</span><span class="text-red-500">•</span>
-          <span>TBK OCA vacuum lamination</span><span class="text-orange-500">•</span>
-          <span>90-litre bubble remover</span><span class="text-red-500">•</span>
-          <span>TBK-958 cold UV laser</span><span class="text-orange-500">•</span>
-          <span>Original OLED retained</span><span class="text-red-500">•</span>
-          <span>6-month repair warranty</span><span class="text-orange-500">•</span>
-          <span>Zero-password privacy</span><span class="text-red-500">•</span>
-          <span>Apple Diagnostic Mode testing</span><span class="text-orange-500">•</span>
-          <span>Halasuru · Bengaluru</span>
+    <!-- 19. FINAL CTA -->
+    <section class="bg-zinc-950 py-12 text-center text-white">
+      <div class="mx-auto max-w-3xl px-4">
+        <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-400">Apple Repair · Halasuru, Bengaluru</div>
+        <h2 class="heading-breathe mt-2 font-display text-3xl font-extrabold sm:text-4xl">Your Apple Device, <span class="text-brand-grad">Fixed Right.</span></h2>
+        <p class="mt-2 text-xs text-zinc-400 sm:text-sm">Tell us the device and the fault. We'll send a fixed estimate and a convenient slot — usually within minutes. Apple Device Repairs, Perfected.</p>
+        <div class="mt-5 flex flex-wrap justify-center gap-3">
+          <a href="#estimate" class="dock-quote-btn rounded-full px-6 py-3 text-xs font-extrabold text-white">Get Instant Estimate</a>
+          <a href="tel:+918660663776" class="rounded-full border border-zinc-700 bg-zinc-900 px-6 py-3 font-mono-num text-xs font-bold text-white hover:border-orange-500">+91 86606 63776</a>
         </div>
       </div>
     </section>
-
-    <!-- 15. COMPLETE FOOTER (ENLARGED STORE PHOTO + SOCIAL & DIRECTORY REGISTRATION HUB + 4 COLUMNS) -->
-    <footer id="footer-contact" class="border-t border-zinc-200 bg-zinc-50 pt-12 pb-12">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm lg:grid-cols-12">
-          <div class="orange-glass-wrap relative h-56 overflow-hidden rounded-2xl lg:col-span-5">
-            <img src="/images/gallery/store-glass-front.webp" alt="Red Apple Mobile Repair Store — Halasuru, MG Road, Bengaluru" class="h-full w-full object-cover" onerror="this.src='/images/gallery/store-glass-front.webp'">
-            <div class="orange-glass-sweep"></div>
-            <span class="absolute bottom-3 left-3 z-20 rounded-full bg-black/75 px-3 py-1 text-[10px] font-bold text-orange-200 backdrop-blur">MG Road, Halasuru · Open 10 AM – 12 AM</span>
-          </div>
-          <div class="flex flex-col gap-3 lg:col-span-7">
-            <div class="flex items-center gap-3">
-              <img src="/icon-512.png" alt="Red Apple Logo" class="h-12 w-12 rounded-xl border border-red-200 bg-red-50/50 object-contain p-0.5" onerror="window.handleLogoFallback && window.handleLogoFallback(this)">
-              <div>
-                <div class="font-display text-lg font-extrabold text-red-600">Red Apple <span class="text-zinc-950">Mobile Repair Store</span></div>
-                <div class="text-xs font-semibold text-zinc-700">Apple Device Repairs, Perfected.</div>
-              </div>
-            </div>
-            <p class="text-xs leading-relaxed text-zinc-600">
-              The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and board-level recovery. Independent Apple repair studio — not affiliated with Apple Inc.
-            </p>
-
-            <!-- Social Media & Business Directory Registration Hub (Ready for Your Profile Links) -->
-            <div>
-              <div class="mb-2 font-mono-num text-[10px] font-bold uppercase tracking-wider text-zinc-400">Follow &amp; Verify Us Across Platforms</div>
-              <div class="flex flex-wrap items-center gap-2">
-                <!-- Facebook -->
-                <a href="#footer-contact" title="Facebook — Add your page URL in site.ts" class="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-[11px] font-bold text-blue-700 transition hover:bg-blue-600 hover:text-white">
-                  <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.89h-2.34v6.99C18.34 21.13 22 16.99 22 12z"/></svg>
-                  <span>Facebook</span>
-                </a>
-                <!-- Instagram -->
-                <a href="#footer-contact" title="Instagram — Add your handle URL in site.ts" class="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-gradient-to-r from-amber-50 to-red-50 px-3 py-1.5 text-[11px] font-bold text-red-700 transition hover:from-orange-500 hover:to-red-600 hover:text-white">
-                  <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 2A3.75 3.75 0 004 7.75v8.5A3.75 3.75 0 007.75 20h8.5A3.75 3.75 0 0020 16.25v-8.5A3.75 3.75 0 0016.25 4h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6zm5.25-2.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z"/></svg>
-                  <span>Instagram</span>
-                </a>
-                <!-- YouTube -->
-                <a href="#footer-contact" title="YouTube Shorts / Bench Videos — Add channel URL in site.ts" class="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-[11px] font-bold text-red-700 transition hover:bg-red-600 hover:text-white">
-                  <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
-                  <span>YouTube</span>
-                </a>
-                <!-- X / Twitter -->
-                <a href="#footer-contact" title="X (Twitter) — Add handle URL in site.ts" class="inline-flex items-center gap-1.5 rounded-full border border-zinc-300 bg-zinc-100 px-3 py-1.5 text-[11px] font-bold text-zinc-900 transition hover:bg-zinc-950 hover:text-white">
-                  <svg class="h-3 w-3 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                  <span>X</span>
-                </a>
-                <!-- Google Maps / GBP -->
-                <a href="https://www.google.com/maps/search/?api=1&query=Red+Apple+Mobile+Repair+Halasuru+Bengaluru" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-800 transition hover:bg-emerald-600 hover:text-white">
-                  <span>Google Maps</span>
-                </a>
-                <!-- JustDial -->
-                <a href="#footer-contact" title="JustDial Verified Listing" class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[11px] font-bold text-amber-800 transition hover:bg-amber-600 hover:text-white">
-                  <span>JustDial</span>
-                </a>
-                <!-- Apple Maps / Bing Places -->
-                <a href="#footer-contact" title="Apple Business Connect - add your listing URL later" class="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-[11px] font-bold text-zinc-700 transition hover:border-zinc-900 hover:text-zinc-950">
-                  <span>Apple Maps</span>
-                </a>
-                <a href="#footer-contact" title="Bing Places - add your listing URL later" class="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-[11px] font-bold text-zinc-700 transition hover:border-zinc-900 hover:text-zinc-950"><span>Bing Places</span></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4-Column Directory -->
-        <div class="mt-8 grid grid-cols-2 gap-6 border-b border-zinc-200 pb-8 text-xs sm:grid-cols-4">
-          <div>
-            <h3 class="font-display text-xs font-extrabold uppercase tracking-wider text-zinc-950">Services</h3>
-            <ul class="mt-3 space-y-2 text-zinc-600">
-              <li><a href="#ecosystem" class="hover:text-red-600">iPhone Repair — All Models</a></li>
-              <li><a href="#oled-restore" class="hover:text-red-600">iPhone Display / Screen Replacement</a></li>
-              <li><a href="#oled-restore" class="hover:text-red-600">Front Glass Restoration</a></li>
-              <li><a href="#tbk-lab" class="hover:text-red-600">iPhone Back Glass Replacement</a></li>
-              <li><a href="#ecosystem" class="hover:text-red-600">iPad Repair — All Models</a></li>
-              <li><a href="#ecosystem" class="hover:text-red-600">Apple Watch &amp; AirPods Repair</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="font-display text-xs font-extrabold uppercase tracking-wider text-zinc-950">Company</h3>
-            <ul class="mt-3 space-y-2 text-zinc-600">
-              <li><a href="#estimate" class="hover:text-red-600">Get a Quote</a></li>
-              <li><a href="#paired-crm" class="hover:text-red-600">Repair Status</a></li>
-              <li><a href="#halasuru-map" class="hover:text-red-600">Halasuru Map &amp; Contact</a></li>
-              <li><a href="#reviews" class="hover:text-red-600">Verified Google Reviews</a></li>
-              <li><a href="/sitemap.xml" class="hover:text-red-600">Sitemap</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="font-display text-xs font-extrabold uppercase tracking-wider text-zinc-950">Legal</h3>
-            <ul class="mt-3 space-y-2 text-zinc-600">
-              <li><a href="/privacy" class="hover:text-red-600">Privacy Policy</a></li>
-              <li><a href="/terms" class="hover:text-red-600">Terms of Service</a></li>
-              <li><a href="/warranty" class="hover:text-red-600">Refund &amp; Warranty</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="font-display text-xs font-extrabold uppercase tracking-wider text-zinc-950">Contact</h3>
-            <ul class="mt-3 space-y-2 text-zinc-600">
-              <li class="font-mono-num font-bold text-zinc-950">+91 86606 63776</li>
-              <li>Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008</li>
-              <li><a href="#halasuru-map" class="font-semibold text-emerald-700 hover:underline">Google My Business &amp; Maps Verified →</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Exact Pixel Forge Studio Referral-Tracked Footer Credit -->
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-600">
-          <span>
-            <strong class="text-zinc-950">Developed by The Pixel Forge Studio · 96200 24812</strong> — Contact Us for your Business Build: Website · App · CRM · AI Integration &amp; All Business Management.
-          </span>
-          <a href="https://wa.me/919620024812?text=The%20Pixel%20Forge%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20Business%20Build.%20I%20came%20via%20redmobilerepair.in%20website%20that%20you%20have%20build." target="_blank" rel="noopener noreferrer" class="font-mono-num rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 font-bold text-emerald-800 transition hover:bg-emerald-100">
-            WhatsApp: +91 96200 24812
-          </a>
-        </div>
-      </div>
-    </footer>
   </main>
 
-  <!-- ====================================================================== -->
-  <!-- UPGRADED FLOATING MULTI-COLOR ACTION DOCK (GET QUOTE · WHATSAPP · AI)  -->
-  <!-- ====================================================================== -->
-  <div class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full border border-zinc-200/90 bg-white/95 p-1.5 shadow-[0_14px_38px_rgba(0,0,0,0.18)] backdrop-blur-md">
-    <a href="#estimate" class="dock-quote-btn inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold text-white transition hover:scale-[1.03] active:scale-95">
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-      <span>Get Quote</span>
+  <!-- 20. COMPLETE 4-COLUMN FOOTER WITH ENLARGED STORE PHOTO, SOCIAL/DIRECTORY HUB & TRACKED PIXEL FORGE CREDIT -->
+  <footer id="footer-contact" class="border-t border-zinc-200 bg-white pt-12 text-xs text-zinc-600">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <!-- Enlarged Real Store Photo Banner -->
+      <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
+        <div class="orange-glass-wrap h-44 overflow-hidden rounded-2xl bg-zinc-900 lg:col-span-5">
+          <img src="/images/gallery/store-glass-front.webp" alt="Red Apple Mobile Repair Store Halasuru" class="h-full w-full object-cover" onerror="this.src='/images/gallery/store-glass-front.webp'">
+          <div class="orange-glass-sweep"></div>
+        </div>
+        <div class="lg:col-span-7">
+          <div class="font-display text-lg font-extrabold text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair Store</div>
+          <p class="mt-1 leading-relaxed text-zinc-600">Apple repairs, perfected. The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and board-level storage IC repair. MG Road, Halasuru · open 10 AM – 12 AM.</p>
+          <div class="mt-3 flex flex-wrap gap-1.5 text-[11px] font-bold">
+            <a href="#footer-contact" class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700 hover:bg-blue-100">Facebook</a>
+            <a href="#footer-contact" class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100">Instagram</a>
+            <a href="#footer-contact" class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700 hover:bg-red-100">YouTube</a>
+            <a href="#footer-contact" class="rounded-full border border-zinc-300 bg-zinc-100 px-2.5 py-1 text-zinc-800 hover:bg-zinc-200">X</a>
+            <a href="#halasuru-map" class="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">Google Maps</a>
+            <a href="#footer-contact" class="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-amber-800">JustDial</a>
+            <a href="#footer-contact" class="rounded-full border border-zinc-300 bg-white px-2.5 py-1 text-zinc-800">Apple Maps</a>
+            <a href="#footer-contact" title="Bing Places - add your listing URL later" class="rounded-full border border-zinc-300 bg-white px-2.5 py-1 text-zinc-800">Bing Places</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Footer Columns -->
+      <div class="grid grid-cols-2 gap-6 pb-8 md:grid-cols-4">
+        <div>
+          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Services</div>
+          <ul class="mt-2.5 space-y-1.5">
+            <li><a href="#estimate" class="hover:text-red-600">iPhone Repair — All Models</a></li>
+            <li><a href="#estimate" class="hover:text-red-600">iPhone Display Replacement</a></li>
+            <li><a href="#glass-lab" class="hover:text-red-600">Front Glass Restoration</a></li>
+            <li><a href="#tbk-machines" class="hover:text-red-600">iPhone Back Glass Replacement</a></li>
+            <li><a href="#ecosystem-3d" class="hover:text-red-600">iPad, Watch &amp; AirPods Repair</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Company</div>
+          <ul class="mt-2.5 space-y-1.5">
+            <li><a href="#estimate" class="hover:text-red-600">Get a Quote</a></li>
+            <li><a href="#paired-crm" class="hover:text-red-600">Repair Status (CRM)</a></li>
+            <li><a href="#halasuru-map" class="hover:text-red-600">Contact &amp; Halasuru Map</a></li>
+            <li><a href="#faq" class="hover:text-red-600">FAQ</a></li>
+            <li><a href="#reviews" class="hover:text-red-600">Google Reviews</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Legal</div>
+          <ul class="mt-2.5 space-y-1.5">
+            <li><a href="#faq" class="hover:text-red-600">Privacy Policy</a></li>
+            <li><a href="#faq" class="hover:text-red-600">Terms of Service</a></li>
+            <li><a href="#faq" class="hover:text-red-600">Refund &amp; 6 Months Warranty</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Contact</div>
+          <ul class="mt-2.5 space-y-1.5">
+            <li>Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</li>
+            <li class="font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
+            <li><a href="tel:+918660663776" class="font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Independent Disclaimer + ONLY Tracked Pixel Forge Studio Credit -->
+      <div class="border-t border-zinc-200 py-5 text-center">
+        <p class="text-[11px] text-zinc-500">© 2026 Red Apple Mobile Repair Store · Halasuru, Bengaluru 560008 · Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</p>
+        <div class="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
+          <a href="https://wa.me/919620024812?text=The%20Pixel%20Forge%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20Business%20Build.%20I%20came%20via%20redmobilerepair.in%20website%20that%20you%20have%20build." target="_blank" rel="noopener noreferrer" class="font-display text-xs font-extrabold text-zinc-950 hover:text-red-600">
+            Developed by The Pixel Forge Studio · 96200 24812
+          </a>
+          <div class="mt-0.5 text-[11px] text-zinc-600">Contact Us for your Business Build — Website · App · CRM · AI Integration &amp; All Business Management.</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SLEEK MATTE CHARCOAL FLOATING ACTION DOCK (Get Estimate · WhatsApp · Call) + RIGHT AI BENCH BUTTON -->
+  <div class="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md">
+    <a href="#estimate" class="dock-dark-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
+      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+      <span>Get Estimate</span>
     </a>
-    <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold text-white transition hover:scale-[1.03] active:scale-95">
-      <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.03 2C6.5 2 2 6.5 2 12c0 1.77.46 3.45 1.28 4.92L2 22l5.25-1.25A9.96 9.96 0 0012.03 22C17.55 22 22 17.5 22 12S17.55 2 12.03 2zm5.82 14.12c-.25.7-1.45 1.34-2 1.42-.52.08-1.18.11-1.9-.12-.44-.14-1-.33-1.72-.64-3.03-1.31-5-4.38-5.15-4.58-.15-.2-1.23-1.64-1.23-3.13 0-1.49.78-2.22 1.06-2.52.28-.3.61-.38.81-.38.2 0 .41.01.59.01.19.01.44-.07.69.53.25.61.86 2.1.94 2.25.08.15.13.33.03.53-.1.2-.15.33-.3.51-.15.18-.32.4-.45.53-.15.15-.31.32-.13.62.18.3.79 1.3 1.7 2.11 1.17 1.04 2.15 1.37 2.45 1.52.3.15.48.13.66-.08.18-.2.76-.89.96-1.19.2-.3.41-.25.69-.15.28.1 1.77.84 2.08.99.3.15.51.23.58.35.08.13.08.73-.17 1.43z"/></svg>
+    <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-dark-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
+      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <span>WhatsApp</span>
     </a>
-    <button type="button" id="btn-open-ai" class="dock-ai-btn inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold text-white transition hover:scale-[1.03] active:scale-95">
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/></svg>
-      <span>AI Bench</span>
-    </button>
+    <a href="tel:+918660663776" aria-label="Call Red Apple Lab" class="dock-dark-btn inline-flex h-10 w-10 items-center justify-center rounded-xl active:scale-95">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </a>
   </div>
 
-  <!-- SURPRISE #4: INTERACTIVE AI BENCH CONCIERGE DRAWER -->
-  <div id="ai-drawer" class="fixed bottom-20 right-4 z-50 hidden w-[340px] max-w-[92vw] flex-col overflow-hidden rounded-3xl border border-violet-200 bg-white shadow-2xl">
-    <div class="dock-ai-btn flex items-center justify-between px-4 py-3 text-white">
-      <div class="flex items-center gap-2">
-        <img src="/icon-512.png" alt="AI Bench" class="h-7 w-7 rounded-lg bg-white p-0.5 object-contain" onerror="window.handleLogoFallback && window.handleLogoFallback(this)">
-        <div class="leading-tight">
-          <div class="text-xs font-extrabold">Red Apple AI Bench</div>
-          <div class="text-[10px] text-violet-100">Halasuru Lab · Zero-Passcode Assistant</div>
-        </div>
+  <!-- SLEEK MATTE CHARCOAL AI BENCH LAUNCHER (Bottom Right, Matching Screenshot) -->
+  <button type="button" id="btn-open-ai" aria-label="Open Red Apple AI Bench Chat" class="dock-dark-btn fixed bottom-4 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-700/60 shadow-2xl active:scale-95">
+    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="4"/><path d="M12 8V4H8"/><circle cx="9" cy="14" r="1.2" fill="currentColor"/><circle cx="15" cy="14" r="1.2" fill="currentColor"/></svg>
+  </button>
+
+  <!-- Surprise: Non-Annoying 10-Second Auto-Dismiss AI Concierge Toast (Triggers after 3 mins active browsing or manual preview) -->
+  <div id="ai-auto-toast" class="fixed bottom-20 right-4 z-40 hidden w-72 rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-2xl">
+    <div class="flex items-start justify-between gap-2">
+      <div>
+        <div class="text-xs font-extrabold text-zinc-950">Need a fixed Apple repair quote?</div>
+        <p class="mt-0.5 text-[11px] text-zinc-600">Ask Red Apple AI Bench for instant published prices or a Halasuru slot.</p>
       </div>
-      <button type="button" id="btn-close-ai" class="rounded-full bg-white/15 px-2 py-0.5 text-xs font-bold hover:bg-white/25">✕</button>
+      <button type="button" id="btn-dismiss-toast" class="text-xs font-bold text-zinc-400 hover:text-zinc-900">✕</button>
     </div>
-    <div id="ai-messages" class="flex max-h-64 flex-col gap-2 overflow-y-auto bg-zinc-50 p-3.5 text-xs">
-      <div class="rounded-2xl rounded-tl-none border border-zinc-200 bg-white p-2.5 text-zinc-700">
-        Hi! I'm the <strong>Red Apple AI Bench Concierge</strong>. Tap a question below or ask about iPhone glass restoration, warranty, or free 24/7 Bengaluru pickup.
-      </div>
-    </div>
-    <div class="flex flex-wrap gap-1.5 border-t border-zinc-100 bg-white px-3 py-2 text-[11px]">
-      <button type="button" data-aiq="glass" class="ai-q rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 font-semibold text-violet-800">Glass Restore Price?</button>
-      <button type="button" data-aiq="warranty" class="ai-q rounded-full border border-red-200 bg-red-50 px-2.5 py-1 font-semibold text-red-700">6-Month Warranty?</button>
-      <button type="button" data-aiq="pickup" class="ai-q rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-800">Free 24/7 Pickup?</button>
+    <div class="mt-2.5 flex items-center justify-between">
+      <button type="button" id="btn-toast-open-ai" class="dock-quote-btn rounded-full px-3 py-1 text-[11px] font-bold text-white">Open AI Bench →</button>
+      <span id="toast-countdown" class="font-mono-num text-[10px] font-bold text-zinc-400">Auto-hides in 10s</span>
     </div>
   </div>
 
-  <!-- PWA INSTALL APP MODAL (SHOWS BRAND ICON + CHROME/iOS INSTALL GUIDE) -->
-  <div id="pwa-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/55 p-4 backdrop-blur-sm">
-    <div class="w-full max-w-sm rounded-3xl border border-zinc-200 bg-white p-6 shadow-2xl">
-      <div class="flex items-center gap-3">
-        <img src="/icon-512.png" alt="Red Apple PWA Icon" class="h-14 w-14 rounded-2xl border border-red-200 bg-red-50 p-1 object-contain shadow" onerror="window.handleLogoFallback && window.handleLogoFallback(this)">
+  <!-- UPGRADED AI BENCH CONCIERGE DRAWER (FULL MANUAL TEXT CHAT + SMART REPLIES + WHATSAPP HANDOFF) -->
+  <div id="ai-drawer" class="fixed bottom-20 right-4 z-50 hidden w-[360px] max-w-[94vw] flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
+    <div class="dock-ai-header flex items-center justify-between px-4 py-3.5 text-white">
+      <div class="flex items-center gap-2.5">
+        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 text-sm font-black backdrop-blur">✦</span>
         <div>
-          <div class="font-display text-base font-extrabold text-zinc-950">Install Red Apple App</div>
-          <div class="text-xs text-zinc-500">redmobilerepair.in · Official PWA</div>
+          <div class="text-xs font-extrabold leading-tight">Red Apple AI Bench</div>
+          <div class="flex items-center gap-1.5 text-[10px] text-white/85"><span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-300"></span>Online · Halasuru Specialist Assistant</div>
         </div>
       </div>
-      <p class="mt-3 text-xs leading-relaxed text-zinc-600">
-        Add <strong>Red Apple Mobile Repair</strong> to your home screen with our official brand icon for 1-tap repair tracking, 30s estimates, and 24/7 WhatsApp bench access.
-      </p>
-      <div class="mt-4 space-y-2 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-[11px] text-zinc-700">
-        <div><strong>Chrome / Android / PC:</strong> Click the install icon in Chrome's address bar or tap Install below.</div>
-        <div><strong>iPhone Safari:</strong> Tap <strong>Share → Add to Home Screen</strong>.</div>
+      <div class="flex items-center gap-1.5">
+        <button type="button" id="btn-clear-ai" class="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold text-white hover:bg-white/25">Reset</button>
+        <button type="button" id="btn-close-ai" class="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-bold text-white hover:bg-white/25">✕</button>
       </div>
-      <div class="mt-4 flex justify-end gap-2">
-        <button type="button" id="btn-close-pwa" class="rounded-full border border-zinc-300 px-4 py-2 text-xs font-bold text-zinc-700">Close</button>
-        <button type="button" id="btn-trigger-pwa" class="dock-quote-btn rounded-full px-5 py-2 text-xs font-bold text-white">Install Now</button>
+    </div>
+
+    <div id="ai-messages" class="flex max-h-72 flex-col gap-2.5 overflow-y-auto bg-zinc-50 p-3.5 text-xs">
+      <div class="rounded-2xl rounded-tl-sm border border-zinc-200 bg-white p-3 text-zinc-700 shadow-sm">
+        <strong>Hi! I'm Red Apple AI Bench.</strong> Type any Apple model or repair question below (e.g. <em>"iPhone 16 Pro glass price"</em>, <em>"motherboard cost"</em>, or <em>"warranty"</em>).
       </div>
+    </div>
+
+    <div class="border-t border-zinc-200 bg-white px-3 pt-2.5">
+      <div class="flex flex-wrap gap-1.5 pb-2 text-[10px] font-bold">
+        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="iPhone 17 Pro Max glass price">17 Pro Max Glass</button>
+        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="Motherboard repair cost">Motherboard Cost</button>
+        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="How does 6 Months warranty work?">6 Months Warranty</button>
+        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="Free 24/7 pickup details">24/7 Pickup</button>
+      </div>
+      <form id="ai-chat-form" class="flex items-center gap-2 pb-3">
+        <input id="ai-chat-input" type="text" placeholder="Type your device or question..." autocomplete="off" class="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs text-zinc-900 outline-none focus:border-red-600">
+        <button type="submit" class="dock-quote-btn shrink-0 rounded-xl px-3.5 py-2 text-xs font-extrabold text-white">Send</button>
+      </form>
     </div>
   </div>
 
-  <!-- 10-SECOND AUTO-DISMISS AI CONCIERGE POPUP (3-MIN ACTIVITY RULE) -->
-  <div id="concierge-toast" class="fixed bottom-20 right-4 z-50 hidden max-w-sm items-start gap-3 rounded-2xl border border-red-200 bg-white p-4 shadow-2xl">
-    <img src="/icon-512.png" alt="AI Assistant" class="h-9 w-9 shrink-0 rounded-xl border border-red-100 object-contain p-0.5" onerror="window.handleLogoFallback && window.handleLogoFallback(this)">
-    <div class="flex-1 text-xs">
-      <div class="font-bold text-zinc-950">Red Apple AI Assistant</div>
-      <p class="mt-0.5 text-zinc-600">Need a quick quote or Job ID status? Appears only after 3 min of activity.</p>
-      <div id="toast-countdown" class="font-mono-num mt-1 text-[11px] font-semibold text-red-600">Auto-dismisses in 10s...</div>
+  <!-- PWA INSTALL MODAL -->
+  <div id="pwa-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-3xl border border-zinc-200 bg-white p-6 text-center shadow-2xl">
+      <img src="/icon-512.png" alt="Red Apple App Icon" class="mx-auto h-16 w-16 rounded-2xl border border-red-200 shadow-md" onerror="this.src='/icon-512.png'">
+      <h3 class="mt-3 font-display text-lg font-extrabold text-zinc-950">Install Red Apple App</h3>
+      <p class="mt-1 text-xs text-zinc-600">Add Red Apple Mobile Repair to your home screen for 1-tap 30-second estimates, live CRM tracking, and 24/7 Halasuru WhatsApp access.</p>
+      <div class="mt-5 flex gap-2">
+        <button type="button" id="btn-pwa-close" class="flex-1 rounded-xl border border-zinc-300 py-2.5 text-xs font-bold text-zinc-700">Not Now</button>
+        <button type="button" id="btn-pwa-confirm" class="dock-quote-btn flex-1 rounded-xl py-2.5 text-xs font-extrabold text-white">Install Now</button>
+      </div>
+      <p id="pwa-status" class="mt-2.5 hidden text-[11px] font-bold text-emerald-700">✓ Ready! Use Chrome menu → "Install App" or "Add to Home Screen".</p>
     </div>
-    <button type="button" id="btn-close-toast" class="text-xs font-bold text-zinc-400 hover:text-zinc-900">✕</button>
-  </div>
-`;
+  </div>`;

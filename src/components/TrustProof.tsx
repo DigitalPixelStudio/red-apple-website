@@ -20,9 +20,9 @@ const CERTS: Cert[] = [
   },
   {
     icon: "shield",
-    title: "6-Month Written Warranty",
+    title: "6 Months Written Warranty",
     desc:
-      "Six months of cover on all repairs, displays, batteries and glass. Claim with your invoice — diagnosis and the covered repair are handled on the same record. Not covered: physical or accidental damage, liquid damage, a repair by another shop after us, or normal wear and tear. Motherboard repairs excluded.",
+      "6 Months of cover on all repairs, displays, batteries and glass. Claim with your invoice — diagnosis and the covered repair are handled on the same record. Not covered: physical or accidental damage, liquid damage, a repair by another shop after us, or normal wear and tear. Motherboard repairs excluded.",
     wash: "tile-wash-violet",
   },
   {

@@ -34,10 +34,10 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
   },
   title: {
-    default: "Red Apple Mobile Repair Store — Halasuru, Bengaluru | Apple Device Repairs, Mastered",
+    default: "Red Apple Mobile Repair — Apple Device Repairs, Mastered | Halasuru, Bengaluru",
     template: "%s | Red Apple Mobile Repair Store",
   },
-  description: "Independent Apple device repair specialist in Halasuru, Bengaluru. iPhone front glass restoration, OLED display, TBK-958 cold UV back glass, iPad, Apple Watch, AirPods & MacBook repairs with 6-month warranty.",
+  description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
   keywords: [
     "iPhone repair Bangalore", "iPhone screen replacement Halasuru", "iPhone back glass repair",
     "iPad repair Bangalore", "MacBook repair Halasuru", "Apple Watch repair Bengaluru",
@@ -57,8 +57,8 @@ export const metadata: Metadata = {
     ICBM: `${SITE.geo.lat}, ${SITE.geo.lng}`,
   },
   openGraph: {
-    title: "Red Apple Mobile Repair Store — Halasuru, Bengaluru | Apple Device Repairs, Mastered",
-    description: "Apple Device Repairs, Mastered. 4.9/5 across 1,103 Google Reviews · TBK-958 Cold UV Laser · 6-Month Hardware Warranty.",
+    title: "Red Apple Mobile Repair — Apple Device Repairs, Mastered | Halasuru, Bengaluru",
+    description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
     url: `${baseUrl}/`,
     siteName: SITE.name,
     locale: "en_IN",
@@ -74,8 +74,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Red Apple Mobile Repair Store — Halasuru, Bengaluru | Apple Device Repairs, Mastered",
-    description: "Apple Device Repairs, Mastered. 4.9/5 across 1,103 Google Reviews · TBK-958 Cold UV Laser · 6-Month Hardware Warranty.",
+    title: "Red Apple Mobile Repair — Apple Device Repairs, Mastered | Halasuru, Bengaluru",
+    description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
     images: [`${baseUrl}/og-image.png`],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true }, "max-image-preview": "large", "max-snippet": -1 },
@@ -200,7 +200,7 @@ const organizationSchema = {
     height: 512,
   },
   image: `${baseUrl}/og-image.png`,
-  description: "Independent Apple device repair specialist in Halasuru, Bengaluru. iPhone front glass restoration, OLED display, TBK-958 cold UV back glass, iPad, Apple Watch, AirPods & MacBook repairs with 6-month warranty.",
+  description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
   email: SITE.email,
   telephone: SITE.phone,
   address: {

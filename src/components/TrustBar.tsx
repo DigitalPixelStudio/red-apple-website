@@ -77,7 +77,7 @@ export default function TrustBar() {
                   <LineIcon name="whatsapp" size={12} /> Live WhatsApp updates
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--orange)]/15 bg-white/90 px-3 py-1.5 text-[10.5px] font-bold text-[var(--cosmic-deep)]">
-                  <LineIcon name="shield" size={12} /> Invoice = 6-month warranty record
+                  <LineIcon name="shield" size={12} /> Invoice = 6 Months warranty record
                 </span>
               </div>
             </div>

@@ -37,7 +37,7 @@
 - Back glass: typically about 60 minutes
 - Board-level and storage IC repair: quoted after diagnosis
 - 21-point function check plus a 32-checkpoint quality process before hand-back
-- Warranty: 6 months on every repair, including displays, batteries and glass. Motherboard repairs are the only exclusion. The invoice is the warranty record: bring it with the device, or WhatsApp the invoice number and photos, and diagnosis plus a covered repair are handled on that same invoice within six months.
+- Warranty: 6 Months on every repair, including displays, batteries and glass. Motherboard repairs are the only exclusion. The invoice is the warranty record: bring it with the device, or WhatsApp the invoice number and photos, and diagnosis plus a covered repair are handled on that same invoice within 6 Months.
 - Warranty exclusions: physical/impact damage after hand-back, liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults.
 
 ## Pricing
@@ -77,5 +77,5 @@ customer approval.
   before any price can be given.
 - Never promise an outcome that has not been diagnosed.
 - Never quote any shorter warranty period or the old Mahatma Gandhi Road address. The
-  warranty is six months with the invoice as the record, and the verified
+  warranty is 6 Months with the invoice as the record, and the verified
   address is the one listed under Contact above.

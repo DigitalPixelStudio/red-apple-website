@@ -4,7 +4,7 @@ export const SITE = {
   shortName: "Red Apple",
   tagline: "Apple Device Repairs, Perfected.",
   shortDescription:
-    "Bengaluru's specialist Apple repair studio in Halasuru. iPhone, iPad, AirPods, Apple Watch, MacBook & Mac repairs — Component-Level Micro-Soldering, OEM Displays & Front-Glass Restoration on TBK machinery, backed by a 6-month repair warranty.",
+    "Bengaluru's specialist Apple repair studio in Halasuru. iPhone, iPad, AirPods, Apple Watch, MacBook & Mac repairs — Component-Level Micro-Soldering, OEM Displays & Front-Glass Restoration on TBK machinery, backed by a 6 Months repair warranty.",
   phone: "+918660663776",
   phoneHref: "tel:+918660663776",
   whatsapp: "918660663776",
@@ -29,7 +29,7 @@ export const SITE = {
   warrantyMonths: "6",
   warrantyLabel: "6 Months",
   warrantyNote:
-    "6-month repair service warranty on all repairs, displays, batteries and glass work — motherboard repairs are excluded. Claims are made with your repair invoice.",
+    "6 Months repair service warranty on all repairs, displays, batteries and glass work — motherboard repairs are excluded. Claims are made with your repair invoice.",
   avgRepairTime: "30",
   placeId: "ChIJmY-X9asXrjsRCLyeUhrkrfk",
   mapsUrl:
@@ -148,49 +148,49 @@ export const SERVICES: {
     desc: "OLED-grade panels with True Tone, installed in ~45 minutes while you wait.",
     time: "~45 min", devices: "iPhone · iPad · MacBook",
     featured: true, img: "/images/v5/display-panel.jpg",
-    points: ["True Tone preserved", "OEM-grade panel", "6-month warranty"],
+    points: ["True Tone preserved", "OEM-grade panel", "6 Months warranty"],
   },
   {
     id: "frontglass", title: "Front Glass Restoration", icon: "display",
     desc: "For devices where the original display/OLED is still suitable and only the front glass or touch layer is damaged. Eligibility is confirmed after a technician inspection — if the display itself is damaged we recommend full display replacement instead.",
     time: "Same day", devices: "iPhone · iPad · Apple Watch",
     img: "/images/craft/before-after-screen.webp",
-    points: ["Eligibility checked first", "Original display retained where suitable", "6-month hardware warranty"],
+    points: ["Eligibility checked first", "Original display retained where suitable", "6 Months hardware warranty"],
   },
   {
     id: "backglass", title: "Back Glass Replacement", icon: "backglass",
     desc: "Laser-aligned factory-grade back glass. MagSafe-compatible, seamless finish.",
     time: "~60 min", devices: "iPhone 8 → 16 series",
     featured: true, img: "/images/v5/back-glass.jpg",
-    points: ["MagSafe compatible", "Camera lens protected", "6-month warranty"],
+    points: ["MagSafe compatible", "Camera lens protected", "6 Months warranty"],
   },
   {
     id: "battery", title: "Battery Replacement", icon: "battery",
     desc: "High-capacity cells with a free health check before and after.",
     time: "~30 min", devices: "iPhone · iPad · Watch · MacBook",
     img: "/images/v5/charging-port-flex.jpg",
-    points: ["85%+ health on hand-back", "Free health report", "6-month warranty"],
+    points: ["85%+ health on hand-back", "Free health report", "6 Months warranty"],
   },
   {
     id: "camera", title: "Camera Repair", icon: "camera",
     desc: "Rear & front modules, OIS, zoom and lens replacement.",
     time: "~60 min", devices: "iPhone · iPad",
     img: "/images/v5/triple-camera.jpg",
-    points: ["OEM modules", "OIS calibration", "6-month warranty"],
+    points: ["OEM modules", "OIS calibration", "6 Months warranty"],
   },
   {
     id: "charging", title: "Charging Port / Flex", icon: "charging",
     desc: "Lightning / USB-C port, charging flex and fast-charge restoration.",
     time: "~40 min", devices: "iPhone · iPad · MacBook",
     img: "/images/v3/tech-workbench.jpg",
-    points: ["Fast charge restored", "Data transfer tested", "6-month warranty"],
+    points: ["Fast charge restored", "Data transfer tested", "6 Months warranty"],
   },
   {
     id: "water", title: "Water Damage Revival", icon: "water",
     desc: "Ultrasonic cleaning + corrosion treatment at chip level.",
     time: "Same day", devices: "iPhone · iPad · Watch",
     img: "/images/v4/water-damage-iphone.jpg",
-    points: ["Ultrasonic bath", "Corrosion treatment", "6-month warranty"],
+    points: ["Ultrasonic bath", "Corrosion treatment", "6 Months warranty"],
   },
   {
     id: "logicboard", title: "Motherboard / IC Repair", icon: "board",
@@ -204,21 +204,21 @@ export const SERVICES: {
     desc: "Earpiece, loudspeaker, microphones and Taptic Engine.",
     time: "~40 min", devices: "iPhone · iPad",
     img: "/images/v5/service-iphone.jpg",
-    points: ["Full audio system", "OEM parts", "6-month warranty"],
+    points: ["Full audio system", "OEM parts", "6 Months warranty"],
   },
   {
     id: "os", title: "System Diagnostics & Signed Firmware Restore", icon: "settings",
     desc: "Signed iOS/iPadOS/macOS restore workflows, boot-loop diagnosis, DFU recovery and setup troubleshooting.",
     time: "30–120 min", devices: "All Apple devices",
     img: "/images/v5/macbook-pro-latest.jpg",
-    points: ["Apple-Signed Restore", "Zero-Passcode Workflow", "6-Month Warranty"],
+    points: ["Apple-Signed Restore", "Zero-Passcode Workflow", "6 Months Warranty"],
   },
   {
     id: "data", title: "Board-Level Storage IC Repair", icon: "data",
     desc: "Board-level diagnosis and storage IC repair when photos, chats or files are inaccessible because of hardware faults. No data outcome is promised before assessment.",
     time: "1–3 days", devices: "iPhone · iPad · Mac",
     img: "/images/v5/data-recovery-bench.jpg",
-    points: ["Board-Level Diagnosis", "Confidential Handling", "6-Month Warranty"],
+    points: ["Board-Level Diagnosis", "Confidential Handling", "6 Months Warranty"],
   },
 ];
 
@@ -229,7 +229,7 @@ export const PROCESS_STEPS = [
   { step: "03", title: "Transparent Quote", desc: "Fixed price confirmed before any work. No hidden charges, ever.", icon: "price", img: "/images/v5/quote-desk.jpg" },
   { step: "04", title: "Expert Repair", desc: "Certified technicians work with OEM-grade parts, Precision TBK Lab Equipment & signed restore workflows.", icon: "wrench", img: "/images/v3/tech-workbench.jpg" },
   { step: "05", title: "Quality Check", desc: "Every repair passes a 32-point test — display, battery, sensors, audio.", icon: "check", img: "/images/v4/quality-testing.jpg" },
-  { step: "06", title: "6-Month Warranty", desc: "Collect your device with a written invoice. Claim any covered issue for six months.", icon: "shield", img: "/images/v5/store-warranty.jpg" },
+  { step: "06", title: "6 Months Warranty", desc: "Collect your device with a written invoice. Claim any covered issue for 6 Months.", icon: "shield", img: "/images/v5/store-warranty.jpg" },
 ] as const;
 
 // ---------- Repair status pipeline ----------
@@ -247,7 +247,7 @@ export const STATS = [
   { value: "4.9", label: "Google Rating", sub: "1,103 verified Google reviews", icon: "star" },
   { value: "9+ yrs", label: "Apple Specialists", sub: "Halasuru, Bengaluru", icon: "experience" },
   { value: "30 min", label: "Avg. repair time", sub: "Most repairs", icon: "clock" },
-  { value: "6 months", label: "Repair Warranty", sub: "Claim with your invoice", icon: "shield" },
+  { value: "6 Months", label: "Repair Warranty", sub: "Claim with your invoice", icon: "shield" },
 ] as const;
 
 // ---------- Why Choose Us vs Local Market ----------
@@ -257,7 +257,7 @@ export const WHY_VS_LOCAL = [
   { feature: "Walk-In Service", us: "No appointment needed, walk in anytime", apple: "Appointment required, slot availability limited" },
   { feature: "OEM-Grade Parts", us: "True Tone panels, MagSafe back glass, genuine battery cells", apple: "Apple-sourced parts only" },
   { feature: "Board-Level Repair", us: "Micro-soldering under microscope, chip-level diagnosis", apple: "Full unit replacement, no component repair" },
-  { feature: "Warranty", us: "6-month repair warranty on every repair, display & battery — claim with your invoice (motherboard work excepted)", apple: "Apple's standard service warranty" },
+  { feature: "Warranty", us: "6 Months repair warranty on every repair, display & battery — claim with your invoice (motherboard work excepted)", apple: "Apple's standard service warranty" },
   { feature: "Free Diagnosis", us: "Open inspection with photos, no charge", apple: "Paid diagnostic at Apple Store" },
   { feature: "Doorstep Pickup", us: "Free 24/7 pickup & drop across Bengaluru", apple: "Not available — you visit the store" },
   { feature: "Data Handling", us: "Sealed Zero-Passcode Bench Workflow (Passcode Never Requested)", apple: "Standard service policies vary" },
@@ -336,7 +336,7 @@ export const PRICING_GROUPS = [
 export const FAQS: { q: string; a: string }[] = [
   { q: "Which Apple Devices Do You Repair?", a: "iPhone (all models), iPad, iPod touch, AirPods, Apple Watch, MacBook Pro/Air, Mac mini, iMac and Mac Studio — plus Apple accessories." },
   { q: "How Long Does a Typical Repair Take?", a: "Most common repairs — screen, battery, charging port — take 30–60 minutes. Board-level and water damage repairs may take 1–2 days." },
-  { q: "Do You Give a Warranty?", a: "Yes. Every repair, display, battery and glass service carries a 6-month repair service warranty. Motherboard repairs are the only exception. Your repair invoice is your warranty record — keep it safe and bring it back if an issue appears." },
+  { q: "Do You Give a Warranty?", a: "Yes. Every repair, display, battery and glass service carries a 6 Months repair service warranty. Motherboard repairs are the only exception. Your repair invoice is your warranty record — keep it safe and bring it back if an issue appears." },
   { q: "How Do I Claim Under Warranty?", a: "Bring the device and your repair invoice to the store, or WhatsApp the invoice number with a photo or video of the issue. We assess it, confirm whether the fault is covered and repair it under the written policy. Diagnosis and the covered repair are handled through the same invoice — no new quote for an in-warranty fault." },
   { q: "What Does the Warranty Not Cover?", a: "It does not cover physical or accidental damage after hand-back, liquid damage after hand-back, a later repair or opening by another shop, normal wear and tear, cosmetic marks, software issues unrelated to the repair, or damage caused by misuse. Motherboard repairs are excluded from the standard cover. The full policy is on our Refund & Warranty page." },
   { q: "Are Parts Genuine?", a: "We use genuine-grade, OEM-quality parts and explain your options before any work so you can choose what fits your budget." },
@@ -348,7 +348,7 @@ export const FAQS: { q: string; a: string }[] = [
   { q: "What If You Can't Fix It?", a: "If we can't repair your device, there is no charge for the failed attempt." },
   { q: "How Do I Track My Repair Status?", a: "You get automatic WhatsApp updates from our repair CRM at every stage — received, diagnosis, quote approval, repair, quality check and ready for handover — whether you walked in or used free doorstep pickup. You never need to call us for a status update." },
   { q: "Do You Repair MacBooks Too?", a: "Yes — MacBook Pro, MacBook Air, Mac mini, iMac and Mac Studio. Display, battery, keyboard, logic board, thermal and storage upgrades." },
-  { q: "What Is Front Glass Restoration?", a: "It replaces only the damaged outer glass while keeping your original OLED display, touch layer and True Tone. We bond the new glass with a TBK OCA laminating press, cure it in a 90-litre high-pressure bubble-remover chamber, and use the TBK-958 cold UV laser for precise, low-heat separation. It carries our 6-month repair warranty." },
+  { q: "What Is Front Glass Restoration?", a: "It replaces only the damaged outer glass while keeping your original OLED display, touch layer and True Tone. We bond the new glass with a TBK OCA laminating press, cure it in a 90-litre high-pressure bubble-remover chamber, and use the TBK-958 cold UV laser for precise, low-heat separation. It carries our 6 Months repair warranty." },
   { q: "How Much Does Front Glass Restoration Cost?", a: "Published glass-restoration prices range from ₹2,500 for an iPhone 8 / SE (Gen 2/3) to ₹19,500 for an iPhone 18 Pro Max. Final eligibility is confirmed on inspection — if the OLED itself is damaged, we recommend a full display replacement instead." },
 ];
 
@@ -358,7 +358,7 @@ export const SERVICE_PAGES: {
 }[] = [
   { slug: "iphone-repair", title: "iPhone Repair — All Models", icon: "phone", short: "Screen, battery, camera & more", desc: "Complete iPhone repair for every generation.", keywords: ["iPhone repair Bangalore", "iPhone repair Halasuru"] },
   { slug: "iphone-display-repair", title: "iPhone Display / Screen Replacement", icon: "display", short: "OEM-grade OLED, True Tone preserved", desc: "Front display replacement on all iPhone models.", keywords: ["iPhone screen replacement", "iPhone display repair Bangalore"] },
-  { slug: "front-glass-restoration", title: "Front Glass Restoration", icon: "display", short: "Glass-only restoration, eligibility checked first", desc: "Front glass/touch layer restoration for devices where the original display/OLED assembly remains suitable. Final eligibility is determined after technician inspection, and the service carries a 6-month hardware warranty.", keywords: ["front glass restoration Bangalore", "front glass replacement Halasuru", "glass only screen repair"] },
+  { slug: "front-glass-restoration", title: "Front Glass Restoration", icon: "display", short: "Glass-only restoration, eligibility checked first", desc: "Front glass/touch layer restoration for devices where the original display/OLED assembly remains suitable. Final eligibility is determined after technician inspection, and the service carries a 6 Months hardware warranty.", keywords: ["front glass restoration Bangalore", "front glass replacement Halasuru", "glass only screen repair"] },
   { slug: "iphone-back-glass-repair", title: "iPhone Back Glass Replacement", icon: "backglass", short: "Laser-aligned, MagSafe compatible", desc: "Factory-grade back glass replacement.", keywords: ["iPhone back glass repair", "iPhone back glass replacement Bangalore"] },
   { slug: "ipad-repair", title: "iPad Repair — All Models", icon: "ipad", short: "Screens, batteries & board-level", desc: "iPad, iPad Pro, iPad Air and iPad mini repairs.", keywords: ["iPad repair Bangalore", "iPad screen replacement"] },
   { slug: "apple-watch-repair", title: "Apple Watch Repair", icon: "watch", short: "Screens, batteries & sensors", desc: "Apple Watch screen, battery, sensor repairs.", keywords: ["Apple Watch repair Bangalore"] },

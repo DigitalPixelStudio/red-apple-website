@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <div
-        className="bg-white text-zinc-900 antialiased pb-24"
+        className="pb-24 antialiased selection:bg-red-600 selection:text-white"
         dangerouslySetInnerHTML={{ __html: finalSiteHtml }}
       />
       <Script src="/final-site.js" strategy="afterInteractive" />

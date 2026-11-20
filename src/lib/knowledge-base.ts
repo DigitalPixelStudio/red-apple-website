@@ -33,7 +33,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "front-glass-restoration",
     title: "Front Glass Restoration versus full display replacement",
     tags: ["front glass", "glass restoration", "glass only", "front glass replacement", "outer glass", "touch layer", "display", "screen", "OLED", "cracked glass"],
-    content: "Front Glass Restoration is a separate service from Front Display Replacement. It applies when the original display/OLED assembly is still suitable and only the front glass or touch layer is damaged. The technician inspects the device first and confirms eligibility; if the display itself is damaged, full display replacement is recommended instead. Front Glass Restoration carries a 6-month hardware warranty, subject to the stated repair warranty terms, and does not cover new impact or liquid damage. A published glass price exists for listed iPhone models, but eligibility is always confirmed on inspection."
+    content: "Front Glass Restoration is a separate service from Front Display Replacement. It applies when the original display/OLED assembly is still suitable and only the front glass or touch layer is damaged. The technician inspects the device first and confirms eligibility; if the display itself is damaged, full display replacement is recommended instead. Front Glass Restoration carries a 6 Months hardware warranty, subject to the stated repair warranty terms, and does not cover new impact or liquid damage. A published glass price exists for listed iPhone models, but eligibility is always confirmed on inspection."
   },
   {
     id: "glass-restoration-prices",
@@ -55,15 +55,15 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
   },
   {
     id: "warranty-policy",
-    title: "Six-month repair warranty, invoice and exclusions",
-    tags: ["warranty", "guarantee", "6 months", "six months", "invoice", "warranty record", "claim", "display", "battery", "glass", "motherboard", "exclusions", "impact", "liquid", "policy"],
-    content: "Every repair carries a six-month warranty: repair work, parts we replaced, displays, batteries and glass are all covered. Motherboard repairs are the only exclusion. The invoice is the warranty record — bring the invoice and the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice within six months. Exclusions are explicit: physical/impact damage after hand-back, liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults. Never quote any shorter warranty period or the old address."
+    title: "6 Months repair warranty, invoice and exclusions",
+    tags: ["warranty", "guarantee", "6 Months", "6 Months", "invoice", "warranty record", "claim", "display", "battery", "glass", "motherboard", "exclusions", "impact", "liquid", "policy"],
+    content: "Every repair carries a 6 Months warranty: repair work, parts we replaced, displays, batteries and glass are all covered. Motherboard repairs are the only exclusion. The invoice is the warranty record — bring the invoice and the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice within 6 Months. Exclusions are explicit: physical/impact damage after hand-back, liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, and unrelated software faults. Never quote any shorter warranty period or the old address."
   },
   {
     id: "warranty-claim",
-    title: "How to claim the six-month warranty with your invoice",
-    tags: ["warranty claim", "claim", "invoice number", "photos", "six months", "6 months", "diagnosis", "same invoice", "exclusions", "motherboard", "proof of repair"],
-    content: "To claim under the six-month repair warranty, bring your invoice and the device to the store, or message us on WhatsApp at +91 86606 63776 with the invoice number and clear photos of the fault. We re-diagnose the device and, if the fault is covered, carry out the repair on the same invoice at no extra charge. The invoice is the only warranty record we need; motherboard repairs are excluded. A claim is not covered for physical/impact or liquid damage after hand-back, a repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults."
+    title: "How to claim the 6 Months warranty with your invoice",
+    tags: ["warranty claim", "claim", "invoice number", "photos", "6 Months", "6 Months", "diagnosis", "same invoice", "exclusions", "motherboard", "proof of repair"],
+    content: "To claim under the 6 Months repair warranty, bring your invoice and the device to the store, or message us on WhatsApp at +91 86606 63776 with the invoice number and clear photos of the fault. We re-diagnose the device and, if the fault is covered, carry out the repair on the same invoice at no extra charge. The invoice is the only warranty record we need; motherboard repairs are excluded. A claim is not covered for physical/impact or liquid damage after hand-back, a repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults."
   },
   {
     id: "crm-whatsapp-updates",

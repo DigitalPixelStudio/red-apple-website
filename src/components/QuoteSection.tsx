@@ -54,7 +54,7 @@ export default function QuoteSection() {
                   <LineIcon name="clock" size={12} /> Display ~45 min
                 </span>
                 <span className="estimate-tag estimate-tag-3">
-                  <LineIcon name="shield" size={12} /> 6-Month Warranty
+                  <LineIcon name="shield" size={12} /> 6 Months Warranty
                 </span>
               </div>
               <div className="estimate-visual-foot">

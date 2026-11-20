@@ -146,7 +146,7 @@ function priceAnswer(text: string): string | null {
     if (repairName === "Board-Level Storage IC Repair") return "Board-level storage IC work starts at ₹2,999 and the assessment is free. A data outcome is never promised; the technician checks the hardware first.";
     if (repairName === "Motherboard / IC Repair") return "Board-level work is quoted after a free diagnosis. Which exact device and model is it?";
     if (repairName === "Front Glass Restoration") {
-      return "Front glass restoration on listed iPhones is ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + " — the exact price depends on the model. Tell me your exact iPhone and I will check the glass list. Every glass restoration carries a 6-month hardware warranty, and eligibility is confirmed on inspection.";
+      return "Front glass restoration on listed iPhones is ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + " — the exact price depends on the model. Tell me your exact iPhone and I will check the glass list. Every glass restoration carries a 6 Months hardware warranty, and eligibility is confirmed on inspection.";
     }
     if (repairName === "Front Display Replacement" && !/ipad|apple watch|airpods|macbook|ipod/i.test(text)) {
       return "Which iPhone model is it? Published iPhone display prices range from ₹1,200 to ₹36,400; I'll check the exact matrix entry once I have the model.";
@@ -167,13 +167,13 @@ function priceAnswer(text: string): string | null {
 
   const quote = priceLabel(price);
   if (repairName === "Front Glass Restoration") {
-    return model + " front glass restoration: " + quote + ". That is the published glass-only price, with parts and labour included. It carries a 6-month hardware warranty, subject to the written policy, and eligibility is confirmed on inspection — if the OLED itself is damaged we recommend full display replacement instead. Typical turnaround: same day after the eligibility check. Would you like to book it?";
+    return model + " front glass restoration: " + quote + ". That is the published glass-only price, with parts and labour included. It carries a 6 Months hardware warranty, subject to the written policy, and eligibility is confirmed on inspection — if the OLED itself is damaged we recommend full display replacement instead. Typical turnaround: same day after the eligibility check. Would you like to book it?";
   }
   const priceText = price[0] === price[1]
     ? model + " " + repairName.toLowerCase() + ": " + quote + ". This is the listed price."
     : model + " " + repairName.toLowerCase() + ": " + quote + ". The exact part grade/revision is confirmed during free diagnosis.";
   const turnaround = TURNAROUND_HINTS[repairName] ? " Typical turnaround: " + TURNAROUND_HINTS[repairName] + "." : "";
-  return priceText + turnaround + " Every repair carries a 6-month warranty — your invoice is the warranty record. Motherboard repairs are excluded. Would you like to arrange a visit or doorstep pickup?";
+  return priceText + turnaround + " Every repair carries a 6 Months warranty — your invoice is the warranty record. Motherboard repairs are excluded. Would you like to arrange a visit or doorstep pickup?";
 }
 
 /* Typed input is matched through this synonym table, so "display kharab hai"
@@ -303,7 +303,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   glass: {
     reply:
-      "Front glass restoration keeps your original OLED, touch and True Tone — we replace only the damaged outer glass using TBK OCA lamination, a 90-litre bubble-remover chamber and the TBK-958 cold UV laser. Published prices run from ₹2,500 to ₹19,500 depending on the model, with a 6-month hardware warranty. Eligibility is confirmed on inspection. Which iPhone model do you have?",
+      "Front glass restoration keeps your original OLED, touch and True Tone — we replace only the damaged outer glass using TBK OCA lamination, a 90-litre bubble-remover chamber and the TBK-958 cold UV laser. Published prices run from ₹2,500 to ₹19,500 depending on the model, with a 6 Months hardware warranty. Eligibility is confirmed on inspection. Which iPhone model do you have?",
     chips: ["Glass price iPhone 17 Pro Max", "Glass price iPhone 16 Pro", "Glass price iPhone 15", "Full glass price list", "Talk to a technician"],
   },
   machines: {
@@ -318,7 +318,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   battery: {
     reply:
-      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model. Batteries carry the same 6-month repair warranty as our other work — keep your invoice, as it is the warranty record. Which model do you have?",
+      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model. Batteries carry the same 6 Months repair warranty as our other work — keep your invoice, as it is the warranty record. Which model do you have?",
     chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
   },
   camera: {
@@ -373,12 +373,12 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   warranty: {
     reply:
-      "Six months on every repair — displays, batteries and glass included. Your invoice is the warranty record: bring it with the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice. Motherboard repairs are the only exclusion. Not covered: physical/impact or liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults.",
+      "6 Months on every repair — displays, batteries and glass included. Your invoice is the warranty record: bring it with the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice. Motherboard repairs are the only exclusion. Not covered: physical/impact or liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults.",
     chips: ["Read the full policy", "Talk to a technician"],
   },
   invoice: {
     reply:
-      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number, and the CRM tracked invoice is generated from that record and sent to you on WhatsApp. For walk-in and doorstep-pickup devices, the CRM also sends WhatsApp stage updates — received, diagnosis, in repair, quality check, ready for hand-back and delivered. That invoice is your 6-month warranty record, so keep it. Need it in your company's name? Add those details at booking and we'll issue it that way.",
+      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number, and the CRM tracked invoice is generated from that record and sent to you on WhatsApp. For walk-in and doorstep-pickup devices, the CRM also sends WhatsApp stage updates — received, diagnosis, in repair, quality check, ready for hand-back and delivered. That invoice is your 6 Months warranty record, so keep it. Need it in your company's name? Add those details at booking and we'll issue it that way.",
     chips: ["What happens after handover?", "Read the full policy", "Talk to a technician"],
   },
   diagnosis: {
@@ -413,7 +413,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   whyexpensive: {
     reply:
-      "I understand. The price reflects the part grade, labour and our 6-month warranty, with your invoice as the warranty record. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
+      "I understand. The price reflects the part grade, labour and our 6 Months warranty, with your invoice as the warranty record. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   human: {

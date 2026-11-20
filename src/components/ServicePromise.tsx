@@ -50,7 +50,7 @@ const PROMISES: Promise_[] = [
     step: "04",
     title: "Tested, Then Warrantied",
     body:
-      "Every device is checked before hand-back — touch, True Tone, Face ID, cameras, sensors, charging and thermals. You get a 6-month repair warranty on all repairs, displays, batteries and glass. Claim it with your invoice; diagnosis and the covered repair are handled together. Motherboard repairs are excluded.",
+      "Every device is checked before hand-back — touch, True Tone, Face ID, cameras, sensors, charging and thermals. You get a 6 Months repair warranty on all repairs, displays, batteries and glass. Claim it with your invoice; diagnosis and the covered repair are handled together. Motherboard repairs are excluded.",
     wash: "tile-wash",
   },
 ];

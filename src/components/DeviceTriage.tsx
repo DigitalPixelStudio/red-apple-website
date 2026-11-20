@@ -137,7 +137,7 @@ export default function DeviceTriage() {
     `Issue: ${symptom.label} (${symptom.repair})\n` +
     `Published price: ${priceText}\n` +
     `Typical turnaround: ${turnaround}\n` +
-    `6-month repair warranty on all work incl. displays, batteries & glass · motherboard repairs excluded · invoice is the warranty record\n` +
+    `6 Months repair warranty on all work incl. displays, batteries & glass · motherboard repairs excluded · invoice is the warranty record\n` +
     `${SITE.address} · ${SITE.phone} · ${SITE.addressVerified}`;
 
   const copyEstimate = async () => {
@@ -332,7 +332,7 @@ export default function DeviceTriage() {
                   <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> Free diagnosis before any charge
                 </li>
                 <li className="flex items-center gap-1.5">
-                  <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> 6-month warranty · invoice is your record
+                  <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> 6 Months warranty · invoice is your record
                 </li>
                 <li className="flex items-center gap-1.5">
                   <LineIcon name="check" size={12} color="var(--cosmic-deep)" /> Zero-password policy

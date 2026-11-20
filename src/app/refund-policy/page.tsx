@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Refund & Warranty Policy | Red Apple Mobile Repair Store",
-  description: "Our six-month repair warranty, how to claim it with your invoice, the exclusions, and our refund terms.",
+  description: "Our 6 Months repair warranty, how to claim it with your invoice, the exclusions, and our refund terms.",
   alternates: { canonical: `${baseUrl}/refund-policy` },
 };
 
@@ -20,9 +20,9 @@ export default function RefundPage() {
         <p className="mb-10 text-sm text-[var(--text-muted)]">Last updated: {UPDATED}</p>
 
         <div className="legal">
-          <h2>Six-month repair warranty</h2>
+          <h2>6 Months repair warranty</h2>
           <p>
-            Every repair we carry out is covered for six months from the date you
+            Every repair we carry out is covered for 6 Months from the date you
             collect the device. That covers the repair work itself, the parts we
             fitted, and displays, batteries and glass work. Motherboard repairs
             are the only exclusion.
@@ -55,7 +55,7 @@ export default function RefundPage() {
             <li>Misuse.</li>
             <li>Cosmetic issues.</li>
             <li>Unrelated software faults, including third-party apps or iOS updates.</li>
-            <li>Motherboard repairs, which are excluded from the six-month warranty.</li>
+            <li>Motherboard repairs, which are excluded from the 6 Months warranty.</li>
           </ul>
 
           <h2>Refunds before work begins</h2>

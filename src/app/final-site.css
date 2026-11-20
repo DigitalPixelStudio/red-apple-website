@@ -1,259 +1,234 @@
-﻿    body {
-      font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+﻿    :root {
+      --ra-red: #dc2626;
+      --ra-orange: #ea580c;
+      --ra-dark: #111113;
+    }
+    body {
+      font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
       background-color: #ffffff;
       color: #18181b;
-      margin: 0;
-      padding: 0;
       overflow-x: hidden;
     }
+    .font-display { font-family: var(--font-space), var(--font-inter), sans-serif; }
+    .font-mono-num { font-family: var(--font-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
-    h1, h2, h3, .font-display {
-      font-family: var(--font-space), var(--font-inter), sans-serif;
+    /* Edge-to-Edge iPhone 12 Pro Max Top Notch with Live Green/Red LED */
+    .iphone-top-notch {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      width: 176px;
+      height: 22px;
+      background: #09090b;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      pointer-events: none;
+    }
+    .notch-speaker {
+      width: 44px;
+      height: 4px;
+      border-radius: 999px;
+      background: #27272a;
+    }
+    .notch-led {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      animation: ledShift 3.2s ease-in-out infinite;
+    }
+    @keyframes ledShift {
+      0%, 45% { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+      55%, 100% { background: #dc2626; box-shadow: 0 0 8px #dc2626; }
     }
 
-    .font-mono-num {
-      font-family: var(--font-mono), ui-monospace, monospace;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* True Red Apple Crimson-to-Amber Gradient */
+    /* True Red Apple Crimson-to-Orange Gradient (Zero Pink) */
     .text-brand-grad {
-      background: linear-gradient(90deg, #dc2626 0%, #ea580c 50%, #dc2626 100%);
-      background-size: 200% auto;
+      background: linear-gradient(90deg, #dc2626 0%, #ea580c 38%, #f59e0b 65%, #dc2626 100%);
+      background-size: 240% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradFlow 6s ease-in-out infinite;
+      animation: gradFlow 5s ease-in-out infinite;
     }
     @keyframes gradFlow {
       0%, 100% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
     }
 
-    .breathing-heading {
-      animation: headBreath 4.5s ease-in-out infinite;
-      will-change: transform, opacity;
+    /* Kinetic Breathing + Color-Shifting Headings (GPU-Only, Zero CLS) */
+    .heading-breathe {
+      animation: headingBreathe 5.5s ease-in-out infinite;
+      will-change: transform;
     }
-    @keyframes headBreath {
-      0%, 100% { transform: scale(1); opacity: 0.96; }
-      50% { transform: scale(1.012); opacity: 1; }
+    @keyframes headingBreathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.015); }
     }
-
-    .ambient-shift-warm {
-      background: radial-gradient(circle at 15% 20%, rgba(220, 38, 38, 0.06), transparent 55%),
-                  radial-gradient(circle at 85% 80%, rgba(234, 88, 12, 0.08), transparent 55%),
-                  #fffaf7;
-      background-size: 160% 160%;
-      animation: ambientDrift 14s ease-in-out infinite alternate;
+    .kicker-shift {
+      animation: kickerColor 4.5s ease-in-out infinite;
     }
-    .ambient-shift-cool {
-      background: radial-gradient(circle at 80% 15%, rgba(234, 88, 12, 0.06), transparent 52%),
-                  radial-gradient(circle at 20% 85%, rgba(220, 38, 38, 0.05), transparent 52%),
-                  #ffffff;
-      background-size: 160% 160%;
-      animation: ambientDrift 16s ease-in-out infinite alternate-reverse;
+    @keyframes kickerColor {
+      0%, 100% { color: #dc2626; }
+      50% { color: #ea580c; }
     }
-    @keyframes ambientDrift {
-      0% { background-position: 0% 30%; }
-      100% { background-position: 100% 70%; }
+    .price-breathe {
+      animation: priceGlow 3.8s ease-in-out infinite;
+      will-change: transform;
     }
-
-    /* iPhone 12 Pro Max Edge-to-Edge Top Notch + Green/Red Changing LED */
-    .iphone-notch-bar {
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      width: 100%;
-      height: 22px;
-      background: linear-gradient(90deg, #09090b 0%, #18181b 50%, #09090b 100%);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      pointer-events: none;
+    @keyframes priceGlow {
+      0%, 100% { transform: scale(1); text-shadow: 0 0 0 rgba(234, 88, 12, 0); }
+      50% { transform: scale(1.025); text-shadow: 0 0 18px rgba(234, 88, 12, 0.32); }
     }
-    .iphone-notch-pill {
-      position: relative;
-      width: 210px;
-      height: 28px;
-      background: #09090b;
-      border-bottom-left-radius: 18px;
-      border-bottom-right-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-top: none;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 0 14px;
+    .badge-breathe {
+      animation: badgePulse 4.6s ease-in-out infinite;
     }
-    .notch-speaker {
-      width: 48px;
-      height: 4px;
-      border-radius: 9999px;
-      background: #27272a;
-      box-shadow: inset 0 1px 2px #000;
-    }
-    .notch-camera {
-      width: 9px;
-      height: 9px;
-      border-radius: 9999px;
-      background: radial-gradient(circle at 35% 35%, #38bdf8, #0f172a 65%, #000 100%);
-      border: 1px solid #27272a;
-    }
-    .notch-led {
-      width: 7px;
-      height: 7px;
-      border-radius: 9999px;
-      animation: ledAlternate 3.2s ease-in-out infinite;
-    }
-    @keyframes ledAlternate {
-      0%, 42% { background-color: #22c55e; box-shadow: 0 0 8px #22c55e, 0 0 14px rgba(34, 197, 94, 0.7); }
-      50%, 92% { background-color: #ef4444; box-shadow: 0 0 8px #ef4444, 0 0 14px rgba(239, 68, 68, 0.7); }
-      100% { background-color: #22c55e; box-shadow: 0 0 8px #22c55e, 0 0 14px rgba(34, 197, 94, 0.7); }
+    @keyframes badgePulse {
+      0%, 100% { opacity: 0.92; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-2px); }
     }
 
-    /* Left-Side Dark Breathing Page Section Indicator */
-    .left-rail {
-      position: fixed;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 45;
-    }
-    .rail-dot-active {
-      background-color: #dc2626 !important;
-      box-shadow: 0 0 10px rgba(220, 38, 38, 0.75);
-      animation: railPulse 2.4s ease-in-out infinite;
-    }
-    @keyframes railPulse {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.25); opacity: 1; }
-    }
-
-    /* Upgraded Precision Calibration Aura for Enlarged Brand Logo */
-    .logo-aura-stage {
-      background: radial-gradient(circle at 50% 50%, rgba(234, 88, 12, 0.24) 0%, rgba(220, 38, 38, 0.14) 42%, #09090b 82%);
-    }
-    .aura-ring {
+    /* Subtle GPU Floating Ambient Orbs & Full-Site Animated Background Mesh */
+    .ambient-orb {
       position: absolute;
       border-radius: 9999px;
-      border: 1.5px solid rgba(234, 88, 12, 0.45);
-      animation: auraExpand 3.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      filter: blur(56px);
+      opacity: 0.2;
       pointer-events: none;
+      will-change: transform;
+      animation: orbFloat 11s ease-in-out infinite;
     }
-    .aura-ring-2 { animation-delay: 1.15s; border-color: rgba(220, 38, 38, 0.45); }
-    .aura-ring-3 { animation-delay: 2.3s; border-color: rgba(251, 146, 60, 0.35); }
-    @keyframes auraExpand {
-      0% { width: 96px; height: 96px; opacity: 0.85; }
-      100% { width: 260px; height: 260px; opacity: 0; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(22px, -16px, 0) scale(1.07); }
     }
-    .logo-float-wrap {
-      animation: logoGentleFloat 4s ease-in-out infinite;
-    }
-    @keyframes logoGentleFloat {
-      0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-6px) scale(1.03); }
+    @keyframes bgMeshShift {
+      0%, 100% { background-position: 0% 0%, 100% 100%, 0 0; }
+      50% { background-position: 100% 40%, 0% 60%, 28px 28px; }
     }
 
-    /* 3D-Tilt Holographic CRM Warranty Card */
-    .holo-card {
+    /* Signature Orange Glass-Sweep Shimmer */
+    /* Section Backgrounds with Smooth Ambient Motion */
+    .ambient-warm {
       position: relative;
-      transform-style: preserve-3d;
-      transition: transform 180ms ease-out, box-shadow 220ms ease;
-      background: linear-gradient(135deg, #18181b 0%, #450a0a 48%, #9a3412 100%);
+      overflow: hidden;
+      background-color: #fffaf7;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.075), transparent 52%),
+        radial-gradient(circle at 88% 82%, rgba(234, 88, 12, 0.095), transparent 52%),
+        radial-gradient(rgba(220, 38, 38, 0.07) 1px, transparent 1px);
+      background-size: 160% 160%, 160% 160%, 28px 28px;
+      animation: bgMeshShift 18s ease-in-out infinite;
     }
-    .holo-sheen {
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 237, 213, 0.32) 0%, rgba(234, 88, 12, 0.14) 30%, transparent 65%);
-      pointer-events: none;
+    .ambient-clean {
+      position: relative;
+      overflow: hidden;
+      background-color: #ffffff;
+      background-image:
+        radial-gradient(circle at 82% 15%, rgba(234, 88, 12, 0.06), transparent 50%),
+        radial-gradient(circle at 18% 85%, rgba(220, 38, 38, 0.045), transparent 50%),
+        radial-gradient(rgba(24, 24, 27, 0.05) 1px, transparent 1px);
+      background-size: 160% 160%, 160% 160%, 32px 32px;
+      animation: bgMeshShift 22s ease-in-out infinite reverse;
     }
-
-    /* Upgraded Multi-Color Action Dock Glows */
-    .dock-quote-btn {
-      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
-      box-shadow: 0 8px 22px -6px rgba(220, 38, 38, 0.55);
-    }
-    .dock-wa-btn {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      box-shadow: 0 8px 22px -6px rgba(16, 185, 129, 0.55);
-    }
-    .dock-ai-btn {
-      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
-      background-size: 180% 180%;
-      animation: aiAura 4.5s ease-in-out infinite;
-      box-shadow: 0 8px 24px -6px rgba(234, 88, 12, 0.65);
-    }
-    @keyframes aiAura {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    /* Signature Orange-Red Glass-Sweep Shimmer */
-    .orange-glass-wrap { position: relative; overflow: hidden; }
     .orange-glass-sweep {
       position: absolute;
       inset: 0;
-      background: linear-gradient(118deg, transparent 16%, rgba(234, 88, 12, 0.36) 46%, rgba(220, 38, 38, 0.18) 56%, transparent 82%);
+      background: linear-gradient(118deg, transparent 16%, rgba(249, 115, 22, 0.34) 46%, rgba(251, 146, 60, 0.14) 56%, transparent 82%);
       transform: translateX(-120%);
-      animation: orangeSweep 3.8s ease-in-out infinite;
+      animation: orangeGlassSweep 4.2s ease-in-out infinite;
       pointer-events: none;
-      z-index: 15;
+      z-index: 10;
     }
-    @keyframes orangeSweep {
-      0%, 15% { transform: translateX(-120%); }
-      55%, 100% { transform: translateX(120%); }
-    }
-
-    .studio-3d-stage {
-      background: radial-gradient(circle at 50% 40%, rgba(220, 38, 38, 0.16), rgba(24, 24, 27, 0.96) 72%);
+    @keyframes orangeGlassSweep {
+      0%, 18% { transform: translateX(-120%); }
+      56%, 100% { transform: translateX(125%); }
     }
 
-    .laser-card {
+    /* Interactive Card Laser Sheen Hover */
+    .card-sheen {
       position: relative;
       overflow: hidden;
-      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease, border-color 220ms ease;
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
     }
-    .laser-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 32px -12px rgba(220, 38, 38, 0.16);
-      border-color: rgba(234, 88, 12, 0.45);
-    }
-    .laser-card::before {
-      content: '';
+    .card-sheen:hover { transform: translateY(-3px); }
+    .card-sheen::after {
+      content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(115deg, transparent 22%, rgba(234, 88, 12, 0.12) 48%, rgba(220, 38, 38, 0.12) 54%, transparent 78%);
+      background: linear-gradient(115deg, transparent 22%, rgba(234, 88, 12, 0.14) 48%, rgba(220, 38, 38, 0.12) 55%, transparent 78%);
       transform: translateX(-120%);
       transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
       pointer-events: none;
     }
-    .laser-card:hover::before { transform: translateX(120%); }
+    .card-sheen:hover::after { transform: translateX(120%); }
 
-    .logo-laser {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #dc2626, #a855f7, #ea580c, transparent);
-      box-shadow: 0 0 14px rgba(220, 38, 38, 0.9), 0 0 8px rgba(168, 85, 247, 0.75);
-      animation: vLaser 2.4s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 20;
+    /* Smooth Scroll Reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+      transition: opacity 480ms ease-out, transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
     }
-    @keyframes vLaser {
-      0% { top: 8%; }
-      50% { top: 88%; }
-      100% { top: 8%; }
+    .reveal-up.is-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
 
-    .pulse-ring { animation: livePulse 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
-    @keyframes livePulse {
+    /* High-Contrast Obsidian Studio Backdrop for 3D Stages */
+    .stage-3d-box {
+      position: relative;
+      background: radial-gradient(circle at 50% 42%, rgba(234, 88, 12, 0.22), rgba(17, 17, 19, 0.96) 72%);
+      overflow: hidden;
+    }
+    .stage-3d-box canvas,
+    .stage-3d-white canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+    .stage-3d-box canvas:active,
+    .stage-3d-white canvas:active { cursor: grabbing; }
+
+    /* Clean Apple-Store White Studio Backdrop for AirPods Pro 3D */
+    .stage-3d-white {
+      position: relative;
+      background: radial-gradient(circle at 50% 45%, #ffffff 0%, #f8fafc 62%, #e4e4e7 100%);
+      overflow: hidden;
+    }
+
+    /* Live Pulse & Radar Calibration Aura */
+    .pulse-ring {
+      animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes livePing {
       0% { transform: scale(1); opacity: 0.75; }
-      100% { transform: scale(2.6); opacity: 0; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+    .aura-ring {
+      position: absolute;
+      inset: -14px;
+      border-radius: 9999px;
+      border: 2px solid rgba(220, 38, 38, 0.45);
+      animation: auraPulse 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      pointer-events: none;
+    }
+    .aura-ring-2 {
+      animation-delay: 1.4s;
+      border-color: rgba(234, 88, 12, 0.45);
+    }
+    @keyframes auraPulse {
+      0% { transform: scale(0.88); opacity: 0.85; }
+      100% { transform: scale(1.38); opacity: 0; }
     }
 
+    /* Smooth Infinite Marquee (Technical Ticker + Google Reviews) */
     .marquee-track {
       display: flex;
       width: max-content;
@@ -266,36 +241,50 @@
       100% { transform: translateX(-50%); }
     }
 
-    input[type="range"].studio-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 6px;
-      border-radius: 9999px;
-      background: #e4e4e7;
-      outline: none;
+    /* Matte Charcoal Action Dock (Matched to Reference Screenshot) */
+    .dock-quote-btn {
+      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28);
     }
-    input[type="range"].studio-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 9999px;
-      background: #dc2626;
-      cursor: pointer;
-      border: 2px solid #ffffff;
-      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.45);
+    .dock-wa-btn {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+    }
+    .dock-dark-btn {
+      background: #18181b;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+      transition: transform 150ms ease, background-color 150ms ease;
+    }
+    .dock-dark-btn:hover {
+      background: #27272a;
+    }
+    .dock-ai-header {
+      background: linear-gradient(135deg, #18181b 0%, #27272a 60%, #dc2626 100%);
     }
 
-    .three-slot { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
-    .three-slot:active { cursor: grabbing; }
-    .three-slot.scroll-safe { pointer-events: none; touch-action: pan-y; cursor: default; }
-    .ba-frame { touch-action: none; user-select: none; cursor: ew-resize; }
+    /* 3D Holographic Warranty Card */
+    .holo-card {
+      transform-style: preserve-3d;
+      transition: transform 140ms ease-out;
+      background: linear-gradient(135deg, #18181b 0%, #27272a 45%, #7c2d12 78%, #450a0a 100%);
+      --gx: 50%;
+      --gy: 50%;
+    }
+    .holo-glare {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.28) 0%, rgba(251, 146, 60, 0.16) 26%, transparent 62%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
 
-    @media (prefers-reduced-motion: reduce) {
-      .orange-glass-sweep, .logo-laser, .pulse-ring, .ambient-shift-warm, .ambient-shift-cool,
-      .marquee-track, .breathing-heading, .text-brand-grad, .notch-led, .rail-dot-active,
-      .aura-ring, .logo-float-wrap, .dock-ai-btn {
-        animation: none !important;
-      }
+    /* Left-Side Dark Breathing Page Indicator */
+    .page-rail-dot {
+      transition: transform 200ms ease, background-color 200ms ease;
+    }
+    .page-rail-dot.is-active {
+      background-color: #dc2626;
+      transform: scale(1.35);
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
     }

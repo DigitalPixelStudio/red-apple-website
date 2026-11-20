@@ -19,7 +19,7 @@ export default function PricingSection() {
           <h2 className="section-title">Apple India vs Red Apple</h2>
           <p className="section-subtitle mx-auto mt-4">
             A like-for-like price comparison against authorised service centres, with
-            OEM-grade parts and a 6-month warranty. All prices are indicative — confirm
+            OEM-grade parts and a 6 Months warranty. All prices are indicative — confirm
             the final figure at the store before work begins.
           </p>
         </Reveal>
@@ -99,7 +99,7 @@ export default function PricingSection() {
           </div>
           <p className="flex items-center justify-center gap-1.5 border-t border-[var(--border)] bg-[var(--bg-alt)] px-6 py-3 text-center text-[11.5px] font-semibold text-[var(--text-muted)]">
             <LineIcon name="shield" size={13} className="shrink-0 text-[var(--accent)]" />
-            6-month repair warranty on all repairs, displays, batteries and glass. Motherboard
+            6 Months repair warranty on all repairs, displays, batteries and glass. Motherboard
             repairs excluded — keep your invoice as the warranty record.
           </p>
         </Reveal>

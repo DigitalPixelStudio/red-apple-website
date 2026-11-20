@@ -56,11 +56,11 @@ export default function TermsPage() {
 
           <h2>Warranty</h2>
           <p>
-            Every repair carries a six-month warranty, including displays,
+            Every repair carries a 6 Months warranty, including displays,
             batteries and glass work. Motherboard repairs are the only exclusion.
             The invoice is the warranty record: bring it with the device, or
             WhatsApp the invoice number and photos, and the diagnosis and covered
-            repair are handled on that same invoice within six months. Not covered:
+            repair are handled on that same invoice within 6 Months. Not covered:
             physical/impact or liquid damage after hand-back, repair or opening by
             another shop after us, accidental damage, normal wear and tear, misuse,
             cosmetic issues, or unrelated software faults. Full details are on our{" "}

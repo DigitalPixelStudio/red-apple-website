@@ -72,7 +72,7 @@ export default function FinalCta() {
           </div>
 
           <p className="mt-7 text-[12.5px] font-semibold text-[var(--text-muted)]">
-            Free diagnosis · No hidden charges · 6-month repair warranty
+            Free diagnosis · No hidden charges · 6 Months repair warranty
           </p>
         </Reveal>
       </div>

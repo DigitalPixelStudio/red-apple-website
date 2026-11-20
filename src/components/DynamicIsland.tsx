@@ -4,7 +4,7 @@ import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 
 const STATES = [
-  { icon: "display" as IconName, text: "iPhone display replaced in ~45 min", sub: "True Tone preserved · 6-month warranty" },
+  { icon: "display" as IconName, text: "iPhone display replaced in ~45 min", sub: "True Tone preserved · 6 Months warranty" },
   { icon: "backglass" as IconName, text: "Back glass repair, MagSafe-compatible", sub: "Laser-aligned · seamless finish" },
   { icon: "watch" as IconName, text: "Apple Watch battery swap", sub: "All Series · fast turnaround" },
   { icon: "data" as IconName, text: "Data recovery before repair", sub: "Photos, chats & files saved first" },

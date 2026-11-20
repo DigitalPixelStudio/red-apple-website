@@ -15,7 +15,7 @@ export default function WhyChooseUs() {
           </h2>
           <p className="section-subtitle mx-auto mt-4">
             We are not another repair shop. We are Apple specialists with OEM-grade
-            parts, board-level skills and a 6-month written warranty — usually at a
+            parts, board-level skills and a 6 Months written warranty — usually at a
             lower cost than an authorised centre.
           </p>
           <p className="mt-3 text-[13px] font-extrabold uppercase tracking-[0.18em] text-[var(--accent)]">

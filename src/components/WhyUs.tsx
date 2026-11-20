@@ -87,7 +87,7 @@ export default function WhyUs() {
               board-level work.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {["Free diagnosis", "Written quote", "Photo updates", "6-Month Warranty"].map((tag) => (
+              {["Free diagnosis", "Written quote", "Photo updates", "6 Months Warranty"].map((tag) => (
                 <span key={tag} className="whyus-tag">
                   <LineIcon name="check" size={11} /> {tag}
                 </span>
@@ -110,7 +110,7 @@ export default function WhyUs() {
                 <span className="elite-media-scan" aria-hidden="true" />
               </div>
               <span className="whyus-float whyus-float-1">
-                <LineIcon name="shield" size={12} /> 6-Month Warranty
+                <LineIcon name="shield" size={12} /> 6 Months Warranty
               </span>
               <span className="whyus-float whyus-float-2">
                 <LineIcon name="clock" size={12} /> ~45 Min Display

@@ -57,7 +57,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <p className="section-subtitle mx-auto mt-5">{page.desc}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
             <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">4.9 · {SITE.ratingCount} Google reviews</span>
-            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">6-Month Warranty</span>
+            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">6 Months Warranty</span>
             <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">Free pickup &amp; drop</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
