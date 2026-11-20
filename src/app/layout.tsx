@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import PWAInstallPrompt from "@/components/PWAInstallPrompt";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
@@ -17,6 +16,11 @@ const space = Plus_Jakarta_Sans({
   variable: "--font-space",
   display: "swap",
 });
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -30,10 +34,10 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
   },
   title: {
-    default: "Red Apple Mobile Repair Store | iPhone, iPad, MacBook & Apple Watch Repair in Halasuru, Bengaluru",
+    default: "Red Apple Mobile Repair Store — Halasuru, Bengaluru | Apple Device Repairs, Mastered",
     template: "%s | Red Apple Mobile Repair Store",
   },
-  description: SITE.shortDescription,
+  description: "Independent Apple device repair specialist in Halasuru, Bengaluru. iPhone front glass restoration, OLED display, TBK-958 cold UV back glass, iPad, Apple Watch, AirPods & MacBook repairs with 6-month warranty.",
   keywords: [
     "iPhone repair Bangalore", "iPhone screen replacement Halasuru", "iPhone back glass repair",
     "iPad repair Bangalore", "MacBook repair Halasuru", "Apple Watch repair Bengaluru",
@@ -53,9 +57,9 @@ export const metadata: Metadata = {
     ICBM: `${SITE.geo.lat}, ${SITE.geo.lng}`,
   },
   openGraph: {
-    title: "Red Apple Mobile Repair Store — Apple Repair Specialists, Halasuru Bengaluru",
-    description: SITE.shortDescription,
-    url: baseUrl,
+    title: "Red Apple Mobile Repair Store — Halasuru, Bengaluru | Apple Device Repairs, Mastered",
+    description: "Apple Device Repairs, Mastered. 4.9/5 across 1,103 Google Reviews · TBK-958 Cold UV Laser · 6-Month Hardware Warranty.",
+    url: `${baseUrl}/`,
     siteName: SITE.name,
     locale: "en_IN",
     type: "website",
@@ -70,16 +74,15 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Red Apple Mobile Repair Store — Halasuru, Bengaluru",
-    description: SITE.shortDescription,
+    title: "Red Apple Mobile Repair Store — Halasuru, Bengaluru | Apple Device Repairs, Mastered",
+    description: "Apple Device Repairs, Mastered. 4.9/5 across 1,103 Google Reviews · TBK-958 Cold UV Laser · 6-Month Hardware Warranty.",
     images: [`${baseUrl}/og-image.png`],
   },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  alternates: { canonical: baseUrl },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true }, "max-image-preview": "large", "max-snippet": -1 },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#dc2626",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -197,7 +200,7 @@ const organizationSchema = {
     height: 512,
   },
   image: `${baseUrl}/og-image.png`,
-  description: SITE.shortDescription,
+  description: "Independent Apple device repair specialist in Halasuru, Bengaluru. iPhone front glass restoration, OLED display, TBK-958 cold UV back glass, iPad, Apple Watch, AirPods & MacBook repairs with 6-month warranty.",
   email: SITE.email,
   telephone: SITE.phone,
   address: {
@@ -231,26 +234,22 @@ const serviceListSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${space.variable} bg-white text-[var(--text)] antialiased`}>
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="canonical" href="https://www.redmobilerepair.in/" />
+      </head>
+      <body className={`${inter.variable} ${space.variable} ${mono.variable} bg-white text-[var(--text)] antialiased`}>
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+          strategy="beforeInteractive"
+        />
         {/* Apply a saved "motion off" choice before the page paints. */}
         <script
           dangerouslySetInnerHTML={{
             __html: "try{if(localStorage.getItem('ramr-motion')==='off'){document.documentElement.setAttribute('data-motion','off');}}catch(e){}",
           }}
         />
-        {/* 3D light layer — three spotlights on a perspective plane plus one
-            travelling hairline. Every one of them animates transform only, and
-            the whole layer is contain:strict, so it can never trigger layout or
-            invalidate the content above it. Decorative: hidden from AT. */}
-        <div className="light-3d" aria-hidden="true">
-          <i className="l1" />
-          <i className="l2" />
-          <i className="l3" />
-        </div>
-        <div className="light-beam" aria-hidden="true" />
         {children}
-        <PWAInstallPrompt />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, organizationSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
