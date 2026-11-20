@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 40;
 
 // Current stable flash models first; a 404 on one model falls through to the next.
-const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-3.8-flash"] as const;
+const MODELS = ["gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-3.8-flash", "gemini-3.6-flash"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 // GEMINI_API_KEY is canonical; the others are accepted aliases for older deployments.
 const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_STUDIO_API_KEY", "GOOGLE_GEMINI_API_KEY", "GEMINI_KEY"] as const;
