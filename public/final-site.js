@@ -594,7 +594,7 @@
       try {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const MAX_W = 1280, MAX_H = 960;
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
         renderer.setPixelRatio(1);
         renderer.setSize(MAX_W, MAX_H, false);
         renderer.setClearColor(0x000000, 0);
