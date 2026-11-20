@@ -698,7 +698,7 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
@@ -720,7 +720,7 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
@@ -742,7 +742,7 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
@@ -1324,6 +1324,7 @@ export const finalSiteHtml = `
             <li>Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</li>
             <li class="font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
             <li><a href="tel:+918660663776" class="font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
+            <li><a href="mailto:support@redmobilerepair.in" class="font-semibold text-red-600">support@redmobilerepair.in</a></li>
           </ul>
         </div>
       </div>
@@ -1399,6 +1400,33 @@ export const finalSiteHtml = `
     </div>
 
     <div class="border-t border-zinc-200 bg-white px-3 pt-2.5">
+      <div id="ai-triage" class="grid grid-cols-3 gap-1.5 pb-2">
+        <select id="ai-device" aria-label="Device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
+          <option value="">Device</option>
+          <option value="iPhone">iPhone</option>
+          <option value="iPad">iPad</option>
+          <option value="MacBook">MacBook</option>
+          <option value="Apple Watch">Apple Watch</option>
+          <option value="AirPods">AirPods</option>
+        </select>
+        <select id="ai-model" aria-label="Model" disabled class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
+          <option value="">Model</option>
+        </select>
+        <select id="ai-issue" aria-label="Issue" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
+          <option value="">Issue</option>
+          <option>Front Glass Restoration (Keep OLED)</option>
+          <option>Front Display Replacement</option>
+          <option>Back Glass (TBK-958 Laser)</option>
+          <option>Battery Replacement</option>
+          <option>Motherboard / IC Repair</option>
+          <option>Camera / Port / Water Damage</option>
+          <option>Warranty / Track CRM Job</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-1.5 pb-2">
+        <button type="button" id="btn-ai-price" class="dock-quote-btn flex-1 rounded-xl py-2 text-[10px] font-extrabold text-white">Ask AI &amp; Get Price</button>
+        <a id="ai-wa-handoff" href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="shrink-0 rounded-xl bg-emerald-600 px-2.5 py-2 text-[10px] font-extrabold text-white">WhatsApp →</a>
+      </div>
       <div class="flex flex-wrap gap-1.5 pb-2 text-[10px] font-bold">
         <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="iPhone 17 Pro Max glass price">17 Pro Max Glass</button>
         <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="Motherboard repair cost">Motherboard Cost</button>

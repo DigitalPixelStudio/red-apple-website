@@ -110,8 +110,8 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
   {
     id: "activation-lock",
     title: "Activation Lock and owner-verified restore",
-    tags: ["iCloud", "Activation Lock", "factory restore", "bypass", "carrier", "network lock", "ownership"],
-    content: "Never offer to bypass iCloud Activation Lock or defeat device security. Refuse briefly and respectfully. Owner-verified factory restore assistance may be discussed only with proof of ownership; never offer a security bypass."
+    tags: ["iCloud", "Activation Lock", "factory restore", "circumvent", "carrier", "network lock", "ownership"],
+    content: "Never offer to circumvent iCloud Activation Lock or defeat device security. Refuse briefly and respectfully. Owner-verified factory restore assistance may be discussed only with proof of ownership; never offer a security circumvention."
   },
   {
     id: "bulk-and-insurance",

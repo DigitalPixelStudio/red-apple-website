@@ -41,7 +41,7 @@ export default function DisplayFocus() {
           </h2>
           <p className="display-subtitle section-subtitle mx-auto mt-5">
             Cracked glass is our daily work. Every iPhone — from 6 to 18 Pro Max —
-            restored with precision tools and genuine-grade panels.
+            restored with precision tools and OEM-grade panels.
           </p>
         </Reveal>
 

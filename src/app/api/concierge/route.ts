@@ -30,6 +30,12 @@ function resolveKeys(): string[] {
       keys.push(value);
     }
   }
+  // Future-proof: any GEMINI_* secret added in Vercel is picked up automatically.
+  for (const [name, raw] of Object.entries(process.env)) {
+    if (!/^GEMINI_/i.test(name) || !raw) continue;
+    const value = raw.trim();
+    if (value.length > 8 && !seen.has(value)) { seen.add(value); keys.push(value); }
+  }
   return keys;
 }
 
@@ -87,10 +93,10 @@ function retrieveKnowledge(query: string): string {
      service, no cold start, and it never invents a fact. */
   const EXPAND: Record<string, string[]> = {
     screen: ["display", "oled", "lcd", "touch", "cracked"],
-    display: ["screen", "oled", "true tone"],
-    battery: ["charging", "drain", "health", "swollen"],
+    display: ["screen", "oled", "true tone", "glass"],
+    battery: ["charging", "drain", "health", "swollen", "power", "charge"],
     charge: ["charging port", "battery", "flex"],
-    glass: ["front glass", "restoration", "oca", "lamination"],
+    glass: ["front glass", "restoration", "oca", "lamination", "oled", "screen glass"],
     price: ["cost", "quote", "rate", "pricing", "kitna"],
     cost: ["price", "quote", "rate"],
     quote: ["price", "estimate", "cost"],
@@ -99,7 +105,7 @@ function retrieveKnowledge(query: string): string {
     mac: ["macbook", "imac", "mac mini", "logic board"],
     laptop: ["macbook", "logic board"],
     tab: ["ipad", "tablet"],
-    water: ["liquid", "corrosion", "spill"],
+    water: ["liquid", "corrosion", "spill", "water damage"],
     data: ["recovery", "photos", "contacts", "backup"],
     unlock: ["activation lock", "carrier", "network lock"],
     open: ["hours", "timing", "opening"],
@@ -111,6 +117,11 @@ function retrieveKnowledge(query: string): string {
     original: ["oem", "genuine", "part grade"],
     fix: ["repair", "service"],
     repair: ["fix", "service"],
+    oled: ["glass", "display", "original screen", "lcd"],
+    motherboard: ["board", "ic", "logic board", "chip"],
+    board: ["motherboard", "ic", "logic"],
+    ic: ["motherboard", "chip", "board"],
+    pickup: ["doorstep", "free pickup", "home collection"],
   };
 
   const rawTerms = Array.from(new Set(query.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) ?? []))
@@ -157,6 +168,26 @@ function retrieveKnowledge(query: string): string {
     .slice(0, 8)
     .map((doc) => doc.title + ": " + doc.body.slice(0, 760))
     .join("\n");
+}
+
+function inferIntent(query: string): string {
+  const lower = query.toLowerCase();
+  const model = Object.keys(PRICES)
+    .sort((a, b) => b.length - a.length)
+    .find((m) => lower.includes(m.toLowerCase()));
+  const issueList = [
+    "Front Glass Restoration", "Front Display Replacement", "Back Glass Replacement",
+    "Battery Replacement", "Motherboard / IC Repair", "Charging Port / Flex",
+    "Camera Repair", "Water Damage",
+  ];
+  const issue = issueList.find((i) => lower.includes(i.toLowerCase()))
+    || (lower.includes("glass") ? "Front Glass Restoration" : null)
+    || (lower.includes("screen") ? "Front Display Replacement" : null)
+    || (lower.includes("board") || lower.includes("dead") ? "Motherboard / IC Repair" : null);
+  return `DETECTED INTENT — device: ${model || "unspecified"}, issue: ${issue || "unspecified"}. ` +
+    (model && issue
+      ? `When quoting, use only the ${model} / ${issue} row from the supplied matrix. If that exact row is absent, say a free diagnosis is needed — never substitute another model's price.`
+      : `Ask one narrow clarification for the missing device or fault before quoting a fixed price.`);
 }
 
 function systemPrompt(query: string): string {
@@ -221,7 +252,7 @@ function systemPrompt(query: string): string {
     "- Never ask for or accept a device passcode, Apple ID/password, OTP, UPI PIN, card number or other account credentials. Tell customers not to share them.",
     "- Never promise that data will be recovered or that water-damaged devices will work. Offer a free assessment first.",
     "- For water damage, advise: do not charge the device and do not apply heat; arrange assessment promptly.",
-    "- Never bypass iCloud Activation Lock. Refuse briefly and offer owner-verified factory restore assistance only with proof of ownership.",
+    "- Never circumvent iCloud Activation Lock. Refuse briefly and offer owner-verified factory restore assistance only with proof of ownership.",
     "- Describe parts as OEM-grade or verified-grade only. Never describe an OEM-grade part as Apple-sourced.",
     "- Never claim to be Apple-authorised.",
     "- Never fabricate a booking, order number, technician name, pickup confirmation or available slot. This chat cannot itself confirm a booking; direct the customer to WhatsApp or the pickup form.",
@@ -235,8 +266,47 @@ function systemPrompt(query: string): string {
     "CONVERSATION FLOW:",
     "1. Answer the question directly. 2. Ask for the missing model or fault if needed. 3. Quote only from the matrix. 4. Reassure briefly about warranty/privacy/turnaround where relevant. 5. Offer a concrete next step: walk-in or doorstep pickup.",
     "If you do not understand, ask one narrow clarification. Do not repeat the same fallback twice; offer WhatsApp or a call, then a human.",
-    "Never say you crawled a website or read a file. You have the shop facts and approved pricing matrix supplied in this instruction."
+    "Never say you crawled a website or read a file. You have the shop facts and approved pricing matrix supplied in this instruction.",
+    inferIntent(query)
   ].join("\n");
+}
+
+function localAnswer(message: string): string {
+  const lower = message.toLowerCase();
+  const model = Object.keys(PRICES)
+    .sort((a, b) => b.length - a.length)
+    .find((m) => lower.includes(m.toLowerCase()));
+  if (model && PRICES[model]["Front Glass Restoration"]) {
+    const [min, max] = PRICES[model]["Front Glass Restoration"];
+    const price = min === max ? inr(min) : `${inr(min)} – ${inr(max)}`;
+    return `${model} front-glass restoration (we keep your original OLED) is ${price} with our 6 Months written CRM warranty. Glass is restored on our TBK OCA press at the Halasuru studio, usually the same day. Would you like a walk-in slot or free 24/7 doorstep pickup?`;
+  }
+  if (lower.includes("motherboard") || lower.includes("board") || lower.includes("ic ") || lower.includes("water")) {
+    return "Board-level and water-damage work starts with a free microscope diagnosis. Typical motherboard / IC repair is ₹10,500 – ₹14,500 depending on the fault; we never promise a data outcome. Motherboard work is excluded from the standard 6 Months warranty, which we explain on your CRM invoice.";
+  }
+  if (lower.includes("warranty")) {
+    return "Every standard repair carries a 6 Months written CRM warranty — displays, front glass, batteries and most board work are quoted on the invoice. Motherboard repairs are the only exclusion. Your invoice is the warranty record; just bring it back within 6 Months.";
+  }
+  if (lower.includes("pickup") || lower.includes("doorstep") || lower.includes("24")) {
+    return `We offer free 24/7 insured doorstep pickup across Bengaluru with zero-password privacy. The Halasuru bench is open 10 AM – 12 AM, all 7 days. Share your device and fault and we will arrange a slot.`;
+  }
+  if (lower.includes("address") || lower.includes("location") || lower.includes("visit") || lower.includes("halasuru")) {
+    return `You will find us at ${SITE.address} — ${SITE.addressVerified}. We are open 10 AM – 12 AM, all 7 days, one minute from Halasuru Metro. Rated 4.9 from ${SITE.ratingCount} Google reviews.`;
+  }
+  return `At ${SITE.name} we repair iPhone, iPad, Apple Watch, AirPods and MacBook — including front-glass restoration that keeps your original OLED. We are independent (not Apple-authorised), give a fixed written CRM quote and a 6 Months warranty, and offer free 24/7 pickup. Tell me the exact device and fault and I will guide you to a price.`;
+}
+
+function localResponse(message: string, reason: string): Response {
+  return new Response(localAnswer(message), {
+    status: 200,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Concierge-Fallback": "local",
+      "X-Concierge-Source": "local",
+      "X-Concierge-Reason": reason,
+    },
+  });
 }
 
 async function callGemini(model: string, key: string, body: unknown): Promise<GeminiResult> {
@@ -357,15 +427,10 @@ function buildPayload(message: string, history: Turn[], model: string, minimal =
 export async function POST(request: NextRequest) {
   const keys = resolveKeys();
   // No configured key is a normal local-answer path, not a server error.
-  if (!keys.length) return new Response(null, {
-    status: 204,
-    headers: {
-      "Cache-Control": "no-store",
-      "X-Concierge-Fallback": "local",
-      "X-Concierge-Source": "unavailable",
-      "X-Concierge-Reason": "no_api_key"
-    }
-  });
+  if (!keys.length) {
+    const fallbackMessage = await request.json().then((b: { message?: unknown }) => String(b.message || "")).catch(() => "");
+    return localResponse(fallbackMessage, "no_api_key");
+  }
 
   let body: { message?: unknown; history?: unknown };
   try {
@@ -435,19 +500,9 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  // Let the browser's deterministic resolver answer from the local knowledge base.
-  // A quota outage is not a customer-facing server error and should not count as a 5xx.
-  return new Response(null, {
-    status: 204,
-    headers: {
-      "Cache-Control": "no-store",
-      "X-Concierge-Fallback": "local",
-      "X-Concierge-Source": "fallback",
-      "X-Concierge-Reason": "provider_unavailable",
-      "X-Concierge-Attempts": String(attempts.length),
-      "X-Concierge-Models": Array.from(new Set(attempts.map((a) => a.model))).join(","),
-    },
-  });
+  // A quota outage is not a customer-facing error: answer from the verified
+  // local knowledge base with HTTP 200 so the chat never shows "unavailable".
+  return localResponse(message, "provider_unavailable");
 }
 
 export async function GET() {

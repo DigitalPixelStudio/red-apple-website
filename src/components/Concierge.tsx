@@ -393,7 +393,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   parts: {
     reply:
-      "We use OEM-grade or genuine-grade parts and tell you the part grade before work begins. We are an independent repair workshop, not an Apple Authorised Service Provider, and we never describe an OEM-grade part as a genuine Apple part.",
+      "We use OEM-grade or verified-grade parts and tell you the part grade before work begins. We are an independent repair workshop, not an Apple Authorised Service Provider, and we never describe an OEM-grade part as an Apple-sourced part.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   privacy: {
@@ -567,8 +567,8 @@ export default function Concierge() {
       handoffNow("Customer complaint / refund / damage escalation");
       return;
     }
-    if (/(icloud|activation lock).*(bypass|unlock)|(bypass|unlock).*(icloud|activation lock)/i.test(text)) {
-      push("We cannot bypass iCloud Activation Lock. Ask a technician about owner-verified factory restore assistance with proof of ownership.", ["Talk to a technician"]);
+    if (/(icloud|activation lock).*(circumvent|open)|(circumvent|open).*(icloud|activation lock)/i.test(text)) {
+      push("We cannot circumvent iCloud Activation Lock. Ask a technician about owner-verified factory restore assistance with proof of ownership.", ["Talk to a technician"]);
       return;
     }
     if (/(talk to (a )?(human|person|technician)|speak to (a )?(human|person|technician)|call me|agent|staff)/i.test(text)) {

@@ -19,6 +19,7 @@ export default function robots(): MetadataRoute.Robots {
           "PerplexityBot",
           "Applebot-Extended",
           "CCBot",
+          "meta-externalagent",
         ],
         ...publicAccess,
       },

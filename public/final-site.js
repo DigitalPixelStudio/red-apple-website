@@ -516,32 +516,82 @@
         }
       });
 
-      function replyToUser(rawText) {
+      const aiDevice = document.getElementById('ai-device');
+      const aiModel = document.getElementById('ai-model');
+      const aiIssue = document.getElementById('ai-issue');
+      const MODEL_LISTS = {
+        'iPad': ['iPad Pro 12.9', 'iPad Pro 11', 'iPad Air', 'iPad Mini', 'iPad 10th Gen', 'iPad 9th Gen'],
+        'MacBook': ['MacBook Pro', 'MacBook Air', 'iMac', 'Mac Mini'],
+        'Apple Watch': ['Apple Watch Ultra 2', 'Apple Watch Ultra', 'Series 9', 'Series 8', 'Series 7', 'Watch SE 2'],
+        'AirPods': ['AirPods Pro', 'AirPods Max', 'AirPods 3', 'AirPods 2'],
+      };
+      function populateModels() {
+        if (!aiModel || !aiDevice) return;
+        const dev = aiDevice.value;
+        const list = dev === 'iPhone' ? fullPrices.map((r) => r[0]) : (MODEL_LISTS[dev] || []);
+        aiModel.innerHTML = '<option value="">Model</option>' + list.map((m) => '<option>' + m + '</option>').join('');
+        aiModel.disabled = list.length === 0;
+      }
+      aiDevice?.addEventListener('change', populateModels);
+      populateModels();
+
+      const escHtml = (t) => String(t).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      function localBotAnswer(q) {
+        const lower = q.toLowerCase();
+        const matched = fullPrices.find(([m]) => lower.includes(m.toLowerCase().replace('iphone ', '')));
+        if (matched) return '<strong>' + matched[0] + '</strong> Front Glass Restoration (Keep Original OLED) is <strong>₹' + matched[1].toLocaleString('en-IN') + '</strong> with 6 Months written CRM warranty.';
+        if (lower.includes('motherboard') || lower.includes('board') || lower.includes('ic')) return '<strong>Motherboard / IC Repair:</strong> ₹10,500 – ₹14,500 after free microscope diagnosis. Motherboard work is excluded from the standard 6 Months warranty.';
+        if (lower.includes('warranty')) return '<strong>6 Months Written Warranty</strong> covers displays, glass, batteries and standard repairs via your CRM invoice (motherboard work excluded).';
+        if (lower.includes('pickup') || lower.includes('24')) return '<strong>Free 24/7 Doorstep Pickup</strong> across Bengaluru, insured and sealed, with zero-password privacy.';
+        return 'Our Halasuru technicians repair iPhone, iPad, Apple Watch, AirPods and MacBook with free inspection and a fixed written CRM quote. Ask for a model to see its exact front-glass price.';
+      }
+
+      let aiHistory = [];
+      async function replyToUser(rawText) {
         const q = (rawText || '').trim();
         if (!q || !aiMsgs) return;
-        const lower = q.toLowerCase();
-        const safeQ = q.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        aiMsgs.innerHTML += `<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">${safeQ}</div>`;
-
-        let ans = '';
-        const matched = fullPrices.find(([m]) => lower.includes(m.toLowerCase().replace('iphone ', '')));
-        if (matched) {
-          ans = `<strong>${matched[0]}</strong> Front Glass Restoration (Keep Original OLED) is <strong>₹${matched[1].toLocaleString('en-IN')}</strong> with 6 Months written warranty &amp; TBK OCA lamination.`;
-        } else if (lower.includes('motherboard') || lower.includes('ic') || lower.includes('water') || lower.includes('dead')) {
-          ans = `<strong>Motherboard / IC &amp; Water Damage:</strong> Typical board-level repair is <strong>₹10,500 – ₹14,500</strong> after free microscope diagnosis (motherboard repairs excluded from standard warranty).`;
-        } else if (lower.includes('warranty')) {
-          ans = `<strong>6 Months Written Warranty:</strong> Covers displays, front glass, batteries, and standard repairs via your CRM invoice (excludes physical/liquid damage &amp; motherboard work).`;
-        } else if (lower.includes('pickup') || lower.includes('drop') || lower.includes('24')) {
-          ans = `<strong>Free 24/7 Doorstep Pickup:</strong> Insured &amp; sealed across Bengaluru with strict Zero-Password Privacy. Store bench hours: 10 AM – 12 AM midnight.`;
-        } else if (lower.includes('glass') || lower.includes('oled') || lower.includes('price')) {
-          ans = `<strong>Front Glass Restoration:</strong> ₹2,500 (iPhone 8/SE) to ₹19,500 (iPhone 18 Pro Max), keeping your original OLED &amp; True Tone. Type your exact iPhone model for the fixed rate!`;
-        } else {
-          ans = `Our Halasuru technicians service <strong>iPhone, iPad, Apple Watch, AirPods &amp; MacBook</strong> with free inspection and a written CRM quote before touching a screw.`;
+        aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + '</div>';
+        const bid = 'ai-' + Date.now() + Math.random().toString(36).slice(2, 6);
+        aiMsgs.innerHTML += '<div id="' + bid + '" class="max-w-[92%] rounded-2xl rounded-tl-sm border border-zinc-200 bg-white p-3 text-zinc-700 shadow-sm"><span class="text-zinc-400">Checking the bench prices…</span></div>';
+        aiMsgs.scrollTop = aiMsgs.scrollHeight;
+        const bubble = document.getElementById(bid);
+        let full = '';
+        try {
+          const res = await fetch('/api/concierge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: q, history: aiHistory.slice(-6) })
+          });
+          if (!res.ok || !res.body) throw new Error('offline');
+          const reader = res.body.getReader();
+          const dec = new TextDecoder();
+          for (;;) {
+            const part = await reader.read();
+            if (part.done) break;
+            full += dec.decode(part.value, { stream: true });
+            if (bubble) bubble.innerHTML = escHtml(full).replace(/\n/g, '<br>');
+            aiMsgs.scrollTop = aiMsgs.scrollHeight;
+          }
+          const src = res.headers.get('X-Concierge-Source') || 'gemini';
+          if (bubble) bubble.innerHTML = escHtml(full).replace(/\n/g, '<br>') +
+            '<div class="mt-2 text-[9px] font-bold ' + (src === 'gemini' ? 'text-red-600' : 'text-emerald-700') + '">' +
+            (src === 'gemini' ? '✦ Forge AI · live answer' : '● Verified local knowledge') + '</div>';
+          aiHistory.push({ role: 'user', text: q }, { role: 'model', text: full });
+        } catch (err) {
+          full = localBotAnswer(q);
+          if (bubble) bubble.innerHTML = full + '<div class="mt-2 text-[9px] font-bold text-emerald-700">● Verified local knowledge</div>';
         }
-        const waDirect = `https://wa.me/918660663776?text=${encodeURIComponent('Hi Red Apple Bench, I asked AI Bench: ' + q)}`;
-        aiMsgs.innerHTML += `<div class="max-w-[92%] rounded-2xl rounded-tl-sm border border-zinc-200 bg-white p-3 text-zinc-700 shadow-sm"><div>${ans}</div><a href="${waDirect}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-bold text-white">Continue on WhatsApp →</a></div>`;
+        const wa = 'https://wa.me/918660663776?text=' + encodeURIComponent('Hi Red Apple Bench, I asked AI Bench: ' + q);
+        if (bubble) bubble.innerHTML += '<a href="' + wa + '" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-bold text-white">Continue on WhatsApp →</a>';
+        const handoff = document.getElementById('ai-wa-handoff');
+        if (handoff) handoff.href = wa;
         aiMsgs.scrollTop = aiMsgs.scrollHeight;
       }
+
+      document.getElementById('btn-ai-price')?.addEventListener('click', () => {
+        const parts = [aiDevice?.value, aiModel?.value, aiIssue?.value].filter(Boolean);
+        replyToUser(parts.length ? parts.join(' · ') + ' — fixed price and turnaround please' : 'Show me your repair price list and warranty');
+      });
 
       aiForm?.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -593,6 +643,9 @@
       if (typeof THREE === 'undefined') return;
       try {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        // Gift: adaptive resolution governor — lowers DPR only if real frame
+        // times regress, then restores it when the device has headroom again.
+        let adaptiveDpr = dpr, perfAcc = 0, perfFrames = 0;
         const MAX_W = 1280, MAX_H = 960;
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
         renderer.setPixelRatio(1);
@@ -654,7 +707,7 @@
           if (!canvas) return null;
           const ctx = canvas.getContext('2d');
           const scene = new THREE.Scene();
-          const camera = new THREE.PerspectiveCamera(35, 4 / 3, 0.1, 100);
+          const camera = new THREE.PerspectiveCamera(38, 4 / 3, 0.1, 100);
           camera.position.set(0, 0.42, camZ);
           camera.lookAt(0, 0, 0);
           scene.add(new THREE.AmbientLight(0xffffff, 0.95));
@@ -664,6 +717,7 @@
           const root = new THREE.Group();
           scene.add(root);
           const onTick = buildFn(root);
+          if (window.innerWidth < 768) root.scale.multiplyScalar(0.92);
           const orbit = addOrbit(canvas, root, initY, initX);
           const slot = { canvas, ctx, scene, camera, root, orbit, onTick, visible: true };
           slots.push(slot);
@@ -1056,13 +1110,14 @@
           requestAnimationFrame(animate);
           if (document.hidden) return;
           t += 0.018;
+          const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
             const s = slots[i];
             if (!s.visible) continue;
             const cw = s.canvas.clientWidth, ch = s.canvas.clientHeight;
             if (!cw || !ch) continue;
-            const rw = Math.min(Math.round(cw * dpr), MAX_W);
-            const rh = Math.min(Math.round(ch * dpr), MAX_H);
+            const rw = Math.min(Math.round(cw * adaptiveDpr), MAX_W);
+            const rh = Math.min(Math.round(ch * adaptiveDpr), MAX_H);
             if (s.canvas.width !== rw || s.canvas.height !== rh) {
               s.canvas.width = rw;
               s.canvas.height = rh;
@@ -1076,6 +1131,14 @@
             renderer.render(s.scene, s.camera);
             s.ctx.clearRect(0, 0, rw, rh);
             s.ctx.drawImage(renderer.domElement, 0, MAX_H - rh, rw, rh, 0, 0, rw, rh);
+          }
+          perfAcc += performance.now() - frameStart;
+          perfFrames++;
+          if (perfFrames >= 45) {
+            const avg = perfAcc / perfFrames;
+            if (avg > 18 && adaptiveDpr > 1) adaptiveDpr = Math.max(1, adaptiveDpr - 0.25);
+            else if (avg < 9 && adaptiveDpr < dpr) adaptiveDpr = Math.min(dpr, adaptiveDpr + 0.25);
+            perfAcc = 0; perfFrames = 0;
           }
         }
         animate();
