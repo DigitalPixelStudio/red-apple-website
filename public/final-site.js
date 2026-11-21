@@ -575,6 +575,51 @@
         backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         const ioBack = new IntersectionObserver((es) => { es.forEach((e) => backTop.classList.toggle('translate-y-8', e.isIntersecting)); }, { rootMargin: '0px -20px 0px 0px' });
         ioBack.observe(document.getElementById('footer-contact') || document.body);
+
+      // Phase D2: Zero-lag bokeh particles canvas (D2 spec)
+      (() => {
+        const canvas = document.createElement('canvas');
+        canvas.className = 'bokeh-canvas';
+        canvas.setAttribute('aria-hidden','true');
+        document.body.prepend(canvas);
+        const ctx = canvas.getContext('2d');
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        const MOTE_COUNT = 22;
+        const motes = Array.from({ length: MOTE_COUNT }, (_, i) => ({
+          x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+          r: 1.5 + Math.random() * 3.5,
+          vx: (Math.random() - 0.5) * 0.4 * dpr, vy: (Math.random() - 0.5) * 0.4 * dpr,
+          hue: 248 + Math.random() * 40, sat: 60, light: 1 + Math.random(), op: 0.15 + Math.random() * 0.25,
+        }));
+        const W = () => canvas.width = innerWidth * dpr, H = () => canvas.height = innerHeight * dpr;
+        W(); H();
+        function drawMote(m) {
+          const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 2.2);
+          g.addColorStop(0, `hsla(${m.hue},70%,97%,${m.op * 0.55})`);
+          g.addColorStop(0.35, `hsla(${m.hue},75%,92%,0)`);
+          ctx.fillStyle = g;
+          ctx.fillRect(m.x - m.r, m.y - m.r, m.r * 2, m.r * 2);
+        }
+        function loop() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          motes.forEach((m) => { drawMote(m); m.x += m.vx; m.y += m.vy; if (m.x < -20 || m.x > canvas.width + 20) m.x = canvas.width * 0.5; if (m.y < -20 || m.y > canvas.height + 20) m.y = canvas.height * 0.5; });
+        }
+        const boom = () => setTimeout(() => boom(), (18 + Math.random() * 12) * 1000);
+        boom();
+        new IntersectionObserver((es) => { es.forEach((e) => e.isIntersecting ? (requestAnimationFrame(loop), loop()) : (cancelAnimationFrame(null), void 0)); }, { threshold: 0 }).observe(document.body);
+        addEventListener('resize', () => { W(); H(); motes.forEach((m) => m.x = Math.random()*canvas.width, m.y=Math.random()*canvas.height); });
+      })();
+
+      // Phase A2: 1px top sentinel toggles header shadow ONCE (no per-frame scroll JS)
+      const hdrSentinel = document.createElement('div');
+      hdrSentinel.className = 'h-px w-full';
+      hdrSentinel.style.top = '44px';
+      hdrSentinel.style.position = 'fixed';
+      hdrSentinel.style.pointerEvents = 'none';
+      hdrSentinel.style.zIndex = '-1';
+      document.body.prepend(hdrSentinel);
+      const hdr = document.querySelector('.site-header-120fps');
+      if (hdr) new IntersectionObserver((es) => es.forEach((e) => hdr.classList.toggle('is-scrolled', !e.isIntersecting)), { rootMargin: '0px 0px -1px 0px' }).observe(hdrSentinel);
       }
 
       // Gift: dark/light theme toggle
@@ -789,28 +834,33 @@
          * recentered at origin so nothing is cropped by aspect or builder
          * offsets. Uses Box3 with precise=true so refined geometries fit tight.
          */
-        function fitSlotCamera(slot) {
+        function centerAndFitEdgeToEdge(camera, root, padding) {
           try {
-            const root = slot.root, cam = slot.camera;
+            const scaleP = padding || 1.10;
             root.updateWorldMatrix(true, true);
-            const bbox = new THREE.Box3().setFromObject(root, true);
-            if (bbox.isEmpty()) return;
-            const sphere = bbox.getBoundingSphere(new THREE.Sphere());
-            const center = sphere.center.clone();
-            const radius = sphere.radius;
+            const rawBox = new THREE.Box3().setFromObject(root, true);
+            const rawSphere = rawBox.getBoundingSphere(new THREE.Sphere());
+            const normScale = rawSphere.radius > 0 ? (2.0 / rawSphere.radius) : 1.0;
+            root.scale.multiplyScalar(normScale);
+            root.position.set(0, 0, 0);
+            root.updateWorldMatrix(true, true);
+            const centeredBox = new THREE.Box3().setFromObject(root);
+            const center = centeredBox.getCenter(new THREE.Vector3());
             root.position.sub(center);
-            const vFov = THREE.MathUtils.degToRad(cam.fov);
-            const hFov = 2 * Math.atan(Math.tan(vFov / 2) * cam.aspect);
-            const limitingFov = Math.min(vFov, hFov);
-            const paddingFactor = 1.42;
-            const dist = (radius / Math.sin(limitingFov / 2)) * paddingFactor;
-            cam.near = Math.max(0.05, dist - radius * 3);
-            cam.far = dist + radius * 4;
-            const zd = dist * 1.35;
-            cam.position.set(0, 0.42, zd);
-            cam.lookAt(0, 0, 0);
-            cam.updateProjectionMatrix();
-          } catch (e) { console.warn('fitSlotCamera skipped', e); }
+            root.updateWorldMatrix(true, true);
+            const sp = new THREE.Box3().setFromObject(root).getBoundingSphere(new THREE.Sphere());
+            const r = sp.radius;
+            const vFov = THREE.MathUtils.degToRad(camera.fov);
+            const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+            const minFov = Math.min(vFov, hFov);
+            const dist = (r / Math.sin(minFov / 2)) * scaleP;
+            camera.near = Math.max(0.05, dist - r * 2.5);
+            camera.far = dist + r * 3.5;
+            camera.position.set(0, 0, dist);
+            camera.lookAt(0, 0, 0);
+            camera.updateProjectionMatrix();
+            return { radius: r, distance: dist };
+          } catch (e) { console.warn('centerAndFitEdgeToEdge skipped', e); }
         }
 
         function registerSlot(canvasId, camZ, buildFn, initY = -0.4, initX = 0.12) {
@@ -1229,7 +1279,7 @@
               s.canvas.width = rw;
               s.canvas.height = rh;
             }
-            if (!s.autoFramed) { s.autoFramed = true; fitSlotCamera(s); }
+            if (!s.autoFramed) { s.autoFramed = true; centerAndFitEdgeToEdge(s.camera, s.root, 1.10); }
             s.camera.aspect = cw / ch;
             s.camera.updateProjectionMatrix();
             s.orbit.update(s === heroSlot && heroAmbient ? 0.009 : 0.006);
@@ -1249,6 +1299,28 @@
             perfAcc = 0; perfFrames = 0;
           }
         }
+        // Phase C2: Fullscreen Toggle on every 3D stage (GPU-only, viewport-driven)
+        for (const slot of slots) {
+          const fsBtn = document.createElement('button');
+          fsBtn.setAttribute('type','button'); fsBtn.dataset.fsToggle = '1';
+          fsBtn.className = 'absolute top-2.5 right-2.5 z-12 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/90 border border-zinc-300 shadow transition-all hover:scale-110 hover:bg-red-600 hover:text-white';
+          fsBtn.textContent = '⎈';
+          const wrap = slot.canvas.closest('.stage-3d-box');
+          if (wrap) { fsBtn.style.position='absolute'; wrap.appendChild(fsBtn); }
+          fsBtn.addEventListener('click', () => toggleFullscreen(slot));
+        }
+        function toggleFullscreen(slot) {
+          if (document.fullscreenElement) { document.exitFullscreen(); return; }
+          const el = slot.canvas.closest('.stage-3d-box') || slot.canvas;
+          el.requestFullscreen ? el.requestFullscreen() : el.webkitRequestFullscreen?.();
+          requestAnimationFrame(() => resizeSlot(slot));
+        }
+        function resizeSlot(slot) { try { slot.camera.aspect = slot.canvas.clientWidth / slot.canvas.clientHeight; slot.camera.updateProjectionMatrix(); } catch(e){} }
+        document.addEventListener('fullscreenchange', () => {
+          const canvas = document.fullscreenElement?.querySelector('canvas') || null;
+          const slot = slots.find((x) => x.canvas === canvas);
+          if (slot) { resizeSlot(slot); requestAnimationFrame(() => resizeSlot(slot)); }
+        });
         animate();
       } catch (err) {
         console.warn('3D fallback active:', err);
