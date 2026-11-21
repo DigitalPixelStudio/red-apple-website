@@ -1329,7 +1329,7 @@ export const finalSiteHtml = `
         <div>
           <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Contact</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li>Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</li>
+            <li><button id="copy-address" type="button" class="hover:underline hover:text-red-600">Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
             <li class="font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
             <li><a href="tel:+918660663776" class="font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
             <li><a href="mailto:support@redmobilerepair.in" class="font-semibold text-red-600">support@redmobilerepair.in</a></li>

@@ -610,6 +610,17 @@
       if (typingIn && typingSend && !typingIn.dataset.bound) {
         typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
         typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t) replyToUser(t); });
+      typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && aiDrawer && !aiDrawer.classList.contains('hidden')) { aiDrawer.classList.add('hidden'); aiDrawer.classList.remove('flex'); } });
+      document.querySelectorAll('#footer-contact li:has(button[id="copy-address"])')?.length;
+      const copyBtn = document.getElementById('copy-address');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          await navigator.clipboard?.writeText('Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008');
+          const lbl = document.getElementById('address-copied'); if (lbl) lbl.classList.remove('hidden');
+          setTimeout(() => lbl?.classList.add('hidden'), 2500);
+        });
+      }
         typingIn.dataset.bound = '1';
       }
       function localBotAnswer(q) {
