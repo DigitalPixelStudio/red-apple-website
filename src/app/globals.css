@@ -4257,8 +4257,7 @@ html[data-motion="off"] .whyus-phone { filter: none; }
 }
 .head-gradient,
 .breath-heading {
-  animation: headDrift 22s ease-in-out infinite, headingBreath 5.6s ease-in-out infinite;
-  transform-origin: left center;
+  animation: none !important;
   display: inline-block;
 }
 .text-center .head-gradient,
@@ -4271,7 +4270,7 @@ html[data-motion="off"] .whyus-phone { filter: none; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: headDrift 9s ease-in-out infinite, headingBreath 5.6s ease-in-out infinite;
+  animation: none !important;
   display: inline-block;
 }
 
