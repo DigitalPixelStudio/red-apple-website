@@ -1460,7 +1460,7 @@ export const finalSiteHtml = `
     </div>
 
   <!-- Gift: floating back-to-top with smooth scroll -->
-  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white/90 shadow-xl backdrop-blur transition-all hover:scale-110 hover:-translate-y-1 focus:outline-none">
+  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white/90 shadow-xl transition-all hover:scale-110 hover:-translate-y-1 focus:outline-none">
     <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
   </button>
 
