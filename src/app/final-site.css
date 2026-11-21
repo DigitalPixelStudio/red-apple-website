@@ -385,6 +385,7 @@
     .brand-name-glow::before { content:""; position:absolute; inset:-3px; border-radius:50%; background:radial-gradient(circle at 26% 22%,rgba(249,107,9,.42),transparent 60%); pointer-events:none; filter: blur(1.5px); transition:background 1.5s ease; }
     @keyframes brandPulse { 0%,100%{filter:drop-shadow(0 0 4px rgba(220,38,38,.18));} 50%{filter:drop-shadow(0 0 12px rgba(220,38,38,.42));} }
     .brand-name-glow { animation: brandPulse 5s ease-in-out infinite; }
+    .brand-dark-glow { color: #0a0a0b; }
     .brand-icon-glow { box-shadow: 0 0 0 2px rgba(220,38,38,.10), 0 0 16px rgba(234,88,12,.28); }
 
     /* 1. Slow drifting glow wash (transform/opacity only) */
