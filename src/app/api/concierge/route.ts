@@ -288,12 +288,12 @@ function localAnswer(message: string): string {
     return "Every standard repair carries a 6 Months written CRM warranty — displays, front glass, batteries and most board work are quoted on the invoice. Motherboard repairs are the only exclusion. Your invoice is the warranty record; just bring it back within 6 Months.";
   }
   if (lower.includes("pickup") || lower.includes("doorstep") || lower.includes("24")) {
-    return `We offer free 24/7 insured doorstep pickup across Bengaluru with zero-password privacy. The Halasuru bench is open 10 AM – 12 AM, all 7 days. Share your device and fault and we will arrange a slot.`;
+    return `We offer 24/7 insured doorstep pickup across Bengaluru with zero-password privacy — free for repairs above ₹2,999. The Halasuru bench is open 10 AM – 12 AM, all 7 days. Share your device and fault and we will arrange a slot.`;
   }
   if (lower.includes("address") || lower.includes("location") || lower.includes("visit") || lower.includes("halasuru")) {
     return `You will find us at ${SITE.address} — ${SITE.addressVerified}. We are open 10 AM – 12 AM, all 7 days, one minute from Halasuru Metro. Rated 4.9 from ${SITE.ratingCount} Google reviews.`;
   }
-  return `At ${SITE.name} we repair iPhone, iPad, Apple Watch, AirPods and MacBook — including front-glass restoration that keeps your original OLED. We are independent (not Apple-authorised), give a fixed written CRM quote and a 6 Months warranty, and offer free 24/7 pickup. Tell me the exact device and fault and I will guide you to a price.`;
+  return `At ${SITE.name} we repair iPhone, iPad, Apple Watch, AirPods and MacBook — including front-glass restoration that keeps your original OLED. We are independent (not Apple-authorised), give a fixed written CRM quote and a 6 Months warranty, and offer 24/7 pickup (free above ₹2,999). Tell me the exact device and fault and I will guide you to a price.`;
 }
 
 function localResponse(message: string, reason: string): Response {
