@@ -569,46 +569,18 @@
       const _sd = () => { const b = document.getElementById('tour-start'); if (b) b.classList.remove('active'); const d=document.getElementById('tour-done'); if (d) d.textContent=''; };
       document.querySelectorAll('#page-plan-links [data-go]').forEach(b=>b.addEventListener('click',()=>setTimeout(_sd,300)));
 
-      // Gift: floating back-to-top (smooth transition, discovers for free)
+      // Phase A2b: Global scroll pause (kills CSS animations in text zones — 120fps answer).
+let scTimer=null;
+const lockScroll=()=>{document.documentElement.classList.add('is-scrolling'); if(scTimer)clearTimeout(scTimer); scTimer=setTimeout(()=>document.documentElement.classList.remove('is-scrolling'),180);};
+addEventListener('scroll',lockScroll,{passive:true});
+addEventListener('scrollend',()=>document.documentElement.classList.remove('is-scrolling'));
+
+// Gift: floating back-to-top (smooth transition, discovers for free)
       const backTop = document.getElementById('back-to-top');
       if (backTop) {
         backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         const ioBack = new IntersectionObserver((es) => { es.forEach((e) => backTop.classList.toggle('translate-y-8', e.isIntersecting)); }, { rootMargin: '0px -20px 0px 0px' });
         ioBack.observe(document.getElementById('footer-contact') || document.body);
-
-      // Phase D2: Zero-lag bokeh particles canvas (D2 spec)
-      (() => {
-        const canvas = document.createElement('canvas');
-        canvas.className = 'bokeh-canvas';
-        canvas.setAttribute('aria-hidden','true');
-        document.body.prepend(canvas);
-        const ctx = canvas.getContext('2d');
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-        const MOTE_COUNT = 22;
-        const motes = Array.from({ length: MOTE_COUNT }, (_, i) => ({
-          x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-          r: 1.5 + Math.random() * 3.5,
-          vx: (Math.random() - 0.5) * 0.4 * dpr, vy: (Math.random() - 0.5) * 0.4 * dpr,
-          hue: 248 + Math.random() * 40, sat: 60, light: 1 + Math.random(), op: 0.15 + Math.random() * 0.25,
-        }));
-        const W = () => canvas.width = innerWidth * dpr, H = () => canvas.height = innerHeight * dpr;
-        W(); H();
-        function drawMote(m) {
-          const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 2.2);
-          g.addColorStop(0, `hsla(${m.hue},70%,97%,${m.op * 0.55})`);
-          g.addColorStop(0.35, `hsla(${m.hue},75%,92%,0)`);
-          ctx.fillStyle = g;
-          ctx.fillRect(m.x - m.r, m.y - m.r, m.r * 2, m.r * 2);
-        }
-        function loop() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          motes.forEach((m) => { drawMote(m); m.x += m.vx; m.y += m.vy; if (m.x < -20 || m.x > canvas.width + 20) m.x = canvas.width * 0.5; if (m.y < -20 || m.y > canvas.height + 20) m.y = canvas.height * 0.5; });
-        }
-        const boom = () => setTimeout(() => boom(), (18 + Math.random() * 12) * 1000);
-        boom();
-        new IntersectionObserver((es) => { es.forEach((e) => e.isIntersecting ? (requestAnimationFrame(loop), loop()) : (cancelAnimationFrame(null), void 0)); }, { threshold: 0 }).observe(document.body);
-        addEventListener('resize', () => { W(); H(); motes.forEach((m) => m.x = Math.random()*canvas.width, m.y=Math.random()*canvas.height); });
-      })();
 
       // Phase A2: 1px top sentinel toggles header shadow ONCE (no per-frame scroll JS)
       const hdrSentinel = document.createElement('div');
@@ -836,7 +808,7 @@
          */
         function centerAndFitEdgeToEdge(camera, root, padding) {
           try {
-            const scaleP = padding || 1.10;
+            const scaleP = padding || 1.30;
             root.updateWorldMatrix(true, true);
             const rawBox = new THREE.Box3().setFromObject(root, true);
             const rawSphere = rawBox.getBoundingSphere(new THREE.Sphere());

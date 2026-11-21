@@ -53,29 +53,7 @@ export const finalSiteHtml = `
   <main>
 
   
-  <!-- Phase B: Top-Placed Dedicated Pages Selector (Snap Rail) -->
-  <nav id="top-page-selector" class="top-page-selector border-b border-zinc-200 bg-[#FDFCFB] pt-1 text-[10px] sm:pt-1.5">
-    <div class="nav-rail-inner -m-0.5 flex flex-wrap items-center gap-x-0 gap-y-1 overflow-x-auto px-4 py-2 sm:gap-x-3 sm:gap-y-2">
-      <a href="#hero" class="top-nav-item is-active" aria-current="page">Intro</a>
-      <a href="#real-shop" class="top-nav-item">Store</a>
-      <a href="#estimate" class="top-nav-item">Estimate</a>
-      <a href="#tbk-machines" class="top-nav-item">TBK Lab</a>
-      <a href="#glass-lab" class="top-nav-item">Glass Lab</a>
-      <a href="#ecosystem-3d" class="top-nav-item">Devices</a>
-      <a href="#paired-crm" class="top-nav-item">Track Repair</a>
-      <a href="#reviews" class="top-nav-item">Reviews</a>
-      <a href="#comparison" class="top-nav-item">Why Us</a>
-      <a href="#faq" class="top-nav-item">FAQ</a>
-      <a href="#halasuru-map" class="top-nav-item">Visit</a>
-      <a href="/services/front-glass-restoration" class="top-nav-item">Front Glass</a>
-      <a href="/services/iphone-repair" class="top-nav-item">iPhone Repair</a>
-      <a href="/services/back-glass-replacement" class="top-nav-item">Back Glass</a>
-      <a href="/services/apple-ecosystem" class="top-nav-item">iPad/Watch</a>
-      <a href="/services/macbook-board-repair" class="top-nav-item">MacBook &amp; IC</a>
-      <a href="#crm-status" class="top-nav-item">CRM Status</a>
-      <a href="#contact" class="top-nav-item">Contact</a>
-    </div>
-  </nav>
+  
 
   <!-- 1. HERO SECTION (PROPERLY FRAMED iPhone 17 Pro Max · Orange 3D) -->
     <section id="hero" class="ambient-warm border-b border-zinc-100 py-8 sm:py-12">

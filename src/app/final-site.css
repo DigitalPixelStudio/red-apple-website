@@ -531,31 +531,7 @@
     #paired-crm, #gallery, #machines-static, #wow-cards { content-visibility: auto; contain-intrinsic-size: auto 480px; contain: layout style; }
 
 
-    /* ===== PHASE D1: LIGHT EDITORIAL TEXTURES (warm studio air) ===== */
-    body {
-      background:
-        linear-gradient(115deg, #FDFBFA 0%, #F7F1EB 40%, #F5F3F6 100%),
-        repeating-linear-gradient(transparent, transparent 39px, rgba(220,38,38,0.012) 39px, rgba(220,38,38,0.012) 40px),
-        repeating-linear-gradient(rgba(220,38,38,0.008) 0px 40px, transparent 40px 41px);
-      background-size: 100% 100%, 100% 40px, 100% 41px;
-    }
-    @supports selector(:has(*)) {
-      .text-breathing-haze, .text-breathing-haze * { filter: progid:DXImageTransform.chromium-blur(0) var(--haze-filter); }
-    }
-
     /* ===== PHASE D2: Zero-Lag Warm Bokeh Particles (30 FPS, 18 motes) ===== */
-    .bokeh-canvas {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
-      display: block; width: 100%; height: 100%; background: transparent;
-      opacity: 0.6; transform: translateZ(0);
-    }
-    .bokeh { position: absolute; border-radius: 50%; background: radial-gradient(circle, #fff8d6 0%, #f8c69b 45%, transparent 80%); box-shadow: 0 0 6px 2px #fff4bd42; animation: bokehFloat 22s ease-in-out infinite; }
-    @keyframes bokehFloat {
-      0%   { transform: translate3d(0, 0, 0); }
-      50%  { transform: translate3d(4px, -4px, 0); }
-      100% { transform: translate3d(0, 0, 0); }
-    }
-
     /* ===== PHASE D3: ORANGE GLASS GLOW — STRICTLY on store & machine images ===== */
     .orange-glass-glow {
       border-radius: 1.25rem;
@@ -587,19 +563,7 @@
     }
     #gallery img:hover, #tbk-machines img:hover, #glass-lab img:hover, #real-shop img:hover {
       box-shadow: 0 16px 34px -6px rgba(249,115,22,0.30);
-    }
+    }    .vivid-brand-gradient { animation: none; }
 
-    /* ===== PHASE D4: Vivid text, subtle breathing, tighter line height ===== */
-    h2, h3, h4 { line-height: 1.45; letter-spacing: -0.005em; font-weight: 800; }
-    .vivid-brand {
-      background: linear-gradient(95deg, #DC2626 0%, #EA580C 55%, #F59E0B 100%);
-      -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;
-      letter-spacing: -0.01em; -webkit-text-fill-color: transparent; background-size: 200% auto;
-      animation: liveLange 1.8s ease-in-out infinite alternate;
-    }
-    @keyframes liveLange { 0%{background-position:0% 50%;} 100%{background-position:100% 50%;} }
-
-
-    /* ===== PHASE D4: improv substance — GPU-only breathing sub-hooks ===== */
-    #real-shop img, #gallery img, #tbk-machines img { animation: none; }
-    .vivid-brand-gradient { animation: none; }
+    /* ===== GLOBAL SCROLL PAUSE — kills all CSS animations while scrolling (120fps answer) ===== */
+    html.is-scrolling * { animation-play-state: paused !important; }
