@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${baseUrl}/terms` },
 };
 
-const UPDATED = "30 October 2026";
+const UPDATED = "21 November 2026";
 
 export default function TermsPage() {
   return (
@@ -44,7 +44,7 @@ export default function TermsPage() {
           <ul>
             <li>Back up your data before handing over any device. We are not responsible for data loss.</li>
             <li>We never ask for your passcode, Apple ID, or account password.</li>
-            <li>If a device is not collected within 90 days of completion, we may dispose of it after written notice.</li>
+            <li>If a device is not collected within 30 days of completion, we may dispose of it after written notice.</li>
           </ul>
 
           <h2>What we do not cover</h2>

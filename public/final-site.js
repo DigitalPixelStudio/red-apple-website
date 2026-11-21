@@ -29,19 +29,19 @@
       // 2. 30-SECOND SMART ESTIMATE (EXACT OWNER WHATSAPP FORMAT)
       // ============================================================
       const deviceModels = {
-        'iPhone': ['iPhone 17 Pro Max', 'iPhone 17 Pro', 'iPhone 16 Pro Max', 'iPhone 16 Pro', 'iPhone 15 Pro Max', 'iPhone 15', 'iPhone 14 Pro Max', 'iPhone 14', 'iPhone 13'],
-        'iPad': ['iPad Pro 13" M4', 'iPad Pro 12.9"', 'iPad Air M2', 'iPad 10th Gen', 'iPad mini 6/7', 'iPad 9th Gen'],
-        'MacBook': ['MacBook Pro M4/M3', 'MacBook Air M3/M2', 'MacBook Pro 16"', 'MacBook Pro 14"', 'iMac / Mac mini'],
-        'Apple Watch': ['Apple Watch Ultra 2/3', 'Watch Series 10/9', 'Watch Series 8/7', 'Watch SE (2nd Gen)'],
-        'AirPods': ['AirPods Pro (2nd Gen)', 'AirPods Pro (1st Gen)', 'AirPods (4th/3rd Gen)', 'AirPods Max']
+        'iPhone': ['iPhone 18 Pro Max','iPhone 18 Pro','iPhone 18','iPhone 17 Pro Max','iPhone 17 Pro','iPhone 17','iPhone 17 Slim/Air','iPhone 16 Pro Max','iPhone 16 Pro','iPhone 16 Plus','iPhone 16','iPhone 15 Pro Max','iPhone 15 Pro','iPhone 15 Plus','iPhone 15','iPhone 14 Pro Max','iPhone 14 Pro','iPhone 14 Plus','iPhone 14','iPhone 13 Pro Max','iPhone 13 Pro','iPhone 13 mini','iPhone 13','iPhone 12 Pro Max','iPhone 12 Pro','iPhone 12 mini','iPhone 12','iPhone 11 Pro Max','iPhone 11 Pro','iPhone 11','iPhone XS Max','iPhone XS','iPhone XR','iPhone X','iPhone SE (3rd G)','iPhone SE (2nd G)','iPhone 8 Plus','iPhone 8','iPhone 7 Plus','iPhone 7','iPhone 6s Plus','iPhone 6s','iPhone 6 Plus','iPhone 6'],
+        'iPad': ['iPad Pro 13" M4','iPad Pro 12.9"','iPad Pro 11"','iPad Air M2','iPad Air','iPad 10th Gen','iPad 9th Gen','iPad mini 6/7','iPad Mini'],
+        'MacBook': ['MacBook Pro M4/M3','MacBook Pro 16"','MacBook Pro 14"','MacBook Air M3/M2','MacBook Pro','MacBook Air','iMac / Mac mini'],
+        'Apple Watch': ['Apple Watch Ultra 3','Apple Watch Ultra 2','Apple Watch Ultra','Watch Series 10','Watch Series 9','Watch Series 8','Watch Series 7','Watch SE (2nd Gen)'],
+        'AirPods': ['AirPods Pro (2nd Gen)','AirPods Pro (1st Gen)','AirPods (4th/3rd Gen)','AirPods Max']
       };
-      let selectedDev = 'iPhone';
-      let selectedModel = 'iPhone 17 Pro Max';
-
-      const estModelsGrid = document.getElementById('est-models-grid');
+      const estDeviceSel = document.getElementById('est-device');
+      const estModelSel = document.getElementById('est-model');
       const estRepair = document.getElementById('est-repair');
       const estSummaryTitle = document.getElementById('est-summary-title');
       const estSummaryPrice = document.getElementById('est-summary-price');
+      let selectedDev = 'iPhone';
+      let selectedModel = 'iPhone 17 Pro Max';
 
       function syncEstimateSummary() {
         if (!estRepair) return;
@@ -53,32 +53,14 @@
       }
 
       function renderEstimateModels() {
-        if (!estModelsGrid) return;
+        if (!estModelSel) return;
         const list = deviceModels[selectedDev] || [];
         if (!list.includes(selectedModel)) selectedModel = list[0] || selectedDev;
-        estModelsGrid.innerHTML = list.map((m) => `
-          <button type="button" data-model="${m}" class="est-model-btn rounded-xl border px-2.5 py-2 text-left text-[11px] font-bold transition ${m === selectedModel ? 'border-red-600 bg-red-600 text-white shadow-sm' : 'border-zinc-200 bg-zinc-50 text-zinc-800 hover:border-red-300'}">${m}</button>
-        `).join('');
-        estModelsGrid.querySelectorAll('.est-model-btn').forEach((b) => {
-          b.addEventListener('click', () => {
-            selectedModel = b.dataset.model;
-            renderEstimateModels();
-          });
-        });
+        estModelSel.innerHTML = list.map((m) => `<option value="${m}" ${m === selectedModel ? 'selected' : ''}>${m}</option>`).join('');
         syncEstimateSummary();
       }
-
-      document.querySelectorAll('.est-dev-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          selectedDev = btn.dataset.dev;
-          document.querySelectorAll('.est-dev-btn').forEach((x) => {
-            x.className = x === btn
-              ? 'est-dev-btn rounded-full bg-red-600 px-3 py-1 text-white'
-              : 'est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700';
-          });
-          renderEstimateModels();
-        });
-      });
+      estDeviceSel?.addEventListener('change', () => { selectedDev = estDeviceSel.value; renderEstimateModels(); });
+      estModelSel?.addEventListener('change', () => { selectedModel = estModelSel.value; syncEstimateSummary(); });
       estRepair?.addEventListener('change', syncEstimateSummary);
       renderEstimateModels();
 
@@ -405,8 +387,6 @@
       // 10-Second Auto-Dismiss AI Concierge Toast
       const aiDrawer = document.getElementById('ai-drawer');
       const aiMsgs = document.getElementById('ai-messages');
-      const aiForm = document.getElementById('ai-chat-form');
-      const aiInput = document.getElementById('ai-chat-input');
       const aiToast = document.getElementById('ai-auto-toast');
       const toastCountEl = document.getElementById('toast-countdown');
       let toastTimer = null;
@@ -593,14 +573,6 @@
         replyToUser(parts.length ? parts.join(' · ') + ' — fixed price and turnaround please' : 'Show me your repair price list and warranty');
       });
 
-      aiForm?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (aiInput) {
-          replyToUser(aiInput.value);
-          aiInput.value = '';
-        }
-      });
-      document.querySelectorAll('.ai-q').forEach((b) => b.addEventListener('click', () => replyToUser(b.dataset.aiq || b.textContent)));
 
       // PWA Modal
       const pwaModal = document.getElementById('pwa-modal');
@@ -945,8 +917,8 @@
         }, 0.4, 0.12);
 
         // 4. TBK OCA Hydraulic Press 3D
-        registerSlot('canvas-tbk-oca', 4.9, (root) => {
-          root.scale.setScalar(1.25);
+        registerSlot('canvas-tbk-oca', 4.6, (root) => {
+          root.scale.setScalar(1.34);
           root.position.y = -0.2;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.9, 1.8), silverMat); base.position.y = -0.8;
           const top = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, 1.8), slateMat); top.position.y = 1.05;
@@ -958,8 +930,8 @@
         }, -0.4, 0.2);
 
         // 5. TBK 90L Autoclave Bubble Chamber 3D
-        registerSlot('canvas-tbk-90l', 4.9, (root) => {
-          root.scale.setScalar(1.25);
+        registerSlot('canvas-tbk-90l', 4.6, (root) => {
+          root.scale.setScalar(1.34);
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.42, 2.0), darkObs); base.position.y = -1.15;
           const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.98, 0.98, 2.05, 32), slateMat); tank.rotation.x = Math.PI / 2;
           const dPivot = new THREE.Group(); dPivot.position.set(-0.98, 0, 1.04);
@@ -972,8 +944,8 @@
         }, -0.35, 0.18);
 
         // 6. TBK-958 Cold UV Purple Laser 3D
-        registerSlot('canvas-tbk-958', 4.9, (root) => {
-          root.scale.setScalar(1.25);
+        registerSlot('canvas-tbk-958', 4.6, (root) => {
+          root.scale.setScalar(1.34);
           root.position.y = -0.25;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.4, 2.2), silverMat); base.position.y = -1.05;
           const bed = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.08, 1.5), darkObs); bed.position.set(0, -0.82, 0.2);

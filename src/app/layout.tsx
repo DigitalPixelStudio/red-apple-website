@@ -24,6 +24,7 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  alternates: { canonical: `${baseUrl}/` },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
@@ -235,9 +236,6 @@ const serviceListSchema = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="canonical" href="https://www.redmobilerepair.in/" />
-      </head>
       <body className={`${inter.variable} ${space.variable} ${mono.variable} bg-white text-[var(--text)] antialiased`}>
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"

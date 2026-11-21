@@ -316,16 +316,20 @@ export const finalSiteHtml = `
           <div class="rounded-3xl border border-zinc-200 bg-white p-5 shadow-md sm:p-6 lg:col-span-7">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-900">1. Choose Device &amp; Model</span>
-              <div id="est-device-tabs" class="flex flex-wrap gap-1.5 text-[11px] font-bold">
-                <button type="button" data-dev="iPhone" class="est-dev-btn rounded-full bg-red-600 px-3 py-1 text-white">iPhone</button>
-                <button type="button" data-dev="iPad" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">iPad</button>
-                <button type="button" data-dev="MacBook" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">MacBook</button>
-                <button type="button" data-dev="Apple Watch" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">Watch</button>
-                <button type="button" data-dev="AirPods" class="est-dev-btn rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">AirPods</button>
-              </div>
             </div>
 
-            <div id="est-models-grid" class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3"></div>
+            <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <select id="est-device" aria-label="Choose device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-zinc-900 outline-none focus:border-red-600">
+                <option value="iPhone">iPhone</option>
+                <option value="iPad">iPad</option>
+                <option value="MacBook">MacBook</option>
+                <option value="Apple Watch">Apple Watch</option>
+                <option value="AirPods">AirPods</option>
+              </select>
+              <select id="est-model" aria-label="Choose model" class="rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-zinc-900 outline-none focus:border-red-600">
+                <option value="">Loading models…</option>
+              </select>
+            </div>
 
             <div class="mt-4">
               <label for="est-repair" class="text-xs font-extrabold uppercase tracking-wider text-zinc-900">2. Select Repair Type (All 15 Bench Services)</label>
@@ -381,7 +385,7 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 5. PAIRED — YOUR DEVICE, TRACKED LIVE (CONNECTED TO red-apple-crm.vercel.app) -->
+    <!-- 5. PAIRED — YOUR DEVICE, TRACKED LIVE (IN-HOUSE CRM) -->
     <section id="paired-crm" class="ambient-clean border-b border-zinc-100 py-12">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="grid grid-cols-1 items-center gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-md lg:grid-cols-12">
@@ -399,7 +403,7 @@ export const finalSiteHtml = `
             </div>
           </div>
           <div class="rounded-2xl border border-orange-200 bg-orange-50/50 p-4 lg:col-span-5">
-            <div class="text-xs font-extrabold text-zinc-900">Track Live Job ID (<span class="font-mono-num text-red-600">red-apple-crm.vercel.app</span>)</div>
+            <div class="text-xs font-extrabold text-zinc-900">In-House CRM · Red Apple Repair Backend &amp; Maintenance</div>
             <div class="mt-2 flex gap-2">
               <input id="crm-job-id" type="text" value="RA-2048" placeholder="e.g. RA-2048" class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 font-mono-num text-xs font-bold uppercase outline-none focus:border-red-600">
               <button type="button" id="btn-crm-lookup" class="dock-quote-btn shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-white">Track</button>
@@ -1173,10 +1177,10 @@ export const finalSiteHtml = `
     <section id="reviews" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="flex flex-col items-center text-center">
-          <div class="logo-laser relative mb-6 flex h-40 w-40 items-center justify-center rounded-3xl border border-red-200 bg-white p-3 shadow-xl">
+          <div class="logo-laser relative mb-6 flex h-48 w-48 items-center justify-center rounded-3xl border border-red-200 bg-white p-3 shadow-xl">
             <span class="aura-ring"></span>
             <span class="aura-ring aura-ring-2"></span>
-            <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-32 w-32 object-contain" onerror="this.src='/logo.png'">
+            <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-40 w-40 object-contain" onerror="this.src='/logo.png'">
           </div>
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Reviews · Apple Device Repairs, Perfected.</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
@@ -1269,7 +1273,7 @@ export const finalSiteHtml = `
       <!-- Enlarged Real Store Photo Banner -->
       <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
         <div class="orange-glass-wrap h-64 overflow-hidden rounded-2xl bg-zinc-900 lg:col-span-5 sm:h-72">
-          <img loading="lazy" decoding="async" src="/images/gallery/store-glass-front.webp" alt="Red Apple Mobile Repair Store Halasuru" class="aspect-square h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
+          <img loading="lazy" decoding="async" src="/images/gallery/store-phone-bench-wide.webp" alt="Live repair bench at our Halasuru store — technician with a restored iPhone" class="aspect-square h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
           <div class="orange-glass-sweep"></div>
         </div>
         <div class="lg:col-span-7">
@@ -1423,20 +1427,11 @@ export const finalSiteHtml = `
           <option>Warranty / Track CRM Job</option>
         </select>
       </div>
-      <div class="flex items-center gap-1.5 pb-2">
+      <div class="flex items-center gap-1.5 pb-3">
         <button type="button" id="btn-ai-price" class="dock-quote-btn flex-1 rounded-xl py-2 text-[10px] font-extrabold text-white">Ask AI &amp; Get Price</button>
         <a id="ai-wa-handoff" href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="shrink-0 rounded-xl bg-emerald-600 px-2.5 py-2 text-[10px] font-extrabold text-white">WhatsApp →</a>
       </div>
-      <div class="flex flex-wrap gap-1.5 pb-2 text-[10px] font-bold">
-        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="iPhone 17 Pro Max glass price">17 Pro Max Glass</button>
-        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="Motherboard repair cost">Motherboard Cost</button>
-        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="How does 6 Months warranty work?">6 Months Warranty</button>
-        <button type="button" class="ai-q rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-zinc-700 hover:border-red-500 hover:text-red-600" data-aiq="Free 24/7 pickup details">24/7 Pickup</button>
-      </div>
-      <form id="ai-chat-form" class="flex items-center gap-2 pb-3">
-        <input id="ai-chat-input" type="text" placeholder="Type your device or question..." autocomplete="off" class="w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs text-zinc-900 outline-none focus:border-red-600">
-        <button type="submit" class="dock-quote-btn shrink-0 rounded-xl px-3.5 py-2 text-xs font-extrabold text-white">Send</button>
-      </form>
+
     </div>
   </div>
 

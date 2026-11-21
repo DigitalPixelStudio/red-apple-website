@@ -109,6 +109,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2"><LineIcon name="clock" size={14} className="shrink-0" /> {SITE.hours}</li>
               <li><a href={SITE.phoneHref} className="hover:text-white flex items-center gap-2"><LineIcon name="call" size={14} /> {SITE.phone}</a></li>
+              <li><a href={`mailto:${SITE.email}`} className="hover:text-white flex items-center gap-2"><LineIcon name="mail" size={14} /> {SITE.email}</a></li>
               <li><a href={wa("Hi Red Apple Mobile Repair Store!")} target="_blank" rel="noopener noreferrer" className="font-semibold text-white/80 hover:text-white flex items-center gap-2"><LineIcon name="whatsapp" size={14} /> WhatsApp</a></li>
             </ul>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -132,34 +133,6 @@ export default function Footer() {
             <MotionToggle />
           </div>
           <div className="mt-4 text-center text-[11.5px] leading-relaxed text-white/45">Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</div>
-          <div className="mt-4 text-center text-[11px] text-white/45">
-            Built with care by{" "}
-            <a
-              href="https://wa.me/919620024812?text=Hi%20Pixel%20Forge%20Studio%2C%20I%27d%20like%20a%20website%20like%20this%20one."
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track("whatsapp_click", { location: "footer_credit" })}
-              className="font-semibold text-white/70 hover:text-[var(--cosmic-hi)]"
-            >
-              Pixel Forge Studio
-            </a>
-            {" "}&middot;{" "}
-            <a
-              href="https://wa.me/919620024812?text=Hi%20Pixel%20Forge%20Studio%2C%20I%27d%20like%20a%20website%20like%20this%20one."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-semibold text-white/70 hover:text-[var(--cosmic-hi)]"
-            >
-              <span className="footer-chip h-5 w-5 rounded-[6px] text-[#25D366]">
-                <LineIcon name="whatsapp" size={11} color="#25D366" />
-              </span>
-              96200 24812
-            </a>
-          </div>
-
-          {/* Image attribution kept in source only: iPhone 18 Pro Max photo by
-              Kyu3a / Wikimedia Commons, CC BY-SA 4.0.
-              https://commons.wikimedia.org/wiki/File:IPhone_18_Pro_Max_(burgundy_model)_-_3.jpg */}
           <div className="dev-line mt-3 text-center font-semibold text-white/75">
             Developed by The Pixel Forge Studio · 96200 24812
           </div>

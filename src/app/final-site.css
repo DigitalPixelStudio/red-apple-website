@@ -285,6 +285,8 @@
     /* Premium heading voice: heavier, tighter, richer colour at rest */
     .font-display { font-weight: 800; letter-spacing: -0.025em; }
     h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
+    .font-display.heading-breathe, h2.heading-breathe, h3.heading-breathe { animation: headingBreathe 5s ease-in-out infinite; }
+    h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
     .heading-breathe { animation: headingBreathe 6.5s ease-in-out infinite; }
     .kicker-shift { font-weight: 800; letter-spacing: 0.16em; }
 
@@ -293,19 +295,19 @@
     .logo-laser::after {
       content: "";
       position: absolute;
-      left: 12%; right: 12%;
-      height: 3px;
+      left: 10%; right: 10%;
+      height: 4px;
       top: 12%;
       border-radius: 999px;
       background: linear-gradient(90deg, transparent, #dc2626 20%, #fb923c 50%, #dc2626 80%, transparent);
       box-shadow: 0 0 14px 3px rgba(220,38,38,0.55);
-      animation: logoLaser 2.9s ease-in-out infinite;
+      animation: logoLaser 2.4s ease-in-out infinite;
       pointer-events: none;
       z-index: 3;
     }
     @keyframes logoLaser {
       0%, 100% { transform: translateY(0); opacity: .25; }
-      50%      { transform: translateY(100px); opacity: .95; }
+      50%      { transform: translateY(112px); opacity: 1; }
     }
     .logo-laser img { animation: logoFloat 4.6s ease-in-out infinite; }
     @keyframes logoFloat {
@@ -368,4 +370,16 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .laser-line { animation: none !important; opacity: .18; }
+    }
+
+
+    /* ===== FINAL ELITE MICRO-POLISH (GPU-only, zero repaint) ===== */
+    .reveal-up, .card-sheen { transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease; }
+    .reveal-up:hover { box-shadow: 0 12px 32px -12px rgba(220,38,38,.22); }
+    select, input { transition: border-color .18s ease, box-shadow .18s ease; }
+    select:focus, input:focus { box-shadow: 0 0 0 3px rgba(220,38,38,.10); }
+    .page-rail-dot:hover { transform: scale(1.5); background-color: #ea580c; }
+    .laser-line { opacity: .55; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-up:hover, .page-rail-dot:hover { transform: none; }
     }

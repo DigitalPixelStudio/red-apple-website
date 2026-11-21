@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${baseUrl}/refund-policy` },
 };
 
-const UPDATED = "30 October 2026";
+const UPDATED = "21 November 2026";
 
 export default function RefundPage() {
   return (
