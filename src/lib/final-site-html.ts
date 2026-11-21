@@ -14,12 +14,6 @@ export const finalSiteHtml = `
     <a href="#halasuru-map" data-rail="VISIT" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Halasuru Map"></a>
   </aside>
 
-  <!-- Top-Edge Silencer Notch: pill with a tiny colored dot that cycles (zero jank) -->
-  <div class="iphone-top-notch" aria-hidden="true">
-    <span class="notch-speaker"></span>
-    <span class="notch-led"></span>
-  </div>
-
   <!-- STICKY HEADER (No "Visit Us" in Header per Client Lock) -->
   <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white pt-0 shadow-[0_1px_0_rgba(220,38,38,0.08)]">
     <div class="h-[3px] w-full bg-gradient-to-r from-red-600 via-orange-500 to-red-600"></div>
@@ -712,7 +706,7 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
+              <div class="orange-glass-wrap relative aspect-[16/9] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
@@ -734,7 +728,7 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
+              <div class="orange-glass-wrap relative aspect-[16/9] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
@@ -756,7 +750,7 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
+              <div class="orange-glass-wrap relative aspect-[16/9] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
@@ -810,7 +804,7 @@ export const finalSiteHtml = `
         <div class="mt-9 flex flex-col gap-5">
           <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="stage-3d-box relative h-[560px] lg:col-span-7 sm:h-[640px]">
+            <div class="stage-3d-box relative aspect-video h-[640px] lg:col-span-7 sm:h-[640px]">
               <canvas id="canvas-internals" aria-label="Interactive 4D iPhone Internal Teardown"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
             </div>
@@ -836,7 +830,7 @@ export const finalSiteHtml = `
               </div>
               <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
-            <div class="stage-3d-box relative order-1 h-[560px] border-b border-zinc-800 sm:h-[640px] lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
+            <div class="stage-3d-box relative order-1 aspect-video h-[640px] border-b border-zinc-800 sm:h-[640px] lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
               <canvas id="canvas-airpods" aria-label="Interactive 4D Realistic AirPods Pro"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 4D</span>
             </div>
@@ -845,7 +839,7 @@ export const finalSiteHtml = `
           <!-- Stacked 3D #3: Apple Watch & MacBook Pro Pair -->
           <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative h-[420px] sm:h-[520px]">
+              <div class="stage-3d-box relative aspect-video h-[480px] sm:h-[560px]">
                 <canvas id="canvas-watch" aria-label="Interactive 4D Apple Watch Ultra"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
               </div>
@@ -856,7 +850,7 @@ export const finalSiteHtml = `
             </div>
 
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative h-[420px] sm:h-[520px]">
+              <div class="stage-3d-box relative aspect-video h-[480px] sm:h-[560px]">
                 <canvas id="canvas-macbook" aria-label="Interactive 4D MacBook Pro"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
               </div>
@@ -1283,7 +1277,7 @@ export const finalSiteHtml = `
       <!-- Enlarged Real Store Photo Banner -->
       <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
         <div class="orange-glass-wrap h-64 overflow-hidden rounded-2xl bg-zinc-900 lg:col-span-5 sm:h-72">
-          <img loading="lazy" decoding="async" src="/images/gallery/store-phone-bench-wide.webp" alt="Live repair bench at our Halasuru store — technician with a restored iPhone" class="aspect-square h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
+          <img loading="lazy" decoding="async" src="/images/gallery/store-glass-front.webp" alt="Live repair bench at our Halasuru store — technician with a restored iPhone" class="aspect-square h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
           <div class="orange-glass-sweep"></div>
         </div>
         <div class="lg:col-span-7">
@@ -1468,9 +1462,6 @@ export const finalSiteHtml = `
   <div id="rm-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
     <div class="absolute bottom-full mb-2 hidden xl:block font-mono-num text-[9px] font-bold text-zinc-400">NN</div>
     <button id="rm-toggle" type="button" aria-label="Toggle Reduced Motion" class="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[10px] font-semibold text-zinc-700 hover:border-red-500">Motion: <span id="rm-label">Auto</span></button>
-    <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="rounded-full border border-zinc-200 bg-white px-2.5 py-1.5 text-[10px] font-semibold text-zinc-700 shadow transition-all hover:bg-red-50 hover:text-red-600">
-      <span data-icon="light">☀️</span><span data-icon="dark" class="hidden">🌙</span>
-    </button>
     <div class="h-6 w-[1.5px] bg-zinc-200 rounded-full"></div>
     <div class="flex flex-col gap-0.5">
       <button type="button" id="tour-start" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition">Scroll Tour</button>

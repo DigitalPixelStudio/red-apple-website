@@ -778,27 +778,28 @@
          * recentered at origin so nothing is cropped by aspect or builder
          * offsets. Uses Box3 with precise=true so refined geometries fit tight.
          */
-        function autoFrame(slot) {
+        function fitSlotCamera(slot) {
           try {
             const root = slot.root, cam = slot.camera;
             root.updateWorldMatrix(true, true);
-            const box = new THREE.Box3().setFromObject(root, true);
-            if (box.isEmpty()) return;
-            const size = box.getSize(new THREE.Vector3());
-            const center = box.getCenter(new THREE.Vector3());
-            const maxDim = Math.max(size.x, size.y, Math.abs(size.z), 1e-6);
-            const aspect = (slot.canvas.clientWidth / slot.canvas.clientHeight) || 1.25;
-            const visH = 2 * Math.tan(THREE.MathUtils.degToRad(cam.fov) / 2) * cam.position.z;
-            const visW = visH * aspect;
-            const minVis = Math.min(visH, visW);
-            const S_cur = (root.scale && root.scale.x) || 1;
-            const targetFill = 0.88;
-            const S_final = targetFill * minVis * S_cur / maxDim;
-            if (!isFinite(S_final) || S_final <= 0) return;
-            root.scale.setScalar(S_final);
-            root.position.set(-center.x * S_final, -center.y * S_final, -center.z * S_final);
-            if (window.innerWidth < 768) root.scale.multiplyScalar(1.0);
-          } catch (e) { console.warn('autoFrame: skipped', e); }
+            const bbox = new THREE.Box3().setFromObject(root, true);
+            if (bbox.isEmpty()) return;
+            const sphere = bbox.getBoundingSphere(new THREE.Sphere());
+            const center = sphere.center.clone();
+            const radius = sphere.radius;
+            root.position.sub(center);
+            const vFov = THREE.MathUtils.degToRad(cam.fov);
+            const hFov = 2 * Math.atan(Math.tan(vFov / 2) * cam.aspect);
+            const limitingFov = Math.min(vFov, hFov);
+            const paddingFactor = 1.42;
+            const dist = (radius / Math.sin(limitingFov / 2)) * paddingFactor;
+            cam.near = Math.max(0.05, dist - radius * 3);
+            cam.far = dist + radius * 4;
+            const zd = dist * 1.35;
+            cam.position.set(0, 0.42, zd);
+            cam.lookAt(0, 0, 0);
+            cam.updateProjectionMatrix();
+          } catch (e) { console.warn('fitSlotCamera skipped', e); }
         }
 
         function registerSlot(canvasId, camZ, buildFn, initY = -0.4, initX = 0.12) {
@@ -1218,7 +1219,7 @@
               s.canvas.width = rw;
               s.canvas.height = rh;
             }
-            if (!s.autoFramed) { s.autoFramed = true; autoFrame(s); }
+            if (!s.autoFramed) { s.autoFramed = true; fitSlotCamera(s); }
             s.camera.aspect = cw / ch;
             s.camera.updateProjectionMatrix();
             s.orbit.update(s === heroSlot && heroAmbient ? 0.009 : 0.006);
