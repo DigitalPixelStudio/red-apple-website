@@ -570,10 +570,8 @@
       document.querySelectorAll('#page-plan-links [data-go]').forEach(b=>b.addEventListener('click',()=>setTimeout(_sd,300)));
 
       // Phase A2b: Global scroll pause (kills CSS animations in text zones — 120fps answer).
-let scTimer=null;
-const lockScroll=()=>{document.documentElement.classList.add('is-scrolling'); window.__raScrolling=true; if(scTimer)clearTimeout(scTimer); scTimer=setTimeout(()=>{document.documentElement.classList.remove('is-scrolling'); window.__raScrolling=false;},180);};
-addEventListener('scroll',lockScroll,{passive:true});
-addEventListener('scrollend',()=>{document.documentElement.classList.remove('is-scrolling'); window.__raScrolling=false;});
+// Smoothness: no per-frame scroll JS. CSS content-visibility + compositor-only
+// animations handle text-heavy sections; WebGL pauses only when off-screen.
 
 // Gift: floating back-to-top (smooth transition, discovers for free)
       const backTop = document.getElementById('back-to-top');
@@ -777,21 +775,27 @@ addEventListener('scrollend',()=>{document.documentElement.classList.remove('is-
         function addOrbit(canvas, group, initY = -0.4, initX = 0.12) {
           let drag = false, px = 0, py = 0, ry = initY, rx = initX, ty = initY, tx = initX;
           let enabled = true;
-          canvas.addEventListener('pointerdown', (e) => { if (!enabled) return; drag = true; px = e.clientX; py = e.clientY; });
-          window.addEventListener('pointermove', (e) => {
+          canvas.addEventListener('pointerdown', (e) => {
+            if (!enabled || (e.button !== undefined && e.button !== 0)) return;
+            drag = true; px = e.clientX; py = e.clientY;
+            try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+          });
+          canvas.addEventListener('pointermove', (e) => {
             if (!drag) return;
             ty += (e.clientX - px) * 0.011;
             tx = Math.max(-0.85, Math.min(0.85, tx + (e.clientY - py) * 0.009));
             px = e.clientX; py = e.clientY;
           });
-          window.addEventListener('pointerup', () => { drag = false; });
+          const endDrag = (e) => { drag = false; try { canvas.releasePointerCapture(e.pointerId); } catch (_) {} };
+          canvas.addEventListener('pointerup', endDrag);
+          canvas.addEventListener('pointercancel', endDrag);
           return {
             setEnabled(v) { enabled = v; },
             reset() { ty = initY; tx = initX; },
             update(autoSpeed) {
               if (!drag) ty += autoSpeed;
-              ry += (ty - ry) * 0.1;
-              rx += (tx - rx) * 0.1;
+              ry += (ty - ry) * 0.14;
+              rx += (tx - rx) * 0.14;
               group.rotation.y = ry;
               group.rotation.x = rx;
             }
@@ -1237,7 +1241,7 @@ addEventListener('scrollend',()=>{document.documentElement.classList.remove('is-
         let t = 0;
         function animate() {
           requestAnimationFrame(animate);
-          if (document.hidden || window.__raScrolling) return;
+          if (document.hidden) return;
           t += 0.018;
           const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
@@ -1254,11 +1258,12 @@ addEventListener('scrollend',()=>{document.documentElement.classList.remove('is-
             if (!s.autoFramed && cw && ch) {
               s.autoFramed = true;
               // First 3 device models (hero iPhone, estimate iPad, pickup iPhone) zoom in
-              // much bigger/closer; all other models stay at 1.03.
+              // tuned per model; machines/small models slightly bigger (0.94).
               const id = s.canvas.id;
-              // First 3 device models (hero iPhone, iPad, pickup iPhone): uniform 90% edge-hugging fill.
-              let pad = 1.03;
-              if (id === 'canvas-hero' || id === 'canvas-pickup-iphone') pad = 0.50;
+              // Hero/IPad/Pickup tuned; others 0.94; tablet reduced.
+              let pad = 0.94;
+              if (id === 'canvas-hero') pad = 0.58;
+              else if (id === 'canvas-pickup-iphone') pad = 0.72;
               else if (id === 'canvas-estimate-ipad') pad = 0.82;
               // Tablet: lower zoom to ~0.80x visual size (larger pad = smaller model).
               if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.20;
@@ -1266,7 +1271,7 @@ addEventListener('scrollend',()=>{document.documentElement.classList.remove('is-
             }
             s.camera.aspect = cw / ch;
             s.camera.updateProjectionMatrix();
-            s.orbit.update(s === heroSlot && heroAmbient ? 0.009 : 0.006);
+            s.orbit.update(s === heroSlot && heroAmbient ? 0.0028 : 0.0016);
             if (s.onTick) s.onTick(t);
             renderer.setViewport(0, 0, rw, rh);
             renderer.setScissor(0, 0, rw, rh);

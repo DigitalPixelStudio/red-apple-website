@@ -238,7 +238,8 @@
       box-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
     }
     /* ================= FINAL POLISH: ELITE TYPE, MOTION & SMOOTHNESS ================= */
-    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    html { scroll-padding-top: 88px; }
+    @media (hover: hover) and (pointer: fine) { html { scroll-behavior: smooth; } }
     section[id] { scroll-margin-top: 88px; }
     /* Premium heading voice: heavier, tighter, richer colour at rest */
     .font-display { font-weight: 800; letter-spacing: -0.025em; }
@@ -526,4 +527,3 @@
     }
 
     /* ===== GLOBAL SCROLL PAUSE — kills all CSS animations while scrolling (120fps answer) ===== */
-    html.is-scrolling * { animation-play-state: paused !important; }
