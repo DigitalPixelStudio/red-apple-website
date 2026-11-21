@@ -96,7 +96,7 @@ export const finalSiteHtml = `
 
           <!-- Hero 3D Stage (HD Flagship iPhone 17 Pro Max · Orange) -->
           <div class="lg:col-span-6">
-            <div class="stage-3d-box relative h-[440px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[520px]">
+            <div class="stage-3d-box relative h-[520px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[600px]">
               <canvas id="canvas-hero" aria-label="Interactive 4D iPhone 17 Pro Max Orange"></canvas>
               <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360° · HD Keynote Animation</div>
               <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
@@ -807,7 +807,7 @@ export const finalSiteHtml = `
         <div class="mt-9 flex flex-col gap-5">
           <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="stage-3d-box relative h-[440px] lg:col-span-7 sm:h-[520px]">
+            <div class="stage-3d-box relative h-[520px] lg:col-span-7 sm:h-[600px]">
               <canvas id="canvas-internals" aria-label="Interactive 4D iPhone Internal Teardown"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
             </div>
@@ -833,7 +833,7 @@ export const finalSiteHtml = `
               </div>
               <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
-            <div class="stage-3d-box relative order-1 aspect-video h-[440px] border-b border-zinc-800 sm:h-[500px] lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
+            <div class="stage-3d-box relative order-1 h-[520px] w-full border-b border-zinc-800 sm:h-[600px] lg:order-2 lg:border-b-0">
               <canvas id="canvas-airpods" aria-label="Interactive 4D Realistic AirPods Pro"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 4D</span>
             </div>
@@ -842,7 +842,7 @@ export const finalSiteHtml = `
           <!-- Stacked 3D #3: Apple Watch & MacBook Pro Pair -->
           <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative aspect-video h-[560px] sm:h-[640px]">
+              <div class="stage-3d-box relative h-[520px] sm:h-[600px]">
                 <canvas id="canvas-watch" aria-label="Interactive 4D Apple Watch Ultra"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
               </div>
@@ -853,7 +853,7 @@ export const finalSiteHtml = `
             </div>
 
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative aspect-video h-[560px] sm:h-[640px]">
+              <div class="stage-3d-box relative h-[520px] sm:h-[600px]">
                 <canvas id="canvas-macbook" aria-label="Interactive 4D MacBook Pro"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
               </div>

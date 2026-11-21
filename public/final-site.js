@@ -808,7 +808,7 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
          */
         function centerAndFitEdgeToEdge(camera, root, padding) {
           try {
-            const scaleP = padding || 1.30;
+            const scaleP = padding || 1.42;
             root.updateWorldMatrix(true, true);
             const rawBox = new THREE.Box3().setFromObject(root, true);
             const rawSphere = rawBox.getBoundingSphere(new THREE.Sphere());
@@ -1251,7 +1251,7 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
               s.canvas.width = rw;
               s.canvas.height = rh;
             }
-            if (!s.autoFramed) { s.autoFramed = true; centerAndFitEdgeToEdge(s.camera, s.root, 1.10); }
+            if (!s.autoFramed) { s.autoFramed = true; centerAndFitEdgeToEdge(s.camera, s.root, 1.03); }
             s.camera.aspect = cw / ch;
             s.camera.updateProjectionMatrix();
             s.orbit.update(s === heroSlot && heroAmbient ? 0.009 : 0.006);
