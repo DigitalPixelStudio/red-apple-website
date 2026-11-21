@@ -569,6 +569,32 @@
       const _sd = () => { const b = document.getElementById('tour-start'); if (b) b.classList.remove('active'); const d=document.getElementById('tour-done'); if (d) d.textContent=''; };
       document.querySelectorAll('#page-plan-links [data-go]').forEach(b=>b.addEventListener('click',()=>setTimeout(_sd,300)));
 
+      // Gift: floating back-to-top (smooth transition, discovers for free)
+      const backTop = document.getElementById('back-to-top');
+      if (backTop) {
+        backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        const ioBack = new IntersectionObserver((es) => { es.forEach((e) => backTop.classList.toggle('translate-y-8', e.isIntersecting)); }, { rootMargin: '0px -20px 0px 0px' });
+        ioBack.observe(document.getElementById('footer-contact') || document.body);
+      }
+
+      // Gift: dark/light theme toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      const applyTheme = (mode) => { document.documentElement.dataset.theme = mode; };
+      const detectTheme = () => {
+        const saved = localStorage.getItem('ra-theme');
+        if (saved) return saved;
+        return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      applyTheme(detectTheme());
+      themeToggle?.addEventListener('click', () => {
+        const now = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(now); localStorage.setItem('ra-theme', now);
+        document.querySelectorAll('#theme-toggle [data-icon]').forEach(el => el.classList.add('hidden'));
+        document.querySelector('#theme-toggle [data-icon="' + now + '"]')?.classList.remove('hidden');
+      });
+      // initial: reveal the correct theme icon
+      document.querySelectorAll('#theme-toggle [data-icon]').forEach(el => el.classList.toggle('hidden', document.documentElement.dataset.theme === 'dark' ? false : true));
+
       // Reduced-motion toggle
       const rmToggle = document.getElementById('rm-toggle');
       const rmLabel = document.getElementById('rm-label');
@@ -766,12 +792,12 @@
             const visW = visH * aspect;
             const minVis = Math.min(visH, visW);
             const S_cur = (root.scale && root.scale.x) || 1;
-            const targetFill = /tbk/.test(slot.canvas.id) ? 0.88 : 0.82;
+            const targetFill = 0.88;
             const S_final = targetFill * minVis * S_cur / maxDim;
             if (!isFinite(S_final) || S_final <= 0) return;
             root.scale.setScalar(S_final);
             root.position.set(-center.x * S_final, -center.y * S_final, -center.z * S_final);
-            if (window.innerWidth < 768) root.scale.multiplyScalar(0.92);
+            if (window.innerWidth < 768) root.scale.multiplyScalar(1.0);
           } catch (e) { console.warn('autoFrame: skipped', e); }
         }
 
@@ -790,7 +816,7 @@
           const root = new THREE.Group();
           scene.add(root);
           const onTick = buildFn(root);
-          if (window.innerWidth < 768) root.scale.multiplyScalar(0.92);
+          if (window.innerWidth < 768) root.scale.multiplyScalar(1.0);
           const orbit = addOrbit(canvas, root, initY, initX);
           const slot = { canvas, ctx, scene, camera, root, orbit, onTick, visible: true };
           slots.push(slot);

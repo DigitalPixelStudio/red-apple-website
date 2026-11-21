@@ -712,7 +712,7 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
@@ -724,7 +724,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">OCA VACUUM LAMINATION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">VACUUM PRESS</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ORIGINAL OLED SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[560px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-[640px] lg:border-l lg:border-t-0">
               <canvas id="canvas-tbk-oca" aria-label="Interactive 4D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -734,7 +734,7 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
@@ -746,7 +746,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">90-LITRE AUTOCLAVE</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ZERO-BUBBLE OCA</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">PRESSURE CURVED</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[560px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-[640px] lg:border-l lg:border-t-0">
               <canvas id="canvas-tbk-90l" aria-label="Interactive 4D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -756,7 +756,7 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[260px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-[4/3] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[400px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
@@ -768,7 +768,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">COLD UV LASER</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">355NM PRECISION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">BACK GLASS SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[560px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-[640px] lg:border-l lg:border-t-0">
               <canvas id="canvas-tbk-958" aria-label="Interactive 4D TBK-958 Cold UV Purple Laser"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 4D · 355nm Beam</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -810,7 +810,7 @@ export const finalSiteHtml = `
         <div class="mt-9 flex flex-col gap-5">
           <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="stage-3d-box relative h-80 lg:col-span-7 sm:h-96">
+            <div class="stage-3d-box relative h-[560px] lg:col-span-7 sm:h-[640px]">
               <canvas id="canvas-internals" aria-label="Interactive 4D iPhone Internal Teardown"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
             </div>
@@ -836,7 +836,7 @@ export const finalSiteHtml = `
               </div>
               <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
-            <div class="stage-3d-box relative order-1 h-80 border-b border-zinc-800 sm:h-96 lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
+            <div class="stage-3d-box relative order-1 h-[560px] border-b border-zinc-800 sm:h-[640px] lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
               <canvas id="canvas-airpods" aria-label="Interactive 4D Realistic AirPods Pro"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 4D</span>
             </div>
@@ -845,7 +845,7 @@ export const finalSiteHtml = `
           <!-- Stacked 3D #3: Apple Watch & MacBook Pro Pair -->
           <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative h-72 sm:h-80">
+              <div class="stage-3d-box relative h-[420px] sm:h-[520px]">
                 <canvas id="canvas-watch" aria-label="Interactive 4D Apple Watch Ultra"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
               </div>
@@ -856,7 +856,7 @@ export const finalSiteHtml = `
             </div>
 
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative h-72 sm:h-80">
+              <div class="stage-3d-box relative h-[420px] sm:h-[520px]">
                 <canvas id="canvas-macbook" aria-label="Interactive 4D MacBook Pro"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
               </div>
@@ -1459,10 +1459,18 @@ export const finalSiteHtml = `
       <p id="pwa-status" class="mt-2.5 hidden text-[11px] font-bold text-emerald-700">✓ Ready! Use Chrome menu → "Install App" or "Add to Home Screen".</p>
     </div>
 
+  <!-- Gift: floating back-to-top with smooth scroll -->
+  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white/90 shadow-xl backdrop-blur transition-all hover:scale-110 hover:-translate-y-1 focus:outline-none">
+    <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
+  </button>
+
   <!-- Reduced Motion + Tour Controls -->
   <div id="rm-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
     <div class="absolute bottom-full mb-2 hidden xl:block font-mono-num text-[9px] font-bold text-zinc-400">NN</div>
     <button id="rm-toggle" type="button" aria-label="Toggle Reduced Motion" class="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[10px] font-semibold text-zinc-700 hover:border-red-500">Motion: <span id="rm-label">Auto</span></button>
+    <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="rounded-full border border-zinc-200 bg-white/85 px-2.5 py-1.5 text-[10px] font-semibold text-zinc-700 shadow transition-all hover:bg-red-50 hover:text-red-600">
+      <span data-icon="light">☀️</span><span data-icon="dark" class="hidden">🌙</span>
+    </button>
     <div class="h-6 w-[1.5px] bg-zinc-200 rounded-full"></div>
     <div class="flex flex-col gap-0.5">
       <button type="button" id="tour-start" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition">Scroll Tour</button>

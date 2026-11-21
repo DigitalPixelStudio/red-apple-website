@@ -502,3 +502,23 @@
       }
       .card-tick:hover { transform: translateY(-2px); }
     }
+
+
+    /* ===== DARK THEME (user toggle) ===== */
+    html[data-theme="dark"] body { background-color: #09090b; }
+    html[data-theme="dark"] .bg-white, html[data-theme="dark"] .bg-white\/70, html[data-theme="dark"] .bg-white\/85, html[data-theme="dark"] .bg-white\/90 { background-color: #09090b; color:#fff; }
+    html[data-theme="dark"] body,html[data-theme="dark"] .text-[var(--text)] { color: #e2e8f0; }
+    html[data-theme="dark"] .text-[var(--text-muted)], html[data-theme="dark"] .text-zinc-500, html[data-theme="dark"] .text-zinc-600 { color: #a8b1bf; }
+    html[data-theme="dark"] .text-zinc-950, html[data-theme="dark"] .text-zinc-900, html[data-theme="dark"] .text-zinc-800,
+    html[data-theme="dark"] .text-zinc-700, html[data-theme="dark"] .text-[#fff] { color: #e2e8f0; }
+    html[data-theme="dark"] .bg-zinc-50, html[data-theme="dark"] .bg-zinc-950, html[data-theme="dark"] .bg-zinc-200, html[data-theme="dark"] .bg-zinc-300 { background-color: #0f1620; }
+    html[data-theme="dark"] .bg-zinc-950\/80 { background-color: rgba(9,9,11,0.85); }
+    html[data-theme="dark"] input, html[data-theme="dark"] select, html[data-theme="dark"] textarea { background-color: #0f1620; color: #e2e8f0; border-color: #27272a; }
+    html[data-theme="dark"] .spotlight-card, html[data-theme="dark"] .card, html[data-theme="dark"] .spotlight-card bg { background-color: #111; }
+    html[data-theme="dark"] #ai-messages, html[data-theme="dark"] .ai-bubble, html[data-theme="dark"] .premium-footer, html[data-theme="dark"] .footer-card { background-color: #09090b; color: #e2e8f0; }
+
+    /* page-transition between chapters of the tour */
+    .laser-stage { contain: paint; }
+    .premium-footer { transition: background .4s ease; }
+    .section-shimmer.is-chapter { opacity: 1 !important; }
+    .station-frame { display: none; }
