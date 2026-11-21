@@ -526,7 +526,66 @@
         } else populateModels();
       } catch(e) { populateModels(); }
 
+
+      // Page Plan — chapter links + "Start Tour" auto-scroll through the sections.
+      const pagePlanLinks = document.getElementById('page-plan-links');
+      const PLAN = [
+        { id: '#hero', label: 'Hero' },
+        { id: '#real-shop', label: 'Shop' },
+        { id: '#tbk-machines', label: 'TBK' },
+        { id: '#glass-lab', label: 'Glass' },
+        { id: '#ecosystem-3d', label: 'Devices' },
+        { id: '#paired-crm', label: 'Status' },
+        { id: '#comparison', label: 'Compare' },
+        { id: '#reviews', label: 'Reviews' },
+        { id: '#halasuru-map', label: 'Visit' },
+      ];
+      if (pagePlanLinks) {
+        pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-full bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
+        pagePlanLinks.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', (e) => {
+          e.preventDefault();
+          const el = document.querySelector(b.dataset.go);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }));
+      }
+      let tourTimeout = null;
+      const startTour = () => {
+        if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; return; }
+        let i = 0;
+        (function next() {
+          if (i >= PLAN.length) return;
+          const el = document.querySelector(PLAN[i].id);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          i++;
+          tourTimeout = setTimeout(next, 2400);
+        })();
+      };
+      document.getElementById('tour-start')?.addEventListener('click', () => {
+        const btn = document.getElementById('tour-start');
+        const done = document.getElementById('tour-done');
+        if (btn && done) { btn.classList.add('active'); done.textContent = '✓ Tour complete — tap any chip to jump'; }
+        startTour();
+      });
+      const _sd = () => { const b = document.getElementById('tour-start'); if (b) b.classList.remove('active'); const d=document.getElementById('tour-done'); if (d) d.textContent=''; };
+      document.querySelectorAll('#page-plan-links [data-go]').forEach(b=>b.addEventListener('click',()=>setTimeout(_sd,300)));
+
+      // Reduced-motion toggle
+      const rmToggle = document.getElementById('rm-toggle');
+      const rmLabel = document.getElementById('rm-label');
+      const updateRmLabel = () => { const on = document.documentElement.classList.contains('reduce-motion'); if (rmLabel) rmLabel.textContent = on ? 'Reduced' : 'Auto'; const t = rmToggle; if (t) t.classList.toggle('active', on); };
+      rmToggle?.addEventListener('click', () => { document.documentElement.classList.toggle('reduce-motion'); updateRmLabel(); });
+      updateRmLabel();
+      // green check after tour
       const escHtml = (t) => String(t).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      // Smooth dedicated chat entry: type a first message -> asks the bot directly
+      const typingIn = document.getElementById('ai-typing-input');
+      const typingSend = document.getElementById('ai-typing-send');
+      if (typingIn && typingSend && !typingIn.dataset.bound) {
+        typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
+        typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t) replyToUser(t); });
+        typingIn.dataset.bound = '1';
+      }
       function localBotAnswer(q) {
         const lower = q.toLowerCase();
         const matched = fullPrices.find(([m]) => lower.includes(m.toLowerCase().replace('iphone ', '')));
@@ -683,6 +742,37 @@
               group.rotation.x = rx;
             }
           };
+        }
+
+
+        /**
+         * Auto-frame a slot's model into the view so EVERY model (OCA press,
+         * bubble chamber, 958 laser, devices, iPhone internals...) is drawn
+         * uniformly — filling ~82% of the narrower visible axis at draw time,
+         * recentered at origin so nothing is cropped by aspect or builder
+         * offsets. Uses Box3 with precise=true so refined geometries fit tight.
+         */
+        function autoFrame(slot) {
+          try {
+            const root = slot.root, cam = slot.camera;
+            root.updateWorldMatrix(true, true);
+            const box = new THREE.Box3().setFromObject(root, true);
+            if (box.isEmpty()) return;
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, Math.abs(size.z), 1e-6);
+            const aspect = (slot.canvas.clientWidth / slot.canvas.clientHeight) || 1.25;
+            const visH = 2 * Math.tan(THREE.MathUtils.degToRad(cam.fov) / 2) * cam.position.z;
+            const visW = visH * aspect;
+            const minVis = Math.min(visH, visW);
+            const S_cur = (root.scale && root.scale.x) || 1;
+            const targetFill = 0.82;
+            const S_final = targetFill * minVis * S_cur / maxDim;
+            if (!isFinite(S_final) || S_final <= 0) return;
+            root.scale.setScalar(S_final);
+            root.position.set(-center.x * S_final, -center.y * S_final, -center.z * S_final);
+            if (window.innerWidth < 768) root.scale.multiplyScalar(0.92);
+          } catch (e) { console.warn('autoFrame: skipped', e); }
         }
 
         function registerSlot(canvasId, camZ, buildFn, initY = -0.4, initX = 0.12) {
@@ -928,8 +1018,7 @@
         }, 0.4, 0.12);
 
         // 4. TBK OCA Hydraulic Press 3D
-        registerSlot('canvas-tbk-oca', 4.3, (root) => {
-          root.scale.setScalar(1.42);
+        registerSlot('canvas-tbk-oca', 5.8, (root) => {
           root.position.y = -0.2;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.9, 1.8), silverMat); base.position.y = -0.8;
           const top = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, 1.8), slateMat); top.position.y = 1.05;
@@ -941,8 +1030,7 @@
         }, -0.4, 0.2);
 
         // 5. TBK 90L Autoclave Bubble Chamber 3D
-        registerSlot('canvas-tbk-90l', 4.3, (root) => {
-          root.scale.setScalar(1.42);
+        registerSlot('canvas-tbk-90l', 5.9, (root) => {
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.42, 2.0), darkObs); base.position.y = -1.15;
           const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.98, 0.98, 2.05, 32), slateMat); tank.rotation.x = Math.PI / 2;
           const dPivot = new THREE.Group(); dPivot.position.set(-0.98, 0, 1.04);
@@ -955,8 +1043,7 @@
         }, -0.35, 0.18);
 
         // 6. TBK-958 Cold UV Purple Laser 3D
-        registerSlot('canvas-tbk-958', 4.3, (root) => {
-          root.scale.setScalar(1.42);
+        registerSlot('canvas-tbk-958', 5.8, (root) => {
           root.position.y = -0.25;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.4, 2.2), silverMat); base.position.y = -1.05;
           const bed = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.08, 1.5), darkObs); bed.position.set(0, -0.82, 0.2);
@@ -1105,6 +1192,7 @@
               s.canvas.width = rw;
               s.canvas.height = rh;
             }
+            if (!s.autoFramed) { s.autoFramed = true; autoFrame(s); }
             s.camera.aspect = cw / ch;
             s.camera.updateProjectionMatrix();
             s.orbit.update(s === heroSlot && heroAmbient ? 0.009 : 0.006);

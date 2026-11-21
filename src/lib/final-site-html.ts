@@ -7,12 +7,18 @@ export const finalSiteHtml = `
     <a href="#real-shop" data-rail="SHOP" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Real Shop"></a>
     <a href="#estimate" data-rail="ESTIMATE" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="30s Estimate"></a>
     <a href="#glass-lab" data-rail="GLASS LAB" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Glass Lab"></a>
-    <a href="#tbk-machines" data-rail="TBK 3D" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="TBK Lab"></a>
+    <a href="#tbk-machines" data-rail="TBK 4D" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="TBK Lab"></a>
     <a href="#ecosystem-3d" data-rail="DEVICES" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Apple Ecosystem"></a>
     <a href="#comparison" data-rail="COMPARE" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Comparison"></a>
     <a href="#reviews" data-rail="REVIEWS" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Reviews"></a>
     <a href="#halasuru-map" data-rail="VISIT" class="page-rail-dot h-2 w-2 rounded-full bg-zinc-600" title="Halasuru Map"></a>
   </aside>
+
+  <!-- Top-Edge Silencer Notch: pill with a tiny colored dot that cycles (zero jank) -->
+  <div class="iphone-top-notch" aria-hidden="true">
+    <span class="notch-speaker"></span>
+    <span class="notch-led"></span>
+  </div>
 
   <!-- STICKY HEADER (No "Visit Us" in Header per Client Lock) -->
   <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white pt-0 shadow-[0_1px_0_rgba(220,38,38,0.08)]">
@@ -20,9 +26,9 @@ export const finalSiteHtml = `
     <div class="pt-4">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
-        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-xl border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
+        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-[5px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div>
-          <div class="font-display brand-name-glow text-base font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> Mobile Repair</div>
+          <div class="font-display brand-name-glow text-base font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> <span class="brand-dark-glow">Mobile Repair</span></div>
           <div class="mt-0.5 text-[11px] font-medium text-zinc-500">Halasuru · MG Road, Bengaluru</div>
         </div>
       </a>
@@ -32,7 +38,7 @@ export const finalSiteHtml = `
         <a href="#estimate" class="hover:text-red-600">30s Estimate</a>
         <a href="#paired-crm" class="hover:text-red-600">Track Repair</a>
         <a href="#glass-lab" class="hover:text-red-600">Glass Lab</a>
-        <a href="#tbk-machines" class="hover:text-red-600">TBK 3D</a>
+        <a href="#tbk-machines" class="hover:text-red-600">TBK 4D</a>
         <a href="#ecosystem-3d" class="hover:text-red-600">Devices</a>
         <a href="#reviews" class="hover:text-red-600">Reviews</a>
         <a href="#faq" class="hover:text-red-600">FAQ</a>
@@ -86,15 +92,15 @@ export const finalSiteHtml = `
               <a href="#estimate" class="dock-quote-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">Get 30-Second Estimate</a>
               <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">WhatsApp Bench 24/7</a>
               <a href="#halasuru-map" class="rounded-full border border-zinc-300 bg-white px-4 py-3 text-xs font-bold text-zinc-900 shadow-sm transition hover:border-red-500 hover:text-red-600">📍 Visit Us</a>
-              <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">Switch to Scroll-Safe BG</button>
-              <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">Reset 3D Angle</button>
+              <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">4D Scroll</button>
+              <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">Reset 4D Angle</button>
             </div>
           </div>
 
           <!-- Hero 3D Stage (HD Flagship iPhone 17 Pro Max · Orange) -->
           <div class="lg:col-span-6">
             <div class="stage-3d-box relative h-[440px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[520px]">
-              <canvas id="canvas-hero" aria-label="3D iPhone 17 Pro Max Orange"></canvas>
+              <canvas id="canvas-hero" aria-label="Interactive 4D iPhone 17 Pro Max Orange"></canvas>
               <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360° · HD Keynote Animation</div>
               <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
             </div>
@@ -172,6 +178,14 @@ export const finalSiteHtml = `
     </div>
 
     <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
+    <section id="page-plan" class="section-shimmer border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-4 text-center text-[10px] font-bold text-zinc-700">
+        <span class="rounded-full bg-red-600 px-2.5 py-1 text-white">Page Plan — 4 Chapters</span>
+        <span id="page-plan-links" class="inline-flex flex-wrap items-center justify-center gap-1"></span>
+        <a id="page-plan-pagelog" href="/services/front-glass-restoration" class="rounded-full border border-red-300 bg-white px-3 py-1 text-red-600 hover:bg-red-50">Live Service Pages →</a>
+      </div>
+    </section>
+
     <section id="real-shop" class="section-shimmer ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="ambient-orb -right-16 top-20 h-72 w-72 bg-orange-400"></div>
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
@@ -711,8 +725,8 @@ export const finalSiteHtml = `
               </div>
             </div>
             <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
-              <canvas id="canvas-tbk-oca" aria-label="Interactive 3D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
-              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 3D · Drag to Orbit</span>
+              <canvas id="canvas-tbk-oca" aria-label="Interactive 4D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
             </div>
           </div>
@@ -733,8 +747,8 @@ export const finalSiteHtml = `
               </div>
             </div>
             <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
-              <canvas id="canvas-tbk-90l" aria-label="Interactive 3D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
-              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 3D · Drag to Orbit</span>
+              <canvas id="canvas-tbk-90l" aria-label="Interactive 4D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
             </div>
           </div>
@@ -755,8 +769,8 @@ export const finalSiteHtml = `
               </div>
             </div>
             <div class="stage-3d-box relative h-[380px] w-full border-t border-zinc-800 lg:col-span-6 lg:h-auto lg:min-h-[440px] lg:border-l lg:border-t-0">
-              <canvas id="canvas-tbk-958" aria-label="Interactive 3D TBK-958 Cold UV Purple Laser"></canvas>
-              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 3D · 355nm Beam</span>
+              <canvas id="canvas-tbk-958" aria-label="Interactive 4D TBK-958 Cold UV Purple Laser"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 4D · 355nm Beam</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
             </div>
           </div>
@@ -797,7 +811,7 @@ export const finalSiteHtml = `
           <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
             <div class="stage-3d-box relative h-80 lg:col-span-7 sm:h-96">
-              <canvas id="canvas-internals" aria-label="3D iPhone Internal Teardown"></canvas>
+              <canvas id="canvas-internals" aria-label="Interactive 4D iPhone Internal Teardown"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
             </div>
             <div class="p-6 lg:col-span-5">
@@ -823,8 +837,8 @@ export const finalSiteHtml = `
               <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
             <div class="stage-3d-box relative order-1 h-80 border-b border-zinc-800 sm:h-96 lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
-              <canvas id="canvas-airpods" aria-label="3D Realistic AirPods Pro"></canvas>
-              <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 3D</span>
+              <canvas id="canvas-airpods" aria-label="Interactive 4D Realistic AirPods Pro"></canvas>
+              <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 4D</span>
             </div>
           </div>
 
@@ -832,7 +846,7 @@ export const finalSiteHtml = `
           <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
               <div class="stage-3d-box relative h-72 sm:h-80">
-                <canvas id="canvas-watch" aria-label="3D Apple Watch Ultra"></canvas>
+                <canvas id="canvas-watch" aria-label="Interactive 4D Apple Watch Ultra"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
               </div>
               <div class="p-5">
@@ -843,7 +857,7 @@ export const finalSiteHtml = `
 
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
               <div class="stage-3d-box relative h-72 sm:h-80">
-                <canvas id="canvas-macbook" aria-label="3D MacBook Pro"></canvas>
+                <canvas id="canvas-macbook" aria-label="Interactive 4D MacBook Pro"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
               </div>
               <div class="p-5">
@@ -1137,7 +1151,7 @@ export const finalSiteHtml = `
             </div>
           </div>
 
-          <!-- Surprise #3: Interactive 3D-Tilt Holographic 6 Months CRM Warranty Card -->
+          <!-- Surprise #3: Interactive 4D-Tilt Holographic 6 Months CRM Warranty Card -->
           <div class="lg:col-span-5">
             <div id="holo-warranty" class="holo-card relative overflow-hidden rounded-3xl border border-orange-500/40 p-6 text-white shadow-2xl">
               <div class="holo-glare"></div>
@@ -1264,7 +1278,7 @@ export const finalSiteHtml = `
   </main>
 
   <!-- 20. COMPLETE 4-COLUMN FOOTER WITH ENLARGED STORE PHOTO, SOCIAL/DIRECTORY HUB & TRACKED PIXEL FORGE CREDIT -->
-  <footer id="footer-contact" class="border-t border-zinc-200 bg-white pt-12 text-xs text-zinc-600">
+  <footer id="footer-contact" class="premium-footer border-t border-red-100 bg-white/75 pt-12 text-xs text-zinc-600">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
       <!-- Enlarged Real Store Photo Banner -->
       <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
@@ -1400,6 +1414,7 @@ export const finalSiteHtml = `
     </div>
 
     <div class="border-t border-zinc-200 bg-white px-3 pt-2.5">
+      <div class="mb-2 relative"><input id="ai-typing-input" type="text" data-lpignore="true" autocomplete="off" placeholder="Type your first message…" class="w-full rounded-xl border border-red-300 bg-white px-3.5 py-3 pr-22 text-[11px] font-bold placeholder:text-zinc-400 shadow-sm focus:border-red-600 focus:shadow-[0_0_0_3px_rgba(220,38,38,0.1)]" /><button id="ai-typing-send" class="absolute inset-y-1 right-1 rounded-xl bg-red-600 px-3 text-[10px] font-extrabold text-white shadow-sm transition hover:bg-red-700">Ask AI →</button></div>
       <div id="ai-triage" class="grid grid-cols-3 gap-1.5 pb-2">
         <select id="ai-device" aria-label="Device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
           <option value="">Device</option>
@@ -1443,4 +1458,15 @@ export const finalSiteHtml = `
       </div>
       <p id="pwa-status" class="mt-2.5 hidden text-[11px] font-bold text-emerald-700">✓ Ready! Use Chrome menu → "Install App" or "Add to Home Screen".</p>
     </div>
+
+  <!-- Reduced Motion + Tour Controls -->
+  <div id="rm-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
+    <div class="absolute bottom-full mb-2 hidden xl:block font-mono-num text-[9px] font-bold text-zinc-400">NN</div>
+    <button id="rm-toggle" type="button" aria-label="Toggle Reduced Motion" class="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[10px] font-semibold text-zinc-700 hover:border-red-500">Motion: <span id="rm-label">Auto</span></button>
+    <div class="h-6 w-[1.5px] bg-zinc-200 rounded-full"></div>
+    <div class="flex flex-col gap-0.5">
+      <button type="button" id="tour-start" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition">Scroll Tour</button>
+      <span id="tour-done" class="tour-done"></span>
+    </div>
+  </div>
   </div>`;
