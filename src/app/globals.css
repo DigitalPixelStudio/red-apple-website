@@ -4937,3 +4937,6 @@ html[data-motion="off"] .glass-machine-scan { opacity: 0 !important; }
 
     /* GIFT (Agent A): paint-contain static text cards — no visual change, isolates repaints */
     .glass-card, .glass-premium, .tile-wash, .tile-wash-violet, .tile-wash-mint { contain: layout paint style; }
+
+    /* FINAL OVERRIDE (zero-jank): no backdrop blur over scrolling text anywhere */
+    .glass-premium, .concierge-teaser { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
