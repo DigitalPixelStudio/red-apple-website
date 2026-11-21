@@ -1258,9 +1258,9 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
               const id = s.canvas.id;
               // First 3 device models (hero iPhone, iPad, pickup iPhone): uniform 90% edge-hugging fill.
               let pad = 1.03;
-              if (id === 'canvas-hero' || id === 'canvas-estimate-ipad' || id === 'canvas-pickup-iphone') pad = 0.90;
-              // Slight extra zoom on tablet widths across all models.
-              if (window.innerWidth >= 768 && window.innerWidth <= 1100) pad = pad * 0.96;
+              if (id === 'canvas-hero' || id === 'canvas-estimate-ipad' || id === 'canvas-pickup-iphone') pad = 0.82;
+              // Tablet: lower zoom to ~0.80x visual size (larger pad = smaller model).
+              if (window.innerWidth >= 768 && window.innerWidth <= 1100) pad = pad * 1.20;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
             }
             s.camera.aspect = cw / ch;
