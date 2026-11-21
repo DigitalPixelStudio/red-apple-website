@@ -1,44 +1,51 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { SITE } from "@/lib/site";
 import { track } from "@/lib/analytics";
-import { LineIcon } from "./Icons";
+import { LineIcon, type IconName } from "./Icons";
 
-const RATINGS = [
-  { label: "Quality of service", val: 5 },
-  { label: "Expert knowledge", val: 5 },
-  { label: "Transparent pricing", val: 5 },
-  { label: "Speed of repair", val: 5 },
-];
-
-const REVIEWS = [
+/** Honest trust facts and invitations — never invented customer quotes. */
+const REVIEW_FACTS: { topic: string; detail: string; icon: IconName }[] = [
   {
-    name: "Rajesh K.",
-    role: "iPhone 16 Pro Max Owner",
-    text: "Cracked my screen at Halasuru Metro. Walked in, got it fixed in 35 minutes. True Tone works perfectly. Best Apple repair in Bengaluru, hands down.",
-    stars: 5,
-    photo: "/images/v4/reviewer-1.jpg",
+    topic: `Verified rating ${SITE.rating}`,
+    detail: "Our public Google rating, shown exactly as Google displays it.",
+    icon: "star",
   },
   {
-    name: "Priya M.",
-    role: "MacBook Pro Owner",
-    text: "Liquid damage on my MacBook Pro. Other shops said motherboard dead. Red Apple repaired the board-level issue and saved my data. Outstanding expertise.",
-    stars: 5,
-    photo: "/images/v4/reviewer-2.jpg",
+    topic: `${SITE.ratingCount} Google reviews`,
+    detail: "The review count on our Google Business Profile.",
+    icon: "users",
   },
   {
-    name: "Amit S.",
-    role: "Apple Watch Ultra Owner",
-    text: "Cracked Watch Ultra screen replaced in 20 minutes. Price was 35% less than Apple Store. Genuine parts, genuine service. Highly recommend.",
-    stars: 5,
-    photo: "/images/v4/reviewer-3.jpg",
+    topic: "Read current reviews",
+    detail: "See what customers actually wrote, straight from the source.",
+    icon: "external",
   },
   {
-    name: "Sneha R.",
-    role: "iPad Pro Owner",
-    text: "iPad Pro back glass replacement was seamless. They kept me updated throughout. Free pickup and drop made it even easier. Five stars across the board.",
-    stars: 5,
-    photo: "/images/v4/reviewer-4.jpg",
+    topic: "Verified Address",
+    detail: "Google My Business & Maps Verified Address in Halasuru.",
+    icon: "gmb",
+  },
+  {
+    topic: "Reviews stay at source",
+    detail: "We never edit, stage or publish testimonials on this site.",
+    icon: "shield",
+  },
+  {
+    topic: "Open the original",
+    detail: "One tap takes you to our original Google profile.",
+    icon: "link",
+  },
+  {
+    topic: "Always current",
+    detail: "Google shows the live rating and the newest reviews.",
+    icon: "refresh",
+  },
+  {
+    topic: "Honest by design",
+    detail: "We link out instead of inventing a testimonial feed.",
+    icon: "info",
   },
 ];
 
@@ -60,65 +67,121 @@ export default function ReviewsSection() {
   return (
     <section id="reviews" className="section-apple bg-white">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
-        <Reveal className="text-center">
-          <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Reviews</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Trusted by <span className="gradient-text">Halasuru &amp; Bengaluru.</span></h2>
-          <p className="section-subtitle mx-auto mt-5">A 4.9 star rating on Google from hundreds of Apple device owners — read the real thing below.</p>
+        <Reveal className="reviews-header relative text-center">
+          {/* Larger red-apple mark on the right, with the same glass + scan
+              treatment used across the proof galleries. Decorative only. */}
+          <div className="reviews-brand" aria-hidden="true">
+            <div className="reviews-brand-glow" />
+            <div className="reviews-brand-glass elite-media">
+              <SmartImg
+                src="/logo.png"
+                alt=""
+                width={220}
+                height={220}
+                className="reviews-brand-img"
+              />
+              <span className="elite-media-scan" />
+            </div>
+            <span className="reviews-brand-caption">Red Apple · Halasuru</span>
+          </div>
+
+          <p className="kicker">Reviews</p>
+          <h2 className="section-title font-apple mt-3 text-[var(--text)]">
+            Trusted by <span className="topic-gradient">Halasuru &amp; Bengaluru.</span>
+          </h2>
+          <p className="section-subtitle mx-auto mt-5">
+            Genuine, current reviews live on Google. Here is the verified rating — read
+            the original feedback at its source.
+          </p>
         </Reveal>
 
-        {/* Main rating card */}
-        <Reveal className="mx-auto mt-12 max-w-[720px]">
-          <div className="rounded-[30px] glass p-8 text-center md:p-10">
-            <div className="flex items-center justify-center gap-1">
+        {/* Large rating hero — numbers only, no invented quotes. */}
+        <Reveal className="mt-12">
+          <div className="glass-premium relative mx-auto max-w-[820px] overflow-hidden rounded-[32px] p-8 text-center md:p-12">
+            <span className="gmb-badge">
+              <LineIcon name="verified" size={13} /> {SITE.addressVerified}
+            </span>
+            <div className="mt-5 flex items-center justify-center gap-1">
               <SolidStars count={5} />
             </div>
-            <div className="mt-3 font-apple text-[54px] font-extrabold leading-none tracking-tight">{SITE.rating}</div>
-            <div className="mt-2 text-[14px] font-semibold text-[var(--text)]">Based on {SITE.ratingCount}+ Google reviews</div>
-            <div className="mx-auto mt-6 max-w-[420px] space-y-3 text-left">
-              {RATINGS.map((r) => (
-                <div key={r.label} className="flex items-center gap-3">
-                  <span className="w-40 shrink-0 text-[12.5px] font-semibold text-[var(--text-light)]">{r.label}</span>
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-black/[0.06]">
-                    <div className="h-full rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)]" style={{ width: "100%" }} />
-                  </div>
-                  <span className="text-[12.5px] font-bold text-[var(--text)]">{r.val}.0</span>
-                </div>
-              ))}
+            <div className="breath-heading mt-4 font-apple text-[clamp(3.5rem,9vw,5.5rem)] font-extrabold leading-none tracking-tight text-[var(--text)]">
+              {SITE.rating}
             </div>
+            <div className="mt-3 font-apple text-[18px] font-extrabold text-[var(--text)]">
+              {SITE.ratingCount} Verified Google Reviews
+            </div>
+            <p className="mx-auto mt-3 max-w-[540px] text-[13.5px] leading-relaxed text-[var(--text-muted)]">
+              We link straight to the original Google Business Profile. We never write,
+              edit or stage testimonials on this site — the real reviews stay where
+              customers left them.
+            </p>
             <a
-              href={SITE.mapsReviewUrl} target="_blank" rel="noopener noreferrer"
-              onClick={() => track("map_click", { source: "reviews" })}
-              className="cta-outline mt-8 press"
+              href={SITE.gmbUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("map_click", { source: "reviews-hero" })}
+              className="cta-outline press mt-7 inline-flex items-center gap-2"
             >
-              <LineIcon name="star" size={16} />
-              Read Google Reviews
+              <LineIcon name="gmb" size={16} />
+              Read the original reviews on Google
+              <LineIcon name="arrow-right" size={15} />
             </a>
           </div>
         </Reveal>
 
-        {/* Individual reviews with profile photos */}
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {REVIEWS.map((r, i) => (
-            <Reveal key={i} delay={i * 80}>
-              <div className="rounded-[22px] bg-[var(--bg-alt)] p-6 border border-black/[0.04] hover:shadow-lg transition duration-300 duration-300 hover-pop spotlight-card">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={r.photo}
-                    alt={r.name}
-                    className="h-12 w-12 rounded-full object-cover ring-2 ring-white shadow-sm"
-                    loading="lazy"
-                  />
-                  <div>
-                    <div className="text-[15px] font-bold text-[var(--text)]">{r.name}</div>
-                    <div className="text-[12px] text-[var(--text-muted)]">{r.role}</div>
+        {/* Continuous, pausable marquee of honest source cards (duplicated for a seamless loop). */}
+        <div
+          className="relative mt-12 overflow-hidden"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+          }}
+        >
+          <div className="review-track">
+            {[...REVIEW_FACTS, ...REVIEW_FACTS].map((fact, i) => {
+              const isDuplicate = i >= REVIEW_FACTS.length;
+              return (
+                <a
+                  key={i}
+                  href={SITE.gmbUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-hidden={isDuplicate}
+                  tabIndex={isDuplicate ? -1 : undefined}
+                  onClick={() => track("map_click", { source: "reviews-marquee" })}
+                  className="review-card group block p-5"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="icon-glow grid h-10 w-10 place-items-center rounded-2xl">
+                      <LineIcon name={fact.icon} size={19} />
+                    </span>
+                    <LineIcon
+                      name="arrow-right"
+                      size={16}
+                      className="text-[var(--text-muted)] transition-transform duration-300 group-hover:translate-x-1"
+                    />
                   </div>
-                </div>
-                <SolidStars count={r.stars} />
-                <p className="mt-3 text-[13px] leading-relaxed text-[var(--text-light)]">{r.text}</p>
-              </div>
-            </Reveal>
-          ))}
+                  <h3 className="mt-5 font-apple text-[16px] font-extrabold leading-snug text-[var(--text)]">
+                    <span className="topic-gradient">{fact.topic}</span>
+                  </h3>
+                  <p className="mt-2 text-[12.5px] leading-relaxed text-[var(--text-muted)]">
+                    {fact.detail}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-wide text-[var(--orange-deep)]">
+                    <LineIcon name="gmb" size={12} /> Google reviews
+                  </span>
+                </a>
+              );
+            })}
+          </div>
         </div>
+
+        <Reveal className="mt-8 text-center" delay={100}>
+          <p className="mx-auto max-w-[720px] text-[13px] leading-relaxed text-[var(--text-muted)]">
+            Every genuine, current review lives on Google — visit our Google Business
+            Profile to read them in full and see the rating as it stands today.
+          </p>
+        </Reveal>
       </div>
     </section>
   );

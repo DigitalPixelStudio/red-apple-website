@@ -5,13 +5,13 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Red Apple Mobile Repair — Halasuru, Bengaluru",
     short_name: "Red Apple Repair",
     description:
-      "Apple repair specialists — iPhone, iPad, Watch, AirPods, MacBook & Mac. Halasuru, Bengaluru.",
+      "Apple Device Repairs, Mastered — Halasuru, Bengaluru.",
     start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait",
     background_color: "#ffffff",
-    theme_color: "#ff2d55",
+    theme_color: "#dc2626",
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

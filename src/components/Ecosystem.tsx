@@ -1,16 +1,17 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 
 const DEVICES = [
-  { id: "iphone", name: "iPhone 17 Pro Max", icon: "phone", tag: "All models", desc: "Displays, batteries, cameras, back glass & full hardware service.", img: "/images/v4/iphone-17-pro-max.jpg" },
-  { id: "ipad", name: "iPad", icon: "ipad", tag: "All models", desc: "iPad, iPad Pro, iPad Air & iPad mini — screens, battery & logic.", img: "/images/v4/repair-process.jpg" },
-  { id: "watch", name: "Apple Watch Ultra 3", icon: "watch", tag: "All series", desc: "Screens, batteries, sensors & straps across all Watch series.", img: "/images/v4/apple-watch-ultra.jpg" },
-  { id: "airpods", name: "AirPods", icon: "airpods", tag: "All generations", desc: "Battery, charging case, speaker & microphone repair.", img: "/images/v4/airpods-real.jpg" },
-  { id: "macbook", name: "MacBook", icon: "macbook", tag: "Pro / Air / Mini", desc: "MacBook Pro, Air, Mac mini & iMac — display, battery, board.", img: "/images/v3/macbook-pro.jpg" },
-  { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS / macOS", desc: "OS install, firmware, boot loops, data recovery & unlocking.", img: "/images/v3/circuit-board.jpg" },
+  { id: "iphone", name: "iPhone 17 Pro Max", icon: "phone", tag: "All models", desc: "Displays, batteries, cameras, back glass & full hardware service.", img: "/images/v5/iphone-pro-max-burgundy.jpg" },
+  { id: "ipad", name: "iPad", icon: "ipad", tag: "All models", desc: "iPad, iPad Pro, iPad Air & iPad mini — screens, battery & logic.", img: "/images/v5/ipad-pro-129.jpg" },
+  { id: "watch", name: "Apple Watch Ultra 3", icon: "watch", tag: "All series", desc: "Screens, batteries, sensors & straps across all Watch series.", img: "/images/v5/service-watch.jpg" },
+  { id: "airpods", name: "AirPods", icon: "airpods", tag: "All generations", desc: "Battery, charging case, speaker & microphone repair.", img: "/images/v5/service-airpods.jpg" },
+  { id: "macbook", name: "MacBook", icon: "macbook", tag: "Pro / Air / Mini", desc: "MacBook Pro, Air, Mac mini & iMac — display, battery, board.", img: "/images/v5/service-macbook.jpg" },
+  { id: "software", name: "Software & Recovery", icon: "wrench", tag: "iOS / macOS", desc: "System diagnostics, signed firmware restore, boot loops and board-level storage IC repair.", img: "/images/v5/motherboard-macro.jpg" },
 ] as const;
 
 export default function Ecosystem() {
@@ -19,8 +20,8 @@ export default function Ecosystem() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">The whole Apple ecosystem</p>
-          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">One specialist store for <span className="gradient-text">every Apple device.</span></h2>
-          <p className="section-subtitle mx-auto mt-5">From the latest iPhone 17 Pro Max to a classic MacBook — if Apple made it, we can fix it.</p>
+          <h2 className="head-gradient section-title font-apple mt-3 text-[var(--text)]">One Specialist Store for <span className="gradient-text">Every Apple Device.</span></h2>
+          <p className="section-subtitle mx-auto mt-5">From the latest iPhone 18 Pro Max to a classic MacBook — if Apple made it, we can fix it.</p>
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -31,8 +32,9 @@ export default function Ecosystem() {
                 onClick={() => track("service_view", { service: d.name })}
                 className="spotlight-card hv-lift group block h-full rounded-[26px] overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/[0.07]"
               >
-                <div className="relative h-44 overflow-hidden">
-                  <img src={d.img} alt={d.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                <div className="elite-media relative h-44 overflow-hidden">
+                  <SmartImg src={d.img} alt={d.name} width={900} height={600} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <span className="elite-media-scan" aria-hidden="true" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 flex items-center gap-2">
                     <span className="grid h-10 w-10 place-items-center rounded-xl bg-black/35">

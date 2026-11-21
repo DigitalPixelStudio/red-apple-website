@@ -11,6 +11,8 @@
  * then offer "Other / Not sure" and route to WhatsApp — never invent a number.
  */
 
+import { glassPriceFor } from "./glass-pricing";
+
 export type Price = [number, number];
 export type RepairPriceMap = Record<string, Price>;
 
@@ -79,6 +81,7 @@ export const PRICES: Record<string, RepairPriceMap> = {
 
 /** Turnaround per repair type — taken from the sheet's Avg Turnaround column. */
 export const TURNAROUND: Record<string, string> = {
+  "Front Glass Restoration": "Same day (after eligibility check)",
   "Front Display Replacement": "~60 min",
   "Back Glass Replacement": "~60 min",
   "Battery Replacement": "~45 min",
@@ -88,24 +91,33 @@ export const TURNAROUND: Record<string, string> = {
   "Motherboard / IC Repair": "1–3 days",
   "Water Damage Revival": "24–48 hrs",
   "Software / iOS Issue": "~2 hrs",
-  "Data Recovery": "1–2 days",
-  "Unlocking (lawful)": "Same day",
-  "OS / Firmware Installation": "~2 hrs",
+  "Board-Level Storage IC Repair": "1–2 days",
+  "Owner-Verified Factory Restore Assistance": "Same day",
+  "System Diagnostics & Signed Firmware Restore": "~2 hrs",
   "Dent / Body / Frame Repair": "1–2 days",
   "Other / Not sure": "Diagnosis first",
 };
 
 export function priceNote(repair: string): string {
   if (repair === "Other / Not sure") return "Free diagnosis, then a fixed price before any work.";
-  if (repair === "Motherboard / IC Repair" || repair === "Data Recovery") {
+  if (repair === "Motherboard / IC Repair" || repair === "Board-Level Storage IC Repair") {
     return "Quoted after a free board-level diagnosis.";
   }
   if (repair === "Water Damage Revival") return "Assessed first — we tell you honestly if it is recoverable.";
-  return "Genuine parts and labour included";
+  if (repair === "Front Glass Restoration") {
+    return "Published glass-restoration price. Final eligibility is confirmed on inspection — if the OLED itself is damaged we recommend full display replacement instead.";
+  }
+  return "OEM-grade parts and labour included";
 }
 
 /** Look up a price. null when the sheet does not cover this combination. */
 export function getPrice(model: string, repair: string): Price | null {
+  // Front-glass restoration has its own published list (glass-pricing.ts).
+  // It is a fixed price for glass-only work, separate from a full display.
+  if (repair === "Front Glass Restoration") {
+    const glass = glassPriceFor(model);
+    return glass === null ? null : [glass, glass];
+  }
   const row = PRICES[model];
   if (!row) return null;
   const v = row[repair];

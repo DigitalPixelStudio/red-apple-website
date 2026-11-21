@@ -18,9 +18,21 @@ export default function PricingSection() {
           </p>
           <h2 className="section-title">Apple India vs Red Apple</h2>
           <p className="section-subtitle mx-auto mt-4">
-            Typically 35% less than authorised service centres — with OEM-grade parts
-            and a 90-day warranty. All prices are indicative; confirm at store.
+            A like-for-like price comparison against authorised service centres, with
+            OEM-grade parts and a 6 Months warranty. All prices are indicative — confirm
+            the final figure at the store before work begins.
           </p>
+        </Reveal>
+
+        <Reveal className="mb-9 flex justify-center">
+          <a
+            href="#glass"
+            className="group inline-flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-[var(--border)] bg-white px-5 py-3 text-[13px] font-semibold text-[var(--text)] shadow-sm transition-transform hover:-translate-y-0.5 hover:border-[var(--orange)]/50"
+          >
+            <LineIcon name="display" size={16} color="var(--orange)" />
+            Front glass restoration: ₹2,500 – ₹19,500 by model
+            <span className="text-[var(--orange)] transition-transform group-hover:translate-x-0.5">See the glass price list →</span>
+          </a>
         </Reveal>
 
         {/* Category tabs */}
@@ -45,13 +57,19 @@ export default function PricingSection() {
         {/* Pricing table */}
         <Reveal key={active} className="glass-card rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="pricing-table smooth-120">
+            <table className="pricing-table smooth-120 min-w-[640px]">
+              <colgroup>
+                <col className="w-1/4" />
+                <col className="w-1/4" />
+                <col className="w-1/4" />
+                <col className="w-1/4" />
+              </colgroup>
               <thead>
                 <tr>
-                  <th className="min-w-[200px]">Model / Device</th>
-                  <th className="text-right min-w-[140px]">Apple India</th>
-                  <th className="text-right min-w-[140px]">{SITE.name}</th>
-                  <th className="text-right min-w-[120px]">You Save</th>
+                  <th scope="col">Model / Device</th>
+                  <th scope="col">Apple India</th>
+                  <th scope="col">Red Apple</th>
+                  <th scope="col">You Save</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,11 +78,11 @@ export default function PricingSection() {
                   const ourNum = parseInt(item.ours.replace(/[₹,]/g, ""));
                   const saving = appleNum - ourNum;
                   return (
-                    <tr key={j} className="hover:bg-[var(--bg-alt)] transition-colors">
+                    <tr key={j}>
                       <td className="font-medium text-[15px]">{item.model}</td>
-                      <td className="text-right price-apple text-[15px]">{item.apple}</td>
-                      <td className="text-right price-ours text-[15px] font-bold">{item.ours}</td>
-                      <td className="text-right font-bold text-green-600 text-[15px]">
+                      <td className="price-apple text-[15px]">{item.apple}</td>
+                      <td className="price-ours text-[15px] font-bold">{item.ours}</td>
+                      <td className="font-bold text-green-600 text-[15px]">
                         {saving.toLocaleString("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 })}
                       </td>
                     </tr>
@@ -73,9 +91,17 @@ export default function PricingSection() {
               </tbody>
             </table>
           </div>
-          <div className="px-6 py-4 bg-[var(--bg-alt)] text-xs text-[var(--text-muted)] border-t border-[var(--border)]">
-            All prices are indicative and subject to device condition. Red Apple pricing is typically around 35% lower than authorised service centre rates. Confirm exact pricing at store.
+          <div className="border-t border-[var(--border)] bg-[var(--bg-alt)] px-6 py-4 text-xs leading-relaxed text-[var(--text-muted)]">
+            All prices are indicative and subject to device condition. Comparative figures are
+            published for guidance only — confirm the exact price at the store before work
+            begins. Apple is a trademark of Apple Inc. Red Apple is an independent repair
+            service and is not affiliated with, authorised by or endorsed by Apple Inc.
           </div>
+          <p className="flex items-center justify-center gap-1.5 border-t border-[var(--border)] bg-[var(--bg-alt)] px-6 py-3 text-center text-[11.5px] font-semibold text-[var(--text-muted)]">
+            <LineIcon name="shield" size={13} className="shrink-0 text-[var(--accent)]" />
+            6 Months repair warranty on all repairs, displays, batteries and glass. Motherboard
+            repairs excluded — keep your invoice as the warranty record.
+          </p>
         </Reveal>
 
         <div className="text-center mt-10">

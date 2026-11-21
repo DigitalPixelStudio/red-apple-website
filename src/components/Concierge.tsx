@@ -4,18 +4,30 @@ import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
+import { GLASS_PRICE_ROWS, GLASS_PRICE_MIN, GLASS_PRICE_MAX } from "@/lib/glass-pricing";
 import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 
 type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
-const CHAT_MEMORY_KEY = "redapple-pixel-ai-history-v1";
+const CHAT_MEMORY_KEY = "redapple-forge-ai-history-v3";
+const LEARN_KEY = "redapple-forge-ai-learn-v1";
 
-/* Pull a model name out of free text, then answer with the real table price. */
-const MODEL_HINTS = Object.keys(PRICES).sort((a, b) => b.length - a.length);
+type Learned = { words: Record<string, string[]>; lastModel?: string; lastRepair?: string };
+
+/* Pull a model name out of free text, then answer with the real table price.
+   Glass-only models and spellings are included so the glass list resolves too. */
+const MODEL_HINTS = Array.from(new Set([
+  ...Object.keys(PRICES),
+  ...GLASS_PRICE_ROWS.flatMap((row) => [row.model, ...(row.aliases ?? [])]),
+])).sort((a, b) => b.length - a.length);
 
 const REPAIR_HINTS: [RegExp, string][] = [
   [/water|liquid|paani|geela|dropped in/i, "Water Damage Revival"],
-  [/data recover|recover photos|photos|contacts|backup|dead phone data/i, "Data Recovery"],
+  [/data recover|recover photos|photos|contacts|backup|dead phone data/i, "Board-Level Storage IC Repair"],
   [/back ?glass|backside|back side|back panel|rear glass|rear panel|back cover/i, "Back Glass Replacement"],
+  [/front ?glass|glass ?only|glass restor|outer glass|touch glass|glass repair|glass price|glass cost|cracked glass|broken glass|sirf glass|only glass/i, "Front Glass Restoration"],
+  // Bare "glass" after a model ("iphone 18 pro max glass") means front glass:
+  // the back-glass rule above always wins when the message says "back".
+  [/\bglass\b/i, "Front Glass Restoration"],
   [/screen|display|toot|tut|broken glass|cracked|black screen|green line|touch not working|lcd|oled/i, "Front Display Replacement"],
   [/battery|batter|charge not lasting|discharge|drain|health/i, "Battery Replacement"],
   [/camera|lens|blurry|focus|ois/i, "Camera Repair"],
@@ -23,12 +35,13 @@ const REPAIR_HINTS: [RegExp, string][] = [
   [/speaker|mic|haptic|sound|earpiece/i, "Speaker / Mic / Haptics"],
   [/motherboard|logic board|\bboard\b|\bic\b|chip/i, "Motherboard / IC Repair"],
   [/software|ios|update|boot loop|firmware/i, "Software / iOS Issue"],
-  [/unlock|activation lock|icloud/i, "Unlocking (lawful)"],
+  [/unlock|activation lock|icloud/i, "Owner-Verified Factory Restore Assistance"],
   [/dent|body|frame|housing/i, "Dent / Body / Frame Repair"],
 ];
 
 /** Deterministic price lookup: the spreadsheet-backed matrix is the sole source. */
 const TURNAROUND_HINTS: Record<string, string> = {
+  "Front Glass Restoration": "same day, after the eligibility check",
   "Front Display Replacement": "about 45–60 minutes",
   "Back Glass Replacement": "about 60 minutes",
   "Battery Replacement": "about 30–45 minutes",
@@ -38,15 +51,73 @@ const TURNAROUND_HINTS: Record<string, string> = {
   "Motherboard / IC Repair": "2–3 days",
   "Water Damage Revival": "24–48 hours",
   "Software / iOS Issue": "about 2 hours",
-  "Data Recovery": "1–2 days",
+  "Board-Level Storage IC Repair": "1–2 days",
+  "Owner-Verified Factory Restore Assistance": "same day after ownership verification",
   "Dent / Body / Frame Repair": "1–2 days",
   "Other / Not sure": "confirmed after diagnosis",
 };
 
 /** Deterministic price lookup: the spreadsheet-backed matrix is the sole source. */
+function readLearn(): Learned {
+  try {
+    const raw = window.localStorage.getItem(LEARN_KEY);
+    if (!raw) return { words: {} };
+    const parsed = JSON.parse(raw) as Learned;
+    return parsed && typeof parsed === "object" && parsed.words ? parsed : { words: {} };
+  } catch {
+    return { words: {} };
+  }
+}
+
+function writeLearn(next: Learned) {
+  try {
+    window.localStorage.setItem(LEARN_KEY, JSON.stringify(next));
+  } catch {
+    // Private browsing / quota — learning is a bonus, never a blocker.
+  }
+}
+
+/**
+ * Learns the customer's own vocabulary for a topic.
+ *
+ * Only strong matches are learned (score >= 3), only words that are not already
+ * in the synonym table, capped at ten per topic. The vocabulary lives in this
+ * browser's localStorage — it is a genuine local adaptation, not a claim that a
+ * shared model has been retrained.
+ */
+function learnWords(topic: string, text: string) {
+  const known = new Set(
+    Object.values(SYNONYMS).flat().flatMap((phrase) => phrase.toLowerCase().split(/\s+/))
+  );
+  const stop = new Set(["this", "that", "with", "have", "what", "when", "where", "which", "your", "mine", "please", "hello", "price", "prices", "cost", "costs"]);
+  const words = (text.toLowerCase().match(/[\p{L}]{4,}/gu) ?? [])
+    .filter((word) => !known.has(word) && !stop.has(word));
+  if (!words.length) return;
+  const learned = readLearn();
+  const previous = learned.words[topic] ?? [];
+  learned.words[topic] = Array.from(new Set([...previous, ...words])).slice(-10);
+  writeLearn(learned);
+}
+
+/** Remembers the last device/repair so follow-ups like "and its price?" work. */
+function rememberContext(text: string) {
+  const explicit = MODEL_HINTS.find((candidate) => {
+    const key = candidate.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    const normalized = text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    return (" " + normalized + " ").includes(" " + key + " ");
+  });
+  const repair = REPAIR_HINTS.find(([pattern]) => pattern.test(text))?.[1];
+  if (!explicit && !repair) return;
+  const learned = readLearn();
+  if (explicit) learned.lastModel = explicit;
+  if (repair) learned.lastRepair = repair;
+  writeLearn(learned);
+}
+
+/** Deterministic price lookup: the spreadsheet-backed matrix is the sole source. */
 function priceAnswer(text: string): string | null {
   const normalized = text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-  const model = MODEL_HINTS.find((candidate) => {
+  const explicitModel = MODEL_HINTS.find((candidate) => {
     const key = candidate.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
     return (" " + normalized + " ").includes(" " + key + " ");
   }) ?? (/\biphone\s*17\s*(?:air|slim)\b/i.test(text) ? "iPhone 17 Slim/Air" : null)
@@ -54,34 +125,55 @@ function priceAnswer(text: string): string | null {
      ?? (/\biphone\s*se\s*(?:2nd|second)\s*(?:gen|generation)\b/i.test(text) ? "iPhone SE (2nd G)" : null);
   const repair = REPAIR_HINTS.find(([pattern]) => pattern.test(text))?.[1];
 
-  if (!model && repair) {
+  // A question about the equipment or the process is not a price question.
+  // Without an explicit model, let it fall through to the machinery/glass copy.
+  const asksProcess = /\b(machine|machines|machinery|equipment|tbk|oca|laser|autoclave|chamber|press)\b/i.test(text);
+  const asksDefinition = /\b(what is|what are|what does|how does|how do you|explain|difference between)\b/i.test(text);
+  const asksTiming = /\b(how long|how much time|turnaround|duration|how many days|kitna (time|der))\b/i.test(text);
+  if (!explicitModel && (asksProcess || asksDefinition || asksTiming)) return null;
+
+  // Follow-up context: "and its price?", "how much for that one?" after a
+  // model or repair was already named. Only used when the message itself does
+  // not name a repair, so an explicit question always wins.
+  const followedUp = /\b(it|its|this|that|same|one|and|also)\b|^\s*(price|cost|how much)/i.test(text);
+  const learned = typeof window !== "undefined" ? readLearn() : { words: {} };
+  const model = explicitModel ?? (followedUp && learned.lastModel ? learned.lastModel : null);
+  const repairName = repair ?? (followedUp && learned.lastRepair ? learned.lastRepair : undefined);
+
+  if (!model && repairName) {
     const unlisted = text.match(/\biphone\s*(5s|5c|5|4s|4)\b/i);
-    if (unlisted) return "iPhone " + unlisted[1] + " — " + repair + " is not listed in the approved price matrix. We can quote it after a free diagnosis.";
-    if (repair === "Data Recovery") return "Data recovery starts at ₹2,999 and the assessment is free. Recovery is not guaranteed; the technician checks whether the data is reachable before any work.";
-    if (repair === "Motherboard / IC Repair") return "Board-level work is quoted after a free diagnosis. Which exact device and model is it?";
-    if (repair === "Front Display Replacement" && !/ipad|apple watch|airpods|macbook|ipod/i.test(text)) {
+    if (unlisted) return "iPhone " + unlisted[1] + " — " + repairName + " is not listed in the approved price matrix. We can quote it after a free diagnosis.";
+    if (repairName === "Board-Level Storage IC Repair") return "Board-level storage IC work starts at ₹2,999 and the assessment is free. A data outcome is never promised; the technician checks the hardware first.";
+    if (repairName === "Motherboard / IC Repair") return "Board-level work is quoted after a free diagnosis. Which exact device and model is it?";
+    if (repairName === "Front Glass Restoration") {
+      return "Front glass restoration on listed iPhones is ₹" + GLASS_PRICE_MIN.toLocaleString("en-IN") + " to ₹" + GLASS_PRICE_MAX.toLocaleString("en-IN") + " — the exact price depends on the model. Tell me your exact iPhone and I will check the glass list. Every glass restoration carries a 6 Months hardware warranty, and eligibility is confirmed on inspection.";
+    }
+    if (repairName === "Front Display Replacement" && !/ipad|apple watch|airpods|macbook|ipod/i.test(text)) {
       return "Which iPhone model is it? Published iPhone display prices range from ₹1,200 to ₹36,400; I'll check the exact matrix entry once I have the model.";
     }
     return "Which exact device and model is it? I'll check the approved price matrix rather than guess.";
   }
-  if (!model || !repair) return null;
+  if (!model || !repairName) return null;
 
-  if (repair === "Water Damage Revival") {
+  if (repairName === "Water Damage Revival") {
     return "Water damage needs a free assessment first, and we cannot promise a recovery outcome. Please do not charge the device or apply heat. Typical assessment and treatment time is 24–48 hours.";
   }
-  if (repair === "Data Recovery") {
-    return "Data recovery starts at ₹2,999 and the assessment is free. Recovery is not guaranteed; the technician checks whether the data is reachable before any work. Typical turnaround is 1–2 days.";
+  if (repairName === "Board-Level Storage IC Repair") {
+    return "Board-level storage IC work starts at ₹2,999 and the assessment is free. A data outcome is never promised; the technician checks the hardware first. Typical turnaround is 1–2 days.";
   }
 
-  const price = getPrice(model, repair);
-  if (!price) return model + " — " + repair + " is quoted after a free diagnosis because it is not listed in the approved price matrix.";
+  const price = getPrice(model, repairName);
+  if (!price) return model + " — " + repairName + " is quoted after a free diagnosis because it is not listed in the approved price matrix.";
 
   const quote = priceLabel(price);
+  if (repairName === "Front Glass Restoration") {
+    return model + " front glass restoration: " + quote + ". That is the published glass-only price, with parts and labour included. It carries a 6 Months hardware warranty, subject to the written policy, and eligibility is confirmed on inspection — if the OLED itself is damaged we recommend full display replacement instead. Typical turnaround: same day after the eligibility check. Would you like to book it?";
+  }
   const priceText = price[0] === price[1]
-    ? model + " " + repair.toLowerCase() + ": " + quote + ". This is the listed price."
-    : model + " " + repair.toLowerCase() + ": " + quote + ". The exact part grade/revision is confirmed during free diagnosis.";
-  const turnaround = TURNAROUND_HINTS[repair] ? " Typical turnaround: " + TURNAROUND_HINTS[repair] + "." : "";
-  return priceText + turnaround + " The repair carries a 90-day service warranty. Would you like to arrange a visit or doorstep pickup?";
+    ? model + " " + repairName.toLowerCase() + ": " + quote + ". This is the listed price."
+    : model + " " + repairName.toLowerCase() + ": " + quote + ". The exact part grade/revision is confirmed during free diagnosis.";
+  const turnaround = TURNAROUND_HINTS[repairName] ? " Typical turnaround: " + TURNAROUND_HINTS[repairName] + "." : "";
+  return priceText + turnaround + " Every repair carries a 6 Months warranty — your invoice is the warranty record. Motherboard repairs are excluded. Would you like to arrange a visit or doorstep pickup?";
 }
 
 /* Typed input is matched through this synonym table, so "display kharab hai"
@@ -106,12 +198,14 @@ function builderAnswer(text: string): string | null {
 
 const SYNONYMS: Record<string, string[]> = {
   about: ["about you", "about the shop", "who are you", "how long have", "experience", "since when", "history", "9 years", "nine years", "trust", "legit", "genuine shop"],
-  store: ["address", "where are you", "location", "kahan", "shop", "store", "directions", "map", "reach", "metro", "halasuru", "mg road"],
+  store: ["address", "where are you", "location", "kahan", "shop", "store", "directions", "map", "reach", "metro", "halasuru", "mg road", "open now", "are you open", "opening hours", "open till", "closing time", "what time", "hours"],
   timing: ["how long", "how much time", "duration", "kitna time", "wait", "same day", "turnaround", "how many days"],
   payment: ["payment", "pay", "upi", "card", "cash", "advance", "paise kaise", "how to pay", "refund"],
   quality: ["quality", "original", "genuine", "oem", "fake", "duplicate", "test", "check", "passcode", "data safe", "private"],
+  glass: ["front glass", "glass restoration", "glass only", "outer glass", "touch glass", "glass repair", "glass replace", "glass damage", "cracked glass", "broken glass", "sirf glass", "only glass", "glass price", "glass cost"],
+  machines: ["machine", "machinery", "tbk", "oca", "laminat", "vacuum", "hydraulic", "press", "bubble remover", "bubble", "chamber", "autoclave", "laser", "uv", "purple laser", "tbk-958", "tbk958", "958", "equipment", "lab setup"],
   booking: ["book", "booking", "appointment", "slot", "walk in", "walk-in", "reserve", "time book"],
-  screen: ["screen", "display", "glass", "crack", "cracked", "toot", "toota", "tooti", "tuta", "tuti", "fut", "touch", "lcd", "oled", "dead pixel", "lines"],
+  screen: ["screen", "display", "crack", "cracked", "toot", "toota", "tooti", "tuta", "tuti", "fut", "touch", "lcd", "oled", "dead pixel", "lines"],
   backglass: ["back glass", "backglass", "rear", "back panel", "back cover"],
   battery: ["battery", "batter", "charge", "charging", "drain", "draining", "heating", "hot", "battery health", "swell", "swollen"],
   camera: ["camera", "lens", "photo", "blurry", "focus", "ois", "flash"],
@@ -128,7 +222,7 @@ const SYNONYMS: Record<string, string[]> = {
   location: [],
   pickup: ["pickup", "pick up", "doorstep", "home", "collect", "drop", "delivery"],
   warranty: ["warranty", "guarantee", "guaranty", "warrenty", "full policy", "policy"],
-  invoice: ["invoice", "bill", "gst", "receipt", "crm", "record", "job card", "jobcard", "after handover", "what happens after"],
+  invoice: ["invoice", "bill", "receipt", "crm", "crm invoice", "record", "job card", "jobcard", "warranty record", "repair status", "stage update", "whatsapp update", "where is my device", "tracking", "after handover", "what happens after"],
   diagnosis: ["diagnosis", "diagnose", "check", "inspect", "assessment", "estimate first"],
   notrepaired: ["not repairable", "cannot fix", "cant fix", "unrepairable", "worse", "damage your"],
   parts: ["genuine", "oem", "original", "copy", "aftermarket", "quality of part", "which part"],
@@ -139,39 +233,42 @@ const SYNONYMS: Record<string, string[]> = {
   human: ["human", "person", "technician", "talk", "call", "speak", "agent", "staff", "baat", "insaan"],
 };
 
-/* Best topic for a typed sentence. Scores by how many keywords hit. */
-function resolve(text: string): string | null {
+/* Best topic for a typed sentence. Scores by how many keywords hit, plus any
+   vocabulary this browser has already learned for that topic. */
+function resolve(text: string): { topic: string; score: number } | null {
   const t = ` ${text.toLowerCase()} `;
+  const learned = typeof window !== "undefined" ? readLearn().words : {};
   let best: string | null = null;
   let bestScore = 0;
   for (const [topic, words] of Object.entries(SYNONYMS)) {
     let score = 0;
     for (const w of words) if (t.includes(w)) score += w.length > 5 ? 2 : 1;
+    for (const w of learned[topic] ?? []) if (t.includes(w)) score += 1;
     if (score > bestScore) { bestScore = score; best = topic; }
   }
-  return bestScore >= 1 ? best : null;
+  return bestScore >= 1 && best ? { topic: best, score: bestScore } : null;
 }
 
 
 const MENU: Record<string, { reply: string; chips: string[] }> = {
   start: {
     reply:
-      "Hi, I'm Pixel Ai — Red Apple's repair assistant. I can give you a real answer on price, timing or warranty, or put you straight through to a technician. What's going on with your device?",
-    chips: ["iPhone screen", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
+      "Hi, I'm Forge AI — Red Apple's repair assistant. I can check prices, timing and warranty, and connect you to a technician. If my AI service is offline, I'll say so and use our verified offline answers instead. What's going on with your device?",
+    chips: ["iPhone screen", "Glass price", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
   },
   about: {
     reply:
-      "Red Apple Mobile Repair has been on Mahatma Gandhi Road, Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10:00 AM to 12:00 AM, all seven days. Rating is 4.9 from 905 Google reviews.",
-    chips: ["Price list", "Visit the store", "Talk to a technician"],
+      "Red Apple Mobile Repair has been in Halasuru since 2017 — nine years, same shop, same bench. We are an independent Apple specialist, not affiliated with Apple Inc. We do component-level micro-soldering, OEM-grade displays, and back-glass laser work. Open 10 AM to 12 AM midnight, all seven days. Rated 4.9 from " + SITE.ratingCount + " Google reviews (" + SITE.addressVerified + "): " + SITE.gmbUrl,
+    chips: ["Price list", "Visit the store", "Google reviews", "Talk to a technician"],
   },
   store: {
     reply:
-      "We are at No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro, Metro Pillar 125. The workshop has glass walls so you can watch your repair. Open 10:00 AM – 12:00 AM, every day. Walk-ins welcome, no appointment needed.",
-    chips: ["Open in Maps", "Book doorstep pickup", "Talk to a technician"],
+      "We are at " + SITE.address + " — " + SITE.addressVerified + ". That's next to Vignesh Dresses, opposite Bhadra Landmark, about a minute from Halasuru Metro. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". The workshop has glass walls so you can watch your repair. Open 10 AM – 12 AM midnight, every day, with WhatsApp assistance 24/7. Walk-ins welcome, no appointment needed.",
+    chips: ["Open in Maps", "Google reviews", "Book doorstep pickup", "Talk to a technician"],
   },
   timing: {
     reply:
-      "Display, back glass and battery are usually same-day, about 45–60 minutes. Charging port and camera take about an hour; board-level work takes 2–3 days, water-damage work about 24–48 hours, data recovery 1–2 days, and iPad screens 1–3 days.",
+      "Display, back glass and battery are usually same-day, about 45–60 minutes. Front glass restoration is same-day after the eligibility check. Charging port and camera take about an hour; board-level work takes 2–3 days, water-damage work about 24–48 hours, board-level storage IC work 1–2 days, and iPad screens 1–3 days.",
     chips: ["Price list", "Book doorstep pickup", "Talk to a technician"],
   },
   payment: {
@@ -181,28 +278,38 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   quality: {
     reply:
-      "Every device goes through 32 checkpoints before hand-back — touch across the whole panel, True Tone, Face ID, front and rear cameras, all sensors, charging, speakers, and a thermal check. We do not ask for your passcode and we never wipe a device without written permission.",
+      "Every device goes through a 21-point quality check before hand-back — touch across the whole panel, True Tone, Face ID, front and rear cameras, all sensors, charging, speakers, and a thermal check. We do not ask for your passcode and we never wipe a device without written permission.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   booking: {
     reply:
-      "Two ways. Walk in any time between 10:00 AM and 12:00 AM — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999.",
+      "Two ways. Walk in any time between 10 AM and 12 AM midnight — no appointment needed. Or book a doorstep pickup and a rider collects the device; pickup runs 24/7 across Bengaluru and is free for repairs above ₹2,999. Either way, our CRM sends you WhatsApp stage updates from collection through hand-back.",
     chips: ["Book doorstep pickup", "Visit the store", "Talk to a technician"],
   },
   device: {
     reply:
-      "We cover iPhone models through iPhone 18 Pro Max, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and data recovery. Which device and model do you have?",
+      "We repair supported iPhone models listed on our website, plus iPad, Apple Watch, iPod, AirPods and MacBook. We handle display, battery, back glass, camera, charging, board-level work, water damage and board-level storage IC repair. Which device and model do you have?",
     chips: ["iPhone", "iPad", "Apple Watch", "AirPods", "MacBook", "Talk to a technician"],
   },
   iphone: {
     reply:
-      "We repair iPhone models from iPhone 6 through iPhone 18 Pro Max. Prices depend on the exact model and repair; tell me both and I'll check the approved price matrix rather than guess.",
+      "We repair supported iPhone models listed on our website. Tell me your exact model and fault so I can check the right service and approved price.",
     chips: ["Screen price", "Battery price", "Back glass price", "Water damage", "Talk to a technician"],
   },
   screen: {
     reply:
-      "We offer OEM-grade display replacement. The exact price depends on the model and is quoted from the approved price matrix; if a combination is not listed, diagnosis is free and the technician will confirm the quote. Which iPhone model is it?",
-    chips: ["iPhone 16 Pro Max", "iPhone 15", "iPhone 14", "iPhone 13", "Talk to a technician"],
+      "We offer OEM-grade display replacement, and separately, front glass restoration that keeps your original OLED. If only the outer glass is cracked and the display still works, glass restoration is usually the better value. If the OLED itself is damaged, go for a full display. Which iPhone model is it?",
+    chips: ["Glass price", "Front glass restoration", "Full display price", "Talk to a technician"],
+  },
+  glass: {
+    reply:
+      "Front glass restoration keeps your original OLED, touch and True Tone — we replace only the damaged outer glass using TBK OCA lamination, a 90-litre bubble-remover chamber and the TBK-958 cold UV laser. Published prices run from ₹2,500 to ₹19,500 depending on the model, with a 6 Months hardware warranty. Eligibility is confirmed on inspection. Which iPhone model do you have?",
+    chips: ["Glass price iPhone 17 Pro Max", "Glass price iPhone 16 Pro", "Glass price iPhone 15", "Full glass price list", "Talk to a technician"],
+  },
+  machines: {
+    reply:
+      "Our Halasuru lab runs three TBK systems. The TBK OCA Laminating Vacuum Compressed Hydraulic Press bonds the new glass to the original OLED under vacuum and controlled pressure. The TBK 90-Litre High-Pressure Bubble Remover Chamber removes microscopic air bubbles for a zero-defect finish. The TBK-958 Cold UV Purple Laser separates the bezel and back glass with low temperature, so the logic board sees no heat stress. Would you like glass prices or a technician?",
+    chips: ["Glass price", "See the lab", "Talk to a technician"],
   },
   backglass: {
     reply:
@@ -211,7 +318,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   battery: {
     reply:
-      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model; battery repairs carry a 90-day service warranty plus the stated 6-month battery health cover. Which model do you have?",
+      "Battery replacement usually takes about 30–45 minutes. The exact price depends on your model. Batteries carry the same 6 Months repair warranty as our other work — keep your invoice, as it is the warranty record. Which model do you have?",
     chips: ["Get exact price", "Book doorstep pickup", "Talk to a technician"],
   },
   camera: {
@@ -251,28 +358,28 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   estimate: {
     reply:
-      "Published iPhone repair prices range from ₹1,200 to ₹36,400 depending on the model and repair. That is not a quote: send your exact model and fault and I'll check the approved matrix; anything not listed is quoted after a free diagnosis.",
-    chips: ["Send my model", "Talk to a technician"],
+      "Published iPhone display repairs range from ₹1,200 to ₹36,400 depending on the model. Front glass restoration on listed iPhones is ₹2,500 to ₹19,500. Neither is a final quote: send your exact model and fault and I'll check the approved list; anything not listed is quoted after a free diagnosis.",
+    chips: ["Send my model", "Glass price", "Talk to a technician"],
   },
   location: {
     reply:
-      "No. 1, Mahatma Gandhi Road, opposite Bhadra Landmark, Halasuru, Bengaluru 560008 — one minute from Halasuru Metro. Open 10:00 AM to 12:00 AM, all seven days. Walk-ins welcome, no appointment needed.",
-    chips: ["Open in Maps", "Call the store", "Book doorstep pickup"],
+      SITE.address + " — " + SITE.addressVerified + ". About a minute from Halasuru Metro, next to Vignesh Dresses. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". Open 10 AM to 12 AM midnight, all seven days. WhatsApp assistance runs 24/7. Walk-ins welcome, no appointment needed.",
+    chips: ["Open in Maps", "Google reviews", "Call the store", "Book doorstep pickup"],
   },
   pickup: {
     reply:
-      "Doorstep pickup runs 24/7 across Bengaluru — any hour, any day. A rider collects the device, we repair it, and it comes back tested. Free for repairs above ₹2,999. Book it and you'll get a WhatsApp confirmation with the rider's details.",
+      "Doorstep pickup runs 24/7 across Bengaluru — any hour, any day. A rider collects the device, we repair it, and it comes back tested. Free for repairs above ₹2,999. You'll get a WhatsApp confirmation with the rider's details, then CRM stage updates as the device moves through diagnosis, repair, quality check and delivery.",
     chips: ["Book pickup", "Talk to a technician"],
   },
   warranty: {
     reply:
-      "90 days on every repair. Battery and display also carry 6 months of health cover — if battery health drops below 80% or the panel develops a non-impact fault, we replace it once free. Damage from a new drop or liquid isn't covered.",
+      "6 Months on every repair — displays, batteries and glass included. Your invoice is the warranty record: bring it with the device, or WhatsApp the invoice number and photos, and we handle the diagnosis and the covered repair on that same invoice. Motherboard repairs are the only exclusion. Not covered: physical/impact or liquid damage after hand-back, repair or opening by another shop after us, accidental damage, normal wear and tear, misuse, cosmetic issues, or unrelated software faults.",
     chips: ["Read the full policy", "Talk to a technician"],
   },
   invoice: {
     reply:
-      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number — and the GST invoice is generated from that record, then sent to you on WhatsApp. Need it in your company's name? Give us the GSTIN at booking and we'll issue it that way.",
-    chips: ["What happens after handover?", "Price list", "Talk to a technician"],
+      "Every repair is a job card in our CRM, not a note on a pad. Parts fitted, technician notes and status changes are logged against your job number, and the CRM tracked invoice is generated from that record and sent to you on WhatsApp. For walk-in and doorstep-pickup devices, the CRM also sends WhatsApp stage updates — received, diagnosis, in repair, quality check, ready for hand-back and delivered. That invoice is your 6 Months warranty record, so keep it. Need it in your company's name? Add those details at booking and we'll issue it that way.",
+    chips: ["What happens after handover?", "Read the full policy", "Talk to a technician"],
   },
   diagnosis: {
     reply:
@@ -281,12 +388,12 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   notrepaired: {
     reply:
-      "If we can't fix it, you pay nothing — we tell you before you commit, not after. If a repair we did makes something worse, we put it right at our cost. That has never been refused.",
+      "If we can't fix it, you pay nothing — we tell you before you commit, not after. If you have a concern after hand-back, contact us and the team will assess it under the written warranty.",
     chips: ["Warranty details", "Talk to a technician"],
   },
   parts: {
     reply:
-      "We use OEM-grade or genuine-grade parts and tell you the part grade before work begins. We are an independent repair workshop, not an Apple Authorised Service Provider, and we never describe an OEM-grade part as a genuine Apple part.",
+      "We use OEM-grade or verified-grade parts and tell you the part grade before work begins. We are an independent repair workshop, not an Apple Authorised Service Provider, and we never describe an OEM-grade part as an Apple-sourced part.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   privacy: {
@@ -301,12 +408,12 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   insurance: {
     reply:
-      "We supply the itemised GST invoice and a written damage report, which is what an insurance claim actually needs. We don't file the claim for you, but we'll give you everything the insurer asks for.",
+      "We supply the itemised CRM tracked invoice and a written damage report, which is what an insurance claim actually needs. We don't file the claim for you, but we'll give you everything the insurer asks for.",
     chips: ["Talk to a technician", "Price list"],
   },
   whyexpensive: {
     reply:
-      "I understand. The price reflects the part grade, labour and 90-day warranty. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
+      "I understand. The price reflects the part grade, labour and our 6 Months warranty, with your invoice as the warranty record. If your budget is lower, a technician can check whether another safe part grade is available; we never discount below the published minimum.",
     chips: ["Warranty details", "Price list", "Talk to a technician"],
   },
   human: {
@@ -343,7 +450,9 @@ function localKnowledgeAnswer(query: string): string | null {
 
   if (!best || best.score < 3) return null;
   const answer = best.document.content.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ");
-  return "From our repair guide: " + (answer.length > 420 ? answer.slice(0, 417) + "..." : answer);
+  // Cut on a word boundary so a truncated excerpt never stops mid-word.
+  const trimmed = answer.length > 420 ? answer.slice(0, 417).replace(/\s+\S*$/, "") + "…" : answer;
+  return "From our offline repair guide: " + trimmed;
 }
 
 export default function Concierge() {
@@ -356,7 +465,25 @@ export default function Concierge() {
   const [stopped, setStopped] = useState(false);
   const [failedTurns, setFailedTurns] = useState(0);
   const [memoryReady, setMemoryReady] = useState(false);
+  const [teaser, setTeaser] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+
+  /* Proactive, but polite: one teaser per browser session, only after two
+     minutes on the page, and never on top of an open chat. Dismissal is
+     remembered for the session. */
+  useEffect(() => {
+    if (open) { setTeaser(false); return; }
+    let seen = false;
+    try { seen = window.sessionStorage.getItem("ramr-concierge-teaser") === "1"; } catch {}
+    if (seen) return;
+    const timer = window.setTimeout(() => setTeaser(true), 120_000);
+    return () => window.clearTimeout(timer);
+  }, [open]);
+
+  const dismissTeaser = () => {
+    setTeaser(false);
+    try { window.sessionStorage.setItem("ramr-concierge-teaser", "1"); } catch {}
+  };
 
   useEffect(() => {
     if (!memoryReady) return;
@@ -413,9 +540,14 @@ export default function Concierge() {
       return;
     }
 
+    // Context + local vocabulary learning. Cheap, synchronous and private.
+    rememberContext(text);
+    const early = resolve(text);
+    if (early && early.score >= 3 && early.topic !== "start") learnWords(early.topic, text);
+
     const handoffNow = (reason: string) => {
       const transcript = [...msgs.slice(-8), { from: "user" as const, text }]
-        .map((item) => (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text)
+        .map((item) => (item.from === "user" ? "Customer: " : "Forge AI: ") + item.text)
         .join("\n");
       const message = "REDAPPLE-HANDOFF\nReason: " + reason + "\nPlease have a technician review this conversation.\n\n" + transcript;
       window.open(wa(message), "_blank", "noopener,noreferrer");
@@ -435,8 +567,8 @@ export default function Concierge() {
       handoffNow("Customer complaint / refund / damage escalation");
       return;
     }
-    if (/(icloud|activation lock).*(bypass|unlock)|(bypass|unlock).*(icloud|activation lock)/i.test(text)) {
-      push("We cannot bypass iCloud Activation Lock. If this is a carrier/network lock, a technician can explain the lawful option with proof of ownership.", ["Talk to a technician"]);
+    if (/(icloud|activation lock).*(circumvent|open)|(circumvent|open).*(icloud|activation lock)/i.test(text)) {
+      push("We cannot circumvent iCloud Activation Lock. Ask a technician about owner-verified factory restore assistance with proof of ownership.", ["Talk to a technician"]);
       return;
     }
     if (/(talk to (a )?(human|person|technician)|speak to (a )?(human|person|technician)|call me|agent|staff)/i.test(text)) {
@@ -450,16 +582,17 @@ export default function Concierge() {
 
     // instant, deterministic answers first
     const built = builderAnswer(text);
-    if (built) { setTimeout(() => push(built), 420); return; }
+    if (built) { setTimeout(() => push(built), 160); return; }
 
     const priced = priceAnswer(text);
     if (priced) {
-      setTimeout(() => push(priced, ["Book doorstep pickup", "Talk to a technician"]), 420);
+      setTimeout(() => push(priced, ["Book doorstep pickup", "Talk to a technician"]), 160);
       return;
     }
 
     // ---- real AI ----
     let streamedReply = "";
+    let providerUnavailable = false;
     try {
       const history = msgs
         .filter((m) => m.text)
@@ -470,11 +603,13 @@ export default function Concierge() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
-        signal: AbortSignal.timeout(27000),
+        signal: AbortSignal.timeout(42000),
         cache: "no-store",
       });
 
-      if (res.ok && res.body) {
+      if (res.status === 204 || !res.ok) {
+        providerUnavailable = true;
+      } else if (res.body) {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let inserted = false;
@@ -539,23 +674,51 @@ export default function Concierge() {
         push("My reply was interrupted while connecting. Please try once more, or choose WhatsApp to continue with a technician.", ["Talk to a technician"]);
         return;
       }
-      // fall through to the rule engine — never surface a network error to a customer
+      providerUnavailable = true;
     }
 
-    // ---- fallback: local knowledge retrieval, then the deterministic menu ----
+    // ---- fallback: curated topic, then local knowledge, then the menu ----
+    // This runs even when the hosted model is unreachable, so a customer asking
+    // about glass, the TBK machines or a price still gets a real answer instead
+    // of an apology. Only a genuinely unknown question reaches the apology.
+    const syn = resolve(text);
+    const confidentTopic = syn && syn.score >= 2 ? syn.topic : null;
+
+    // A confidently recognised topic has a hand-written, complete answer that
+    // beats a two-sentence excerpt from the knowledge base.
+    if (confidentTopic && MENU[confidentTopic]) {
+      setFailedTurns(0);
+      const entry = MENU[confidentTopic];
+      setTimeout(() => push(entry.reply, entry.chips), 160);
+      return;
+    }
+
     const localAnswer = localKnowledgeAnswer(text);
     if (localAnswer) {
       setFailedTurns(0);
-      setTimeout(() => push(localAnswer, ["Book doorstep pickup", "Talk to a technician"]), 250);
+      setTimeout(() => push(localAnswer, ["Book doorstep pickup", "Talk to a technician"]), 160);
       return;
     }
-    const lower = text.toLowerCase();
-    let resolved = "start";
-    for (const k of Object.keys(MENU)) { if (lower.includes(k)) { resolved = k; break; } }
-    const syn = resolve(text);
-    if (syn && MENU[syn]) resolved = syn;
 
-    if (resolved === "start" && text.trim().split(/\s+/).length > 2) {
+    const lower = text.toLowerCase();
+    let resolved = "";
+    for (const k of Object.keys(MENU)) { if (k !== "start" && lower.includes(k)) { resolved = k; break; } }
+    if (syn && MENU[syn.topic]) resolved = syn.topic;
+
+    if (resolved && MENU[resolved]) {
+      setFailedTurns(0);
+      const entry = MENU[resolved];
+      setTimeout(() => push(entry.reply, entry.chips), 180);
+      return;
+    }
+
+    if (providerUnavailable) {
+      setFailedTurns(0);
+      push("That reply came from our verified offline answers, not the live AI service, which is temporarily unreachable. I can still check published prices or connect you directly with a Red Apple technician.", ["Price list", "Talk to a technician"]);
+      return;
+    }
+
+    if (text.trim().split(/\s+/).length > 2) {
       const nextFailedTurn = failedTurns + 1;
       setFailedTurns(nextFailedTurn);
       if (nextFailedTurn >= 3) {
@@ -565,20 +728,32 @@ export default function Concierge() {
       const clarification = nextFailedTurn === 1
         ? "I want to get that right. Which device and model are you asking about?"
         : "Is the issue with the screen, battery, charging, or something else?";
-      setTimeout(() => push(clarification, ["Screen", "Battery", "Charging", "Talk to a technician"]), 300);
+      setTimeout(() => push(clarification, ["Screen", "Glass price", "Battery", "Charging", "Talk to a technician"]), 180);
       return;
     }
 
     setFailedTurns(0);
-    const entry = MENU[resolved];
-    setTimeout(() => push(entry.reply, entry.chips), 300);
+    const entry = MENU.start;
+    setTimeout(() => push(entry.reply, entry.chips), 180);
   };
 
   const chipAction = (chip: string) => {
+    if (/see the lab|glass lab/i.test(chip)) {
+      document.getElementById("glass")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Here is the glass lab — live prices, the before/after result and the three TBK machines.", chips: ["Glass price", "Talk to a technician"] }]);
+      return;
+    }
+    if (/front glass restoration/i.test(chip)) { send("front glass restoration"); return; }
+    if (/full glass price list|^glass price$/i.test(chip)) { send("front glass restoration price"); return; }
+    if (/price list/i.test(chip)) {
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Here is the published repair-pricing section. If your exact model or repair is not listed, the team will confirm it after a free diagnosis.", chips: ["Talk to a technician"] }]);
+      return;
+    }
     if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || /pickup/i.test(chip) || /technician|human|agent/i.test(chip)) {
       const isHuman = /technician|human|agent/i.test(chip);
       const transcript = msgs.slice(-8).map((item) =>
-        (item.from === "user" ? "Customer: " : "Pixel Ai: ") + item.text
+        (item.from === "user" ? "Customer: " : "Forge AI: ") + item.text
       ).join("\n");
       const msg = isHuman
         ? "REDAPPLE-HANDOFF\nCustomer requests a technician. Please review this chat:\n\n" + transcript
@@ -594,12 +769,21 @@ export default function Concierge() {
       setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opening WhatsApp in a new tab — our team usually replies within minutes.", chips: [] }]);
       return;
     }
+    if (/google reviews/i.test(chip)) {
+      window.open(SITE.gmbUrl, "_blank", "noopener,noreferrer");
+      track("map_click", { source: "concierge", chip: "google_reviews" });
+      setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opening our verified Google My Business & Maps listing — 4.9 from " + SITE.ratingCount + " reviews.", chips: [] }]);
+      return;
+    }
     if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
     if (chip.includes("Call")) { window.open(SITE.phoneHref, "_self"); track("call_click", { source: "concierge" }); return; }
-    if (chip.includes("Maps")) { window.open(SITE.mapsUrl, "_blank", "noopener,noreferrer"); track("map_click", { source: "concierge" }); setMsgs((m) => [...m, { from: "user", text: chip }]); return; }
     if (chip.includes("policy")) { window.open("/refund-policy", "_blank", "noopener,noreferrer"); setMsgs((m) => [...m, { from: "user", text: chip }, { from: "bot", text: "Opened our Refund & Warranty Policy in a new tab.", chips: [] }]); return; }
     const modelMatch = chip.match(/iPhone\s+\d+[^,]*/i);
-    if (modelMatch) { send(`screen price for ${modelMatch[0]}`); return; }
+    if (modelMatch) {
+      const wantsGlass = /glass/i.test(chip);
+      send(`${wantsGlass ? "front glass" : "screen"} price for ${modelMatch[0]}`);
+      return;
+    }
     send(chip.replace(/^[^\w]+/, "").trim());
   };
 
@@ -609,7 +793,7 @@ export default function Concierge() {
       const saved = window.localStorage.getItem(CHAT_MEMORY_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as { savedAt?: number; messages?: unknown };
-        const fresh = typeof parsed.savedAt === "number" && Date.now() - parsed.savedAt < 24 * 60 * 60 * 1000;
+        const fresh = typeof parsed.savedAt === "number" && Date.now() - parsed.savedAt < 7 * 24 * 60 * 60 * 1000;
         if (fresh && Array.isArray(parsed.messages)) {
           const safe = parsed.messages.filter((item): item is Msg =>
             Boolean(item) &&
@@ -632,27 +816,59 @@ export default function Concierge() {
 
   return (
     <>
+      {/* Proactive teaser — one per session, never covers an open chat */}
+      {teaser && !open && (
+        <div className="fixed bottom-[9.5rem] right-4 z-[69] w-[calc(100vw-2rem)] max-w-[240px] md:bottom-[5.5rem] md:right-8">
+          <div className="concierge-teaser relative rounded-[14px] bg-white p-3 pr-7 shadow-xl ring-1 ring-black/[0.08]">
+            <button
+              type="button"
+              onClick={dismissTeaser}
+              aria-label="Dismiss assistant message"
+              className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full text-[var(--text-muted)] hover:bg-black/[0.05] hover:text-[var(--text)]"
+            >
+              <LineIcon name="close" size={10} />
+            </button>
+            <p className="text-[11.5px] font-semibold leading-snug text-[var(--text)]">
+              Hi — I&rsquo;m Forge AI. Ask for a published price or a technician.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                dismissTeaser();
+                if (!open) restoreMemory();
+                setOpen(true);
+                track("ai_chat_started", { source: "proactive_teaser" });
+              }}
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)] px-2.5 py-1 text-[11px] font-bold text-white"
+            >
+              Check my price
+              <LineIcon name="arrow-right" size={11} color="#fff" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Floating launcher */}
       <button
         id="concierge-open"
-        onClick={() => { if (!open) restoreMemory(); setOpen(!open); }}
-        aria-label="Open Pixel Ai chat"
-        className="fixed bottom-24 right-5 z-[70] grid h-14 w-14 place-items-center rounded-[var(--cta-radius)] bg-[var(--cta-dark)] text-white shadow-2xl transition-transform hover:scale-110 animate-pulse-ring md:bottom-8 md:right-8"
+        onClick={() => { if (!open) restoreMemory(); setTeaser(false); setOpen(!open); }}
+        aria-label="Open Forge AI chat"
+        className="fixed bottom-24 right-5 z-[70] grid h-12 w-12 place-items-center rounded-[13px] bg-[var(--cta-dark)] text-white shadow-xl transition-transform hover:scale-105 md:bottom-8 md:right-8"
       >
         {open ? <LineIcon name="close" size={20} /> : <LineIcon name="bot" size={22} />}
       </button>
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-36 right-4 z-[70] flex h-[540px] w-[calc(100vw-2rem)] max-w-[400px] flex-col overflow-hidden rounded-[28px] bg-white shadow-2xl ring-1 ring-black/[0.08] md:bottom-24 md:right-8">
+        <div className="fixed bottom-32 right-4 z-[70] flex h-[460px] w-[calc(100vw-2rem)] max-w-[360px] flex-col overflow-hidden rounded-[22px] bg-white shadow-xl ring-1 ring-black/[0.08] md:bottom-24 md:right-8">
           {/* Header */}
           <div className="relative flex items-center gap-3 bg-[var(--cta-dark)] px-5 py-4 text-white">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/10">
               <LineIcon name="bot" size={20} />
             </span>
             <div>
-              <div className="text-[14px] font-bold">Pixel Ai</div>
-              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-green-400" /> Online · replies instantly</div>
+              <div className="text-[14px] font-bold">Forge AI</div>
+              <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Repair assistant · prices &amp; warranty · technician handoff</div>
             </div>
             <button
               type="button"
@@ -699,7 +915,7 @@ export default function Concierge() {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Type your problem — e.g. screen toot gayi"
-              aria-label="Type your message to Pixel Ai"
+              aria-label="Type your message to Forge AI"
               className="min-w-0 flex-1 rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-2.5 text-[13px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--orange)]/60"
             />
             <button

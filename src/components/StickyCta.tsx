@@ -31,13 +31,13 @@ export default function StickyCta() {
     }`}>
       <div className="glass flex items-center gap-2 rounded-[var(--cta-radius)] bg-white p-2 shadow-2xl">
         <a href="#quote" onClick={() => track("quote_started", { source: "sticky" })}
-          className="flex-1 rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-5 py-3 text-center text-[13.5px] font-bold text-white flex items-center justify-center gap-2 press">
+          className="flex-1 whitespace-nowrap rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-2.5 py-3 text-center text-[12.5px] font-bold text-white flex items-center justify-center gap-1.5 press sm:gap-2 sm:px-5 sm:text-[13.5px]">
           <LineIcon name="search" size={16} />
           Get Estimate
         </a>
         <a href={wa("Hi Red Apple Mobile Repair Store! I need a repair.")} target="_blank" rel="noopener noreferrer"
           onClick={() => track("whatsapp_click", { source: "sticky" })}
-          className="flex-1 rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-5 py-3 text-center text-[13.5px] font-bold text-white flex items-center justify-center gap-2 press">
+          className="flex-1 whitespace-nowrap rounded-[var(--cta-radius)] bg-[var(--cta-dark)] px-2.5 py-3 text-center text-[12.5px] font-bold text-white flex items-center justify-center gap-1.5 press sm:gap-2 sm:px-5 sm:text-[13.5px]">
           <LineIcon name="whatsapp" size={16} />
           WhatsApp
         </a>

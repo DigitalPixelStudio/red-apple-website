@@ -5,11 +5,11 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Refund & Warranty Policy | Red Apple Mobile Repair Store",
-  description: "Our 90-day service warranty, 6 months of battery and display health cover, and refund terms.",
+  description: "Our 6 Months repair warranty, how to claim it with your invoice, the exclusions, and our refund terms.",
   alternates: { canonical: `${baseUrl}/refund-policy` },
 };
 
-const UPDATED = "30 October 2026";
+const UPDATED = "21 November 2026";
 
 export default function RefundPage() {
   return (
@@ -20,26 +20,42 @@ export default function RefundPage() {
         <p className="mb-10 text-sm text-[var(--text-muted)]">Last updated: {UPDATED}</p>
 
         <div className="legal">
-          <h2>90-day service warranty</h2>
+          <h2>6 Months repair warranty</h2>
           <p>
-            Every repair we carry out is covered for 90 days from the date you collect the
-            device. If the same fault returns within that window, we repair it again at no
-            charge.
+            Every repair we carry out is covered for 6 Months from the date you
+            collect the device. That covers the repair work itself, the parts we
+            fitted, and displays, batteries and glass work. Motherboard repairs
+            are the only exclusion.
           </p>
 
-          <h2>6 months of health cover</h2>
+          <h2>Your invoice is the warranty record</h2>
           <p>
-            Battery replacements and display replacements additionally carry a 6-month
-            health cover. If battery health drops below 80% or the display develops a
-            defect that is not impact damage, we replace it once free of charge.
+            We keep the job card in our repair CRM, and the CRM tracked invoice issued
+            after the repair is your warranty record. Keep it safe: it carries
+            the repair date, the work done and the invoice number we use to find
+            your job.
+          </p>
+
+          <h2>How to claim</h2>
+          <p>
+            Bring the invoice and the device to the store, or message us on
+            WhatsApp at {SITE.phone} with your invoice number and clear photos of
+            the problem. We re-diagnose the fault and, if it is covered, handle
+            the diagnosis and the covered repair on that same invoice at no extra
+            charge. Warranty claims are usually assessed the same day.
           </p>
 
           <h2>What the warranty does not cover</h2>
           <ul>
-            <li>New damage — drops, cracks, liquid contact, or bending.</li>
-            <li>Repairs carried out by anyone else after our work.</li>
-            <li>Faults in parts of the device we did not touch.</li>
-            <li>Software problems caused by apps or iOS updates.</li>
+            <li>Physical or impact damage after hand-back — drops, cracks or bending.</li>
+            <li>Liquid damage after hand-back.</li>
+            <li>Repair or opening by another shop after our work.</li>
+            <li>Accidental damage.</li>
+            <li>Normal wear and tear.</li>
+            <li>Misuse.</li>
+            <li>Cosmetic issues.</li>
+            <li>Unrelated software faults, including third-party apps or iOS updates.</li>
+            <li>Motherboard repairs, which are excluded from the 6 Months warranty.</li>
           </ul>
 
           <h2>Refunds before work begins</h2>
@@ -57,12 +73,6 @@ export default function RefundPage() {
             under the warranty at no extra cost, or refund you in full if we cannot fix it.
           </p>
 
-          <h2>How to claim</h2>
-          <p>
-            Bring the device in, or message us on WhatsApp at {SITE.phone} with your repair
-            date and the issue. Warranty claims are usually assessed the same day.
-          </p>
-
           <h2>Refund timing</h2>
           <p>
             Approved refunds are returned to the original payment method within 5–7 working
@@ -71,7 +81,9 @@ export default function RefundPage() {
 
           <h2>Contact</h2>
           <p>
-            {SITE.legalName}, {SITE.address}. Email{" "}
+            {SITE.legalName}, {SITE.address} ({SITE.addressVerified}). Rated 4.9 from{" "}
+            {SITE.ratingCount} Google reviews —{" "}
+            <a href={SITE.gmbUrl} target="_blank" rel="noopener noreferrer">Google My Business &amp; Maps</a>. Email{" "}
             <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
           </p>
         </div>

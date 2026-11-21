@@ -60,7 +60,7 @@ const BY_SECTION: Record<string, Nudge> = {
   },
   reviews: {
     id: "reviews",
-    text: "905 people have rated us 4.9. Want the same turnaround for your device?",
+    text: "Over 1,000 Google reviews support our 4.9 rating. Want the same turnaround for your device?",
     quote: "Get my estimate",
     wa: "Ask a technician",
   },

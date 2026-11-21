@@ -3,10 +3,12 @@ import { useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon } from "./Icons";
+import SmartImg from "./SmartImg";
 
 const LINKS = [
   { href: "#ecosystem", label: "Devices" },
   { href: "#repairs", label: "Repairs" },
+  { href: "#glass", label: "Glass Lab" },
   { href: "#pricing", label: "Pricing" },
   { href: "#process", label: "How It Works" },
   { href: "#quote", label: "Get Quote" },
@@ -22,26 +24,26 @@ export default function Navbar() {
     <header
       className="site-header sticky inset-x-0 top-0 z-50"
     >
-      <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
+      <span className="header-beam" aria-hidden="true" />
+      <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 md:pt-12 lg:px-8">
         <a href="#top" className="group flex items-center gap-2.5" aria-label="Red Apple Mobile Repair Store home">
-          <img
+          <SmartImg
             src="/logo.png"
             alt="Red Apple Mobile Repair Store"
             width={44}
             height={44}
+            priority
             className="h-11 w-11 shrink-0 rounded-[10px] object-contain transition-transform duration-300 group-hover:scale-[1.04]"
-            loading="eager"
-            decoding="async"
           />
           <span className="leading-tight">
-            <span className="brand-name block font-apple text-[17px] font-extrabold tracking-tight">Red Apple</span>
-            <span className="brand-sub block text-[11px] font-extrabold uppercase tracking-[0.2em]">Mobile Repair Store</span>
+            <span className="brand-name block whitespace-nowrap font-apple text-[17px] font-extrabold tracking-tight">Red Apple</span>
+            <span className="brand-sub block whitespace-nowrap text-[10px] font-extrabold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.2em]">Mobile Repair Store</span>
           </span>
         </a>
 
-        <div className="hidden items-center gap-6 xl:flex">
+        <div className="hidden items-center gap-3.5 xl:flex">
           {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="text-[13px] font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text)]">
+            <a key={l.href} href={l.href} className="whitespace-nowrap text-[12.5px] font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text)]">
               {l.label}
             </a>
           ))}

@@ -1,0 +1,503 @@
+    :root {
+      --ra-red: #dc2626;
+      --ra-orange: #ea580c;
+      --ra-dark: #111113;
+    }
+    body {
+      font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+      background-color: #ffffff;
+      color: #18181b;
+      overflow-x: hidden;
+    }
+    .font-display { font-family: var(--font-space), var(--font-inter), sans-serif; }
+    .font-mono-num { font-family: var(--font-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+    /* Edge-to-Edge iPhone 12 Pro Max Top Notch with Live Green/Red LED */
+    .iphone-top-notch {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      width: 176px;
+      height: 22px;
+      background: #09090b;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      pointer-events: none;
+    }
+    .notch-speaker {
+      width: 44px;
+      height: 4px;
+      border-radius: 999px;
+      background: #27272a;
+    }
+    .notch-led {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      animation: notchColor 9s ease-in-out infinite;
+    }
+
+    /* True Red Apple Crimson-to-Orange Gradient (Zero Pink) */
+    .text-brand-grad {
+      background: linear-gradient(90deg, #dc2626 0%, #ea580c 38%, #f59e0b 65%, #dc2626 100%);
+      background-size: 100% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Kinetic Breathing + Color-Shifting Headings (GPU-Only, Zero CLS) */
+    .heading-breathe {
+      animation: headingBreathe 5.5s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes headingBreathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.015); }
+    }
+    .kicker-shift {
+      animation: kickerColor 4.5s ease-in-out infinite;
+    }
+    @keyframes kickerColor {
+      0%, 100% { color: #dc2626; }
+      50% { color: #ea580c; }
+    }
+    .price-breathe {
+      animation: priceGlow 3.8s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes priceGlow {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: .92; }
+    }
+    .badge-breathe {
+      animation: badgePulse 4.6s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%, 100% { opacity: 0.92; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-2px); }
+    }
+
+    /* Subtle GPU Floating Ambient Orbs & Full-Site Animated Background Mesh */
+    .ambient-orb {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(28px);
+      opacity: 0.2;
+      pointer-events: none;
+      will-change: transform;
+      animation: orbFloat 11s ease-in-out infinite;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(22px, -16px, 0) scale(1.07); }
+    }
+    /* Signature Orange Glass-Sweep Shimmer */
+    /* Section Backgrounds with Smooth Ambient Motion */
+    .ambient-warm {
+      position: relative;
+      overflow: hidden;
+      background-color: #fffaf7;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.075), transparent 52%),
+        radial-gradient(circle at 88% 82%, rgba(234, 88, 12, 0.095), transparent 52%),
+        radial-gradient(rgba(220, 38, 38, 0.07) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 28px 28px;
+    }
+    .ambient-clean {
+      position: relative;
+      overflow: hidden;
+      background-color: #ffffff;
+      background-image:
+        radial-gradient(circle at 82% 15%, rgba(234, 88, 12, 0.06), transparent 50%),
+        radial-gradient(circle at 18% 85%, rgba(220, 38, 38, 0.045), transparent 50%),
+        radial-gradient(rgba(24, 24, 27, 0.05) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 32px 32px;
+    }
+    .orange-glass-sweep {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(118deg, transparent 16%, rgba(249, 115, 22, 0.34) 46%, rgba(251, 146, 60, 0.14) 56%, transparent 82%);
+      transform: translateX(-120%);
+      animation: orangeGlassSweep 4.2s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 10;
+    }
+    @keyframes orangeGlassSweep {
+      0%, 18% { transform: translateX(-120%); }
+      56%, 100% { transform: translateX(125%); }
+    }
+
+    /* Interactive Card Laser Sheen Hover */
+    .card-sheen {
+      position: relative;
+      overflow: hidden;
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+    }
+    .card-sheen:hover { transform: translateY(-3px); }
+    .card-sheen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, transparent 22%, rgba(234, 88, 12, 0.14) 48%, rgba(220, 38, 38, 0.12) 55%, transparent 78%);
+      transform: translateX(-120%);
+      transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    .card-sheen:hover::after { transform: translateX(120%); }
+
+    /* Smooth Scroll Reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+      transition: opacity 480ms ease-out, transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-up.is-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* High-Contrast Obsidian Studio Backdrop for 3D Stages */
+    .stage-3d-box {
+      contain: paint;
+      position: relative;
+      background: radial-gradient(circle at 50% 42%, rgba(234, 88, 12, 0.22), rgba(17, 17, 19, 0.96) 72%);
+      overflow: hidden;
+    }
+    .stage-3d-box canvas,
+    .stage-3d-white canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+    .stage-3d-box canvas:active,
+    .stage-3d-white canvas:active { cursor: grabbing; }
+
+    /* Clean Apple-Store White Studio Backdrop for AirPods Pro 3D */
+    .stage-3d-white {
+      position: relative;
+      background: radial-gradient(circle at 50% 45%, #ffffff 0%, #f8fafc 62%, #e4e4e7 100%);
+      overflow: hidden;
+    }
+
+    /* Live Pulse & Radar Calibration Aura */
+    .pulse-ring {
+      animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes livePing {
+      0% { transform: scale(1); opacity: 0.75; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+    .aura-ring {
+      position: absolute;
+      inset: -14px;
+      border-radius: 9999px;
+      border: 2px solid rgba(220, 38, 38, 0.45);
+      animation: auraPulse 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      pointer-events: none;
+    }
+    .aura-ring-2 {
+      animation-delay: 1.4s;
+      border-color: rgba(234, 88, 12, 0.45);
+    }
+    @keyframes auraPulse {
+      0% { transform: scale(0.88); opacity: 0.85; }
+      100% { transform: scale(1.38); opacity: 0; }
+    }
+
+    /* Smooth Infinite Marquee (Technical Ticker + Google Reviews) */
+    .marquee-track {
+      width: 100%;
+      animation: none !important;
+      will-change: auto;
+    }
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Matte Charcoal Action Dock (Matched to Reference Screenshot) */
+    .dock-quote-btn {
+      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28);
+    }
+    .dock-wa-btn {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+    }
+    .dock-dark-btn {
+      background: #18181b;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+      transition: transform 150ms ease, background-color 150ms ease;
+    }
+    .dock-dark-btn:hover {
+      background: #27272a;
+    }
+    .dock-ai-header {
+      background: linear-gradient(135deg, #18181b 0%, #27272a 60%, #dc2626 100%);
+    }
+
+    /* 3D Holographic Warranty Card */
+    .holo-card {
+      transform-style: preserve-3d;
+      transition: transform 140ms ease-out;
+      background: linear-gradient(135deg, #18181b 0%, #27272a 45%, #7c2d12 78%, #450a0a 100%);
+      --gx: 50%;
+      --gy: 50%;
+    }
+    .holo-glare {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.28) 0%, rgba(251, 146, 60, 0.16) 26%, transparent 62%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    /* Left-Side Dark Breathing Page Indicator */
+    .page-rail-dot {
+      transition: transform 200ms ease, background-color 200ms ease;
+    }
+    .page-rail-dot.is-active {
+      background-color: #dc2626;
+      transform: scale(1.35);
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+    }
+
+    /* ================= FINAL POLISH: ELITE TYPE, MOTION & SMOOTHNESS ================= */
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    section[id] { scroll-margin-top: 88px; }
+
+    /* Premium heading voice: heavier, tighter, richer colour at rest */
+    .font-display { font-weight: 800; letter-spacing: -0.025em; }
+    h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
+    .font-display.heading-breathe, h2.heading-breathe, h3.heading-breathe { animation: headingBreathe 5s ease-in-out infinite; }
+    h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
+    .heading-breathe { animation: headingBreathe 6.5s ease-in-out infinite; }
+    .kicker-shift { font-weight: 800; letter-spacing: 0.16em; }
+
+    /* Laser-red vertical sweep on the trusted-by logo */
+    .logo-laser { position: relative; isolation: isolate; }
+    .logo-laser::after {
+      content: "";
+      position: absolute;
+      left: 10%; right: 10%;
+      height: 4px;
+      top: 12%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, #dc2626 20%, #fb923c 50%, #dc2626 80%, transparent);
+      box-shadow: 0 0 14px 3px rgba(220,38,38,0.55);
+      animation: logoLaser 2.4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+    @keyframes logoLaser {
+      0%, 100% { transform: translateY(0); opacity: .25; }
+      50%      { transform: translateY(112px); opacity: 1; }
+    }
+    .logo-laser img { animation: logoFloat 4.6s ease-in-out infinite; }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-3px) scale(1.03); }
+    }
+
+    /* Touch-friendly 3D + slider handling */
+    #ba-slider-box { touch-action: pan-y; }
+    .stage-3d-box canvas, .stage-3d-white canvas { touch-action: pan-y; }
+
+    /* Gift: honour device motion preference — stops all continuous GPU work */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .heading-breathe, .kicker-shift, .price-breathe, .badge-breathe,
+      .ambient-orb, .ambient-warm, .ambient-clean, .aura-ring,
+      .pulse-ring, .logo-laser::after, .logo-laser img { animation: none !important; }
+      .reveal-up { opacity: 1 !important; transform: none !important; }
+      .stage-3d-box canvas, .stage-3d-white canvas { will-change: auto; }
+    }
+
+    /* Gift: one-time, GPU-only stagger for trust cards */
+    .marquee-track > .reveal-up { transition-delay: var(--stagger, 0ms); }
+    .marquee-track > .reveal-up:nth-child(1) { --stagger: 0ms; }
+    .marquee-track > .reveal-up:nth-child(2) { --stagger: 90ms; }
+    .marquee-track > .reveal-up:nth-child(3) { --stagger: 180ms; }
+    .marquee-track > .reveal-up:nth-child(4) { --stagger: 270ms; }
+
+
+    /* ===== LIGHTWEIGHT LASER LINE (transform-only, one instance per section) ===== */
+    .laser-stage { position: relative; isolation: isolate; }
+    .laser-line {
+      position: absolute;
+      z-index: 0;
+      left: -18%;
+      top: 28%;
+      width: 42%;
+      height: 2px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(220,38,38,.55), rgba(249,115,22,.75), transparent);
+      box-shadow: 0 0 12px 1px rgba(234,88,12,.25);
+      transform: translate3d(0,0,0) rotate(-4deg);
+      will-change: transform;
+      animation: laserDrift 9s ease-in-out infinite;
+      contain: strict;
+    }
+    @keyframes laserDrift {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); opacity: .25; }
+      50%      { transform: translate3d(260%, 34px, 0) rotate(-4deg); opacity: .55; }
+    }
+    .laser-stage > *:not(.laser-line) { position: relative; z-index: 1; }
+
+    /* Lazy reveal for machine cards & 3D stages */
+    .laser-stage .reveal-up:nth-child(2) { transition-delay: 70ms; }
+    .laser-stage .reveal-up:nth-child(3) { transition-delay: 140ms; }
+    .laser-stage .reveal-up:nth-child(4) { transition-delay: 210ms; }
+
+    @media (max-width: 767px) {
+      .laser-line { width: 60%; animation-duration: 12s; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .laser-line { animation: none !important; opacity: .18; }
+    }
+
+
+    /* ===== FINAL ELITE MICRO-POLISH (GPU-only, zero repaint) ===== */
+    .reveal-up, .card-sheen { transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease; }
+    .reveal-up:hover { box-shadow: 0 12px 32px -12px rgba(220,38,38,.22); }
+    select, input { transition: border-color .18s ease, box-shadow .18s ease; }
+    select:focus, input:focus { box-shadow: 0 0 0 3px rgba(220,38,38,.10); }
+    .page-rail-dot:hover { transform: scale(1.5); background-color: #ea580c; }
+    .laser-line { opacity: .55; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-up:hover, .page-rail-dot:hover { transform: none; }
+    }
+
+
+    /* ===== HEADER BRAND GLOW + 5 LIGHTWEIGHT BACKGROUND AMBIENCES ===== */
+    .brand-name-glow { color: #111; font-weight: 900; letter-spacing: .02em; position: relative; display:inline-block; text-transform: uppercase; }
+    .brand-name-glow::before { content:""; position:absolute; inset:-3px; border-radius:50%; background:radial-gradient(circle at 26% 22%,rgba(249,107,9,.42),transparent 60%); pointer-events:none; filter: blur(1.5px); transition:background 1.5s ease; }
+    @keyframes brandPulse { 0%,100%{filter:drop-shadow(0 0 4px rgba(220,38,38,.18));} 50%{filter:drop-shadow(0 0 12px rgba(220,38,38,.42));} }
+    .brand-name-glow { animation: brandPulse 5s ease-in-out infinite; }
+    .brand-icon-glow { box-shadow: 0 0 0 2px rgba(220,38,38,.10), 0 0 16px rgba(234,88,12,.28); }
+
+    /* 1. Slow drifting glow wash (transform/opacity only) */
+    .ambient-warm::before, .ambient-clean::before {
+      content: ""; position: absolute; z-index: 0;
+      width: 28vw; height: 28vw; max-width: 320px; max-height: 320px;
+      left: -6vw; top: -8vw; border-radius: 50%;
+      background: radial-gradient(circle, rgba(234,88,12,.055), transparent 68%);
+      pointer-events: none; will-change: transform;
+      animation: ambientDrift 26s ease-in-out infinite alternate; will-change: transform; contain: strict;
+    }
+    @keyframes ambientDrift {
+      0%   { transform: translate3d(0,0,0) scale(1); opacity: .6; }
+      100% { transform: translate3d(22vw, 12vw, 0) scale(1.12); opacity: 1; }
+    }
+    /* 2. Section-top hairline shimmer (transform only, contain) */
+    .section-shimmer { position: relative; }
+    .section-shimmer::after {
+      content: ""; position: absolute; z-index: 1; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(220,38,38,.35), rgba(234,88,12,.45), transparent);
+      background-size: 200% 100%;
+      transform: translate3d(-30%,0,0);
+      animation: shimmerLine 14s linear infinite;
+      pointer-events: none; contain: strict;
+    }
+    @keyframes shimmerLine { to { transform: translate3d(30%,0,0); } }
+    /* 3. Slow breathing dot-grid accent */
+    .grid-breathe { animation: gridBreathe 9s ease-in-out infinite; }
+    @keyframes gridBreathe { 0%,100% { opacity: .5; } 50% { opacity: .85; } }
+    /* 4. Soft radial pulse behind the logo (transform/opacity only) */
+    .logo-laser::before {
+      content: ""; position: absolute; inset: -18px; border-radius: 9999px;
+      background: radial-gradient(circle, rgba(220,38,38,.16), transparent 70%);
+      animation: auraPulse 6s ease-in-out infinite; pointer-events: none; z-index: -1;
+    }
+    /* 5. Gentle floating sparkles on machine stages (opacity/transform only) */
+    .stage-3d-box::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.5) 0 1px, transparent 2px),
+        radial-gradient(circle at 78% 66%, rgba(251,146,60,.5) 0 1px, transparent 2px),
+        radial-gradient(circle at 55% 18%, rgba(255,255,255,.35) 0 1px, transparent 2px);
+      animation: sparkleFloat 11s ease-in-out infinite alternate;
+    }
+    @keyframes sparkleFloat {
+      0% { transform: translate3d(0,0,0); opacity: .35; }
+      100% { transform: translate3d(6px,-8px,0); opacity: .8; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .brand-name-glow, .ambient-warm::before, .ambient-clean::before,
+      .section-shimmer::after, .grid-breathe, .logo-laser::before,
+      .stage-3d-box::after { animation: none !important; }
+    }
+
+
+    /* GIFT 1 — off-screen render skipping for heavy static lists (no visual change) */
+    #faq-list, #reviews .marquee-track > div, .glass-lab-grid, .parts-grid {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 420px;
+    }
+
+
+    /* ===== FOOTER GLASS ===== */
+    .premium-footer {
+      position: relative; border-color: rgba(220,38,38,0.10);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      will-change: transform, backdrop-filter;
+      contain: paint;
+    }
+    .premium-footer::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(135deg, rgba(220,38,38,0.08), rgba(234,88,12,0.04));
+      z-index: -1;
+    }
+
+    /* ===== COLORED DOT NOTCH (re-enabled, slow color cycle — zero perf cost) ===== */
+    .notch-led { animation: notchColor 9s ease-in-out infinite; }
+    @keyframes notchColor {
+      0%,45% { background:#22c55e; } 10%,35% { background:#ef4444; }
+      12%,30% { background:#06b6d4; } 15%,28% { background:#8b5cf6; }
+      18%,25% { background:#f59e0b; } 20%,22% { background:#ec4899; }
+      21% { background:#ea580c; }
+    }
+
+    /* ===== DEVICE GRID HOVER: rotated lift (3D, GPU-only) ===== */
+    .spotlight-card { will-change: transform, opacity; backface-visibility: hidden; transform: translateZ(0); }
+    .spotlight-card:hover { transform: translateY(-3px) rotate(0.5deg); box-shadow: 0 16px 40px -14px rgba(220,38,38,0.25); }
+
+    /* ===== HOVER PRICE TABLE ===== */
+    .price-row { transition: transform .3s cubic-bezier(.22,1,.36,1); }
+    .price-row:hover { transform: translateX(8px); background: linear-gradient(90deg, rgba(220,38,38,0.06), transparent); }
+
+    /* ===== AIRPODS world + watch display ===== */
+    .airpods-glow { animation: none; } /* rely on static colored ring instead (perf) */
+
+    @media (prefers-reduced-motion: reduce) {
+      .notch-led { animation: none; background:#dc2626; }
+      .spotlight-card:hover, .price-row:hover { transform: none; }
+      .premium-footer::before { display: none; }
+    }
+
+
+    /* ===== JITTER LOCK — physics-muted animations stop the moment it is needed ===== */
+    html.reduce-motion body *:not(#rm-toggle,#rm-dock) { animation:none !important; transition:none !important; will-change:auto !important; }
+    html.reduce-motion .pulse-ring, html.reduce-motion .aurora-spin, html.reduce-motion .orb-float, html.reduce-motion .notch-led, html.reduce-motion .convex-dot { animation:none !important; }
+    #rm-toggle { padding: 6px 10px; text-wrap: nowrap; }
+    #rm-toggle.active { background: rgba(220,38,38,.25); }
+    .tour-done { color: #16a34a; text-decoration: underline; font-size: 11px; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .spotlight-card:hover, .price-pill:hover, .price-row:hover, .glass-card:hover {
+        box-shadow: 0 12px 28px -10px rgba(220,38,38,.18);
+      }
+      .card-tick:hover { transform: translateY(-2px); }
+    }

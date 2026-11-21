@@ -32,6 +32,7 @@ type AnalyticsEvent =
   | "quote_started"
   | "device_selected"
   | "model_selected"
+  | "glass_price_select"
   | "quote_completed"
   | "whatsapp_click"
   | "call_click"
@@ -44,7 +45,10 @@ type AnalyticsEvent =
   | "nudge_shown"
   | "nudge_quote_click"
   | "nudge_whatsapp_click"
-  | "lead_captured";
+  | "lead_captured"
+  | "triage_model"
+  | "triage_symptom"
+  | "triage_share";
 
 declare global {
   interface Window {

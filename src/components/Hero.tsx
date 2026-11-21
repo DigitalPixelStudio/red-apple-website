@@ -7,13 +7,13 @@ import Phone3D from "./Phone3D";
 
 export default function Hero() {
   const devices = [
-    { label: "iPhone", sub: "Display · Back glass · Battery", icon: "phone" as IconName, img: "/images/v4/iphone-product.jpg" },
-    { label: "iPad", sub: "Screens & logic boards", icon: "ipad" as IconName, img: "/images/v3/ipad-repair.jpg" },
-    { label: "Apple Watch", sub: "Screens · battery · sensors", icon: "watch" as IconName, img: "/images/v4/apple-watch.jpg" },
-    { label: "MacBook", sub: "Logic board · keyboard · screen", icon: "macbook" as IconName, img: "/images/v3/laptop-closeup.jpg" },
+    { label: "iPhone", sub: "Display · Back glass · Battery", icon: "phone" as IconName, img: "/images/v5/service-iphone.jpg", tone: "device-tone-orange" },
+    { label: "iPad", sub: "Screens & logic boards", icon: "ipad" as IconName, img: "/images/v5/ipad-pro-129.jpg", tone: "device-tone-blue" },
+    { label: "Apple Watch", sub: "Screens · Battery · Sensors", icon: "watch" as IconName, img: "/images/v5/service-watch.jpg", tone: "device-tone-green" },
+    { label: "MacBook", sub: "Logic board · Keyboard · Screen", icon: "macbook" as IconName, img: "/images/v5/macbook-pro-latest.jpg", tone: "device-tone-violet" },
   ];
 
-  /* Store hours: 10:30 – 21:00, all 7 days (IST). Computed on the client so the
+  /* Store hours: 10:00 – 24:00 (midnight), all 7 days (IST). Computed on the client so the
      badge never claims "Open now" at 2am. Falls back to the static label during
      SSR, then corrects itself on mount — no hydration mismatch. */
   const [status, setStatus] = useState<{ open: boolean; label: string }>({
@@ -124,11 +124,14 @@ export default function Hero() {
           <span>{status.label}</span>
         </div>
 
-        <h1 className="hero-apple font-breathe mb-6 text-balance">
-          Apple repairs, <span className="hero-mastered">mastered.</span>
+        <h1 className="hero-apple hero-title mb-6 text-balance">
+          Apple Device Repairs, <span className="hero-mastered">Mastered.</span>
         </h1>
-        <p className="hero-sub mb-10 text-balance">
-          Component-level micro-soldering, OEM displays, and 30-minute turnarounds right here in Bangalore. Backed by our rock-solid 90-day warranty.
+        <p className="hero-sub hero-sub-rich mb-10 text-balance">
+          Component-Level Micro-Soldering, OEM Displays &amp; Front-Glass Restoration
+          On Specialised TBK Machinery — <strong>30-Minute Turnarounds</strong>, Right
+          Here In Bengaluru. Backed By Our{" "}
+          <strong>6 Months Repair Service Warranty</strong>.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
@@ -156,15 +159,16 @@ export default function Hero() {
             <a
               key={d.label}
               href="#quote"
-              className="spotlight-card hover-pop p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--accent)]/40 text-left flex items-center gap-3 group shadow-sm"
+              className={`device-chip spotlight-card hover-pop group ${d.tone}`}
             >
-              <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] shrink-0 group-hover:scale-110 transition-transform">
+              <span className="device-chip-icon">
                 <LineIcon name={d.icon} className="w-5 h-5" />
-              </div>
-              <div className="overflow-hidden">
-                <h3 className="font-bold text-sm truncate">{d.label}</h3>
-                <p className="text-[11px] text-[var(--text-muted)] truncate">{d.sub}</p>
-              </div>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[13px] font-bold leading-tight sm:text-[13.5px]">{d.label}</span>
+                <span className="mt-0.5 block line-clamp-2 text-[10.5px] leading-snug text-[var(--text-muted)] sm:text-[11px]">{d.sub}</span>
+              </span>
+              <LineIcon name="arrow-right" size={14} className="device-chip-arrow hidden sm:block" />
             </a>
           ))}
         </div>
@@ -174,10 +178,10 @@ export default function Hero() {
             enough to pass `sm:` but only ~390px tall, so the phone existed and
             was never reachable. It is always rendered now, and the hero
             compresses itself in landscape so the device comes into view. */}
-        <div className="hero-phone-wrap mt-14">
+        <div className="hero-phone-wrap hero-phone-live mt-14">
           <Phone3D />
           <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--orange-deep)]">
-            Built for every iPhone · 11 through 17 Pro Max
+            Built for every iPhone · 11 through 18 Pro Max
           </p>
         </div>
       </div>

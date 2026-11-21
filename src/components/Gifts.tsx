@@ -7,7 +7,7 @@
  *  1. Scroll-progress ring that doubles as a back-to-top button
  *  2. Sticky section rail on desktop (shows where you are)
  *  3. Press "/" anywhere to open the assistant
- *  4. Live "repairs this month" counter that ticks up
+ *  4. A walk-in reminder drawn from the real store hours (no invented stats)
  *  5. One-tap copy of the shop address
  *  6. Keyboard shortcut hint chip (discoverable, not hidden)
  *  7. Reading-time estimate on long sections
@@ -23,6 +23,7 @@ const SECTIONS = [
   { id: "top", label: "Home" },
   { id: "quote", label: "Estimate" },
   { id: "pricing", label: "Pricing" },
+  { id: "triage", label: "Triage" },
   { id: "repairs", label: "Repairs" },
   { id: "process", label: "Process" },
   { id: "reviews", label: "Reviews" },
@@ -34,7 +35,6 @@ export default function Gifts() {
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState("top");
   const [copied, setCopied] = useState(false);
-  const [count, setCount] = useState(0);
   const [openNow, setOpenNow] = useState(true);
   const ticking = useRef(false);
   const offsets = useRef<{ id: string; top: number }[]>([]);
@@ -90,20 +90,6 @@ export default function Gifts() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  /* 4 — counter ticks up to a believable monthly figure */
-  useEffect(() => {
-    const target = 412;
-    let n = 0;
-    const step = () => {
-      n += Math.max(1, Math.round((target - n) / 18));
-      if (n >= target) { setCount(target); return; }
-      setCount(n);
-      requestAnimationFrame(step);
-    };
-    const t = setTimeout(step, 600);
-    return () => clearTimeout(t);
   }, []);
 
   /* 8 — mirror the real store hours in IST */
@@ -200,7 +186,7 @@ export default function Gifts() {
           {openNow ? "Open now · until 12 AM" : "Closed · opens 10 AM"}
         </span>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] px-3 py-1.5 font-semibold text-[var(--text)]/70">
-          <span className="font-bold text-[var(--text)]">{count}</span> repairs completed this month
+          Walk-ins welcome · no appointment needed
         </span>
         <button
           onClick={copyAddress}

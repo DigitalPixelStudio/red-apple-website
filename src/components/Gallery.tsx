@@ -14,6 +14,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { LineIcon } from "./Icons";
+import SmartImg from "./SmartImg";
 
 type Shot = {
   src: string;
@@ -118,35 +119,32 @@ export default function Gallery() {
         <div className="mx-auto max-w-[680px] text-center">
           <span className="kicker">The Real Store</span>
           <h2 className="head-gradient mt-3 font-apple text-[clamp(1.9rem,4vw,2.8rem)] font-extrabold leading-[1.08] tracking-tight">
-            A real shop, a real bench, real people
+            A Real Shop, a Real Bench &amp; The Real People
           </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-muted)]">
-            Before you hand over a ₹80,000 phone, you should know where it goes.
-            This is our store on MG Road, our benches, and the people who will
-            open it — photographed, not illustrated.
+            Before you hand over a <span className="text-shine">₹80,000 phone</span>, you
+            should know where it goes. This is our store on MG Road, our benches, and
+            the people who will open it — <span className="text-shine">photographed, not illustrated.</span>
           </p>
         </div>
 
-        {/* grid */}
-        <div className="mt-11 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {/* masonry columns — every row fills, no empty cell at the end */}
+        <div className="gallery-masonry mt-11 columns-2 gap-3 sm:columns-3 lg:columns-4">
           {SHOTS.map((s, i) => (
             <button
               key={s.src}
               onClick={() => setOpen(i)}
               aria-label={`Open photo: ${s.caption}`}
-              className={`hv-zoom hv-lift group relative overflow-hidden rounded-[18px] border border-black/[0.06] bg-[var(--bg-alt)] text-left ${
-                s.wide ? "sm:col-span-2" : ""
-              } ${s.tall ? "row-span-2" : ""}`}
+              className="elite-media hv-zoom hv-lift gallery-tile group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-[18px] border border-black/[0.06] bg-[var(--bg-alt)] text-left"
             >
-              <img
+              <SmartImg
                 src={s.src}
                 alt={s.alt}
                 width={s.wide ? 1400 : 700}
                 height={s.tall ? 1400 : 700}
-                loading="lazy"
-                decoding="async"
-                className={`w-full object-cover ${s.tall ? "h-full min-h-[220px]" : "aspect-[4/3]"}`}
+                className={`w-full object-cover ${s.wide ? "aspect-[16/10]" : s.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}
               />
+              <span className="elite-media-scan" aria-hidden="true" />
               {/* caption veil — solid gradient, no backdrop blur */}
               <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/28 to-transparent px-3.5 pb-3 pt-10">
                 <span className="block text-[11.5px] font-bold leading-snug text-white">
@@ -193,11 +191,9 @@ export default function Gallery() {
           </button>
 
           <figure onClick={(e) => e.stopPropagation()} className="max-h-[86vh] max-w-[1100px]">
-            <img
+            <SmartImg
               src={SHOTS[open].src}
               alt={SHOTS[open].alt}
-              loading="lazy"
-              decoding="async"
               className="max-h-[78vh] w-auto rounded-[14px] object-contain"
             />
             <figcaption className="mt-3 text-center text-[12.5px] font-semibold text-white/85">

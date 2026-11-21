@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import QuoteWizard from "@/components/QuoteWizard";
 import Concierge from "@/components/Concierge";
+import GlassRestoration from "@/components/GlassRestoration";
 import StickyCta from "@/components/StickyCta";
 import { SERVICE_PAGES, SITE, wa, baseUrl } from "@/lib/site";
 
@@ -55,8 +56,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <h1 className="section-title font-apple mt-3 text-[#1d1d1f]">{page.title}</h1>
           <p className="section-subtitle mx-auto mt-5">{page.desc}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
-            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">4.9 Google rated</span>
-            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">️ 90-day warranty</span>
+            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">4.9 · {SITE.ratingCount} Google reviews</span>
+            <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">6 Months Warranty</span>
             <span className="rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-[#1d1d1f] shadow-sm">Free pickup &amp; drop</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -65,6 +66,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
       </section>
+
+      {slug === "front-glass-restoration" && <GlassRestoration />}
 
       <section id="estimate" className="section-apple bg-white">
         <div className="mx-auto max-w-[860px] px-6 lg:px-8">

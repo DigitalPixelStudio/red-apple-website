@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${baseUrl}/terms` },
 };
 
-const UPDATED = "30 October 2026";
+const UPDATED = "21 November 2026";
 
 export default function TermsPage() {
   return (
@@ -44,7 +44,7 @@ export default function TermsPage() {
           <ul>
             <li>Back up your data before handing over any device. We are not responsible for data loss.</li>
             <li>We never ask for your passcode, Apple ID, or account password.</li>
-            <li>If a device is not collected within 90 days of completion, we may dispose of it after written notice.</li>
+            <li>If a device is not collected within 30 days of completion, we may dispose of it after written notice.</li>
           </ul>
 
           <h2>What we do not cover</h2>
@@ -56,8 +56,14 @@ export default function TermsPage() {
 
           <h2>Warranty</h2>
           <p>
-            Every repair carries a 90-day service warranty. Displays and batteries also
-            carry 6 months of health cover. Full details are on our{" "}
+            Every repair carries a 6 Months warranty, including displays,
+            batteries and glass work. Motherboard repairs are the only exclusion.
+            The invoice is the warranty record: bring it with the device, or
+            WhatsApp the invoice number and photos, and the diagnosis and covered
+            repair are handled on that same invoice within 6 Months. Not covered:
+            physical/impact or liquid damage after hand-back, repair or opening by
+            another shop after us, accidental damage, normal wear and tear, misuse,
+            cosmetic issues, or unrelated software faults. Full details are on our{" "}
             <a href="/refund-policy">Refund &amp; Warranty Policy</a>.
           </p>
 

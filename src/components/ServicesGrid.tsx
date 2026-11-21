@@ -1,5 +1,6 @@
 "use client";
 import Reveal from "./Reveal";
+import SmartImg from "./SmartImg";
 import { SERVICES, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
@@ -10,18 +11,19 @@ export default function ServicesGrid() {
       <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
         <Reveal className="text-center">
           <p className="font-apple text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">Repair services</p>
-          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Every repair. <span className="gradient-text">One expert team.</span></h2>
+          <h2 className="section-title font-apple mt-3 text-[var(--text)]">Every Repair. <span className="gradient-text">One Expert Team.</span></h2>
           <p className="section-subtitle mx-auto mt-5">Hardware and software — handled by technicians who work on Apple devices every single day.</p>
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
             <Reveal key={s.id} delay={(i % 3) * 80}>
-              <div className={`group relative flex h-full flex-col rounded-[26px] overflow-hidden transition duration-300 duration-300 hover:-translate-y-1.5 ${
+              <div className={`group relative flex h-full flex-col overflow-hidden rounded-[26px] transition duration-300 hover:-translate-y-1.5 ${
                 s.featured ? "shadow-xl" : ""
               }`}>
-                <div className="relative h-40 overflow-hidden">
-                  <img src={s.img} alt={s.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                <div className="elite-media relative h-40 overflow-hidden">
+                  <SmartImg src={s.img} alt={s.title} width={900} height={540} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <span className="elite-media-scan" aria-hidden="true" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3">
                     <div className="flex items-center justify-between">
