@@ -1251,7 +1251,15 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
               s.canvas.width = rw;
               s.canvas.height = rh;
             }
-            if (!s.autoFramed) { s.autoFramed = true; centerAndFitEdgeToEdge(s.camera, s.root, 1.03); }
+            if (!s.autoFramed && cw && ch) {
+              s.autoFramed = true;
+              // Hero iPhone + pickup phone zoom in tighter (bigger, edge-to-edge); others stay 1.03.
+              const focus = (s.canvas.id === 'canvas-hero' || s.canvas.id === 'canvas-pickup-iphone');
+              let pad = focus ? 0.92 : 1.03;
+              // Slight extra zoom on tablet widths across all models.
+              if (window.innerWidth >= 768 && window.innerWidth <= 1100) pad = pad * 0.96;
+              centerAndFitEdgeToEdge(s.camera, s.root, pad);
+            }
             s.camera.aspect = cw / ch;
             s.camera.updateProjectionMatrix();
             s.orbit.update(s === heroSlot && heroAmbient ? 0.009 : 0.006);
