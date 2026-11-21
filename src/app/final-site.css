@@ -523,6 +523,7 @@
     }
     #gallery img:hover, #tbk-machines img:hover, #glass-lab img:hover, #real-shop img:hover {
       box-shadow: 0 16px 34px -6px rgba(249,115,22,0.30);
+    }
 
     /* ===== GLOBAL SCROLL PAUSE — kills all CSS animations while scrolling (120fps answer) ===== */
     html.is-scrolling * { animation-play-state: paused !important; }
