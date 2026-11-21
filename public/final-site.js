@@ -817,7 +817,6 @@
           const root = new THREE.Group();
           scene.add(root);
           const onTick = buildFn(root);
-          if (window.innerWidth < 768) root.scale.multiplyScalar(1.0);
           const orbit = addOrbit(canvas, root, initY, initX);
           const slot = { canvas, ctx, scene, camera, root, orbit, onTick, visible: true };
           slots.push(slot);
