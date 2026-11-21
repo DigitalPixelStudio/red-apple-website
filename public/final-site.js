@@ -1255,8 +1255,11 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
               s.autoFramed = true;
               // First 3 device models (hero iPhone, estimate iPad, pickup iPhone) zoom in
               // much bigger/closer; all other models stay at 1.03.
-              const focus = (s.canvas.id === 'canvas-hero' || s.canvas.id === 'canvas-estimate-ipad' || s.canvas.id === 'canvas-pickup-iphone');
-              let pad = focus ? 0.48 : 1.03;
+              const id = s.canvas.id;
+              // Hero iPhone + pickup iPhone: ~1.4x bigger (pad 0.40). iPad (pad model): +5% zoom (0.456).
+              let pad = 1.03;
+              if (id === 'canvas-hero' || id === 'canvas-pickup-iphone') pad = 0.40;
+              else if (id === 'canvas-estimate-ipad') pad = 0.456;
               // Slight extra zoom on tablet widths across all models.
               if (window.innerWidth >= 768 && window.innerWidth <= 1100) pad = pad * 0.96;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
