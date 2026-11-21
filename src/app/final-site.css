@@ -486,3 +486,9 @@
     .premium-footer { transition: background .4s ease; }
     .section-shimmer.is-chapter { opacity: 1 !important; }
     .station-frame { display: none; }
+
+
+    /* ===== ZERO-RASTERIZE JANK (re-created text areas) ===== */
+    .stage-3d-box, .spotlight-card, .reveal-up, .card-sheen, .hero-apple, .heading-breathe { transform: translateZ(0); backface-visibility: hidden; }
+    .stage-3d-box canvas, .stage-3d-white canvas { transform: translateZ(0); backface-visibility: hidden; }
+    .ambient-warm::before { transform: translateZ(0); }
