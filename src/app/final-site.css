@@ -11,7 +11,6 @@
     }
     .font-display { font-family: var(--font-space), var(--font-inter), sans-serif; }
     .font-mono-num { font-family: var(--font-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; }
-
     /* True Red Apple Crimson-to-Orange Gradient (Zero Pink) */
     .text-brand-grad {
       background: linear-gradient(90deg, #dc2626 0%, #ea580c 38%, #f59e0b 65%, #dc2626 100%);
@@ -19,7 +18,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
     /* Kinetic Breathing + Color-Shifting Headings (GPU-Only, Zero CLS) */
     .heading-breathe {
       animation: headingBreathe 5.5s ease-in-out infinite;
@@ -51,7 +49,6 @@
       0%, 100% { opacity: 0.92; transform: translateY(0); }
       50% { opacity: 1; transform: translateY(-2px); }
     }
-
     /* Subtle GPU Floating Ambient Orbs & Full-Site Animated Background Mesh */
     .ambient-orb {
       position: absolute;
@@ -102,7 +99,6 @@
       0%, 18% { transform: translateX(-120%); }
       56%, 100% { transform: translateX(125%); }
     }
-
     /* Interactive Card Laser Sheen Hover */
     .card-sheen {
       position: relative;
@@ -120,7 +116,6 @@
       pointer-events: none;
     }
     .card-sheen:hover::after { transform: translateX(120%); }
-
     /* Smooth Scroll Reveal */
     .reveal-up { opacity: 0; transform: translate3d(0, 14px, 0); }
     .reveal-up.is-in { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -140,7 +135,6 @@
       }
     }
     @media (prefers-reduced-motion: reduce) { .reveal-up { transition: none !important; } }
-
     /* High-Contrast Obsidian Studio Backdrop for 3D Stages */
     .stage-3d-box {
       contain: paint;
@@ -158,14 +152,12 @@
     }
     .stage-3d-box canvas:active,
     .stage-3d-white canvas:active { cursor: grabbing; }
-
     /* Clean Apple-Store White Studio Backdrop for AirPods Pro 3D */
     .stage-3d-white {
       position: relative;
       background: radial-gradient(circle at 50% 45%, #ffffff 0%, #f8fafc 62%, #e4e4e7 100%);
       overflow: hidden;
     }
-
     /* Live Pulse & Radar Calibration Aura */
     .pulse-ring {
       animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
@@ -190,7 +182,6 @@
       0% { transform: scale(0.88); opacity: 0.85; }
       100% { transform: scale(1.38); opacity: 0; }
     }
-
     /* Smooth Infinite Marquee (Technical Ticker + Google Reviews) */
     .marquee-track {
       width: 100%;
@@ -201,7 +192,6 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-
     /* Matte Charcoal Action Dock (Matched to Reference Screenshot) */
     .dock-quote-btn {
       background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
@@ -223,7 +213,6 @@
     .dock-ai-header {
       background: linear-gradient(135deg, #18181b 0%, #27272a 60%, #dc2626 100%);
     }
-
     /* 3D Holographic Warranty Card */
     .holo-card {
       transform-style: preserve-3d;
@@ -239,7 +228,6 @@
       pointer-events: none;
       mix-blend-mode: screen;
     }
-
     /* Left-Side Dark Breathing Page Indicator */
     .page-rail-dot {
       transition: transform 200ms ease, background-color 200ms ease;
@@ -249,11 +237,9 @@
       transform: scale(1.35);
       box-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
     }
-
     /* ================= FINAL POLISH: ELITE TYPE, MOTION & SMOOTHNESS ================= */
     html { scroll-behavior: smooth; scroll-padding-top: 88px; }
     section[id] { scroll-margin-top: 88px; }
-
     /* Premium heading voice: heavier, tighter, richer colour at rest */
     .font-display { font-weight: 800; letter-spacing: -0.025em; }
     h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
@@ -261,7 +247,6 @@
     h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
     .heading-breathe { animation: headingBreathe 6.5s ease-in-out infinite; }
     .kicker-shift { font-weight: 800; letter-spacing: 0.16em; }
-
     /* Laser-red vertical sweep on the trusted-by logo */
     .logo-laser { position: relative; isolation: isolate; }
     .logo-laser::after {
@@ -286,11 +271,9 @@
       0%, 100% { transform: translateY(0) scale(1); }
       50%      { transform: translateY(-3px) scale(1.03); }
     }
-
     /* Touch-friendly 3D + slider handling */
     #ba-slider-box { touch-action: pan-y; }
     .stage-3d-box canvas, .stage-3d-white canvas { touch-action: pan-y; }
-
     /* Gift: honour device motion preference — stops all continuous GPU work */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -300,14 +283,12 @@
       .reveal-up { opacity: 1 !important; transform: none !important; }
       .stage-3d-box canvas, .stage-3d-white canvas { will-change: auto; }
     }
-
     /* Gift: one-time, GPU-only stagger for trust cards */
     .marquee-track > .reveal-up { transition-delay: var(--stagger, 0ms); }
     .marquee-track > .reveal-up:nth-child(1) { --stagger: 0ms; }
     .marquee-track > .reveal-up:nth-child(2) { --stagger: 90ms; }
     .marquee-track > .reveal-up:nth-child(3) { --stagger: 180ms; }
     .marquee-track > .reveal-up:nth-child(4) { --stagger: 270ms; }
-
 
     /* ===== LIGHTWEIGHT LASER LINE (transform-only, one instance per section) ===== */
     .laser-stage { position: relative; isolation: isolate; }
@@ -331,19 +312,16 @@
       50%      { transform: translate3d(260%, 34px, 0) rotate(-4deg); opacity: .55; }
     }
     .laser-stage > *:not(.laser-line) { position: relative; z-index: 1; }
-
     /* Lazy reveal for machine cards & 3D stages */
     .laser-stage .reveal-up:nth-child(2) { transition-delay: 70ms; }
     .laser-stage .reveal-up:nth-child(3) { transition-delay: 140ms; }
     .laser-stage .reveal-up:nth-child(4) { transition-delay: 210ms; }
-
     @media (max-width: 767px) {
       .laser-line { width: 60%; animation-duration: 12s; }
     }
     @media (prefers-reduced-motion: reduce) {
       .laser-line { animation: none !important; opacity: .18; }
     }
-
 
     /* ===== FINAL ELITE MICRO-POLISH (GPU-only, zero repaint) ===== */
     .reveal-up, .card-sheen { transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease; }
@@ -356,7 +334,6 @@
       .reveal-up:hover, .page-rail-dot:hover { transform: none; }
     }
 
-
     /* ===== HEADER BRAND GLOW + 5 LIGHTWEIGHT BACKGROUND AMBIENCES ===== */
     .brand-name-glow { color: #111; font-weight: 900; letter-spacing: .02em; position: relative; display:inline-block; text-transform: uppercase; }
     .brand-name-glow::before { content:""; position:absolute; inset:-3px; border-radius:50%; background:radial-gradient(circle at 26% 22%,rgba(249,107,9,.42),transparent 60%); pointer-events:none; filter: blur(1.5px); transition:background 1.5s ease; }
@@ -364,7 +341,6 @@
     .brand-name-glow { animation: brandPulse 5s ease-in-out infinite; }
     .brand-dark-glow { color: #0a0a0b; }
     .brand-icon-glow { box-shadow: 0 0 0 2px rgba(220,38,38,.10), 0 0 16px rgba(234,88,12,.28); }
-
     /* 1. Slow drifting glow wash (transform/opacity only) */
     .ambient-warm::before, .ambient-clean::before {
       content: ""; position: absolute; z-index: 0;
@@ -417,13 +393,11 @@
       .stage-3d-box::after { animation: none !important; }
     }
 
-
     /* GIFT 1 — off-screen render skipping for heavy static lists (no visual change) */
     #faq-list, #reviews .marquee-track > div, .glass-lab-grid, .parts-grid {
       content-visibility: auto;
       contain-intrinsic-size: auto 420px;
     }
-
 
     /* ===== FOOTER GLASS ===== */
     .premium-footer {
@@ -437,7 +411,6 @@
       background: linear-gradient(135deg, rgba(220,38,38,0.08), rgba(234,88,12,0.04));
       z-index: -1;
     }
-
     /* ===== COLORED DOT NOTCH (re-enabled, slow color cycle — zero perf cost) ===== */
     .notch-led { animation: notchColor 9s ease-in-out infinite; }
     @keyframes notchColor {
@@ -446,24 +419,19 @@
       18%,25% { background:#f59e0b; } 20%,22% { background:#ec4899; }
       21% { background:#ea580c; }
     }
-
     /* ===== DEVICE GRID HOVER: rotated lift (3D, GPU-only) ===== */
     .spotlight-card { will-change: transform, opacity; backface-visibility: hidden; transform: translateZ(0); }
     .spotlight-card:hover { transform: translateY(-3px) rotate(0.5deg); box-shadow: 0 16px 40px -14px rgba(220,38,38,0.25); }
-
     /* ===== HOVER PRICE TABLE ===== */
     .price-row { transition: transform .3s cubic-bezier(.22,1,.36,1); }
     .price-row:hover { transform: translateX(8px); background: linear-gradient(90deg, rgba(220,38,38,0.06), transparent); }
-
     /* ===== AIRPODS world + watch display ===== */
     .airpods-glow { animation: none; } /* rely on static colored ring instead (perf) */
-
     @media (prefers-reduced-motion: reduce) {
       .notch-led { animation: none; background:#dc2626; }
       .spotlight-card:hover, .price-row:hover { transform: none; }
       .premium-footer::before { display: none; }
     }
-
 
     /* ===== JITTER LOCK — physics-muted animations stop the moment it is needed ===== */
     html.reduce-motion body *:not(#rm-toggle,#rm-dock) { animation:none !important; transition:none !important; will-change:auto !important; }
@@ -471,7 +439,6 @@
     #rm-toggle { padding: 6px 10px; text-wrap: nowrap; }
     #rm-toggle.active { background: rgba(220,38,38,.25); }
     .tour-done { color: #16a34a; text-decoration: underline; font-size: 11px; }
-
     @media (hover: hover) and (pointer: fine) {
       .spotlight-card:hover, .price-pill:hover, .price-row:hover, .glass-card:hover {
         box-shadow: 0 12px 28px -10px rgba(220,38,38,.18);
@@ -479,19 +446,16 @@
       .card-tick:hover { transform: translateY(-2px); }
     }
 
-
 /* page-transition between chapters of the tour */
     .laser-stage { contain: paint; }
     .premium-footer { transition: background .4s ease; }
     .section-shimmer.is-chapter { opacity: 1 !important; }
     .station-frame { display: none; }
 
-
     /* ===== ZERO-RASTERIZE JANK (re-created text areas) ===== */
     .stage-3d-box, .spotlight-card, .reveal-up, .card-sheen, .hero-apple, .heading-breathe { transform: translateZ(0); backface-visibility: hidden; }
     .stage-3d-box canvas, .stage-3d-white canvas { transform: translateZ(0); backface-visibility: hidden; }
     .ambient-warm::before { transform: translateZ(0); }
-
 
     /* ===== PHASE A: ZERO-JITTER STICKY HEADER + TEXT-ZONE COLLOWO — GEMINI 247QH ===== */
     .site-header-120fps {
@@ -503,7 +467,6 @@
     .site-header-120fps.is-scrolled { box-shadow: 0 6px 20px -12px rgba(15, 23, 42, 0.14); }
     .text-section-120fps { content-visibility: auto; contain-intrinsic-size: auto 650px; contain: layout style; }
     .text-section-120fps { display: contents !important; }
-
     /* Top Pages Selector Rail */
     .nav-rail-inner { scrollbar-width: none; scrollbar-gutter: stable; }
     .nav-rail-inner::-webkit-scrollbar { display: none; }
@@ -525,11 +488,9 @@
       50% { opacity: 1; }
     }
 
-
     /* Phase A3: dense below-the-fold text zones — content-visibility auto */
     #faq-list, #reviews, #comparison, .legal, #faq { content-visibility: auto; contain-intrinsic-size: auto 620px; contain: layout style; }
     #paired-crm, #gallery, #machines-static, #wow-cards { content-visibility: auto; contain-intrinsic-size: auto 480px; contain: layout style; }
-
 
     /* ===== PHASE D2: Zero-Lag Warm Bokeh Particles (30 FPS, 18 motes) ===== */
     /* ===== PHASE D3: ORANGE GLASS GLOW — STRICTLY on store & machine images ===== */
@@ -550,7 +511,6 @@
       opacity: 0; pointer-events: none; transition: opacity 240ms ease-out;
     }
     .orange-glass-glow:hover::after { opacity: 0.9; }
-
     /* Scope: ONLY store/gallery/machine images (exclude logos, text cards, icons) */
     #gallery img, #tbk-machines img, #glass-lab img, #real-shop img, #craft-showcase img {
       border-radius: 1.25rem;
@@ -563,7 +523,6 @@
     }
     #gallery img:hover, #tbk-machines img:hover, #glass-lab img:hover, #real-shop img:hover {
       box-shadow: 0 16px 34px -6px rgba(249,115,22,0.30);
-    }    .vivid-brand-gradient { animation: none; }
 
     /* ===== GLOBAL SCROLL PAUSE — kills all CSS animations while scrolling (120fps answer) ===== */
     html.is-scrolling * { animation-play-state: paused !important; }
