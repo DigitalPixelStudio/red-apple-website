@@ -34,10 +34,10 @@ export const SITE = {
   placeId: "ChIJmY-X9asXrjsRCLyeUhrkrfk",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=Red+Apple+Mobile+Repair+Store+Halasuru+Bengaluru&query_place_id=ChIJmY-X9asXrjsRCLyeUhrkrfk",
-  mapsReviewUrl: "https://share.google/EinJlCF6U63xVQhgI",
+  mapsReviewUrl: "https://share.google/12Pqrwl3lJq4mL75p",
   mapsEmbed:
     "https://www.google.com/maps?q=Metro+Pillar+No+125%2C+No.38%2C+next+to+Vignesh+Dresses%2C+Halasuru%2C+Bengaluru+560008&z=17&output=embed",
-  gmbUrl: "https://share.google/EinJlCF6U63xVQhgI",
+  gmbUrl: "https://share.google/12Pqrwl3lJq4mL75p",
   justdialUrl: "https://www.justdial.com/Bengaluru/Red-Apple-Mobile-Repair-Store-Halasuru",
   youtubeUrl: "https://www.youtube.com/@RedAppleMobileRepairStore",
   facebookUrl: "https://www.facebook.com/RedAppleMobileRepairStore",

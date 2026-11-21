@@ -2266,19 +2266,19 @@ table tbody tr {
   width: 54vmax; height: 54vmax;
   left: -16vmax; top: -18vmax;
   background: radial-gradient(circle, rgba(255, 45, 85, .13), transparent 66%);
-  animation: lightSpin 60s linear infinite;
+  animation:none!important;
 }
 .light-3d .l2 {
   width: 44vmax; height: 44vmax;
   right: -14vmax; top: 22vh;
   background: radial-gradient(circle, rgba(255, 149, 0, .11), transparent 66%);
-  animation: lightSpin 78s linear infinite reverse;
+  animation:none!important;
 }
 .light-3d .l3 {
   width: 38vmax; height: 38vmax;
   left: 34vw; bottom: -18vmax;
   background: radial-gradient(circle, rgba(255, 45, 85, .09), transparent 68%);
-  animation: lightSpin 92s linear infinite;
+  animation:none!important;
 }
 @keyframes lightSpin {
   0%   { transform: rotate(0deg)   translate3d(0, 0, 0) scale(1); }
@@ -2295,7 +2295,7 @@ table tbody tr {
   pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(255, 45, 85, .28), transparent);
   transform: translate3d(0, 0, 0);
-  animation: beamTravel 22s linear infinite;
+  animation:none!important;
 }
 @keyframes beamTravel {
   0%   { transform: translate3d(0, 0, 0);     opacity: 0; }
@@ -4438,7 +4438,7 @@ html[data-motion="off"] .whyus-phone { filter: none; }
   position: absolute; inset: 0;
   background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.35) 45%, transparent 70%);
   transform: translate3d(-110%, 0, 0);
-  animation: glassSweep 6s ease-in-out infinite;
+  animation:none!important;
   pointer-events: none;
 }
 @keyframes glassSweep {
@@ -4481,7 +4481,7 @@ html[data-motion="off"] .topic-gradient {
     radial-gradient(ellipse 40% 30% at 18% 22%, rgba(255,45,85,.10), transparent 70%),
     radial-gradient(ellipse 36% 28% at 82% 70%, rgba(255,149,0,.09), transparent 70%);
   transform: translate3d(0,0,0) scale(1);
-  animation: siteAtmosphere 26s ease-in-out infinite;
+  animation:none!important;will-change:auto;
   will-change: transform, opacity;
 }
 @keyframes siteAtmosphere {
@@ -4515,7 +4515,7 @@ html[data-motion="off"] .topic-gradient {
 /* --- the four requested kickers --- */
 .kicker-red {
   color: #dc2626 !important;
-  animation: redKickerBreath 5.4s ease-in-out infinite !important;
+  animation:none!important;color:#dc2626;
 }
 @keyframes redKickerBreath {
   0%, 100% { color: #dc2626; opacity: 1; }
@@ -4934,3 +4934,6 @@ html[data-motion="off"] .glass-machine-scan { opacity: 0 !important; }
   .elite-media-scan,
   .glass-machine-scan { opacity: 0 !important; }
 }
+
+    /* GIFT (Agent A): paint-contain static text cards — no visual change, isolates repaints */
+    .glass-card, .glass-premium, .tile-wash, .tile-wash-violet, .tile-wash-mint { contain: layout paint style; }

@@ -170,15 +170,26 @@
       const baKnob = document.getElementById('ba-knob');
       const baPctLbl = document.getElementById('ba-pct-lbl');
       let baDragging = false;
-      function setBaSplit(clientX) {
-        if (!baBox) return;
-        const r = baBox.getBoundingClientRect();
-        const pct = Math.max(5, Math.min(95, ((clientX - r.left) / r.width) * 100));
+      function setBaPct(pct) {
+        pct = Math.max(5, Math.min(95, pct));
         if (baOverlay) baOverlay.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
         if (baLine) baLine.style.left = pct + '%';
         if (baKnob) baKnob.style.left = pct + '%';
         if (baPctLbl) baPctLbl.textContent = `${Math.round(100 - pct)}% Restored`;
+        baBox?.setAttribute('aria-valuenow', String(Math.round(pct)));
       }
+      function setBaSplit(clientX) {
+        if (!baBox) return;
+        const r = baBox.getBoundingClientRect();
+        setBaPct(((clientX - r.left) / r.width) * 100);
+      }
+      baBox?.addEventListener('keydown', (e) => {
+        const cur = Number(baBox.getAttribute('aria-valuenow') || 50);
+        if (e.key === 'ArrowLeft') { setBaPct(cur - 5); e.preventDefault(); }
+        else if (e.key === 'ArrowRight') { setBaPct(cur + 5); e.preventDefault(); }
+        else if (e.key === 'Home') { setBaPct(5); e.preventDefault(); }
+        else if (e.key === 'End') { setBaPct(95); e.preventDefault(); }
+      });
       baBox?.addEventListener('pointerdown', (e) => { if (e.button !== undefined && e.button !== 0) return; baDragging = true; setBaSplit(e.clientX); });
       window.addEventListener('pointermove', (e) => { if (baDragging) setBaSplit(e.clientX); }, { passive: true });
       const stopBa = () => { baDragging = false; };
@@ -577,7 +588,7 @@
       const backTop = document.getElementById('back-to-top');
       if (backTop) {
         backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-        const ioBack = new IntersectionObserver((es) => { es.forEach((e) => backTop.classList.toggle('translate-y-8', e.isIntersecting)); }, { rootMargin: '0px -20px 0px 0px' });
+        const ioBack = new IntersectionObserver((es) => { es.forEach((e) => backTop.classList.toggle('hidden', e.isIntersecting)); }, { rootMargin: '0px -20px 0px 0px' });
         ioBack.observe(document.getElementById('footer-contact') || document.body);
 
       // Phase A2: 1px top sentinel toggles header shadow ONCE (no per-frame scroll JS)
@@ -746,6 +757,7 @@
         renderer.setSize(MAX_W, MAX_H, false);
         renderer.setClearColor(0x000000, 0);
         renderer.setScissorTest(true);
+        const glCanvas = renderer.domElement;
 
         const slots = [];
         const io = typeof IntersectionObserver !== 'undefined'
@@ -781,6 +793,13 @@
             try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
           });
           canvas.addEventListener('pointermove', (e) => {
+            // Gift: pointer-follow glass sheen (compositor-only CSS vars)
+            const box = canvas.closest('.stage-3d-box');
+            if (box) {
+              const r = box.getBoundingClientRect();
+              box.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+              box.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            }
             if (!drag) return;
             ty += (e.clientX - px) * 0.011;
             tx = Math.max(-0.85, Math.min(0.85, tx + (e.clientY - py) * 0.009));
@@ -1289,7 +1308,8 @@
               if (id === 'canvas-hero') pad = 0.55;              // slight zoom in (was 0.58)
               else if (id === 'canvas-pickup-iphone') pad = 0.62; // more zoom (was 0.72)
               else if (id === 'canvas-estimate-ipad') pad = 0.82; // untouched
-              else if (id === 'canvas-tbk-oca' || id === 'canvas-tbk-90l' || id === 'canvas-tbk-958') pad = 0.84; // machinery more zoom (was 0.94)
+              else if (id === 'canvas-tbk-oca') pad = 0.80;        // table press: slight more zoom (was 0.84)
+              else if (id === 'canvas-tbk-90l' || id === 'canvas-tbk-958') pad = 0.84; // other machinery
               // Tablet: slight zoom across models (was 1.20 -> 1.14)
               if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
@@ -1301,7 +1321,7 @@
             renderer.setScissor(0, 0, rw, rh);
             renderer.render(s.scene, s.camera);
             s.ctx.clearRect(0, 0, rw, rh);
-            s.ctx.drawImage(renderer.domElement, 0, MAX_H - rh, rw, rh, 0, 0, rw, rh);
+            s.ctx.drawImage(glCanvas, 0, MAX_H - rh, rw, rh, 0, 0, rw, rh);
           }
           perfAcc += performance.now() - frameStart;
           perfFrames++;

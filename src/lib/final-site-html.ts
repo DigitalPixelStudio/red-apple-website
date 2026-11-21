@@ -538,7 +538,7 @@ export const finalSiteHtml = `
             </div>
             <span id="ba-pct-lbl" class="rounded-full bg-zinc-800 px-3 py-1 font-mono-num text-xs font-bold text-orange-300">50% Restored</span>
           </div>
-          <div id="ba-slider-box" class="relative h-72 w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-80" style="touch-action: pan-y;">
+          <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative h-72 w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-80" style="touch-action: pan-y;">
             <div class="flex h-full w-full items-center justify-center text-center">
               <div>
                 <div class="font-display text-lg font-extrabold text-white sm:text-2xl">Factory-Grade OLED &amp; Glass Engineering</div>
@@ -1358,7 +1358,7 @@ export const finalSiteHtml = `
   </footer>
 
   <!-- SLEEK MATTE CHARCOAL FLOATING ACTION DOCK (Get Estimate · WhatsApp · Call) + RIGHT AI BENCH BUTTON -->
-  <div class="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white/95 p-1.5 shadow-2xl">
+  <div class="floating-dock fixed bottom-4 left-1/2 z-40 flex items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white p-1.5 shadow-2xl">
     <a href="#estimate" class="dock-dark-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
       <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
       <span>Get Estimate</span>
@@ -1461,7 +1461,7 @@ export const finalSiteHtml = `
     </div>
 
   <!-- Gift: floating back-to-top with smooth scroll -->
-  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white/90 shadow-xl transition-[transform,box-shadow] duration-200 ease-out hover:scale-105 hover:-translate-y-1 focus:outline-none">
+  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white shadow-xl transition-transform duration-200 ease-out hover:scale-105 hover:-translate-y-1 focus:outline-none">
     <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
   </button>
 
@@ -1471,7 +1471,7 @@ export const finalSiteHtml = `
     <button id="rm-toggle" type="button" aria-label="Toggle Reduced Motion" class="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[10px] font-semibold text-zinc-700 hover:border-red-500">Motion: <span id="rm-label">Auto</span></button>
     <div class="h-6 w-[1.5px] bg-zinc-200 rounded-full"></div>
     <div class="flex flex-col gap-0.5">
-      <button type="button" id="tour-start" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition">Scroll Tour</button>
+      <button type="button" id="tour-start" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition-colors">Scroll Tour</button>
       <span id="tour-done" class="tour-done"></span>
     </div>
   </div>

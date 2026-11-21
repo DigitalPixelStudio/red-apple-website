@@ -60,7 +60,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Red Apple Mobile Repair — Apple Device Repairs, Mastered | Halasuru, Bengaluru",
     description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
-    url: `${baseUrl}/`,
     siteName: SITE.name,
     locale: "en_IN",
     type: "website",
@@ -153,6 +152,11 @@ const localBusinessSchema = {
     longitude: SITE.geo.lng,
   },
   openingHours: SITE.hoursSchema,
+  openingHoursSpecification: [{
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    opens: "10:00", closes: "23:59"
+  }],
   areaServed: [
     { "@type": "City", name: "Bengaluru" },
     { "@type": "Place", name: "Halasuru" },
