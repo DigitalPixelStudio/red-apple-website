@@ -571,9 +571,9 @@
 
       // Phase A2b: Global scroll pause (kills CSS animations in text zones — 120fps answer).
 let scTimer=null;
-const lockScroll=()=>{document.documentElement.classList.add('is-scrolling'); if(scTimer)clearTimeout(scTimer); scTimer=setTimeout(()=>document.documentElement.classList.remove('is-scrolling'),180);};
+const lockScroll=()=>{document.documentElement.classList.add('is-scrolling'); window.__raScrolling=true; if(scTimer)clearTimeout(scTimer); scTimer=setTimeout(()=>{document.documentElement.classList.remove('is-scrolling'); window.__raScrolling=false;},180);};
 addEventListener('scroll',lockScroll,{passive:true});
-addEventListener('scrollend',()=>document.documentElement.classList.remove('is-scrolling'));
+addEventListener('scrollend',()=>{document.documentElement.classList.remove('is-scrolling'); window.__raScrolling=false;});
 
 // Gift: floating back-to-top (smooth transition, discovers for free)
       const backTop = document.getElementById('back-to-top');
@@ -1237,7 +1237,7 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
         let t = 0;
         function animate() {
           requestAnimationFrame(animate);
-          if (document.hidden) return;
+          if (document.hidden || window.__raScrolling) return;
           t += 0.018;
           const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
@@ -1258,9 +1258,10 @@ addEventListener('scrollend',()=>document.documentElement.classList.remove('is-s
               const id = s.canvas.id;
               // First 3 device models (hero iPhone, iPad, pickup iPhone): uniform 90% edge-hugging fill.
               let pad = 1.03;
-              if (id === 'canvas-hero' || id === 'canvas-estimate-ipad' || id === 'canvas-pickup-iphone') pad = 0.82;
+              if (id === 'canvas-hero' || id === 'canvas-pickup-iphone') pad = 0.50;
+              else if (id === 'canvas-estimate-ipad') pad = 0.82;
               // Tablet: lower zoom to ~0.80x visual size (larger pad = smaller model).
-              if (window.innerWidth >= 768 && window.innerWidth <= 1100) pad = pad * 1.20;
+              if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.20;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
             }
             s.camera.aspect = cw / ch;
