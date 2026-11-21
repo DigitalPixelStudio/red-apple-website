@@ -51,6 +51,15 @@ export const finalSiteHtml = `
   </header>
 
   <main>
+  <div class="scroll-progress-css" aria-hidden="true"></div>
+
+    <section id="page-plan" class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-4 text-center text-[10px] font-bold text-zinc-700">
+        <span class="rounded-full bg-red-600 px-2.5 py-1 text-white">Page Plan — 4 Chapters</span>
+        <span id="page-plan-links" class="inline-flex flex-wrap items-center justify-center gap-1"></span>
+        <a id="page-plan-pagelog" href="/services/front-glass-restoration" class="rounded-full border border-red-300 bg-white px-3 py-1 text-red-600 hover:bg-red-50">Live Service Pages →</a>
+      </div>
+    </section>
 
   
   
@@ -159,6 +168,8 @@ export const finalSiteHtml = `
       </div>
     </section>
 
+
+
     <!-- 2. TECHNICAL TICKER STRIP -->
     <div class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-1.5 px-4 text-center text-[11px] font-bold text-zinc-700">
@@ -175,15 +186,9 @@ export const finalSiteHtml = `
     </div>
 
     <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
-    <section id="page-plan" class="section-shimmer border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
-      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-4 text-center text-[10px] font-bold text-zinc-700">
-        <span class="rounded-full bg-red-600 px-2.5 py-1 text-white">Page Plan — 4 Chapters</span>
-        <span id="page-plan-links" class="inline-flex flex-wrap items-center justify-center gap-1"></span>
-        <a id="page-plan-pagelog" href="/services/front-glass-restoration" class="rounded-full border border-red-300 bg-white px-3 py-1 text-red-600 hover:bg-red-50">Live Service Pages →</a>
-      </div>
-    </section>
 
-    <section id="real-shop" class="section-shimmer ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+
+    <section id="real-shop" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="ambient-orb -right-16 top-20 h-72 w-72 bg-orange-400"></div>
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
@@ -697,7 +702,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 10. THREE MACHINES. ONE ORIGINAL DISPLAY (LARGE REAL PHOTO ON TOP + HIGH-CONTRAST METALLIC 3D BELOW) -->
-    <section id="tbk-machines" class="section-shimmer laser-stage ambient-warm border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
+    <section id="tbk-machines" class="laser-stage ambient-warm border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Equipment Behind the Finish</div>
@@ -796,7 +801,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 11. STACKED APPLE ECOSYSTEM 3D SUITE (ALL DEVICES ONE BELOW ANOTHER SO VISITORS INTERACT DIRECTLY) -->
-    <section id="ecosystem-3d" class="section-shimmer laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
+    <section id="ecosystem-3d" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-3xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Mastered Inside &amp; Out · Every Apple Device</div>
