@@ -18,7 +18,7 @@ export const SITE = {
   state: "Karnataka",
   country: "IN",
   hours: "10 AM – 12 AM midnight (Open all 7 days)",
-  hoursSchema: "Mo-Su 10:00-23:59",
+  hoursSchema: "Mo-Su 10:00-24:00",
   pickupHours: "24/7 — doorstep pickup any hour, any day",
   openTime: "10:00",
   closeTime: "23:59",

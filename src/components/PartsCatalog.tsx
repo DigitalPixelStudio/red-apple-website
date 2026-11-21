@@ -5,7 +5,7 @@ import { LineIcon, type IconName } from "./Icons";
 
 const PARTS: { name: string; device: string; quality: string; img: string; icon: IconName }[] = [
   { name: "OLED Display Panel", device: "iPhone 14 / 15 / 16 Series", quality: "OEM-grade True Tone", img: "/images/v4/oled-display-panel.jpg", icon: "display" },
-  { name: "Battery Cell", device: "iPhone, iPad, MacBook", quality: "Genuine capacity cells", img: "/images/v4/iphone-battery.jpg", icon: "battery" },
+  { name: "Battery Cell", device: "iPhone, iPad, MacBook", quality: "Verified capacity cells", img: "/images/v4/iphone-battery.jpg", icon: "battery" },
   { name: "Back Glass Panel", device: "iPhone 13 / 14 / 15 / 16 Pro Max", quality: "MagSafe compatible", img: "/images/v4/iphone-17-pro-max.jpg", icon: "backglass" },
   { name: "Camera Module", device: "iPhone 14 Pro / 15 Pro / 16 Pro", quality: "OEM sensor assembly", img: "/images/v4/camera-repair.jpg", icon: "camera" },
   { name: "Charging Port Flex", device: "iPhone, iPad, AirPods", quality: "Precision connector", img: "/images/v3/charging-port.jpg", icon: "charging" },
@@ -22,7 +22,7 @@ export default function PartsCatalog() {
             Only the Best Parts <span className="topic-gradient">for Your Device.</span>
           </h2>
           <p className="parts-subtitle section-subtitle mx-auto mt-5">
-            We use OEM-grade, genuine-quality components from trusted suppliers.
+            We use OEM-grade, verified-grade components from trusted suppliers.
             Every part is tested before installation.
           </p>
         </Reveal>

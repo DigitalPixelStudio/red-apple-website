@@ -24,7 +24,7 @@
       content: ""; position: absolute; left: 12%; right: 12%; bottom: -4px; height: 2px;
       border-radius: 999px; background: linear-gradient(90deg, transparent, rgba(220,38,38,.45), rgba(234,88,12,.5), transparent);
       transform: scaleX(.6) translateZ(0); opacity: 0;
-      animation: headingUnderlinePulse 5.5s ease-in-out infinite; pointer-events: none;
+      animation: none; pointer-events: none;
     }
     @keyframes headingUnderlinePulse {
       0%, 100% { transform: scaleX(.6) translateZ(0); opacity: 0; }
@@ -386,7 +386,7 @@
       z-index: -1;
     }
     /* ===== COLORED DOT NOTCH (re-enabled, slow color cycle — zero perf cost) ===== */
-    .notch-led { animation: notchColor 9s ease-in-out infinite; }
+    .notch-led { background: #dc2626; }
     @keyframes notchColor {
       0%,45% { background:#22c55e; } 10%,35% { background:#ef4444; }
       12%,30% { background:#06b6d4; } 15%,28% { background:#8b5cf6; }
@@ -427,7 +427,7 @@
     .station-frame { display: none; }
 
     /* ===== ZERO-RASTERIZE JANK (re-created text areas) ===== */
-    .stage-3d-box, .spotlight-card, .reveal-up, .card-sheen, .hero-apple, .heading-breathe { transform: translateZ(0); backface-visibility: hidden; }
+    .stage-3d-box, .spotlight-card, .card-sheen { transform: translateZ(0); backface-visibility: hidden; }
     .stage-3d-box canvas, .stage-3d-white canvas { transform: translateZ(0); backface-visibility: hidden; }
     .ambient-warm::before { transform: translateZ(0); }
 
@@ -440,7 +440,7 @@
     }
     .site-header-120fps.is-scrolled { box-shadow: 0 6px 20px -12px rgba(15, 23, 42, 0.14); }
     .text-section-120fps { contain: layout style; }
-    .text-section-120fps { display: contents !important; }
+    .text-section-120fps { display: block; }
     /* Top Pages Selector Rail */
     .nav-rail-inner { scrollbar-width: none; scrollbar-gutter: stable; }
     .nav-rail-inner::-webkit-scrollbar { display: none; }
@@ -518,7 +518,7 @@
     .top-nav-item:hover { color: #dc2626; }
 
     /* Gift 3: image card lift uses pre-rendered shadow pseudo opacity (already on most); enforce */
-    .reveal-up, .card-sheen { backface-visibility: hidden; }
+    .reveal-up { opacity: 0; transform: translate3d(0, 12px, 0); transition: opacity 400ms ease-out, transform 400ms cubic-bezier(.22,1,.36,1); }
 
     /* Gift 4: calm focus rings for dropdowns/forms (accessibility + polish) */
     select:focus-visible, input:focus-visible { outline: 2px solid #ea580c; outline-offset: 2px; }
@@ -531,19 +531,22 @@
 
 
     /* Gift 6 (bonus): pure-CSS scroll progress bar — compositor-driven, zero JS */
-    @supports (animation-timeline: scroll()) {
-      .scroll-progress-css {
-        position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 70;
-        background: linear-gradient(90deg, #dc2626, #ea580c, #f59e0b);
-        transform-origin: 0 50%;
-        animation: scrollGrow linear both;
-        animation-timeline: scroll(root block);
-        pointer-events: none;
-      }
-      @keyframes scrollGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-    }
 
 
     /* One-line page nav: hide scrollbar but keep horizontal scroll on small screens */
     .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
     .scrollbar-none::-webkit-scrollbar { display: none; }
+
+
+    /* ===== 3 DIAMOND GIFTS (zero-jank, premium feel) ===== */
+    /* Gift 1: elegant focus glow on every link/button (accessibility + polish) */
+    a:focus-visible, button:focus-visible { outline: 2px solid #ea580c; outline-offset: 3px; border-radius: 4px; }
+
+    /* Gift 2: crisp themed text selection color (looks premium when users select text) */
+    ::selection { background: #dc2626; color: #fff; }
+
+    /* Gift 3: smooth, themed scrollbar (Firefox + WebKit) — subtle, matches brand */
+    html { scrollbar-color: #e7a08c #faf6f2; scrollbar-width: thin; }
+    ::-webkit-scrollbar { width: 9px; height: 9px; }
+    ::-webkit-scrollbar-track { background: #faf6f2; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #dc2626, #ea580c); border-radius: 8px; border: 2px solid #faf6f2; }

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Get an Instant Repair Estimate",
   description: "Select your Apple device and issue — get a transparent repair estimate on WhatsApp within minutes. iPhone, iPad, Watch, AirPods, MacBook & Mac.",
   alternates: { canonical: `${baseUrl}/quote` },
-  openGraph: { title: "Instant Apple Repair Estimate — Red Apple Mobile Repair", description: "Get an exact repair estimate for your Apple device in 30 seconds.", url: `${baseUrl}/quote` },
+  openGraph: { title: "Instant Apple Repair Estimate — Red Apple Mobile Repair", description: "Get an exact repair estimate for your Apple device in 30 seconds.", url: `${baseUrl}/quote`, images: [`${baseUrl}/og-image.png`] },
 };
 
 export default function QuotePage() {

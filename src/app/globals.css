@@ -1343,7 +1343,7 @@ html {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: headDrift 22s ease-in-out infinite;
+  animation: none;
   will-change: auto;
 }
 @keyframes headDrift {
@@ -1360,7 +1360,7 @@ html {
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--cosmic-deep);
-  animation: kickerGlow 6s ease-in-out infinite;
+  animation: none;
 }
 @keyframes kickerGlow {
   0%, 100% { color: var(--cosmic-deep); opacity: 1;    }
@@ -1951,10 +1951,8 @@ html[data-motion="off"] {
 }
 
 
-/* ---- 3. kicker keeps a gentle colour pulse ---- */
-.kicker {
-  color: var(--cosmic-deep);
-}
+/* ---- 3. kicker static (no repaint) ---- */
+.kicker { color: var(--cosmic-deep); animation: none !important; }
 
 /* ---- 4. hero headline sweep ---- */
 html[data-motion="off"] .mastered-shift,

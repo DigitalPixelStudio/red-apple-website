@@ -121,7 +121,7 @@ const serviceSchema = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": ["LocalBusiness", "Store", "Organization", "MobilePhoneRepair"],
+  "@type": ["LocalBusiness", "Store", "Organization", "AutoRepair"],
   "@id": `${baseUrl}/#business`,
   name: SITE.legalName,
   alternateName: SITE.shortName,

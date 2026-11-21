@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Red Apple Mobile Repair Store",
+  title: "Privacy Policy",
   description: "How Red Apple Mobile Repair Store collects, uses and protects your personal information.",
   alternates: { canonical: `${baseUrl}/privacy` },
 };

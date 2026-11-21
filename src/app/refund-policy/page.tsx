@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Refund & Warranty Policy | Red Apple Mobile Repair Store",
+  title: "Refund & Warranty Policy",
   description: "Our 6 Months repair warranty, how to claim it with your invoice, the exclusions, and our refund terms.",
   alternates: { canonical: `${baseUrl}/refund-policy` },
 };

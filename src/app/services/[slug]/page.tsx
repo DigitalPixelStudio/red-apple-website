@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: page.desc,
     keywords: page.keywords,
     alternates: { canonical: `${baseUrl}/services/${slug}` },
-    openGraph: { title: `${page.title} — Halasuru, Bengaluru`, description: page.desc, url: `${baseUrl}/services/${slug}`, type: "website" },
+    openGraph: { title: `${page.title} — Halasuru, Bengaluru`, description: page.desc, url: `${baseUrl}/services/${slug}`, type: "website", images: [`${baseUrl}/og-image.png`] },
   };
 }
 

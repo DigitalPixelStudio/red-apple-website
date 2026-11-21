@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Red Apple Mobile Repair Store",
+  title: "Terms of Service",
   description: "The terms that apply when you use Red Apple Mobile Repair Store's website and repair services.",
   alternates: { canonical: `${baseUrl}/terms` },
 };

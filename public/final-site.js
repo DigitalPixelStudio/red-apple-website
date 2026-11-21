@@ -541,7 +541,7 @@
         { id: '#halasuru-map', label: 'Visit' },
       ];
       if (pagePlanLinks) {
-        pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="shrink-0 rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-extrabold tracking-tight text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-full bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
+        pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="shrink-0 rounded-[6px] bg-red-600 px-2.5 py-1 text-[10px] font-extrabold tracking-tight text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-[4px] bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
         pagePlanLinks.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', (e) => {
           e.preventDefault();
           const el = document.querySelector(b.dataset.go);
@@ -1238,6 +1238,29 @@
           return () => { lidPivot.rotation.x = Math.PI / 2 - mbFactor * 1.88; };
         }, -0.4, 0.18);
 
+        // Cache dimensions via ResizeObserver (no layout reads in the render loop)
+        if (typeof ResizeObserver !== 'undefined') {
+          const ro = new ResizeObserver((entries) => {
+            entries.forEach((en) => {
+              const target = en.target;
+              const slot = slots.find((x) => x.canvas === target);
+              if (!slot) return;
+              const cs = en.contentRect;
+              slot.cw = Math.round(cs.width); slot.ch = Math.round(cs.height);
+              slot.rw = Math.min(Math.round(slot.cw * adaptiveDpr), MAX_W);
+              slot.rh = Math.min(Math.round(slot.ch * adaptiveDpr), MAX_H);
+              if (slot.canvas.width !== slot.rw || slot.canvas.height !== slot.rh) {
+                slot.canvas.width = slot.rw; slot.canvas.height = slot.rh;
+              }
+              if (slot.rw && slot.rh) {
+                slot.camera.aspect = slot.rw / slot.rh;
+                slot.camera.updateProjectionMatrix();
+                if (!slot.autoFramed) { slot.autoFramed = true; /* refit on first real size */ }
+              }
+            });
+          });
+          slots.forEach((x) => ro.observe(x.canvas));
+        }
         let t = 0;
         function animate() {
           requestAnimationFrame(animate);
@@ -1247,10 +1270,11 @@
           for (let i = 0; i < slots.length; i++) {
             const s = slots[i];
             if (!s.visible) continue;
-            const cw = s.canvas.clientWidth, ch = s.canvas.clientHeight;
+            let cw = s.cw, ch = s.ch;
+            if (!cw || !ch) { cw = s.canvas.clientWidth; ch = s.canvas.clientHeight; s.cw = cw; s.ch = ch; }
             if (!cw || !ch) continue;
-            const rw = Math.min(Math.round(cw * adaptiveDpr), MAX_W);
-            const rh = Math.min(Math.round(ch * adaptiveDpr), MAX_H);
+            const rw = s.rw || Math.min(Math.round(cw * adaptiveDpr), MAX_W);
+            const rh = s.rh || Math.min(Math.round(ch * adaptiveDpr), MAX_H);
             if (s.canvas.width !== rw || s.canvas.height !== rh) {
               s.canvas.width = rw;
               s.canvas.height = rh;
@@ -1270,8 +1294,7 @@
               if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
             }
-            s.camera.aspect = cw / ch;
-            s.camera.updateProjectionMatrix();
+            if (typeof ResizeObserver === 'undefined') { s.camera.aspect = cw / ch; s.camera.updateProjectionMatrix(); }
             s.orbit.update(s === heroSlot && heroAmbient ? 0.0028 : 0.0016);
             if (s.onTick) s.onTick(t);
             renderer.setViewport(0, 0, rw, rh);
