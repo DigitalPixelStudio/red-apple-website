@@ -706,7 +706,7 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-square min-h-[420px] w-full overflow-hidden bg-zinc-950 sm:min-h-[500px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
@@ -728,7 +728,7 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-square min-h-[420px] w-full overflow-hidden bg-zinc-950 sm:min-h-[500px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
@@ -750,7 +750,7 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[4/5] min-h-[280px] w-full overflow-hidden bg-zinc-950 sm:min-h-[360px]">
+              <div class="orange-glass-wrap relative aspect-square min-h-[420px] w-full overflow-hidden bg-zinc-950 sm:min-h-[500px]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
@@ -1454,7 +1454,7 @@ export const finalSiteHtml = `
     </div>
 
   <!-- Gift: floating back-to-top with smooth scroll -->
-  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white/90 shadow-xl transition-all hover:scale-110 hover:-translate-y-1 focus:outline-none">
+  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white/90 shadow-xl transition-[transform,box-shadow] duration-200 ease-out hover:scale-105 hover:-translate-y-1 focus:outline-none">
     <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
   </button>
 
