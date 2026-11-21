@@ -33,7 +33,7 @@
     .kicker-shift { color: #ea580c; } /* static: no per-frame text repaint */
     .price-breathe { color: #dc2626; } /* static: no text scale jitter */
     .badge-breathe {
-      animation: badgePulse 4.6s ease-in-out infinite;
+      opacity: 1;
     }
     @keyframes badgePulse {
       0%, 100% { opacity: 1; transform: translate3d(0,0,0); }
@@ -109,21 +109,8 @@
     /* Smooth Scroll Reveal */
     .reveal-up { opacity: 0; transform: translate3d(0, 14px, 0); }
     .reveal-up.is-in { opacity: 1; transform: translate3d(0, 0, 0); }
-    @media (prefers-reduced-motion: no-preference) {
-      @supports (animation-timeline: view()) {
-        .reveal-up {
-          transition: none !important;
-          animation: revealUp inherit;
-          animation-timeline: view(cover 35% 75%);
-          animation-range: enter 20% exit 10%;
-        }
-        .reveal-up.is-in { animation-play-state: paused; }
-      }
-      @keyframes revealUp {
-        from { opacity: 0; transform: translate3d(0, 14px, 0); }
-        to   { opacity: 1; transform: translate3d(0, 0, 0); }
-      }
-    }
+    /* One-shot reveal via IntersectionObserver only (no per-frame scroll work, no reverse jitter) */
+    .reveal-up { transition: opacity 420ms ease-out, transform 420ms cubic-bezier(.22,1,.36,1); will-change: auto; }
     @media (prefers-reduced-motion: reduce) { .reveal-up { transition: none !important; } }
     /* High-Contrast Obsidian Studio Backdrop for 3D Stages */
     .stage-3d-box {
@@ -383,8 +370,7 @@
 
     /* GIFT 1 — off-screen render skipping for heavy static lists (no visual change) */
     #faq-list, #reviews .marquee-track > div, .glass-lab-grid, .parts-grid {
-      content-visibility: auto;
-      contain-intrinsic-size: auto 560px;
+      contain: layout style;
     }
 
     /* ===== FOOTER GLASS ===== */
@@ -453,7 +439,7 @@
       backdrop-filter: none;
     }
     .site-header-120fps.is-scrolled { box-shadow: 0 6px 20px -12px rgba(15, 23, 42, 0.14); }
-    .text-section-120fps { content-visibility: auto; contain-intrinsic-size: auto 720px; contain: layout style; }
+    .text-section-120fps { contain: layout style; }
     .text-section-120fps { display: contents !important; }
     /* Top Pages Selector Rail */
     .nav-rail-inner { scrollbar-width: none; scrollbar-gutter: stable; }
@@ -477,8 +463,8 @@
     }
 
     /* Phase A3: dense below-the-fold text zones — content-visibility auto */
-    #faq-list, #reviews, #comparison, .legal, #faq { content-visibility: auto; contain-intrinsic-size: auto 680px; contain: layout style; }
-    #paired-crm, #gallery, #machines-static, #wow-cards { content-visibility: auto; contain-intrinsic-size: auto 520px; contain: layout style; }
+    #faq-list, #reviews, #comparison, .legal, #faq { contain: layout style; }
+    #paired-crm, #gallery, #machines-static, #wow-cards { contain: layout style; }
 
     /* ===== PHASE D2: Zero-Lag Warm Bokeh Particles (30 FPS, 18 motes) ===== */
     /* ===== PHASE D3: ORANGE GLASS GLOW — STRICTLY on store & machine images ===== */
@@ -556,3 +542,8 @@
       }
       @keyframes scrollGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     }
+
+
+    /* One-line page nav: hide scrollbar but keep horizontal scroll on small screens */
+    .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+    .scrollbar-none::-webkit-scrollbar { display: none; }

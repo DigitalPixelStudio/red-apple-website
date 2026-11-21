@@ -541,7 +541,7 @@
         { id: '#halasuru-map', label: 'Visit' },
       ];
       if (pagePlanLinks) {
-        pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-full bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
+        pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="shrink-0 rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-extrabold tracking-tight text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-full bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
         pagePlanLinks.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', (e) => {
           e.preventDefault();
           const el = document.querySelector(b.dataset.go);
@@ -1262,11 +1262,12 @@
               const id = s.canvas.id;
               // Hero/IPad/Pickup tuned; others 0.94; tablet reduced.
               let pad = 0.94;
-              if (id === 'canvas-hero') pad = 0.58;
-              else if (id === 'canvas-pickup-iphone') pad = 0.72;
-              else if (id === 'canvas-estimate-ipad') pad = 0.82;
-              // Tablet: lower zoom to ~0.80x visual size (larger pad = smaller model).
-              if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.20;
+              if (id === 'canvas-hero') pad = 0.55;              // slight zoom in (was 0.58)
+              else if (id === 'canvas-pickup-iphone') pad = 0.62; // more zoom (was 0.72)
+              else if (id === 'canvas-estimate-ipad') pad = 0.82; // untouched
+              else if (id === 'canvas-tbk-oca' || id === 'canvas-tbk-90l' || id === 'canvas-tbk-958') pad = 0.84; // machinery more zoom (was 0.94)
+              // Tablet: slight zoom across models (was 1.20 -> 1.14)
+              if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
             }
             s.camera.aspect = cw / ch;

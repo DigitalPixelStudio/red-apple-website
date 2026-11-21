@@ -54,10 +54,9 @@ export const finalSiteHtml = `
   <div class="scroll-progress-css" aria-hidden="true"></div>
 
     <section id="page-plan" class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
-      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-4 text-center text-[10px] font-bold text-zinc-700">
-        <span class="rounded-full bg-red-600 px-2.5 py-1 text-white">Page Plan — 4 Chapters</span>
-        <span id="page-plan-links" class="inline-flex flex-wrap items-center justify-center gap-1"></span>
-        <a id="page-plan-pagelog" href="/services/front-glass-restoration" class="rounded-full border border-red-300 bg-white px-3 py-1 text-red-600 hover:bg-red-50">Live Service Pages →</a>
+      <div class="mx-auto flex max-w-6xl items-center gap-2 px-4 py-0.5 text-center text-[10px] font-semibold text-zinc-700">
+        <span id="page-plan-links" class="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-none"></span>
+        <a id="page-plan-pagelog" href="/services/front-glass-restoration" class="shrink-0 rounded-full border border-red-300 bg-white px-3 py-1 font-bold text-red-600 hover:bg-red-50">Live Service Pages →</a>
       </div>
     </section>
 
