@@ -1468,7 +1468,7 @@ export const finalSiteHtml = `
   <div id="rm-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
     <div class="absolute bottom-full mb-2 hidden xl:block font-mono-num text-[9px] font-bold text-zinc-400">NN</div>
     <button id="rm-toggle" type="button" aria-label="Toggle Reduced Motion" class="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[10px] font-semibold text-zinc-700 hover:border-red-500">Motion: <span id="rm-label">Auto</span></button>
-    <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="rounded-full border border-zinc-200 bg-white/85 px-2.5 py-1.5 text-[10px] font-semibold text-zinc-700 shadow transition-all hover:bg-red-50 hover:text-red-600">
+    <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="rounded-full border border-zinc-200 bg-white px-2.5 py-1.5 text-[10px] font-semibold text-zinc-700 shadow transition-all hover:bg-red-50 hover:text-red-600">
       <span data-icon="light">☀️</span><span data-icon="dark" class="hidden">🌙</span>
     </button>
     <div class="h-6 w-[1.5px] bg-zinc-200 rounded-full"></div>
