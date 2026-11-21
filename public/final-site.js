@@ -766,7 +766,7 @@
             const visW = visH * aspect;
             const minVis = Math.min(visH, visW);
             const S_cur = (root.scale && root.scale.x) || 1;
-            const targetFill = 0.82;
+            const targetFill = /tbk/.test(slot.canvas.id) ? 0.88 : 0.82;
             const S_final = targetFill * minVis * S_cur / maxDim;
             if (!isFinite(S_final) || S_final <= 0) return;
             root.scale.setScalar(S_final);
