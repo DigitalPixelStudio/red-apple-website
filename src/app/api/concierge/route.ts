@@ -281,6 +281,22 @@ function localAnswer(message: string): string {
     const price = min === max ? inr(min) : `${inr(min)} – ${inr(max)}`;
     return `${model} front-glass restoration (we keep your original OLED) is ${price} with our 6 Months written CRM warranty. Glass is restored on our TBK OCA press at the Halasuru studio, usually the same day. Would you like a walk-in slot or free 24/7 doorstep pickup?`;
   }
+  // Exact grounded prices for other common intents (no hallucination, from PRICES).
+  const issueRows: Array<[string[], string]> = [
+    [["back glass", "backglass", "rear glass"], "Back Glass Replacement"],
+    [["battery"], "Battery Replacement"],
+    [["camera"], "Camera Repair"],
+    [["charging port", "charging", "port"], "Charging Port / Flex"],
+  ];
+  for (const [keys, row] of issueRows) {
+    if (model && PRICES[model]?.[row]) {
+      const [lo, hi] = PRICES[model][row];
+      const p = lo === hi ? inr(lo) : `${inr(lo)} – ${inr(hi)}`;
+      if (keys.some((k) => lower.includes(k))) {
+        return `${model} ${row.toLowerCase()} is ${p}. We quote a fixed price after a free bench inspection and back it with our 6 Months written CRM warranty. Would you like a Halasuru walk-in slot or 24/7 pickup?`;
+      }
+    }
+  }
   if (lower.includes("motherboard") || lower.includes("board") || lower.includes("ic ") || lower.includes("water")) {
     return "Board-level and water-damage work starts with a free microscope diagnosis. Typical motherboard / IC repair is ₹10,500 – ₹14,500 depending on the fault; we never promise a data outcome. Motherboard work is excluded from the standard 6 Months warranty, which we explain on your CRM invoice.";
   }

@@ -20,9 +20,9 @@ export const finalSiteHtml = `
     <div class="pt-4">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
-        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-9 w-9 rounded-xl border border-red-200 object-contain shadow-sm" onerror="this.src='/icon-512.png'">
+        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-xl border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div>
-          <div class="font-display text-sm font-extrabold leading-none text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair</div>
+          <div class="font-display brand-name-glow text-base font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> Mobile Repair</div>
           <div class="mt-0.5 text-[11px] font-medium text-zinc-500">Halasuru · MG Road, Bengaluru</div>
         </div>
       </a>
@@ -75,7 +75,6 @@ export const finalSiteHtml = `
             <!-- 6 Trust Pills  -->
             <div class="flex flex-wrap gap-2 text-[11px] font-bold">
               <span class="badge-breathe rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-900">★ 4.9/5 · 1,103 Google Reviews</span>
-              <span class="badge-breathe rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800" style="animation-delay: 0.4s;">32-Point QC</span>
               <span class="badge-breathe rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-orange-800" style="animation-delay: 0.8s;">CRM Invoice</span>
               <span class="badge-breathe rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-700" style="animation-delay: 1.2s;">6 Months Warranty</span>
               <span class="badge-breathe rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800" style="animation-delay: 1.6s;">Zero-Password Privacy</span>
@@ -87,17 +86,14 @@ export const finalSiteHtml = `
               <a href="#estimate" class="dock-quote-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">Get 30-Second Estimate</a>
               <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">WhatsApp Bench 24/7</a>
               <a href="#halasuru-map" class="rounded-full border border-zinc-300 bg-white px-4 py-3 text-xs font-bold text-zinc-900 shadow-sm transition hover:border-red-500 hover:text-red-600">📍 Visit Us</a>
-            </div>
-
-            <div class="flex flex-wrap gap-2 pt-1 text-[11px]">
-              <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:border-red-400">Switch to Scroll-Safe BG</button>
-              <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:border-red-400">Reset 3D Angle</button>
+              <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">Switch to Scroll-Safe BG</button>
+              <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">Reset 3D Angle</button>
             </div>
           </div>
 
           <!-- Hero 3D Stage (HD Flagship iPhone 17 Pro Max · Orange) -->
           <div class="lg:col-span-6">
-            <div class="stage-3d-box relative h-[380px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[430px]">
+            <div class="stage-3d-box relative h-[440px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[520px]">
               <canvas id="canvas-hero" aria-label="3D iPhone 17 Pro Max Orange"></canvas>
               <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360° · HD Keynote Animation</div>
               <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
@@ -176,7 +172,7 @@ export const finalSiteHtml = `
     </div>
 
     <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
-    <section id="real-shop" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+    <section id="real-shop" class="section-shimmer ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="ambient-orb -right-16 top-20 h-72 w-72 bg-orange-400"></div>
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
@@ -224,7 +220,7 @@ export const finalSiteHtml = `
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
             <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
-              <img loading="lazy" decoding="async" src="/images/v4/quality-check-tech.jpg" alt="The bench — laser, rework station, microscope" class="h-full w-full object-cover object-center" onerror="this.src='/images/v4/quality-check-tech.jpg'">
+              <img loading="lazy" decoding="async" src="/images/gallery/bench-phone-store.webp" alt="Our Halasuru bench — live repair in progress with a restored iPhone" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/bench-phone-store.webp'">
               <div class="orange-glass-sweep"></div>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">04 · Bench</span>
             </div>
@@ -690,7 +686,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 10. THREE MACHINES. ONE ORIGINAL DISPLAY (LARGE REAL PHOTO ON TOP + HIGH-CONTRAST METALLIC 3D BELOW) -->
-    <section id="tbk-machines" class="laser-stage ambient-warm border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
+    <section id="tbk-machines" class="section-shimmer laser-stage ambient-warm border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Equipment Behind the Finish</div>
@@ -789,7 +785,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 11. STACKED APPLE ECOSYSTEM 3D SUITE (ALL DEVICES ONE BELOW ANOTHER SO VISITORS INTERACT DIRECTLY) -->
-    <section id="ecosystem-3d" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
+    <section id="ecosystem-3d" class="section-shimmer laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-3xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Mastered Inside &amp; Out · Every Apple Device</div>
@@ -1279,7 +1275,7 @@ export const finalSiteHtml = `
         <div class="lg:col-span-7">
           <div class="font-display text-lg font-extrabold text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair Store</div>
           <p class="mt-1 leading-relaxed text-zinc-600">Apple repairs, perfected. The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and board-level storage IC repair. MG Road, Halasuru · open 10 AM – 12 AM.</p>
-          <div class="mt-3 flex flex-wrap gap-1.5 text-[11px] font-bold">
+          <div class="mt-3 flex flex-nowrap flex-wrap gap-1 text-[10px] font-bold sm:gap-1.5">
             <a href="#footer-contact" class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700 hover:bg-blue-100">Facebook</a>
             <a href="#footer-contact" class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100">Instagram</a>
             <a href="#footer-contact" class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700 hover:bg-red-100">YouTube</a>

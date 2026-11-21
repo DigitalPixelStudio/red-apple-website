@@ -383,3 +383,79 @@
     @media (prefers-reduced-motion: reduce) {
       .reveal-up:hover, .page-rail-dot:hover { transform: none; }
     }
+
+
+    /* ===== HEADER BRAND GLOW + 5 LIGHTWEIGHT BACKGROUND AMBIENCES ===== */
+    .brand-name-glow {
+      background: linear-gradient(100deg, #dc2626 0%, #ea580c 45%, #dc2626 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 8px rgba(234,88,12,.32));
+      animation: brandGlow 5s ease-in-out infinite;
+    }
+    @keyframes brandGlow {
+      0%, 100% { background-position: 0% 50%; filter: drop-shadow(0 0 6px rgba(220,38,38,.24)); }
+      50%      { background-position: 100% 50%; filter: drop-shadow(0 0 14px rgba(234,88,12,.5)); }
+    }
+    .brand-icon-glow { box-shadow: 0 0 0 2px rgba(220,38,38,.10), 0 0 16px rgba(234,88,12,.28); }
+
+    /* 1. Slow drifting glow wash (transform/opacity only) */
+    .ambient-warm::before, .ambient-clean::before {
+      content: ""; position: absolute; z-index: 0;
+      width: 50vw; height: 50vw; max-width: 720px; max-height: 720px;
+      left: -15vw; top: -20vw; border-radius: 50%;
+      background: radial-gradient(circle, rgba(234,88,12,.055), transparent 68%);
+      pointer-events: none; will-change: transform;
+      animation: ambientDrift 26s ease-in-out infinite alternate;
+    }
+    @keyframes ambientDrift {
+      0%   { transform: translate3d(0,0,0) scale(1); opacity: .6; }
+      100% { transform: translate3d(22vw, 12vw, 0) scale(1.12); opacity: 1; }
+    }
+    /* 2. Section-top hairline shimmer (transform only, contain) */
+    .section-shimmer { position: relative; }
+    .section-shimmer::after {
+      content: ""; position: absolute; z-index: 1; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(220,38,38,.35), rgba(234,88,12,.45), transparent);
+      background-size: 200% 100%;
+      transform: translate3d(-30%,0,0);
+      animation: shimmerLine 14s linear infinite;
+      pointer-events: none; contain: strict;
+    }
+    @keyframes shimmerLine { to { transform: translate3d(30%,0,0); } }
+    /* 3. Slow breathing dot-grid accent */
+    .grid-breathe { animation: gridBreathe 9s ease-in-out infinite; }
+    @keyframes gridBreathe { 0%,100% { opacity: .5; } 50% { opacity: .85; } }
+    /* 4. Soft radial pulse behind the logo (transform/opacity only) */
+    .logo-laser::before {
+      content: ""; position: absolute; inset: -18px; border-radius: 9999px;
+      background: radial-gradient(circle, rgba(220,38,38,.16), transparent 70%);
+      animation: auraPulse 6s ease-in-out infinite; pointer-events: none; z-index: -1;
+    }
+    /* 5. Gentle floating sparkles on machine stages (opacity/transform only) */
+    .stage-3d-box::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.5) 0 1px, transparent 2px),
+        radial-gradient(circle at 78% 66%, rgba(251,146,60,.5) 0 1px, transparent 2px),
+        radial-gradient(circle at 55% 18%, rgba(255,255,255,.35) 0 1px, transparent 2px);
+      animation: sparkleFloat 11s ease-in-out infinite alternate;
+    }
+    @keyframes sparkleFloat {
+      0% { transform: translate3d(0,0,0); opacity: .35; }
+      100% { transform: translate3d(6px,-8px,0); opacity: .8; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .brand-name-glow, .ambient-warm::before, .ambient-clean::before,
+      .section-shimmer::after, .grid-breathe, .logo-laser::before,
+      .stage-3d-box::after { animation: none !important; }
+    }
+
+
+    /* GIFT 1 — off-screen render skipping for heavy static lists (no visual change) */
+    #faq-list, #reviews .marquee-track > div, .glass-lab-grid, .parts-grid {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 420px;
+    }
