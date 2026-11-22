@@ -742,6 +742,11 @@
         document.querySelectorAll('.reveal-up').forEach((el) => el.classList.add('is-in'));
       }
 
+      // Failsafe: lazy reveals must never strand content at opacity 0
+      setTimeout(() => {
+        document.querySelectorAll('.reveal-up:not(.is-in)').forEach((el) => el.classList.add('is-in'));
+      }, 1200);
+
       // ============================================================
       // 5. RAZOR-SHARP HiDPI SINGLE-CONTEXT WEBGL ENGINE (ALL 10 MODELS)
       // ============================================================
@@ -1322,9 +1327,9 @@
               else if (id === 'canvas-pickup-iphone') pad = 0.62;
               else if (id === 'canvas-airpods' || id === 'canvas-watch') pad = 0.94;
               else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.82 * 1.14 : 0.82;
-              else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.80 * 1.26 : 0.80;
-              else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.84 * 1.26 : 0.84;
-              else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.84 * 1.28 : 0.84;
+              else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.80 * 1.10 : 0.80;
+              else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.84 * 1.10 : 0.84;
+              else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.84 * 1.12 : 0.84;
               else if (id === 'canvas-macbook') pad = isMobileView ? 0.94 * 1.28 : 0.94;
               else if (id === 'canvas-internals') pad = isMobileView ? 0.94 * 1.14 : 0.94;
               // Tablet: slight zoom across models (was 1.20 -> 1.14)

@@ -20,10 +20,10 @@ export const finalSiteHtml = `
     <div class="pt-4">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
-        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
+        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow max-[379px]:hidden" onerror="this.src='/icon-512.png'">
         <div>
           <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> <span class="brand-dark-glow">Mobile Repair</span></div>
-          <div class="mt-0.5 text-[11px] font-medium text-zinc-500">Halasuru · MG Road, Bengaluru</div>
+          <div class="mt-0.5 whitespace-nowrap text-[10px] font-medium text-zinc-500">Halasuru · Bengaluru</div>
         </div>
       </a>
 
@@ -38,11 +38,11 @@ export const finalSiteHtml = `
         <a href="#faq" class="hover:text-red-600">FAQ</a>
       </nav>
 
-      <div class="flex items-center gap-2">
-        <button type="button" id="btn-pwa-open" class="inline-flex items-center gap-1.5 rounded-[6px] bg-zinc-950 px-3 py-2 text-[11px] font-bold text-white transition hover:bg-zinc-800">
+      <div class="flex items-center gap-1">
+        <button type="button" id="btn-pwa-open" class="inline-flex items-center gap-1 whitespace-nowrap rounded-[6px] bg-gradient-to-r from-red-600 to-orange-600 px-2 py-2 text-[10px] font-bold text-white transition hover:from-red-700 hover:to-orange-700">
           <span>⬇</span><span>Install App</span>
         </button>
-        <a href="#estimate" class="dock-quote-btn rounded-[6px] px-3.5 py-2 text-[11px] font-bold text-white transition hover:opacity-95">
+        <a href="#estimate" class="dock-quote-btn whitespace-nowrap rounded-[6px] px-2 py-2 text-[10px] font-bold text-white transition hover:opacity-95">
           Get Quote
         </a>
       </div>
@@ -622,7 +622,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 9. KEEP THE ORIGINAL OLED. RESTORE THE GLASS + SAVINGS CALCULATOR + ZERO-JITTER FULL PRICE LIST -->
-    <section id="glass-lab" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+    <section id="glass-lab" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Front Glass Restoration · Halasuru Lab</div>
@@ -713,10 +713,10 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-square min-h-[420px] w-full overflow-hidden bg-zinc-950 sm:min-h-[500px]">
-                <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-oca-press.webp'">
+              <div class="orange-glass-wrap relative aspect-[3/4] min-h-[420px] w-full overflow-hidden bg-[#F7EFE6] sm:min-h-[460px]">
+                <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
-                <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
+                <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
               </div>
               <div class="flex flex-1 flex-col p-5 sm:p-6">
                 <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest text-red-600">Bench equipment 01 of 03</div>
@@ -725,7 +725,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">OCA VACUUM LAMINATION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">VACUUM PRESS</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ORIGINAL OLED SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[440px] w-full border-t border-zinc-800 lg:col-span-6 lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[520px] w-full border-t border-orange-100 lg:col-span-6 lg:border-l lg:border-t-0">
               <canvas id="canvas-tbk-oca" aria-label="Interactive 4D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -735,10 +735,10 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-square min-h-[420px] w-full overflow-hidden bg-zinc-950 sm:min-h-[500px]">
-                <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
+              <div class="orange-glass-wrap relative aspect-[3/4] min-h-[420px] w-full overflow-hidden bg-[#F7EFE6] sm:min-h-[460px]">
+                <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
-                <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
+                <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
               </div>
               <div class="flex flex-1 flex-col p-5 sm:p-6">
                 <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest text-red-600">Bench equipment 02 of 03</div>
@@ -747,7 +747,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">90-LITRE AUTOCLAVE</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ZERO-BUBBLE OCA</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">PRESSURE CURVED</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[440px] w-full border-t border-zinc-800 lg:col-span-6 lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[520px] w-full border-t border-orange-100 lg:col-span-6 lg:border-l lg:border-t-0">
               <canvas id="canvas-tbk-90l" aria-label="Interactive 4D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -757,10 +757,10 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
             <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-square min-h-[420px] w-full overflow-hidden bg-zinc-950 sm:min-h-[500px]">
-                <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-cover object-center" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
+              <div class="orange-glass-wrap relative aspect-[3/4] min-h-[420px] w-full overflow-hidden bg-[#F7EFE6] sm:min-h-[460px]">
+                <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
-                <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/85 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
+                <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
               </div>
               <div class="flex flex-1 flex-col p-5 sm:p-6">
                 <div class="kicker-shift font-mono-num text-[10px] font-bold uppercase tracking-widest text-red-600">Bench equipment 03 of 03</div>
@@ -769,7 +769,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">COLD UV LASER</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">355NM PRECISION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">BACK GLASS SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[440px] w-full border-t border-zinc-800 lg:col-span-6 lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[520px] w-full border-t border-orange-100 lg:col-span-6 lg:border-l lg:border-t-0">
               <canvas id="canvas-tbk-958" aria-label="Interactive 4D TBK-958 Cold UV Purple Laser"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 4D · 355nm Beam</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -1095,7 +1095,7 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 15. COMPARISON + FOUR REASONS ₹1,00,000 + SURPRISE #3: 3D HOLOGRAPHIC WARRANTY CARD -->
-    <section id="comparison" class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
+    <section id="comparison" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Honest Comparison</div>

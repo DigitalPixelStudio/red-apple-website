@@ -1271,7 +1271,7 @@ html[data-motion="off"] {
    ========================================================================== */
 html {
   scroll-padding-top: 92px;
-  scroll-behavior: auto; /* smooth scroll is applied per-call, never globally */
+  scroll-behavior: smooth; /* GPU-friendly native smooth scroll (site-wide) */
 }
 
 /* ==========================================================================
