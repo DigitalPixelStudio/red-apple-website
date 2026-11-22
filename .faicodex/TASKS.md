@@ -35,3 +35,12 @@ Status key: TODO / IN PROGRESS / DONE / VERIFIED
 ## Final
 - [ ] QA-1 Playwright 9 gates PASS (Mobile/Tablet/Desktop)
 - [ ] Deploy + Word document + link
+
+## v6/v7 addendum — DONE & VERIFIED (commit 036ed98)
+- [x] Obsidian/black 3D strip -> warm cream studio backdrop (all 10 stages)
+- [x] Machine images: natural 3:4 + object-contain + warm matte (zero crop, all 3)
+- [x] Machine cards stacked full-width -> 2.1x bigger 3D stages
+- [x] Global hover/active transform jitter neutralized (verified computed transform: none)
+- [x] Reveal failsafe (15/15 visible), unconditional smooth scroll, 5 laser sections
+- [x] Header: one-line brand/subtext, warm install button, no black strip
+- [x] Redeployed to https://www.redmobilerepair.in — all live checks PASS

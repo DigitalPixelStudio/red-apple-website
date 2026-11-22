@@ -17,8 +17,8 @@
 | Working branch | `fix/disable-orange-glass-sweep` (107+ commits ahead of main; live is deployed from THIS branch, NOT main) |
 | Vercel project | `redmobile-repair.in` (id `prj_UXuax2HiAkDgB0MNqrTc10b52TFr`, team/scope `digital-pixel-studio`, team id `team_X2IuKDqvHxg5BoaS61nc2mpg`) |
 | GitHub repo | `DigitalPixelStudio/red-apple-website` |
-| Latest production deploy | commit `ed797d6` (prior `9f35159`, `08e9073`) |
-| Rollback tags | `stable-pre-onego-v5` (v5 baseline, commit `61d4aa2`), `stable-pre-v4-fixes` (`36e903d`) |
+| Latest production deploy | commit `036ed98` (v7: machine card restructure); prior `3cfbbb4` (v6: strip fix), `ed797d6` |
+| Rollback tags | `stable-pre-strip-fix` (pre-v6), `stable-pre-onego-v5`, `stable-pre-v4-fixes` |
 | Safety | NEVER force-push main. Deploy forward from tags. |
 | Final Word report | `/root/workspace/RedApple_OneGo_v5_Final_Report.docx` |
 
@@ -97,3 +97,23 @@ Then tell Faisu: "Context restored from .faicodex/HANDOFF.md — ready to work."
 
 ---
 *End of handoff. Fresh session: read sections 1–4 first, then run the commands in section 2.*
+
+
+## 11. v6 / v7 ADDENDUM (2026-11-22, commit 036ed98)
+Real bugs found via Playwright (not string checks) and fixed:
+- **"Black strip"** = `.stage-3d-box` used `rgba(17,17,19,.96)` obsidian backdrop on all 10 3D stages.
+  Replaced with warm editorial radial `#FFF9F3 → #F8E9DD → #EED7C4`. Renderer is `alpha:true`, so CSS shows through.
+- **Machine images cropped** = portrait 1613×2160 (3:4) in `aspect-square`+`object-cover`.
+  Fixed: `aspect-[3/4]` natural ratio, `object-contain`, warm matte `#F7EFE6`; no crop, full machine visible.
+- **Global hover micro-jitter** = `globals.css a[href],button:hover { transform: translate3d(0,-1px,0) }`.
+  Neutralized: hover/active `transform:none !important` (verified computed transform `none` on hover).
+- **Invisible content** = `.reveal-up` could stay at opacity 0 if IntersectionObserver missed.
+  Added 1.2s failsafe that adds `.is-in` to all remaining elements (verified 15/15 visible).
+- **Smooth scroll** was hover-only + overridden by late globals rule → now unconditional `smooth` (reduced-motion still wins).
+- **Bigger 3D models** = machine cards stacked full-width (image above 3D), 3D stage 480/520px;
+  mobile pads reduced to 1.10/1.12 (still >1 so bounding-sphere fit = zero crop).
+- **More light animation** = laser-line sections now 5 (hero, glass-lab, tbk-machines, ecosystem-3d, comparison);
+  transform/opacity only, `contain:strict`.
+- Header compacted: one-line brand + subtext, warm gradient Install button (no black), nowrap CTAs.
+- Verified live: docOverflow 0, warm stage, imgFit contain, smooth scroll, 5 lasers, 15/15 reveals, AI bot healthy.
+- Safety tag before this pass: `stable-pre-strip-fix`.
