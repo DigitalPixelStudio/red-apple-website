@@ -50,9 +50,9 @@ V14_FILL_FLOORS: dict[str, float] = {
     "canvas-hero":          0.92,
     "canvas-estimate-ipad": 0.92,
     "canvas-pickup-iphone": 0.92,
-    "canvas-tbk-oca":       0.92,
-    "canvas-tbk-90l":       0.92,
-    "canvas-tbk-958":       0.92,
+    "canvas-tbk-oca":       0.84,   # v15: machines eased from 0.92 to 0.88 per Faisu
+    "canvas-tbk-90l":       0.84,
+    "canvas-tbk-958":       0.84,
     "canvas-internals":     0.92,
     "canvas-airpods":       0.86,   # intentionally eased back
     "canvas-watch":         0.92,

@@ -908,13 +908,14 @@
         // v13: widened near-edge fills. Shared renderer — never per-slot setSize.
         // AirPods deliberately eased back slightly; MacBook pushed furthest.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 0.95, fov: 34 },
+          'canvas-hero':          { fill: 0.96, fov: 34 }, // slight zoom increase per Faisu
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
-          'canvas-tbk-oca':       { fill: 0.95, fov: 34 },
-          'canvas-tbk-90l':       { fill: 0.95, fov: 34 },
-          'canvas-tbk-958':       { fill: 0.95, fov: 34 },
+          // Machines eased back slightly from 0.95 -> 0.88 for a clean centred view (no crop).
+          'canvas-tbk-oca':       { fill: 0.88, fov: 34 },
+          'canvas-tbk-90l':       { fill: 0.88, fov: 34 },
+          'canvas-tbk-958':       { fill: 0.88, fov: 34 },
           'canvas-internals':     { fill: 0.95, fov: 34 },
           'canvas-airpods':       { fill: 0.86, fov: 34 }, // eased slightly per Faisu
           'canvas-watch':         { fill: 0.95, fov: 34 },

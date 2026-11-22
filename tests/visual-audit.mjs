@@ -470,8 +470,19 @@ async function main() {
     const fillEntries = Object.entries(fills);
     const nonAirpods = fillEntries.filter(([id]) => id !== 'canvas-airpods');
     const raisedCount = nonAirpods.filter(([, v]) => v >= 0.95).length;
-    const mostRaised = nonAirpods.length >= 6 &&
-      raisedCount > nonAirpods.length / 2 && raisedCount >= nonAirpods.length - 2;
+    // v15: machines are DELIBERATELY eased to <=0.90 (Faisu asked to reduce machine
+    // zoom). Hero >=0.96 (increased). So accept: hero raised, machines 0.84..0.90,
+    // and at least half of non-machine slots raised. Never let machines creep back to 0.95.
+    const machineIds = ['canvas-tbk-oca', 'canvas-tbk-90l', 'canvas-tbk-958'];
+    const machinesEased = machineIds.every((id) => {
+      const v = fills[id];
+      return v !== undefined && v >= 0.84 && v <= 0.90;
+    });
+    const heroRaised = (fills['canvas-hero'] ?? 0) >= 0.96;
+    const nonMachine = nonAirpods.filter(([id]) => !machineIds.includes(id));
+    const raisedNonMachine = nonMachine.filter(([, v]) => v >= 0.95).length;
+    const mostRaised = nonMachine.length >= 5 && raisedNonMachine >= nonMachine.length - 1 &&
+      heroRaised && machinesEased && nonAirpods.length >= 6;
     const maxFill = fillEntries.length ? Math.max(...fillEntries.map(([, v]) => v)) : 0;
     const macbookFill = fills['canvas-macbook'];
     const airpodsFill = fills['canvas-airpods'];
@@ -487,7 +498,7 @@ async function main() {
     const capVal = capMatch ? Number(capMatch[1]) : 1; // no cap = fully open
     const capOk = capVal >= 0.95;
     record(mostRaised && macbookHighest && airpodsEased && tabletWider && capOk && fillEntries.length >= 8,
-      'v14 SOURCE final-site.js: raised fills (most >=0.95) + tablet wider + MacBook highest + AirPods eased + raised cap',
+      'v15 SOURCE final-site.js: hero>=0.96, machines eased 0.84-0.90, tablet wider, MacBook highest, AirPods eased, cap raised',
       `slots=${fillEntries.length} raised=${raisedCount}/${nonAirpods.length} ` +
       `fills=${JSON.stringify(fills)} macbookHighest=${macbookHighest} airpodsEased=${airpodsEased} ` +
       `tabletWider=${tabletWider} (token=${tabletToken} idCond=${tabletIdCond}) ` +
@@ -648,16 +659,24 @@ async function main() {
         `srcChips=${V10_CHIPS.length} srcButtons=${V10_BUTTONS.length} hoursLen=${V10_HOURS.length}`,
         'DOM-CHECK');
 
-      /* ---- v10 GATE 31 (per viewport): footer DOM obsidian theme + photo + credit ---- */
+      /* ---- v15 GATE 31 (per viewport): footer LIGHT theme + photo + credit ---- */
       const footer = page.locator('#footer-contact').first();
       const footerCount = await footer.count();
+      const isLight = footerCount > 0
+        ? await footer.evaluate((el) => el.classList.contains('footer-light-modern')) : false;
       const isObsidian = footerCount > 0
         ? await footer.evaluate((el) => el.classList.contains('footer-neon-obsidian')) : false;
       const bgRgb = footerCount > 0 ? await footer.evaluate((el) => getComputedStyle(el).backgroundColor) : '';
-      const mRgb = bgRgb.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+      const mRgb = bgRgb.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?/);
       const rgb = mRgb ? [Number(mRgb[1]), Number(mRgb[2]), Number(mRgb[3])] : [];
-      // Shipped .footer-neon-obsidian bg is #0A0A0C = rgb(10,10,12), near #0B0D12.
-      const darkBg = rgb.length === 3 && Math.max(...rgb) <= 40 && rgb[0] <= 20;
+      const alpha = mRgb && mRgb[4] !== undefined ? Number(mRgb[4]) : 1;
+      // A transparent background (alpha 0) means a gradient/bg-image is used — never "dark".
+      const darkBg = alpha > 0 && rgb.length === 3 && Math.max(...rgb) <= 40 && rgb[0] <= 20;
+      // v15 light theme uses a linear-gradient background-image (light FDFCFB->F2ECE4),
+      // so backgroundColor is transparent — validate the LIGHT class and gradient.
+      const bgImage = footerCount > 0 ? await footer.evaluate((el) => getComputedStyle(el).backgroundImage) : '';
+      const lightGradient = /gradient/.test(bgImage) && /25[0-5]|24[0-9]|23[0-9]/.test(bgImage);
+      const lightTheme = isLight && !isObsidian && !darkBg && lightGradient;
       const storeImg = page.locator('#footer-contact .studio-photo-frame img').first();
       const storeImgCount = await storeImg.count();
       const storeSrc = storeImgCount ? await storeImg.getAttribute('src') : null;
@@ -666,9 +685,9 @@ async function main() {
       const footerText = footerCount > 0 ? await footer.evaluate((el) => el.textContent) : '';
       const hasCredit = footerText.includes('Developed by The Pixel Forge Studio · 96200 24812');
       const hasCopyright = footerText.includes('© 2026 Red Apple Mobile Repair Store');
-      record(footerCount > 0 && isObsidian && darkBg && storePhotoOk && hasCredit && hasCopyright,
-        `${vp.name}: footer obsidian theme + store photo + copyright/credit`,
-        `footer=${footerCount} obsidianClass=${isObsidian} bg="${bgRgb}" dark=${darkBg} ` +
+      record(footerCount > 0 && lightTheme && storePhotoOk && hasCredit && hasCopyright,
+        `${vp.name}: footer LIGHT theme + store photo + copyright/credit`,
+        `footer=${footerCount} lightClass=${isLight} obsidianClass=${isObsidian} lightGradient=${lightGradient} bg="${bgRgb}" dark=${darkBg} ` +
         `storeSrc=${storeSrc} aspectSquare=${storeCls.includes('aspect-square')} ` +
         `credit=${hasCredit} copyright=${hasCopyright}`, 'DOM-CHECK');
 

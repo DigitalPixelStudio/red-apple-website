@@ -11,8 +11,12 @@ import { SITE, baseUrl } from "@/lib/site";
  * into the existing JSON-LD array in layout.tsx without duplicating nodes.
  */
 
-/** 17 Bengaluru zones served — single source, reused by the schema node. */
-const BENGALURU_ZONES = [
+/**
+ * 17 Bengaluru zones served — single source, reused by the schema node.
+ * Mirrored verbatim in public/llms.txt ("Service area" section); keep both in
+ * sync to avoid the answer-engine vs. llms.txt drift flagged by audit BE-1.
+ */
+export const BENGALURU_ZONES = [
   "Halasuru",
   "Indiranagar",
   "MG Road",
