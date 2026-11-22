@@ -540,10 +540,10 @@ export const finalSiteHtml = `
           </div>
           <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative h-72 w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-80" style="touch-action: pan-y;">
             <!-- Restored side: label lives ONLY in the right half so it never overlaps the cracked label -->
-            <div class="absolute inset-0 flex items-center justify-end px-6 text-right sm:px-10">
+            <div class="absolute inset-y-0 right-0 flex w-1/2 items-center justify-end px-3 text-right sm:px-8">
               <div>
-                <div class="font-display text-base font-extrabold leading-tight text-white drop-shadow sm:text-2xl">Factory-Grade OLED &amp; Glass Engineering</div>
-                <div class="mt-1 text-xs font-semibold text-blue-200">Original OLED · True Tone · 90L Zero-Bubble OCA Finish</div>
+                <div class="font-display text-xs font-extrabold leading-tight text-white drop-shadow sm:text-2xl">Factory-Grade OLED &amp; Glass Engineering</div>
+                <div class="mt-1 text-[10px] font-semibold text-blue-200 sm:text-xs">Original OLED · True Tone · 90L Zero-Bubble OCA Finish</div>
               </div>
             </div>
             <!-- Cracked side: full-width overlay clipped by the slider; label pinned inside the visible LEFT half -->
@@ -551,7 +551,7 @@ export const finalSiteHtml = `
               <svg class="absolute inset-0 h-full w-full opacity-50" viewBox="0 0 800 320" preserveAspectRatio="none">
                 <path d="M120,20 L260,110 L420,40 M260,110 L180,210 M260,110 L470,190 M260,110 L650,90 M60,130 L260,110" stroke="#f87171" stroke-width="2" fill="none"/>
               </svg>
-              <span class="absolute left-0 top-1/2 w-1/2 -translate-y-1/2 px-6 text-center font-display text-base font-extrabold leading-tight text-rose-400 drop-shadow sm:text-2xl">Cracked Outer Glass Layer</span>
+              <span class="absolute left-0 top-1/2 w-1/2 -translate-y-1/2 px-3 text-center font-display text-xs font-extrabold leading-tight text-rose-400 drop-shadow sm:px-6 sm:text-2xl">Cracked Outer Glass Layer</span>
             </div>
             <div id="ba-line" class="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 bg-red-500"></div>
             <div id="ba-knob" class="pointer-events-none absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white shadow-lg">↔</div>

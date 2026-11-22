@@ -117,3 +117,13 @@ Real bugs found via Playwright (not string checks) and fixed:
 - Header compacted: one-line brand + subtext, warm gradient Install button (no black), nowrap CTAs.
 - Verified live: docOverflow 0, warm stage, imgFit contain, smooth scroll, 5 lasers, 15/15 reveals, AI bot healthy.
 - Safety tag before this pass: `stable-pre-strip-fix`.
+
+---
+
+## 12. IMAGE/3D FIX PASS — IN PROGRESS (2026-11-22, deploy PENDING)
+> Section 7 "all PASS" refers to the previously deployed v7 (`036ed98`). This pass is NEW, uncommitted, and not yet verified/deployed.
+- Safety tag created before edits: `backup-before-image-3d-fix` (rollback point on `fix/disable-orange-glass-sweep`).
+- 3 files changed (uncommitted): `src/app/final-site.css` (scoped object-fit cover/contain), `src/lib/final-site-html.ts` (`machine-frame` class, header nav `md:flex` for tablet gap, glass visualiser label separation), `public/final-site.js` (aspect-preserving `fitDims`; `resizeSlot` no longer corrupts shared renderer).
+- Build artifacts valid: `BUILD_ID=2hZajWIhaMmA7Bcteqh24`; TypeScript OK; compiler OK (exit 139 = benign sandbox teardown — verify via BUILD_ID, not exit code).
+- Deploy: **PENDING** (FaiCodex has not deployed this pass). QA: **NOT run / not claimed** — do not report QA PASS until gates are executed.
+- NEXT SESSION FIRST ACTION (gift): run `bash scripts/predeploy-check.sh` + QA gates on this pass, then deploy from `fix/disable-orange-glass-sweep` via `vercel deploy --prod --scope digital-pixel-studio --project redmobile-repair.in --yes` and verify the live URL.
