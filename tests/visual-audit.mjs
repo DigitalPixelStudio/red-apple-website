@@ -6,14 +6,31 @@
  * Run against a LOCAL build (BASE_URL, default http://127.0.0.1:3000).
  * NEVER point this at production: production is redeployed only after the gate is green.
  *
- * Checks (per viewport: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x):
- *   1. computed object-fit: store/gallery photos = cover, machine-frame photos = contain
- *   2. header <nav> visible at >= 768px, hidden at 390px
- *   3. #ba-overlay cracked label and restored label bounding boxes do not overlap
- *   4. no .orange-glass-showcase node in the DOM (and not in SSR HTML)
- *   5. SSR HTML contains 4.9/5 and does not contain 1.3/5
- *   + frozen 3D canvas elements exist (existence only — headless has no WebGL,
- *     so this test deliberately never reads canvas pixels or calls getContext).
+ * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
+ *
+ * GATES (34 total = 23 legacy + 11 v8):
+ *   LEGACY (2 global, 7 per viewport):
+ *    1. SSR rating 4.9/5 present and 1.3/5 absent
+ *    2. SSR HTML has no .orange-glass-showcase
+ *    3. per: store/gallery photos (.studio-photo-frame) object-fit=cover;
+ *           machine-frame photos object-fit=contain
+ *    4. per: header <nav> visible >= 768px, hidden at 390px
+ *    5. per: #ba-overlay cracked/restored label boxes do not overlap
+ *    6. per: no .orange-glass-showcase node in DOM
+ *    7. per: frozen 3D canvases exist (existence only — headless has no WebGL,
+ *            so this gate never reads canvas pixels or calls getContext)
+ *    8. per: no app JS errors (HMR/Turbopack teardown noise ignored)
+ *   v8 NEW (2 global source gates, 3 per viewport):
+ *    9. GLOBAL SOURCE: public/final-site.js contains 0x8a8f98 + applyAirpodsSpaceGrey
+ *       and NOT the old `target * ease` counter animation
+ *   10. GLOBAL SOURCE: src/app/final-site.css has .stage-3d-orange-bg + .stat-final
+ *   11. per: fullscreen toggle absent on #canvas-hero, present on the other 9 stages.
+ *       DOM-CHECK when the 3D engine ran ([data-fs-toggle] buttons in DOM);
+ *       SOURCE-CHECK fallback when headless has no WebGL (engine never created buttons):
+ *       asserts public/final-site.js contains `if (slot.canvas.id === 'canvas-hero') continue;`.
+ *       Never FAILs solely because of no-WebGL.
+ *   12. per: all 10 .stage-3d-box wrappers carry .stage-3d-orange-bg
+ *   13. per: #ambient-particles host exists in DOM
  *
  * Gift: `node tests/visual-audit.mjs --shots` writes one screenshot per viewport
  * to tests/shots/ for eyeball review. Set SHOTS_FULL=1 for full-page captures.
@@ -27,11 +44,20 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
 const BASE_URL = (process.env.BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const SHOTS = process.argv.includes('--shots');
 const SHOTS_FULL = process.env.SHOTS_FULL === '1';
 const SHOTS_DIR = process.env.SHOTS_DIR || path.join(SCRIPT_DIR, 'shots');
 const OVERLAP_TOLERANCE_PX = 1; // ignore sub-pixel/rounding-only intersections
+
+// v8 source anchors (read once; shared by the global source gates and the
+// fullscreen SOURCE-CHECK fallback). Exact strings from the shipped v8 files.
+const JS_SOURCE_PATH = path.join(REPO_ROOT, 'public', 'final-site.js');
+const CSS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'final-site.css');
+const HERO_FS_EXCLUSION = "if (slot.canvas.id === 'canvas-hero') continue;";
+const EXPECTED_FS_BUTTONS = 9; // 10 stages − hero
+const EXPECTED_STAGE_BOXES = 10;
 
 const VIEWPORTS = [
   { name: 'tablet', width: 1024, height: 768, deviceScaleFactor: 2 },
@@ -40,11 +66,12 @@ const VIEWPORTS = [
 ];
 
 const results = [];
-function record(status, check, detail) {
+function record(status, check, detail, mode) {
   const passed = status === true || status === 'PASS';
   const label = passed ? 'PASS' : 'FAIL';
-  results.push({ status: label, check, detail });
-  console.log(`[${label}] ${check}${detail ? ` — ${detail}` : ''}`);
+  const tag = mode ? ` [${mode}]` : '';
+  results.push({ status: label, check, detail, mode: mode || '' });
+  console.log(`[${label}${tag}] ${check}${detail ? ` — ${detail}` : ''}`);
 }
 
 /* ------------------------------------------------------------------ *
@@ -85,6 +112,11 @@ function resolveChromium(chromium) {
   return undefined;
 }
 
+function readSource(file) {
+  try { return fs.readFileSync(file, 'utf8'); }
+  catch (e) { console.log(`[WARN] cannot read ${file}: ${e && e.message ? e.message : e}`); return ''; }
+}
+
 /* ------------------------------------------------------------------ *
  * Geometry helpers
  * ------------------------------------------------------------------ */
@@ -107,6 +139,10 @@ function boxesOverlap(a, b) {
  * Main
  * ------------------------------------------------------------------ */
 async function main() {
+  // v8 source snapshots (global gates + fullscreen fallback).
+  const jsSource = readSource(JS_SOURCE_PATH);
+  const cssSource = readSource(CSS_SOURCE_PATH);
+
   const { chromium } = await loadPlaywright();
   const executablePath = resolveChromium(chromium);
   const browser = await chromium.launch({
@@ -119,7 +155,7 @@ async function main() {
   console.log(`visual-audit BASE_URL=${BASE_URL} shots=${SHOTS ? 'on' : 'off'}`);
 
   try {
-    /* ---- Check 5: SSR HTML (once) ---- */
+    /* ---- LEGACY Check 1+2: SSR HTML (once) ---- */
     let ssr = '';
     try {
       const res = await fetch(BASE_URL, { headers: { 'user-agent': 'Mozilla/5.0 visual-audit' } });
@@ -133,6 +169,23 @@ async function main() {
     } catch (e) {
       record('FAIL', 'SSR HTML fetch', String(e && e.message ? e.message : e));
     }
+
+    /* ---- v8 GLOBAL SOURCE Gate 9: AirPods Space Grey + no old counter animation ---- */
+    const hasSpaceGreyColor = jsSource.includes('0x8a8f98');
+    const hasSpaceGreyFn = jsSource.includes('applyAirpodsSpaceGrey');
+    const hasOldCounterAnim = jsSource.includes('target * ease');
+    record(hasSpaceGreyColor && hasSpaceGreyFn && !hasOldCounterAnim,
+      'SOURCE final-site.js: AirPods Space Grey + no old counter animation',
+      `0x8a8f98=${hasSpaceGreyColor} applyAirpodsSpaceGrey=${hasSpaceGreyFn} ` +
+      `"target * ease"=${hasOldCounterAnim} (expected present,present,absent)`, 'SOURCE-CHECK');
+
+    /* ---- v8 GLOBAL SOURCE Gate 10: required CSS classes ---- */
+    const cssHasOrangeBg = cssSource.includes('.stage-3d-orange-bg');
+    const cssHasStatFinal = cssSource.includes('.stat-final');
+    record(cssHasOrangeBg && cssHasStatFinal,
+      'SOURCE final-site.css: .stage-3d-orange-bg + .stat-final',
+      `.stage-3d-orange-bg=${cssHasOrangeBg} .stat-final=${cssHasStatFinal} (expected present,present)`,
+      'SOURCE-CHECK');
 
     for (const vp of VIEWPORTS) {
       console.log(`\n--- viewport ${vp.name}: ${vp.width}x${vp.height} @${vp.deviceScaleFactor}x ---`);
@@ -148,9 +201,9 @@ async function main() {
       await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
       await page.waitForTimeout(250);
 
-      /* ---- Check 1: object-fit ---- */
-      // The rendered store gallery lives under #real-shop; the legacy #gallery
-      // selector is kept for parity with final-site.css. Use whichever exists.
+      /* ---- LEGACY Check 1: object-fit ---- */
+      // Store/gallery photos now use .studio-photo-frame; keep the legacy
+      // #gallery selector as first choice for parity with final-site.css.
       let gallerySel = '#gallery img';
       let galleryCount = await page.locator(gallerySel).count();
       let galleryNote = 'selector=#gallery img';
@@ -176,7 +229,7 @@ async function main() {
         `${machineFits.length - machineBad.length}/${machineFits.length} contain` +
         (machineBad.length ? ` bad=${JSON.stringify(machineBad)}` : ''));
 
-      /* ---- Check 2: nav visibility ---- */
+      /* ---- LEGACY Check 2: nav visibility ---- */
       const nav = page.locator('nav').first();
       const navCount = await nav.count();
       const navVisible = navCount > 0 ? await nav.isVisible() : false;
@@ -186,7 +239,7 @@ async function main() {
         `${vp.name}: header nav ${expectNav ? 'visible' : 'hidden'}`,
         `count=${navCount} display=${navDisplay} visible=${navVisible} expected=${expectNav}`);
 
-      /* ---- Check 3: ba-overlay label boxes ---- */
+      /* ---- LEGACY Check 3: ba-overlay label boxes ---- */
       const overlayCount = await page.locator('#ba-overlay').count();
       const cracked = page.locator('#ba-overlay span').first();
       const restored = page.locator('#ba-slider-box').getByText('Factory-Grade OLED & Glass Engineering').first();
@@ -198,11 +251,11 @@ async function main() {
         `overlay=${overlayCount} cracked[${fmtBox(crackedBox)}] restored[${fmtBox(restoredBox)}] ` +
         `intersection=${ov ? `${ov.w.toFixed(1)}x${ov.h.toFixed(1)}px` : 'n/a'}`);
 
-      /* ---- Check 4: no orange-glass-showcase in DOM ---- */
+      /* ---- LEGACY Check 4: no orange-glass-showcase in DOM ---- */
       const showcase = await page.locator('.orange-glass-showcase').count();
       record(showcase === 0, `${vp.name}: no .orange-glass-showcase in DOM`, `count=${showcase}`);
 
-      /* ---- Canvas existence only (NO WebGL / pixel judgement) ---- */
+      /* ---- LEGACY Canvas existence only (NO WebGL / pixel judgement) ---- */
       const frozen = ['canvas-hero', 'canvas-pickup-iphone', 'canvas-airpods', 'canvas-watch'];
       const canvasState = {};
       for (const id of frozen) {
@@ -215,8 +268,46 @@ async function main() {
       record(frozenOk && allCanvas >= 4, `${vp.name}: frozen 3D canvases present (existence only)`,
         `${JSON.stringify(canvasState)} totalCanvas=${allCanvas}`);
 
-      // Turbopack/HMR chunk errors are dev-server teardown noise (this sandbox's
-      // next dev exits 139 harmlessly); they cannot occur in a production build.
+      /* ---- v8 GATE 11: fullscreen toggle absent on hero, present on other 9 ---- */
+      // The 3D engine creates buttons with dataset.fsToggle='1' at runtime, and
+      // skips the hero via `if (slot.canvas.id === 'canvas-hero') continue;`.
+      // Headless Chromium has no WebGL, so the engine may never run: in that
+      // case fall back to a SOURCE-CHECK (never FAIL on no-WebGL).
+      const fsCount = await page.locator('[data-fs-toggle]').count();
+      const heroFsCount = await page.evaluate(() => {
+        const hero = document.getElementById('canvas-hero');
+        if (!hero) return -1;
+        const wrap = hero.closest('.stage-3d-box');
+        if (!wrap) return -2;
+        return wrap.querySelectorAll('[data-fs-toggle]').length;
+      });
+      let fsMode, fsOk, fsDetail;
+      if (fsCount > 0) {
+        fsMode = 'DOM-CHECK';
+        fsOk = fsCount === EXPECTED_FS_BUTTONS && heroFsCount === 0;
+        fsDetail = `runtime fsButtons=${fsCount} (expected ${EXPECTED_FS_BUTTONS}) ` +
+          `heroFsButtons=${heroFsCount} (expected 0)`;
+      } else {
+        fsMode = 'SOURCE-CHECK';
+        const hasExclusion = jsSource.includes(HERO_FS_EXCLUSION);
+        fsOk = hasExclusion;
+        fsDetail = `0 runtime fsButtons (headless no WebGL — engine did not run); ` +
+          `source hero-exclusion="${HERO_FS_EXCLUSION}"=${hasExclusion}`;
+      }
+      record(fsOk, `${vp.name}: fullscreen toggle on 9 non-hero stages, not hero`, fsDetail, fsMode);
+
+      /* ---- v8 GATE 12: all 10 stage wrappers carry .stage-3d-orange-bg ---- */
+      const orangeState = await page.locator('.stage-3d-box').evaluateAll((els) =>
+        els.map((el) => el.classList.contains('stage-3d-orange-bg')));
+      const orangeOk = orangeState.length === EXPECTED_STAGE_BOXES && orangeState.every(Boolean);
+      record(orangeOk, `${vp.name}: all ${EXPECTED_STAGE_BOXES} .stage-3d-box carry .stage-3d-orange-bg`,
+        `${orangeState.filter(Boolean).length}/${orangeState.length} orange-bg (expected ${EXPECTED_STAGE_BOXES}/${EXPECTED_STAGE_BOXES})`);
+
+      /* ---- v8 GATE 13: #ambient-particles host exists ---- */
+      const ambCount = await page.locator('#ambient-particles').count();
+      record(ambCount > 0, `${vp.name}: #ambient-particles host present`, `count=${ambCount}`);
+
+      /* ---- LEGACY: no app JS errors (HMR/Turbopack teardown noise ignored) ---- */
       const devNoise = pageErrors.filter((e) => /turbopack|hmr-client/i.test(e));
       const appErrors = pageErrors.filter((e) => !/turbopack|hmr-client/i.test(e));
       if (devNoise.length) console.log(`   [DEV-NOISE] ignored ${devNoise.length} HMR chunk error(s)`);
@@ -248,7 +339,10 @@ async function main() {
   }
 
   const failed = results.filter((r) => r.status === 'FAIL');
-  console.log(`\n===== visual-audit summary: ${results.length - failed.length}/${results.length} PASS, ${failed.length} FAIL =====`);
+  const sourceChecks = results.filter((r) => r.mode === 'SOURCE-CHECK').length;
+  const domChecks = results.filter((r) => r.mode === 'DOM-CHECK').length;
+  console.log(`\n===== visual-audit summary: ${results.length - failed.length}/${results.length} PASS, ${failed.length} FAIL ` +
+    `(modes: ${domChecks} DOM-CHECK, ${sourceChecks} SOURCE-CHECK) =====`);
   if (failed.length) {
     for (const f of failed) console.log(`FAIL: ${f.check} — ${f.detail}`);
     process.exitCode = 1;
