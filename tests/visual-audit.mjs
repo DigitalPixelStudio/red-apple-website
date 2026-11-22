@@ -43,10 +43,11 @@
  *    22: footer mailto anchor overflow-wrap === 'break-word'.
  *    23: all 4 footer column headings computed textAlign === 'left'.
  *   v10 NEW (6 global source/scripts + 2 per viewport = 12):
- *    24. GLOBAL SOURCE: final-site.js computeTightDeviceBounds + near-edge 0.90/0.88
- *        fill inside centerAndFitResponsive; NO per-slot renderer.setSize; NO inflated
- *        setFromObject(root, true) in the fit path. (source/structural only — headless
- *        Chromium has no WebGL, so this gate NEVER reads canvas pixels.)
+ *    24. GLOBAL SOURCE: final-site.js computeTightDeviceBounds + aspect-aware
+ *        distV/distH -> Math.max(distV, distH) per-axis fit + MODEL_FRAMING fills
+ *        (most 0.92, airpods 0.86, macbook 0.94); NO per-slot renderer.setSize;
+ *        NO inflated setFromObject(root, true) in the fit path. (source/structural
+ *        only — headless Chromium has no WebGL, so this gate NEVER reads pixels.)
  *    25. GLOBAL SOURCE: final-site-html.ts .glass-lab-cta-band + 9 .lab-hash-chip;
  *        final-site.css has box-shadow:none on chips + contain:layout style on band.
  *    26. SOURCE robots.ts: Googlebot/Bingbot/Applebot allowed, /_next/ NOT disallowed.
@@ -263,20 +264,46 @@ async function main() {
       `.stage-3d-orange-bg=${cssHasOrangeBg} .stat-final=${cssHasStatFinal} (expected present,present)`,
       'SOURCE-CHECK');
 
-    /* ---- v10 GLOBAL SOURCE Gate 24: tight device bounds + near-edge fill ---- */
+    /* ---- v10 GLOBAL SOURCE Gate 24: tight bounds + aspect-aware per-axis fit ---- */
     // 3D is verified STRUCTURALLY only: headless Chromium has no WebGL, so we
-    // never read canvas pixels or judge model size from a screenshot.
+    // never read canvas pixels or judge model size from a screenshot. The NEW
+    // formula solves distance per-axis (distV/distH -> Math.max) and uses
+    // MODEL_FRAMING fills (most 0.92, airpods 0.86, macbook 0.94). Assert that
+    // approach — never the retired Math.min(0.90)/0.88/dist*0.24 formula.
+    const framingBlock = sliceBetween(jsSource, 'const MODEL_FRAMING', 'function registerSlot');
     const fitFn = sliceBetween(jsSource, 'function centerAndFitResponsive', 'function registerSlot');
-    const hasTightFn = /function\s+computeTightDeviceBounds\s*\(/.test(jsSource) && fitFn.includes('computeTightDeviceBounds');
-    const hasNearEdge = fitFn.includes('Math.min(0.90') || fitFn.includes('0.90');
-    const hasFill088 = fitFn.includes('0.88');
+    // tight device-bounds helper exists in source AND is used by the fit
+    const hasTightFn = /function\s+computeTightDeviceBounds\s*\(/.test(jsSource) &&
+      fitFn.includes('computeTightDeviceBounds');
+    // aspect-aware per-axis distance solve (the whole point of the new framing)
+    const hasDistV = /\bdistV\s*=/.test(fitFn);
+    const hasDistH = /\bdistH\s*=/.test(fitFn);
+    const hasMaxDist = /Math\.max\s*\(\s*distV\s*,\s*distH\s*\)/.test(fitFn);
+    // MODEL_FRAMING fill tiers: default 0.92, AirPods eased to 0.86, MacBook 0.94
+    const hasFill092 = /fill:\s*0\.92/.test(framingBlock);
+    const hasAirpods086 = /['"]canvas-airpods['"]\s*:\s*\{\s*fill:\s*0\.86\b/.test(framingBlock);
+    const hasMacbook094 = /['"]canvas-macbook['"]\s*:\s*\{\s*fill:\s*0\.94\b/.test(framingBlock);
+    // regression guards: no per-slot renderer.setSize inside the fit, and no
+    // inflated setFromObject(root, true) in the fit path. (The legacy
+    // centerAndFitEdgeToEdge fallback may still use setFromObject(root, true);
+    // that function is OUTSIDE this slice, so the guard stays correctly scoped.)
     const noPerSlotSetSize = !/\.setSize\s*\(/.test(fitFn);
     const noInflatedFit = !/setFromObject\s*\(\s*root\s*,\s*true\s*\)/.test(fitFn);
-    record(hasTightFn && hasNearEdge && hasFill088 && noPerSlotSetSize && noInflatedFit,
-      'v10 SOURCE final-site.js: tight bounds + near-edge 0.90/0.88, no per-slot setSize, no inflated fit',
-      `fitFnLen=${fitFn.length} computeTightDeviceBounds=${hasTightFn} nearEdge0.90=${hasNearEdge} ` +
-      `fill0.88=${hasFill088} perSlotSetSizeAbsent=${noPerSlotSetSize} inflatedFitAbsent=${noInflatedFit} ` +
-      `(expected true x5)`, 'SOURCE-CHECK');
+    // GIFT (QA fail-closed): also reject any residue of the RETIRED formula so a
+    // partial revert that keeps the new markers but restores the old math fails.
+    const noRetiredMin090 = !/Math\.min\(\s*0\.90/.test(fitFn);
+    const noRetiredDist024 = !/dist\s*\*\s*0\.24/.test(fitFn);
+    const noRetiredFill088 = !/\b0\.88\b/.test(fitFn);
+    record(hasTightFn && hasDistV && hasDistH && hasMaxDist &&
+      hasFill092 && hasAirpods086 && hasMacbook094 && noPerSlotSetSize && noInflatedFit &&
+      noRetiredMin090 && noRetiredDist024 && noRetiredFill088,
+      'v10 SOURCE final-site.js: tight bounds + distV/distH/Math.max + fills 0.92/0.86/0.94, no per-slot setSize, no inflated fit, no retired formula',
+      `fitFnLen=${fitFn.length} tightFn=${hasTightFn} distV=${hasDistV} distH=${hasDistH} ` +
+      `maxDist=${hasMaxDist} fill0.92=${hasFill092} airpods0.86=${hasAirpods086} ` +
+      `macbook0.94=${hasMacbook094} perSlotSetSizeAbsent=${noPerSlotSetSize} ` +
+      `inflatedFitAbsent=${noInflatedFit} retiredMin090Absent=${noRetiredMin090} ` +
+      `retiredDist024Absent=${noRetiredDist024} retiredFill088Absent=${noRetiredFill088} ` +
+      `(expected true x12)`, 'SOURCE-CHECK');
 
     /* ---- v10 GLOBAL SOURCE Gate 25: glass-lab CTA (zero-jitter) source ---- */
     const hasCtaBand = htmlSource.includes('glass-lab-cta-band');

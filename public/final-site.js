@@ -905,17 +905,19 @@
         // ADAPTATION: we keep the document's fill math + 3/4 camera, but DO NOT call
         // renderer.setSize/setPixelRatio here — the renderer is SHARED by all 10 stages
         // and resizing it per slot reintroduces the old bottom-right shift bug.
+        // v13: widened near-edge fills. Shared renderer — never per-slot setSize.
+        // AirPods deliberately eased back slightly; MacBook pushed furthest.
         const MODEL_FRAMING = {
-          'canvas-hero':          { mobileFill: 0.86, desktopFill: 0.84, fov: 36 },
-          'canvas-estimate-ipad': { mobileFill: 0.66, desktopFill: 0.68, fov: 40 },
-          'canvas-pickup-iphone': { mobileFill: 0.76, desktopFill: 0.74, fov: 38 },
-          'canvas-tbk-oca':       { mobileFill: 0.74, desktopFill: 0.76, fov: 40 },
-          'canvas-tbk-90l':       { mobileFill: 0.74, desktopFill: 0.76, fov: 40 },
-          'canvas-tbk-958':       { mobileFill: 0.74, desktopFill: 0.76, fov: 40 },
-          'canvas-internals':     { mobileFill: 0.76, desktopFill: 0.76, fov: 38 },
-          'canvas-airpods':       { mobileFill: 0.74, desktopFill: 0.74, fov: 38 },
-          'canvas-watch':         { mobileFill: 0.74, desktopFill: 0.74, fov: 38 },
-          'canvas-macbook':       { mobileFill: 0.76, desktopFill: 0.76, fov: 38 },
+          'canvas-hero':          { fill: 0.92, fov: 34 },
+          'canvas-estimate-ipad': { fill: 0.92, fov: 34 },
+          'canvas-pickup-iphone': { fill: 0.92, fov: 34 },
+          'canvas-tbk-oca':       { fill: 0.92, fov: 34 },
+          'canvas-tbk-90l':       { fill: 0.92, fov: 34 },
+          'canvas-tbk-958':       { fill: 0.92, fov: 34 },
+          'canvas-internals':     { fill: 0.92, fov: 34 },
+          'canvas-airpods':       { fill: 0.86, fov: 34 },
+          'canvas-watch':         { fill: 0.92, fov: 34 },
+          'canvas-macbook':       { fill: 0.94, fov: 34 },
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -953,16 +955,21 @@
             const size = tight2.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
             const r = tight2.getBoundingSphere(new THREE.Sphere()).radius;
-            const cfg = MODEL_FRAMING[id] || { mobileFill: 0.88, desktopFill: 0.88, fov: 34 };
+            const cfg = MODEL_FRAMING[id] || { fill: 0.92, fov: 34 };
             camera.fov = 34; // sleek telephoto studio lens — bolder, less distortion
             const vFov = THREE.MathUtils.degToRad(camera.fov);
             const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-            const minHalf = Math.min(vFov, hFov) / 2;
-            // NEAR-EDGE 90% fill on every device/viewport. Fullscreen a touch tighter.
-            const fill = Math.min(0.90, (cfg.mobileFill > 0.8 ? cfg.mobileFill : 0.88) + 0.02);
-            const effR = Math.max(r, maxDim * 0.56);
-            const dist = effR / (Math.sin(minHalf) * fill);
-            camera.position.set(dist * 0.24, dist * 0.14, dist * 0.96);
+            const fill = Math.min(0.94, cfg.fill ?? 0.92); // up to 92% near-edge (94% MacBook)
+            // v13 ASPECT-AWARE PER-AXIS FIT: solve distance for BOTH width and height,
+            // then take the larger. The old bounding-sphere-vs-hFov approach over-shrank
+            // tall/narrow devices on portrait mobile. This widens every model cleanly.
+            const distV = (size.y * 0.5) / (Math.tan(vFov / 2) * fill);
+            // hypot(x,z) is rotation-invariant: prevents square-footprint machines from
+            // cropping at 45° yaw on portrait, with ~0.6% change to thin phones (frozen models safe).
+            const distH = (Math.hypot(size.x, size.z) * 0.5) / (Math.tan(hFov / 2) * fill);
+            const dist = Math.max(distV, distH);
+            // More FRONTAL camera (smaller x/y offset) => wider silhouette, less narrow look.
+            camera.position.set(dist * 0.16, dist * 0.10, dist * 0.982);
             camera.near = Math.max(0.05, dist - maxDim * 2.5);
             camera.far = dist + maxDim * 4;
             camera.lookAt(0, 0, 0);
