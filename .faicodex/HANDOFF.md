@@ -149,6 +149,15 @@ Real bugs found via Playwright (not string checks) and fixed:
 
 ---
 
+## 17b. v10 GRAND CLOSURE — DEPLOYED (2026-11-22) — HEAD badfb9b
+- Section 17 PENDING resolved. Rollback `stable-pre-v10-closure` (f105fa0).
+- Root-cause 3D fix: `computeTightDeviceBounds()` excludes Torus halos + Circle shadows; 0.88-0.90 near-edge fill, fov 34, shared renderer intact, fullscreen safe. Models now fill their stages on all viewports (verified structurally — headless has no WebGL).
+- Glass-lab CTA rebuilt zero-jitter (exact text preserved); Obsidian+neon footer anchored at bottom edge with store photo/aspect untouched; repair-status POSTs (0 405s); robots allows 10 crawlers + /_next/; IndexNow key + Apple Maps; both noindex gates BLOCKING in predeploy.
+- Gates: QA 62/62 PASS, SEO scanner 14/14 live PASS, predeploy ALL PASS. BUILD_ID `Nugti3XuXDrekAu_4jLkf`.
+- Faisu manual: GSC Request Indexing 5 URLs; delete 2 old Vercel projects; 48h index-flip check. Next: CRM. `/catch-up`.
+
+---
+
 ## 15b. v8 FLAWLESS POLISH — DEPLOYED (2026-11-22) — FINAL
 - Section 15 (PENDING) is RESOLVED. HEAD `4c594ad`; runtime commit `4c28cb0`; rollback `stable-pre-v8-final`.
 - Live: 34/34 QA gates PASS, SEO scanner 8/8 PASS on live, 10/10 routes 200, predeploy ALL PASS, BUILD_ID `ywbfY68blWQ-kRby774bY`.
