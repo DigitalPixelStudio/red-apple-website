@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Live SEO-strike scanner for redmobilerepair.in (stdlib only, urllib — never curl).
 
-Fetches the eight public routes with a Googlebot UA and asserts:
+Fetches the ten public routes with a Googlebot UA and asserts:
   (a) '/' contains '4.9/5' and does not contain '1.3/5'
   (b) no banned legacy string on any HTML route
       ('90-day', 'No. 1, Mahatma Gandhi Rd', '10:30 AM', 'orange-glass',
@@ -9,6 +9,17 @@ Fetches the eight public routes with a Googlebot UA and asserts:
   (c) no duplicate brand pipes in any <title> (multiple '|' or repeated brand)
   (d) robots.txt names Googlebot, GPTBot, PerplexityBot, ClaudeBot, Applebot
   (e) llms.txt contains Bengaluru and 560008
+  (f) raw SSR HTML on '/' contains 'data-target="4.9"' and '1,103', and does
+      NOT contain '1.3/5' (counter bot-proof)
+  (g) source public/final-site.js has NO legacy counter-animation pattern
+      ('(now - start) / dur' or 'target * ease') — number animation removed
+  (h) source src/app/final-site.css has NO ACTIVE declaration of the retired
+      ambient animations (laserDrift|ambientDrift|shimmerLine|gridBreathe|
+      sparkleFloat). Commented-out CSS does not count as active.
+
+Checks (a)-(f) reflect what is actually deployed live. Checks (g)/(h) read local
+repo source and are EXPECTED TO FAIL until the FE work lands (number animation
+and ambient CSS drift removal); they are forward gates for that cleanup.
 
 Prints PASS/FAIL per check, exits 1 on any FAIL.
 Gift: --json for machine-readable output.
@@ -19,6 +30,7 @@ import argparse
 import json
 import re
 import sys
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -28,15 +40,22 @@ GOOGLEBOT_UA = (
 )
 TIMEOUT_SECONDS = 20
 
+# scripts/audit/<file> -> parents[2] is the repo root.
+SOURCE_ROOT = Path(__file__).resolve().parents[2]
+JS_SOURCE = SOURCE_ROOT / "public" / "final-site.js"
+CSS_SOURCE = SOURCE_ROOT / "src" / "app" / "final-site.css"
+
 HTML_ROUTES = (
     "/",
     "/privacy",
     "/terms",
     "/refund-policy",
     "/services/iphone-display-repair",
+    "/services/airpods-repair",
+    "/quote",
 )
 TEXT_ROUTES = ("/robots.txt", "/llms.txt", "/sitemap.xml")
-ALL_ROUTES = HTML_ROUTES + TEXT_ROUTES
+ALL_ROUTES = HTML_ROUTES + TEXT_ROUTES  # 10 routes total
 
 BANNED_STRINGS = (
     "90-day",
@@ -48,7 +67,30 @@ BANNED_STRINGS = (
 REQUIRED_BOTS = ("Googlebot", "GPTBot", "PerplexityBot", "ClaudeBot", "Applebot")
 REQUIRED_LLMS = ("Bengaluru", "560008")
 
+# (f) counter bot-proof tokens in the server-rendered homepage HTML.
+REQUIRED_SSR = ('data-target="4.9"', "1,103")
+FORBIDDEN_SSR = ("1.3/5",)
+
 TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
+
+# (g) legacy counter animation — whitespace-tolerant but pattern-specific.
+OLD_COUNTER_PATTERNS = (
+    ("(now - start) / dur", re.compile(r"\(\s*now\s*-\s*start\s*\)\s*/\s*dur")),
+    ("target * ease", re.compile(r"target\s*\*\s*ease")),
+)
+
+# (h) retired ambient animations: only ACTIVE `animation:` declarations count.
+CSS_ANIM_NAMES = (
+    "laserDrift",
+    "ambientDrift",
+    "shimmerLine",
+    "gridBreathe",
+    "sparkleFloat",
+)
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+CSS_ACTIVE_ANIM_RE = re.compile(
+    r"animation(?:-name)?\s*:\s*[^;}]*?\b(" + "|".join(CSS_ANIM_NAMES) + r")\b"
+)
 
 
 def fetch(base_url: str, path: str) -> tuple[int | None, str, str | None]:
@@ -102,7 +144,9 @@ def main() -> int:
     add(
         "fetch_all_routes",
         not unreachable,
-        "all 8 routes fetched" if not unreachable else "unreachable: " + ", ".join(
+        f"all {len(ALL_ROUTES)} routes fetched"
+        if not unreachable
+        else "unreachable: " + ", ".join(
             f"{p} ({pages[p]['error']})" for p in unreachable
         ),
     )
@@ -176,6 +220,60 @@ def main() -> int:
         else "missing from llms.txt: " + ", ".join(missing_llms),
     )
 
+    # (f) counter bot-proof: canonical rating/review must be in raw SSR HTML.
+    missing_ssr = [token for token in REQUIRED_SSR if token not in home]
+    bad_ssr = [token for token in FORBIDDEN_SSR if token in home]
+    f_parts = []
+    if missing_ssr:
+        f_parts.append("missing SSR token(s): " + ", ".join(repr(t) for t in missing_ssr))
+    if bad_ssr:
+        f_parts.append("forbidden SSR token(s): " + ", ".join(repr(t) for t in bad_ssr))
+    add(
+        "f_ssr_counter_botproof",
+        not missing_ssr and not bad_ssr,
+        'SSR has data-target="4.9" and 1,103; no 1.3/5'
+        if not f_parts
+        else "; ".join(f_parts),
+    )
+
+    # (g) legacy counter animation must be gone from the JS source.
+    try:
+        js_text = JS_SOURCE.read_text(encoding="utf-8")
+        js_error = None
+    except OSError as exc:  # pragma: no cover - defensive
+        js_text, js_error = "", str(exc)
+    if js_error:
+        add("g_no_old_counter_js", False, f"cannot read {JS_SOURCE}: {js_error}")
+    else:
+        js_hits = [label for label, rx in OLD_COUNTER_PATTERNS if rx.search(js_text)]
+        add(
+            "g_no_old_counter_js",
+            not js_hits,
+            "no legacy counter animation in public/final-site.js"
+            if not js_hits
+            else "legacy counter animation pattern(s) still present: "
+            + ", ".join(js_hits),
+        )
+
+    # (h) retired ambient animations must not be actively declared in CSS.
+    try:
+        css_text = CSS_SOURCE.read_text(encoding="utf-8")
+        css_error = None
+    except OSError as exc:  # pragma: no cover - defensive
+        css_text, css_error = "", str(exc)
+    if css_error:
+        add("h_no_active_ambient_css", False, f"cannot read {CSS_SOURCE}: {css_error}")
+    else:
+        css_active = CSS_COMMENT_RE.sub("", css_text)
+        active_animations = sorted(set(CSS_ACTIVE_ANIM_RE.findall(css_active)))
+        add(
+            "h_no_active_ambient_css",
+            not active_animations,
+            "no active retired ambient animations in src/app/final-site.css"
+            if not active_animations
+            else "active animation declaration(s): " + ", ".join(active_animations),
+        )
+
     violations = [c["detail"] for c in checks if not c["ok"]]
     ok = not violations
     result = {
@@ -184,6 +282,7 @@ def main() -> int:
         "user_agent": GOOGLEBOT_UA,
         "routes_checked": list(ALL_ROUTES),
         "statuses": {p: pages[p]["status"] for p in ALL_ROUTES},
+        "source_files": {"js": str(JS_SOURCE), "css": str(CSS_SOURCE)},
         "checks": checks,
         "violations": violations,
     }

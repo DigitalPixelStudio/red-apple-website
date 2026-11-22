@@ -26,6 +26,49 @@
       setInterval(updateISTClock, 30000);
 
       // ============================================================
+      // v8: ULTRA-LIGHT AMBIENT PARTICLES — 18 motes, ONE fixed dpr=1 canvas, 30 FPS
+      // Replaces the killed shaking background loops. ~0.2ms CPU, GPU-friendly.
+      // ============================================================
+      (function mountAmbientParticles() {
+        const host = document.getElementById('ambient-particles');
+        if (!host) return;
+        const cv = document.createElement('canvas');
+        cv.setAttribute('aria-hidden', 'true');
+        cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
+        const ctx = cv.getContext('2d');
+        if (!ctx) return;
+        let W = 0, H = 0;
+        const motes = Array.from({ length: 18 }, () => ({
+          x: Math.random(), y: Math.random(),
+          r: 1.2 + Math.random() * 2.2,
+          vx: (Math.random() - 0.5) * 0.00012,
+          vy: -0.00006 - Math.random() * 0.00008,
+          a: 0.06 + Math.random() * 0.10
+        }));
+        function size() { W = cv.width = Math.max(1, window.innerWidth); H = cv.height = Math.max(1, window.innerHeight); }
+        size();
+        window.addEventListener('resize', size, { passive: true });
+        let last = 0;
+        function frame(now) {
+          requestAnimationFrame(frame);
+          if (document.hidden || now - last < 33) return;
+          last = now;
+          ctx.clearRect(0, 0, W, H);
+          for (const m of motes) {
+            m.x += m.vx; m.y += m.vy;
+            if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
+            if (m.x < -0.02) m.x = 1.02; else if (m.x > 1.02) m.x = -0.02;
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(220,38,38,${m.a})`;
+            ctx.arc(m.x * W, m.y * H, m.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        requestAnimationFrame(frame);
+        host.appendChild(cv);
+      })();
+
+      // ============================================================
       // 2. 30-SECOND SMART ESTIMATE (EXACT OWNER WHATSAPP FORMAT)
       // ============================================================
       const deviceModels = {
@@ -436,22 +479,10 @@
         const statIo = new IntersectionObserver((entries) => {
           if (!entries[0]?.isIntersecting) return;
           statIo.disconnect();
-          const nums = statBar.querySelectorAll('.stat-counter');
-          const start = performance.now();
-          const dur = 950;
-          function step(now) {
-            const p = Math.min(1, (now - start) / dur);
-            const ease = 1 - Math.pow(1 - p, 3);
-            nums.forEach((el) => {
-              const target = parseFloat(el.dataset.target || '0');
-              const dec = parseInt(el.dataset.dec || '0', 10);
-              const suf = el.dataset.suf || '';
-              const v = target * ease;
-              el.textContent = (dec > 0 ? v.toFixed(dec) : Math.round(v).toLocaleString('en-IN')) + suf;
-            });
-            if (p < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
+          // v8 BOT-PROOF: never animate the NUMBERS. Googlebot renders JS and previously
+          // caught a mid-count frame (1.3/5). SSR already carries the final values —
+          // just fade the bar in with a compositor-only class. Zero number mutation.
+          statBar.classList.add('stat-final');
         }, { threshold: 0.35 });
         statIo.observe(statBar);
       }
@@ -934,30 +965,38 @@
           g.fillStyle = bg;
           g.fillRect(0, 0, 512, 1024);
 
-          g.strokeStyle = 'rgba(255, 237, 213, 0.25)';
+          // v8: clean corner-slotted lock screen — date top-left, status top-right,
+          // time centred, motif moved BELOW the time, caption in its own bottom card.
+          // Nothing overlaps any other text element.
+          g.textAlign = 'left';
+          g.fillStyle = 'rgba(255,255,255,0.92)';
+          g.font = '600 24px Inter, sans-serif';
+          g.fillText('Friday, 20 November', 34, 62);
+          g.textAlign = 'right';
+          g.font = '600 18px Inter, sans-serif';
+          g.fillText('●●●', 478, 62);
+
+          g.textAlign = 'center';
+          g.fillStyle = '#ffffff';
+          g.font = '800 128px Inter, sans-serif';
+          g.fillText('9:41', 256, 292);
+
+          g.strokeStyle = 'rgba(255, 237, 213, 0.22)';
           g.lineWidth = 4;
           for (let i = 0; i < 4; i++) {
             g.beginPath();
-            g.arc(256, 560 + i * 38, 210 + i * 28, Math.PI * 1.05, Math.PI * 1.95);
+            g.arc(256, 700 + i * 26, 150 + i * 22, Math.PI * 1.08, Math.PI * 1.92);
             g.stroke();
           }
 
-          g.fillStyle = 'rgba(255,255,255,0.88)';
-          g.font = '600 26px Inter, sans-serif';
-          g.textAlign = 'center';
-          g.fillText('Friday, 20 November', 256, 178);
-          g.font = '800 132px Inter, sans-serif';
-          g.fillStyle = '#ffffff';
-          g.fillText('9:41', 256, 306);
-
-          g.fillStyle = 'rgba(9, 9, 11, 0.62)';
-          fillRoundedRect(g, 76, 800, 360, 86, 26);
+          g.fillStyle = 'rgba(9, 9, 11, 0.66)';
+          fillRoundedRect(g, 66, 824, 380, 84, 26);
           g.fillStyle = '#fb923c';
-          g.font = '700 20px Inter, sans-serif';
-          g.fillText('RED APPLE · HALASURU LAB', 256, 836);
+          g.font = '700 19px Inter, sans-serif';
+          g.fillText('RED APPLE · HALASURU LAB', 256, 857);
           g.fillStyle = '#e4e4e7';
-          g.font = '500 18px Inter, sans-serif';
-          g.fillText('Original OLED · True Tone Active', 256, 868);
+          g.font = '500 16px Inter, sans-serif';
+          g.fillText('Original OLED · True Tone Active', 256, 885);
 
           g.fillStyle = 'rgba(255,255,255,0.85)';
           fillRoundedRect(g, 166, 982, 180, 10, 5);
@@ -1204,7 +1243,17 @@
           };
         }, -0.45, 0.14) });;
 
-        // 8. Stacked Realistic AirPods Pro 3D (Matched Dark Crimson-Orange Studio Backdrop)
+        // v8: explicit AirPods Space Grey material applier (Faisu's contrast request).
+        function applyAirpodsSpaceGrey(shell, silicone) {
+          shell.color.setHex(0x8a8f98);
+          shell.metalness = 0.42;
+          shell.roughness = 0.26;
+          silicone.color.setHex(0x3f444d);
+          silicone.metalness = 0.06;
+          silicone.roughness = 0.52;
+        }
+
+        // 8. Stacked Realistic AirPods Pro 3D (Space Grey on medium-light orange studio)
         let apFactor = 0.7;
         document.getElementById('sl-airpods')?.addEventListener('input', (e) => {
           apFactor = parseFloat(e.target.value) / 100;
@@ -1212,10 +1261,11 @@
           if (v) v.textContent = Math.round(apFactor * 100) + '%';
         });
         queueSlot(() => { registerSlot('canvas-airpods', 5.2, (root) => {
-          // v7: warm champagne shell + deep espresso silicone tips — AirPods now READ clearly
-          // against the lighter orange studio tile instead of disappearing into it.
-          const apGlossWhite = new THREE.MeshStandardMaterial({ color: 0xd9b892, metalness: 0.28, roughness: 0.22 });
-          const apSilicone = new THREE.MeshStandardMaterial({ color: 0x7a4a2f, metalness: 0.05, roughness: 0.5 });
+          // v8: Space Grey shell + graphite silicone — the #8A8F98 tint gives the AirPods
+          // a defined silhouette against the medium-light orange studio backdrop.
+          const apGlossWhite = new THREE.MeshStandardMaterial({ color: 0x8a8f98, metalness: 0.42, roughness: 0.26 });
+          const apSilicone = new THREE.MeshStandardMaterial({ color: 0x3f444d, metalness: 0.06, roughness: 0.52 });
+          if (typeof applyAirpodsSpaceGrey === 'function') applyAirpodsSpaceGrey(apGlossWhite, apSilicone);
           const apShadow = new THREE.Mesh(
             new THREE.CircleGeometry(1.38, 36),
             new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.36 })
@@ -1355,12 +1405,13 @@
               let pad = 0.80;
               if (id === 'canvas-hero') pad = 0.50;
               else if (id === 'canvas-pickup-iphone') pad = 0.55;
-              else if (id === 'canvas-airpods' || id === 'canvas-watch') pad = 0.82;
-              else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.74 * 1.14 : 0.74;
+              else if (id === 'canvas-airpods') pad = isMobileView ? 0.76 * 1.06 : 0.76; // v8: slight-to-medium zoom in
+              else if (id === 'canvas-watch') pad = 0.82; // untouched
+              else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.70 * 1.14 : 0.70; // v8: slight zoom in + centred 3/4
               else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.68 * 1.10 : 0.68;
               else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.70 * 1.10 : 0.70;
               else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.70 * 1.12 : 0.70;
-              else if (id === 'canvas-macbook') pad = isMobileView ? 0.78 * 1.28 : 0.78;
+              else if (id === 'canvas-macbook') pad = isMobileView ? 0.70 * 1.28 : 0.70; // v8: medium zoom in + fix stretch
               else if (id === 'canvas-internals') pad = isMobileView ? 0.80 * 1.14 : 0.80;
               // Tablet: slight zoom across models (was 1.20 -> 1.14)
               if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
@@ -1386,6 +1437,9 @@
         }
         // Phase C2: Fullscreen Toggle on every 3D stage (GPU-only, viewport-driven)
         for (const slot of slots) {
+          // v8: Hero keeps its clean keynote styling — no enlarge button (Faisu's call).
+          // The other 9 stages keep the fullscreen control.
+          if (slot.canvas.id === 'canvas-hero') continue;
           const fsBtn = document.createElement('button');
           fsBtn.setAttribute('type','button'); fsBtn.dataset.fsToggle = '1';
           fsBtn.className = 'absolute top-2.5 right-2.5 z-20 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/95 border border-zinc-300 shadow-lg transition-all hover:scale-110 hover:bg-red-600 hover:text-white';

@@ -23,35 +23,26 @@
     .heading-breathe::after {
       content: ""; position: absolute; left: 12%; right: 12%; bottom: -4px; height: 2px;
       border-radius: 999px; background: linear-gradient(90deg, transparent, rgba(220,38,38,.45), rgba(234,88,12,.5), transparent);
-      transform: scaleX(.6) translateZ(0); opacity: 0;
-      animation: none; pointer-events: none;
-    }
-    @keyframes headingUnderlinePulse {
-      0%, 100% { transform: scaleX(.6) translateZ(0); opacity: 0; }
-      50% { transform: scaleX(1) translateZ(0); opacity: .85; }
+      transform: scaleX(.85) translateZ(0); opacity: .38;
+      animation: none !important; pointer-events: none;
     }
     .kicker-shift { color: #ea580c; } /* static: no per-frame text repaint */
     .price-breathe { color: #dc2626; } /* static: no text scale jitter */
     .badge-breathe {
       opacity: 1;
+      transform: translate3d(0, 0, 0);
+      animation: none !important;
     }
-    @keyframes badgePulse {
-      0%, 100% { opacity: 1; transform: translate3d(0,0,0); }
-      50% { opacity: 1; transform: translate3d(0,-2px,0); }
-    }
-    /* Subtle GPU Floating Ambient Orbs & Full-Site Animated Background Mesh */
+    /* Subtle GPU Ambient Orbs — STATIC, zero per-frame cost */
     .ambient-orb {
       position: absolute;
       border-radius: 9999px;
       filter: blur(28px);
       opacity: 0.2;
       pointer-events: none;
-      will-change: transform;
-      animation: orbFloat 11s ease-in-out infinite;
-    }
-    @keyframes orbFloat {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(22px, -16px, 0) scale(1.07); }
+      transform: translate3d(0, 0, 0) scale(1);
+      will-change: auto;
+      animation: none !important;
     }
     /* Signature Orange Glass-Sweep Shimmer */
     /* Section Backgrounds with Smooth Ambient Motion */
@@ -114,6 +105,12 @@
       position: relative;
       background: radial-gradient(circle at 50% 42%, #FFF9F3 0%, #F8E9DD 58%, #EED7C4 100%);
       overflow: hidden;
+    }
+    /* v8: one static, GPU-composited orange studio backdrop for all 10 3D stages (0ms, no animation). */
+    .stage-3d-orange-bg {
+      background: radial-gradient(circle at 50% 38%, #FFF3E6 0%, #F6DCBE 55%, #ECC49C 100%) !important;
+      animation: none !important;
+      will-change: auto;
     }
     .stage-3d-box canvas,
     .stage-3d-white canvas {
@@ -219,7 +216,7 @@
     h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
     h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
     .kicker-shift { font-weight: 800; letter-spacing: 0.16em; }
-    /* Laser-red vertical sweep on the trusted-by logo */
+    /* Laser-red sheen on the trusted-by logo — STATIC, zero per-frame cost */
     .logo-laser { position: relative; isolation: isolate; }
     .logo-laser::after {
       content: "";
@@ -230,19 +227,13 @@
       border-radius: 999px;
       background: linear-gradient(90deg, transparent, #dc2626 20%, #fb923c 50%, #dc2626 80%, transparent);
       box-shadow: 0 0 14px 3px rgba(220,38,38,0.55);
-      animation: logoLaser 2.4s ease-in-out infinite;
+      transform: translateY(0);
+      opacity: .6;
+      animation: none !important;
       pointer-events: none;
       z-index: 3;
     }
-    @keyframes logoLaser {
-      0%, 100% { transform: translateY(0); opacity: .25; }
-      50%      { transform: translateY(112px); opacity: 1; }
-    }
-    .logo-laser img { animation: logoFloat 4.6s ease-in-out infinite; }
-    @keyframes logoFloat {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-3px) scale(1.03); }
-    }
+    .logo-laser img { transform: translateY(0) scale(1); animation: none !important; }
     /* Touch-friendly 3D + slider handling */
     #ba-slider-box { touch-action: pan-y; }
     .stage-3d-box canvas, .stage-3d-white canvas { touch-action: pan-y; }
@@ -275,13 +266,9 @@
       background: linear-gradient(90deg, transparent, rgba(220,38,38,.55), rgba(249,115,22,.75), transparent);
       box-shadow: 0 0 12px 1px rgba(234,88,12,.25);
       transform: translate3d(0,0,0) rotate(-4deg);
-      will-change: transform;
-      animation: laserDrift 9s ease-in-out infinite;
+      will-change: auto;
+      animation: none !important;
       contain: strict;
-    }
-    @keyframes laserDrift {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); opacity: .25; }
-      50%      { transform: translate3d(260%, 34px, 0) rotate(-4deg); opacity: .55; }
     }
     .laser-stage > *:not(.laser-line) { position: relative; z-index: 1; }
     /* Lazy reveal for machine cards & 3D stages */
@@ -289,7 +276,7 @@
     .laser-stage .reveal-up:nth-child(3) { transition-delay: 140ms; }
     .laser-stage .reveal-up:nth-child(4) { transition-delay: 210ms; }
     @media (max-width: 767px) {
-      .laser-line { width: 60%; animation-duration: 12s; }
+      .laser-line { width: 60%; }
     }
     @media (prefers-reduced-motion: reduce) {
       .laser-line { animation: none !important; opacity: .18; }
@@ -312,51 +299,42 @@
     .brand-name-glow { filter: drop-shadow(0 0 6px rgba(220,38,38,.28)); }
     .brand-dark-glow { color: #0a0a0b; }
     .brand-icon-glow { box-shadow: 0 0 0 2px rgba(220,38,38,.10), 0 0 16px rgba(234,88,12,.28); }
-    /* 1. Slow drifting glow wash (transform/opacity only) */
+    /* 1. Static glow wash (composited, zero per-frame cost) */
     .ambient-warm::before, .ambient-clean::before {
       content: ""; position: absolute; z-index: 0;
       width: 28vw; height: 28vw; max-width: 320px; max-height: 320px;
       left: -6vw; top: -8vw; border-radius: 50%;
       background: radial-gradient(circle, rgba(234,88,12,.055), transparent 68%);
-      pointer-events: none; will-change: transform;
+      pointer-events: none; transform: translate3d(0,0,0) scale(1);
       animation:none!important;will-change:auto;contain:none; contain: strict;
     }
-    @keyframes ambientDrift {
-      0%   { transform: translate3d(0,0,0) scale(1); opacity: .6; }
-      100% { transform: translate3d(22vw, 12vw, 0) scale(1.12); opacity: 1; }
-    }
-    /* 2. Section-top hairline shimmer (transform only, contain) */
+    /* 2. Section-top hairline — STATIC, composited */
     .section-shimmer { position: relative; }
     .section-shimmer::after {
       content: ""; position: absolute; z-index: 1; top: 0; left: 0; right: 0; height: 1px;
       background: linear-gradient(90deg, transparent, rgba(220,38,38,.35), rgba(234,88,12,.45), transparent);
       background-size: 200% 100%;
-      transform: translate3d(-30%,0,0);
-      animation: shimmerLine 14s linear infinite;
+      transform: translate3d(0,0,0);
+      animation: none !important;
       pointer-events: none; contain: strict;
     }
-    @keyframes shimmerLine { to { transform: translate3d(30%,0,0); } }
-    /* 3. Slow breathing dot-grid accent */
-    .grid-breathe { animation: gridBreathe 9s ease-in-out infinite; }
-    @keyframes gridBreathe { 0%,100% { opacity: .5; } 50% { opacity: .85; } }
+    /* 3. Static dot-grid accent */
+    .grid-breathe { opacity: .65; transform: translateZ(0); animation: none !important; }
     /* 4. Soft radial pulse behind the logo (transform/opacity only) */
     .logo-laser::before {
       content: ""; position: absolute; inset: -18px; border-radius: 9999px;
       background: radial-gradient(circle, rgba(220,38,38,.16), transparent 70%);
       animation: auraPulse 6s ease-in-out infinite; pointer-events: none; z-index: -1;
     }
-    /* 5. Gentle floating sparkles on machine stages (opacity/transform only) */
+    /* 5. Static sparkles on machine stages (no per-frame work) */
     .stage-3d-box::after {
       content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
       background:
         radial-gradient(circle at 20% 30%, rgba(255,255,255,.5) 0 1px, transparent 2px),
         radial-gradient(circle at 78% 66%, rgba(251,146,60,.5) 0 1px, transparent 2px),
         radial-gradient(circle at 55% 18%, rgba(255,255,255,.35) 0 1px, transparent 2px);
-      animation: sparkleFloat 11s ease-in-out infinite alternate;
-    }
-    @keyframes sparkleFloat {
-      0% { transform: translate3d(0,0,0); opacity: .35; }
-      100% { transform: translate3d(6px,-8px,0); opacity: .8; }
+      transform: translate3d(0,0,0); opacity: .5;
+      animation: none !important;
     }
     @media (prefers-reduced-motion: reduce) {
       .brand-name-glow, .ambient-warm::before, .ambient-clean::before,
@@ -451,11 +429,8 @@
     .top-nav-item.is-active::after {
       content: ""; position: absolute; left: 6px; right: 6px; bottom: -1px; height: 2px;
       border-radius: 1px; background: linear-gradient(90deg, #dc2626 0%, #ea580c 100%);
-      animation: activeRailPulse 2.4s ease-in-out infinite;
-    }
-    @keyframes activeRailPulse {
-      0%, 100% { opacity: .55; }
-      50% { opacity: 1; }
+      opacity: .8; transform: translateZ(0);
+      animation: none !important;
     }
 
     /* Phase A3: dense below-the-fold text zones — content-visibility auto */
@@ -551,16 +526,12 @@
     .floating-dock { contain: layout style; transform: translate3d(-50%, 0, 0); backface-visibility: hidden; backdrop-filter: none; }
     #back-to-top, #btn-open-ai, #rm-dock { transform: translateZ(0); backface-visibility: hidden; will-change: auto; }
     .brand-name-glow::before, .brand-name-glow { filter: none; transition: none; }
-    /* Agent E gift: GPU online pulse on WhatsApp dock button */
+    /* Agent E gift: static online ring on WhatsApp dock button (no per-frame cost) */
     .dock-wa-btn { position: relative; }
     .dock-wa-btn::after {
       content:""; position:absolute; inset:-3px; border-radius:inherit;
       border:1px solid rgba(16,185,129,.7); pointer-events:none;
-      transform: scale(1) translateZ(0); opacity:.7; animation: waPulse 2.4s ease-out infinite;
-    }
-    @keyframes waPulse {
-      0% { transform: scale(.96) translateZ(0); opacity:.7; }
-      100% { transform: scale(1.25) translateZ(0); opacity:0; }
+      transform: scale(1) translateZ(0); opacity:.5; animation: none !important;
     }
     @media (prefers-reduced-motion: reduce) { .dock-wa-btn::after { animation:none; display:none; } }
 
@@ -650,6 +621,9 @@
     }
     /* WCAG 2.4.7: the before/after slider is keyboard-operable — give it a visible focus ring (paint-only). */
     #ba-slider-box:focus-visible { outline: 2px solid #ea580c; outline-offset: 3px; }
+    /* v8 bot-proof stats: final SSR numbers are already in HTML — a paint-only fade is all we add. */
+    .stat-final { animation: statFadeIn 480ms ease-out both; }
+    @keyframes statFadeIn { from { opacity: .72; } to { opacity: 1; } }
     /* Light backdrop means stage hint labels need warm-dark ink */
     .stage-3d-box span.text-zinc-400,
     .stage-3d-box span.text-zinc-500 { color: #9a3412 !important; }
@@ -659,9 +633,5 @@
       a[href]:hover, button:hover { transform: none !important; }
     }
     a[href]:active, button:active { transform: none !important; }
-    /* Visible-but-safe line laser: transform/opacity only, 1 per section */
-    .laser-line { opacity: .8 !important; }
-    @keyframes laserDrift {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); opacity: .28; }
-      50%      { transform: translate3d(260%, 34px, 0) rotate(-4deg); opacity: .8; }
-    }
+    /* Visible-but-safe line laser: static, composited, 1 per section */
+    .laser-line { opacity: .8 !important; animation: none !important; }

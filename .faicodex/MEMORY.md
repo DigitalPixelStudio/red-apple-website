@@ -28,3 +28,9 @@
 - Always raise the 7 agents in parallel for tasks (`.faicodex/TEAM.md`); each gives a gift; FaiCodex reviews + executes.
 - Preserve all images/models/quotations/WhatsApp flows; no phases/days language; verify with `bash scripts/predeploy-check.sh` before deploy.
 - Memory must survive token resets — keep these files updated.
+
+## v8 status (2026-11-22, deploy PENDING)
+- Safety tag `stable-pre-v8-final`; v8 uncommitted at HEAD `2d29150`. Deploy PENDING until FaiCodex confirms; QA not claimed.
+- v8 work: 12 jitter animations killed; static `.stage-3d-orange-bg` on 10 stages + `#ambient-particles` host; stat counter bot-proof (number animation removed); selective 3-model tuning ONLY (tablet/MacBook 0.70, AirPods 0.76 + Space Grey `#8A8F98`); 18-mote dpr=1 30 FPS particle canvas; `.stat-final` paint-only fade.
+- Stale 1.3/5 / 90-day in Google snippets = Google CACHE, not live SSR — needs Faisu's GSC Request Indexing on 5 URLs: `/`, `/privacy`, `/terms`, `/refund-policy`, `/services/iphone-display-repair`.
+- NEXT SESSION: predeploy + QA v8 gates → commit → deploy after FaiCodex confirms.

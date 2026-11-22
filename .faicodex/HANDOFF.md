@@ -146,3 +146,19 @@ Real bugs found via Playwright (not string checks) and fixed:
 - Gates: visual-audit 23/23 PASS, seo_strike_scanner PASS (live), image_fit_audit PASS, predeploy-check ALL PASS, 8 live routes 200.
 - New tools: `scripts/audit/seo_strike_scanner.py`, `scripts/audit/verify_v7_live.py`, `src/lib/seo/localSchema.ts`, `src/lib/analytics/adSignals.ts`.
 - NEXT: CRM build. Use `/catch-up`.
+
+---
+
+## 15. v8 JITTER-FREE / BOT-PROOF BUILD — IN PROGRESS (2026-11-22, deploy PENDING)
+> Sections 7/13/14 PASS refer to previously deployed builds. v8 is NEW, uncommitted, and NOT deployed. Do not report QA PASS or deploy until FaiCodex confirms.
+- Safety tag before edits: `stable-pre-v8-final` (rollback point on `fix/disable-orange-glass-sweep`). HEAD `2d29150` (docs); v8 changes uncommitted: `public/final-site.js`, `src/app/final-site.css`, `src/lib/final-site-html.ts`, `scripts/audit/seo_strike_scanner.py`, new `scripts/audit/verify_v8_live.py`.
+- Agents (each with a gift):
+  - FE-1: killed 12 jitter animations (orbFloat, laserDrift, ambientDrift, shimmerLine, gridBreathe, sparkleFloat, logoLaser, logoFloat, activeRailPulse, waPulse, headingUnderlinePulse, badgePulse); static `.stage-3d-orange-bg` on all 10 stages + `#ambient-particles` host.
+  - BE-1: live SSR clean on 7 routes + 7 APIs healthy.
+  - RES-1: schema / robots / llms confirmed; 5 GSC Request Indexing URLs produced.
+  - PY-1: `seo_strike_scanner.py` upgraded (10 routes + counter-bot gate `g` + animation gate `h`); `verify_v8_live.py` added.
+  - QA-1: adding v8 visual gates (in progress).
+  - DevOps: running predeploy.
+- FaiCodex: stat counter bot-proof (removed number animation — Googlebot can no longer render 1.3/5); hero fullscreen button removed only; hero lock-screen text re-slotted into non-overlapping corners; selective 3-model tuning ONLY (tablet 0.70, MacBook 0.70, AirPods 0.76 + Space Grey `#8A8F98`); 18-mote dpr=1 30 FPS particle canvas; `.stat-final` paint-only fade.
+- KEY NUANCE: stale 1.3/5 / 90-day in Google snippets = Google's CACHE, not live SSR (live SSR clean). Needs Faisu's GSC Request Indexing on 5 URLs: `/`, `/privacy`, `/terms`, `/refund-policy`, `/services/iphone-display-repair`.
+- STATUS: deploy **PENDING**; QA not claimed. NEXT-SESSION REMINDER: run predeploy + QA v8 gates, commit, deploy after FaiCodex confirms; ask Faisu to Request Indexing the 5 URLs. Live: https://www.redmobilerepair.in

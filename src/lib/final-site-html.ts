@@ -51,6 +51,7 @@ export const finalSiteHtml = `
   </header>
 
   <main>
+  <div id="ambient-particles" aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10"></div>
   <div class="scroll-progress-css" aria-hidden="true"></div>
 
     <section id="page-plan" class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
@@ -104,7 +105,7 @@ export const finalSiteHtml = `
 
           <!-- Hero 3D Stage (HD Flagship iPhone 17 Pro Max · Orange) -->
           <div class="lg:col-span-6">
-            <div class="stage-3d-box relative h-[520px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[600px]">
+            <div class="stage-3d-box stage-3d-orange-bg relative h-[520px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[600px]">
               <canvas id="canvas-hero" aria-label="Interactive 4D iPhone 17 Pro Max Orange"></canvas>
               <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360° · HD Keynote Animation</div>
               <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
@@ -310,7 +311,7 @@ export const finalSiteHtml = `
         <div class="mt-9 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
           <!-- Left: Animated 3D iPad Pro Carrying Live Info Badges -->
           <div class="flex flex-col justify-between overflow-hidden rounded-3xl border border-orange-200 bg-white p-4 shadow-md lg:col-span-5">
-            <div class="stage-3d-box tile-3d-studio-pearl relative h-[420px] w-full rounded-2xl sm:h-[500px]">
+            <div class="stage-3d-box stage-3d-orange-bg relative h-[420px] w-full rounded-2xl sm:h-[500px]">
               <canvas id="canvas-estimate-ipad" aria-label="Animated 3D iPad Pro Estimate Showcase"></canvas>
               <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-extrabold text-zinc-900 shadow">Front Glass from ₹2,500</div>
               <div class="pointer-events-none absolute right-3 top-14 rounded-full bg-red-600/95 px-3 py-1 text-[11px] font-bold text-white shadow">OLED Display ~45 min</div>
@@ -484,7 +485,7 @@ export const finalSiteHtml = `
           </div>
 
           <!-- Right: Animated 3D iPhone Carrying Pickup Badges -->
-          <div class="stage-3d-box relative min-h-[420px] rounded-3xl sm:min-h-[480px] border border-zinc-800 shadow-lg lg:col-span-4">
+          <div class="stage-3d-box stage-3d-orange-bg relative min-h-[420px] rounded-3xl sm:min-h-[480px] border border-zinc-800 shadow-lg lg:col-span-4">
             <canvas id="canvas-pickup-iphone" aria-label="Animated 3D iPhone 24/7 Insured Pickup"></canvas>
             <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-red-600 px-3 py-1 text-[11px] font-extrabold text-white shadow">24/7 Pickup</div>
             <div class="pointer-events-none absolute right-3 top-14 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-zinc-900 shadow">Insured &amp; Tracked</div>
@@ -727,7 +728,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">OCA VACUUM LAMINATION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">VACUUM PRESS</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ORIGINAL OLED SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box tile-3d-studio-lab relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
+            <div class="stage-3d-box stage-3d-orange-bg relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-oca" aria-label="Interactive 4D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -749,7 +750,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">90-LITRE AUTOCLAVE</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ZERO-BUBBLE OCA</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">PRESSURE CURVED</span></div>
               </div>
             </div>
-            <div class="stage-3d-box tile-3d-studio-lab relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
+            <div class="stage-3d-box stage-3d-orange-bg relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-90l" aria-label="Interactive 4D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -771,7 +772,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">COLD UV LASER</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">355NM PRECISION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">BACK GLASS SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box tile-3d-studio-uv-lab relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
+            <div class="stage-3d-box stage-3d-orange-bg relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-958" aria-label="Interactive 4D TBK-958 Cold UV Purple Laser"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 4D · 355nm Beam</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -813,7 +814,7 @@ export const finalSiteHtml = `
         <div class="mt-9 flex flex-col gap-5">
           <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="stage-3d-box tile-3d-studio-graphite relative h-[520px] lg:col-span-7 sm:h-[600px]">
+            <div class="stage-3d-box stage-3d-orange-bg relative h-[520px] lg:col-span-7 sm:h-[600px]">
               <canvas id="canvas-internals" aria-label="Interactive 4D iPhone Internal Teardown"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
             </div>
@@ -839,7 +840,7 @@ export const finalSiteHtml = `
               </div>
               <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
-            <div class="stage-3d-box tile-3d-studio-pearl relative order-1 h-[520px] w-full border-b border-zinc-800 sm:h-[600px] lg:order-2 lg:border-b-0">
+            <div class="stage-3d-box stage-3d-orange-bg relative order-1 h-[520px] w-full border-b border-zinc-800 sm:h-[600px] lg:order-2 lg:border-b-0">
               <canvas id="canvas-airpods" aria-label="Interactive 4D Realistic AirPods Pro"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 4D</span>
             </div>
@@ -848,7 +849,7 @@ export const finalSiteHtml = `
           <!-- Stacked 3D #3: Apple Watch & MacBook Pro Pair -->
           <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box tile-3d-studio-graphite relative h-[520px] sm:h-[600px]">
+              <div class="stage-3d-box stage-3d-orange-bg relative h-[520px] sm:h-[600px]">
                 <canvas id="canvas-watch" aria-label="Interactive 4D Apple Watch Ultra"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
               </div>
@@ -859,7 +860,7 @@ export const finalSiteHtml = `
             </div>
 
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box tile-3d-studio-mac relative h-[520px] sm:h-[600px]">
+              <div class="stage-3d-box stage-3d-orange-bg relative h-[520px] sm:h-[600px]">
                 <canvas id="canvas-macbook" aria-label="Interactive 4D MacBook Pro"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
               </div>
