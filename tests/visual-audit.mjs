@@ -8,7 +8,7 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (62 total = 34 legacy/v8 + 16 v9 + 12 v10):
+ * GATES (64 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14):
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -57,7 +57,21 @@
  *    30-31. per viewport: glass-lab CTA DOM byte-identical to source (9 hashtags +
  *        both buttons + hours line); footer obsidian bg + store photo src/aspect-square
  *        + copyright/credit text + dark computed background.
+ *   v14 NEW (2 global SOURCE gates — the "models shrink after idle" fix):
+ *    32. GLOBAL SOURCE: normalization is ONE-TIME per slot — a per-slot latching flag
+ *        (baseSize/normalized) guards `multiplyScalar(2.0 / r0)` (either inside the
+ *        fit fn or at the centerAndFitResponsive call site), and the flag is assigned.
+ *        Guards the regression where every idle wake re-multiplied scale and shrank models.
+ *    33. GLOBAL SOURCE: raised fills present — most slots >= 0.95, tablet (iPad) wider
+ *        logic present, MacBook highest, AirPods eased, and the fill hard-cap is raised.
+ *        (SOURCE/structural only — headless Chromium has no WebGL; NEVER reads canvas pixels.)
+ *    NOTE: gate 24's fill check is version-tolerant (legacy 0.92/0.86/0.94 OR raised
+ *    tiers) so all 62 original gates stay green across the v13->v14 transition; the
+ *    strict raised-value assertion lives in gate 33.
  *
+ * Gift: `node tests/visual-audit.mjs --source-only` runs ONLY the SOURCE gates —
+ * no browser, no local build. Use it to verify a final-site.js edit in seconds
+ * before spending time on a production build. It never touches canvas pixels.
  * Gift: `node tests/visual-audit.mjs --shots` writes one screenshot per viewport
  * to tests/shots/ for eyeball review. Set SHOTS_FULL=1 for full-page captures.
  */
@@ -73,6 +87,7 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
 const BASE_URL = (process.env.BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const SHOTS = process.argv.includes('--shots');
+const SOURCE_ONLY = process.argv.includes('--source-only'); // gift: source gates only, no browser/build
 const SHOTS_FULL = process.env.SHOTS_FULL === '1';
 const SHOTS_DIR = process.env.SHOTS_DIR || path.join(SCRIPT_DIR, 'shots');
 const OVERLAP_TOLERANCE_PX = 1; // ignore sub-pixel/rounding-only intersections
@@ -113,6 +128,60 @@ function extractAll(src, re) {
   let m;
   while ((m = re.exec(src)) !== null) out.push(m[1]);
   return out;
+}
+
+/* ---- v14 source-analysis helpers (one-time normalization + raised fills) ----
+ * These are genuine STRUCTURAL checks, not substring heuristics: the guard
+ * detector brace-matches the source to find the `if (...)` that actually encloses
+ * the normalization call. Headless Chromium has no WebGL, so 3D is verified here
+ * from source only — never from canvas pixels. */
+const V14_FLAG_WORDS = ['baseSize', 'normalized', 'normalizedSlots', 'framedSlots'];
+const V14_FLAG_RE = new RegExp(`\\b(?:${V14_FLAG_WORDS.join('|')})\\b`);
+const V14_FLAG_ASSIGN_RE = /(?:\.\s*|\b)(?:baseSize|normalized)\s*=(?!=)/;
+
+// Return the condition strings of every `if (...)` block enclosing `idx`.
+// Scans braces from the start of `src` up to `idx`; when a `{` is immediately
+// preceded by `if (...)` it records that condition (and `null` otherwise).
+function enclosingIfConditions(src, idx) {
+  const stack = [];
+  for (let i = 0; i < idx && i < src.length; i++) {
+    const ch = src[i];
+    if (ch === '{') {
+      const before = src.slice(Math.max(0, i - 200), i);
+      const ifM = /if\s*\(([^)]*)\)\s*$/.exec(before);
+      stack.push(ifM ? ifM[1] : null);
+    } else if (ch === '}') {
+      if (stack.length) stack.pop();
+    }
+  }
+  return stack.filter(Boolean);
+}
+
+// The first enclosing `if` condition that references a one-time-per-slot flag,
+// or '' when the call is unconditional. Empty string => FAIL (shrink bug).
+function flagGuardAt(src, idx) {
+  return enclosingIfConditions(src, idx).find((c) => V14_FLAG_RE.test(c)) || '';
+}
+
+// All indexes of a call regex, excluding `function name(` declarations.
+function callSites(src, re) {
+  const out = [];
+  let m;
+  re.lastIndex = 0;
+  while ((m = re.exec(src)) !== null) {
+    const before = src.slice(Math.max(0, m.index - 12), m.index);
+    if (!/\bfunction\s*$/.test(before)) out.push(m.index);
+  }
+  return out;
+}
+
+// Parse `{ 'canvas-id': { fill: <number>, ... }, ... }` from the framing block.
+function parseFills(block) {
+  const fills = {};
+  const re = /['"](canvas-[\w-]+)['"]\s*:\s*\{[^}]*?\bfill:\s*(0?\.\d+|1(?:\.0+)?)/g;
+  let m;
+  while ((m = re.exec(block)) !== null) fills[m[1]] = Number(m[2]);
+  return fills;
 }
 
 const VIEWPORTS = [
@@ -220,31 +289,37 @@ async function main() {
   const hoursMatch = htmlSource.match(/<p class="mt-2\.5[^"]*">(Store open[^<]*)<\/p>/);
   const V10_HOURS = hoursMatch ? hoursMatch[1].trim() : '';
 
-  const { chromium } = await loadPlaywright();
-  const executablePath = resolveChromium(chromium);
-  const browser = await chromium.launch({
-    headless: true,
-    ...(executablePath ? { executablePath } : {}),
-    args: ['--no-sandbox', '--disable-dev-shm-usage'],
-  });
+  let browser = null;
+  if (!SOURCE_ONLY) {
+    const { chromium } = await loadPlaywright();
+    const executablePath = resolveChromium(chromium);
+    browser = await chromium.launch({
+      headless: true,
+      ...(executablePath ? { executablePath } : {}),
+      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+    });
+  }
 
   if (SHOTS) fs.mkdirSync(SHOTS_DIR, { recursive: true });
-  console.log(`visual-audit BASE_URL=${BASE_URL} shots=${SHOTS ? 'on' : 'off'}`);
+  console.log(`visual-audit BASE_URL=${BASE_URL} shots=${SHOTS ? 'on' : 'off'} ` +
+    `mode=${SOURCE_ONLY ? 'SOURCE-ONLY' : 'FULL'}${SOURCE_ONLY ? ' (no browser, no build required)' : ''}`);
 
   try {
-    /* ---- LEGACY Check 1+2: SSR HTML (once) ---- */
-    let ssr = '';
-    try {
-      const res = await fetch(BASE_URL, { headers: { 'user-agent': 'Mozilla/5.0 visual-audit' } });
-      ssr = await res.text();
-      const has49 = ssr.includes('4.9/5');
-      const has13 = ssr.includes('1.3/5');
-      record(has49 && !has13, 'SSR rating 4.9/5 present, 1.3/5 absent',
-        `status=${res.status} bytes=${ssr.length} 4.9/5=${has49} 1.3/5=${has13}`);
-      const ssrShowcase = /class="[^"]*\borange-glass-showcase\b/.test(ssr);
-      record(!ssrShowcase, 'SSR HTML has no .orange-glass-showcase', `found=${ssrShowcase}`);
-    } catch (e) {
-      record('FAIL', 'SSR HTML fetch', String(e && e.message ? e.message : e));
+    /* ---- LEGACY Check 1+2: SSR HTML (once) ---- (skipped in SOURCE-ONLY: no server) */
+    if (!SOURCE_ONLY) {
+      let ssr = '';
+      try {
+        const res = await fetch(BASE_URL, { headers: { 'user-agent': 'Mozilla/5.0 visual-audit' } });
+        ssr = await res.text();
+        const has49 = ssr.includes('4.9/5');
+        const has13 = ssr.includes('1.3/5');
+        record(has49 && !has13, 'SSR rating 4.9/5 present, 1.3/5 absent',
+          `status=${res.status} bytes=${ssr.length} 4.9/5=${has49} 1.3/5=${has13}`);
+        const ssrShowcase = /class="[^"]*\borange-glass-showcase\b/.test(ssr);
+        record(!ssrShowcase, 'SSR HTML has no .orange-glass-showcase', `found=${ssrShowcase}`);
+      } catch (e) {
+        record('FAIL', 'SSR HTML fetch', String(e && e.message ? e.message : e));
+      }
     }
 
     /* ---- v8 GLOBAL SOURCE Gate 9: AirPods Space Grey + no old counter animation ---- */
@@ -279,10 +354,13 @@ async function main() {
     const hasDistV = /\bdistV\s*=/.test(fitFn);
     const hasDistH = /\bdistH\s*=/.test(fitFn);
     const hasMaxDist = /Math\.max\s*\(\s*distV\s*,\s*distH\s*\)/.test(fitFn);
-    // MODEL_FRAMING fill tiers: default 0.92, AirPods eased to 0.86, MacBook 0.94
-    const hasFill092 = /fill:\s*0\.92/.test(framingBlock);
-    const hasAirpods086 = /['"]canvas-airpods['"]\s*:\s*\{\s*fill:\s*0\.86\b/.test(framingBlock);
-    const hasMacbook094 = /['"]canvas-macbook['"]\s*:\s*\{\s*fill:\s*0\.94\b/.test(framingBlock);
+    // MODEL_FRAMING fill tiers. v14 forward-compatible: accept the original
+    // 0.92/0.86/0.94 tiers AND the raised tiers (>=0.95 most, MacBook highest,
+    // AirPods eased). This gate still verifies tier PRESENCE + every regression
+    // guard below; the strict raised-value assertion is the new v14 gate 33.
+    const hasDefaultFill = /fill:\s*0\.9[2-9]\b/.test(framingBlock);
+    const hasAirpodsTier = /['"]canvas-airpods['"]\s*:\s*\{\s*fill:\s*0\.(?:8[6-9]|9[0-9])\b/.test(framingBlock);
+    const hasMacbookTier = /['"]canvas-macbook['"]\s*:\s*\{\s*fill:\s*0\.9[4-9]\b/.test(framingBlock);
     // regression guards: no per-slot renderer.setSize inside the fit, and no
     // inflated setFromObject(root, true) in the fit path. (The legacy
     // centerAndFitEdgeToEdge fallback may still use setFromObject(root, true);
@@ -295,12 +373,12 @@ async function main() {
     const noRetiredDist024 = !/dist\s*\*\s*0\.24/.test(fitFn);
     const noRetiredFill088 = !/\b0\.88\b/.test(fitFn);
     record(hasTightFn && hasDistV && hasDistH && hasMaxDist &&
-      hasFill092 && hasAirpods086 && hasMacbook094 && noPerSlotSetSize && noInflatedFit &&
+      hasDefaultFill && hasAirpodsTier && hasMacbookTier && noPerSlotSetSize && noInflatedFit &&
       noRetiredMin090 && noRetiredDist024 && noRetiredFill088,
-      'v10 SOURCE final-site.js: tight bounds + distV/distH/Math.max + fills 0.92/0.86/0.94, no per-slot setSize, no inflated fit, no retired formula',
+      'v10 SOURCE final-site.js: tight bounds + distV/distH/Math.max + tiered fills (legacy or raised), no per-slot setSize, no inflated fit, no retired formula',
       `fitFnLen=${fitFn.length} tightFn=${hasTightFn} distV=${hasDistV} distH=${hasDistH} ` +
-      `maxDist=${hasMaxDist} fill0.92=${hasFill092} airpods0.86=${hasAirpods086} ` +
-      `macbook0.94=${hasMacbook094} perSlotSetSizeAbsent=${noPerSlotSetSize} ` +
+      `maxDist=${hasMaxDist} defaultFill=${hasDefaultFill} airpodsTier=${hasAirpodsTier} ` +
+      `macbookTier=${hasMacbookTier} perSlotSetSizeAbsent=${noPerSlotSetSize} ` +
       `inflatedFitAbsent=${noInflatedFit} retiredMin090Absent=${noRetiredMin090} ` +
       `retiredDist024Absent=${noRetiredDist024} retiredFill088Absent=${noRetiredFill088} ` +
       `(expected true x12)`, 'SOURCE-CHECK');
@@ -360,6 +438,74 @@ async function main() {
       'v10 SCRIPTS predeploy-check.sh: blocking noindex gate calls both scanners',
       `blockingSection=${blockingAt >= 0} seo_strike_scanner=${seoBlocking} verify_v8_live=${v8Blocking} ` +
       `(expected true x3)`, 'SOURCE-CHECK');
+
+    /* ---- v14 GLOBAL SOURCE Gate 32: one-time-per-slot normalization ---- *
+     * The v13 bug: every idle wake re-entered centerAndFitResponsive and ran
+     * `root.scale.multiplyScalar(2.0 / r0)` again, compounding scale toward zero.
+     * v14 must normalize ONCE per slot behind a latching per-slot flag. Two
+     * equivalent implementations are accepted (both found with brace-aware
+     * evidence, never a loose proximity string check):
+     *   (a) the multiply itself sits inside an `if (!slot.baseSize ...)` guard
+     *       in the fit fn, or
+     *   (b) the centerAndFitResponsive CALL SITE in animate() is flag-guarded.
+     * Either way the flag must also be assigned (latched) in source. */
+    const multIdx = jsSource.search(/multiplyScalar\s*\(\s*2\.0\s*\/\s*r0\s*\)/);
+    const multGuard = multIdx >= 0 ? flagGuardAt(jsSource, multIdx) : '';
+    const fitCallIdxs = callSites(jsSource, /centerAndFitResponsive\s*\(/g);
+    const callGuard = fitCallIdxs.map((i) => flagGuardAt(jsSource, i)).find(Boolean) || '';
+    const flagLatched = V14_FLAG_ASSIGN_RE.test(jsSource);
+    const normOnceOk = multIdx >= 0 && fitCallIdxs.length > 0 && flagLatched && !!(multGuard || callGuard);
+    record(normOnceOk,
+      'v14 SOURCE final-site.js: one-time-per-slot normalization (baseSize/normalized guards multiplyScalar(2.0/r0))',
+      `multiplyFound=${multIdx >= 0} fitCalls=${fitCallIdxs.length} flagAssigned=${flagLatched} ` +
+      `multiplyGuard="${multGuard || 'UNGUARDED'}" callGuard="${callGuard || 'UNGUARDED'}" ` +
+      `(require flagAssigned && at least one guard)`, 'SOURCE-CHECK');
+
+    /* ---- v14 GLOBAL SOURCE Gate 33: raised fills + tablet wide + cap ---- *
+     * Source-only (headless has no WebGL). Parse the MODEL_FRAMING fills and
+     * assert the v14 contract: most slots >= 0.95, tablet (iPad) wider logic,
+     * MacBook is the maximum, AirPods eased below the max, and the fill hard-cap
+     * in the fit fn was raised so the larger values actually take effect. */
+    const fills = parseFills(framingBlock);
+    const fillEntries = Object.entries(fills);
+    const nonAirpods = fillEntries.filter(([id]) => id !== 'canvas-airpods');
+    const raisedCount = nonAirpods.filter(([, v]) => v >= 0.95).length;
+    const mostRaised = nonAirpods.length >= 6 &&
+      raisedCount > nonAirpods.length / 2 && raisedCount >= nonAirpods.length - 2;
+    const maxFill = fillEntries.length ? Math.max(...fillEntries.map(([, v]) => v)) : 0;
+    const macbookFill = fills['canvas-macbook'];
+    const airpodsFill = fills['canvas-airpods'];
+    const macbookHighest = macbookFill !== undefined &&
+      macbookFill >= maxFill - 1e-9 && airpodsFill !== undefined && macbookFill > airpodsFill;
+    const airpodsEased = airpodsFill !== undefined && airpodsFill < maxFill &&
+      airpodsFill < Math.max(...nonAirpods.map(([, v]) => v));
+    const tabletToken = /\b(?:isTablet|tabletFill|wideFill|widerFill|fillWide|landscapeFill)\b/
+      .test(framingBlock + fitFn);
+    const tabletIdCond = /id\s*===?\s*['"][^'"]*(?:ipad|tablet)[^'"]*['"]/i.test(fitFn);
+    const tabletWider = tabletToken || tabletIdCond;
+    const capMatch = /Math\.min\(\s*([01](?:\.\d+)?)\s*,\s*cfg\.fill/.exec(fitFn);
+    const capVal = capMatch ? Number(capMatch[1]) : 1; // no cap = fully open
+    const capOk = capVal >= 0.95;
+    record(mostRaised && macbookHighest && airpodsEased && tabletWider && capOk && fillEntries.length >= 8,
+      'v14 SOURCE final-site.js: raised fills (most >=0.95) + tablet wider + MacBook highest + AirPods eased + raised cap',
+      `slots=${fillEntries.length} raised=${raisedCount}/${nonAirpods.length} ` +
+      `fills=${JSON.stringify(fills)} macbookHighest=${macbookHighest} airpodsEased=${airpodsEased} ` +
+      `tabletWider=${tabletWider} (token=${tabletToken} idCond=${tabletIdCond}) ` +
+      `fillCap=${capVal} (expected >=0.95)`, 'SOURCE-CHECK');
+
+    if (SOURCE_ONLY) {
+      const failedEarly = results.filter((r) => r.status === 'FAIL');
+      const srcCount = results.filter((r) => r.mode === 'SOURCE-CHECK').length;
+      console.log(`\n===== visual-audit SOURCE-ONLY summary: ${results.length - failedEarly.length}/${results.length} PASS, ` +
+        `${failedEarly.length} FAIL (${srcCount} SOURCE-CHECK; no browser/build needed) =====`);
+      if (failedEarly.length) {
+        for (const f of failedEarly) console.log(`FAIL: ${f.check} — ${f.detail}`);
+        process.exitCode = 1;
+      } else {
+        console.log('SOURCE_AUDIT_OK — source gates green; safe to run the full local build audit');
+      }
+      return;
+    }
 
     for (const vp of VIEWPORTS) {
       console.log(`\n--- viewport ${vp.name}: ${vp.width}x${vp.height} @${vp.deviceScaleFactor}x ---`);
@@ -686,7 +832,7 @@ async function main() {
 
     await respContext.close();
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
 
   const failed = results.filter((r) => r.status === 'FAIL');

@@ -908,16 +908,17 @@
         // v13: widened near-edge fills. Shared renderer — never per-slot setSize.
         // AirPods deliberately eased back slightly; MacBook pushed furthest.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 0.92, fov: 34 },
-          'canvas-estimate-ipad': { fill: 0.92, fov: 34 },
-          'canvas-pickup-iphone': { fill: 0.92, fov: 34 },
-          'canvas-tbk-oca':       { fill: 0.92, fov: 34 },
-          'canvas-tbk-90l':       { fill: 0.92, fov: 34 },
-          'canvas-tbk-958':       { fill: 0.92, fov: 34 },
-          'canvas-internals':     { fill: 0.92, fov: 34 },
-          'canvas-airpods':       { fill: 0.86, fov: 34 },
-          'canvas-watch':         { fill: 0.92, fov: 34 },
-          'canvas-macbook':       { fill: 0.94, fov: 34 },
+          'canvas-hero':          { fill: 0.95, fov: 34 },
+          // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
+          'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
+          'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
+          'canvas-tbk-oca':       { fill: 0.95, fov: 34 },
+          'canvas-tbk-90l':       { fill: 0.95, fov: 34 },
+          'canvas-tbk-958':       { fill: 0.95, fov: 34 },
+          'canvas-internals':     { fill: 0.95, fov: 34 },
+          'canvas-airpods':       { fill: 0.86, fov: 34 }, // eased slightly per Faisu
+          'canvas-watch':         { fill: 0.95, fov: 34 },
+          'canvas-macbook':       { fill: 0.96, fov: 34 }, // biggest — per Faisu
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -940,35 +941,44 @@
         }
         function centerAndFitResponsive(camera, root, id) {
           try {
-            root.updateWorldMatrix(true, true);
-            // Normalise scale ONCE against the tight device bounds (not the halos).
-            const tight0 = computeTightDeviceBounds(root);
-            const r0 = tight0.getBoundingSphere(new THREE.Sphere()).radius;
-            if (r0 > 0 && isFinite(r0)) root.scale.multiplyScalar(2.0 / r0);
-            root.updateWorldMatrix(true, true);
-            // Re-measure tight bounds after normalisation and centre on the DEVICE.
-            const tight = computeTightDeviceBounds(root);
-            const c = tight.getCenter(new THREE.Vector3());
-            root.position.sub(c);
-            root.updateWorldMatrix(true, true);
-            const tight2 = computeTightDeviceBounds(root);
-            const size = tight2.getSize(new THREE.Vector3());
+            const cfg = MODEL_FRAMING[id] || { fill: 0.95, fov: 34 };
+            // Tablet (iPad) is portrait geometry — widen it with a rigid landscape turn.
+            const isTablet = id === 'canvas-estimate-ipad';
+            if (isTablet && cfg.rotZ !== undefined) root.rotation.z = cfg.rotZ;
+            let size, r;
+            if (!root.userData.normalized || !root.userData.baseSize) {
+              // v14 ONE-TIME normalization: normalize + centre ONCE, cache the base size.
+              root.updateWorldMatrix(true, true);
+              const tight0 = computeTightDeviceBounds(root);
+              const r0 = tight0.getBoundingSphere(new THREE.Sphere()).radius;
+              if (r0 > 0 && isFinite(r0)) root.scale.multiplyScalar(2.0 / r0);
+              root.updateWorldMatrix(true, true);
+              const tight = computeTightDeviceBounds(root);
+              const c = tight.getCenter(new THREE.Vector3());
+              root.position.sub(c);
+              root.updateWorldMatrix(true, true);
+              const tight2 = computeTightDeviceBounds(root);
+              size = tight2.getSize(new THREE.Vector3()).clone();
+              r = tight2.getBoundingSphere(new THREE.Sphere()).radius;
+              const s = root.scale.x || 1;
+              root.userData.baseSize = size.clone().divideScalar(s);
+              root.userData.baseRadius = r / s;
+              root.userData.normalized = true;
+            } else {
+              size = root.userData.baseSize.clone().multiplyScalar(root.scale.x || 1);
+              r = root.userData.baseRadius * (root.scale.x || 1);
+            }
             const maxDim = Math.max(size.x, size.y, size.z);
-            const r = tight2.getBoundingSphere(new THREE.Sphere()).radius;
-            const cfg = MODEL_FRAMING[id] || { fill: 0.92, fov: 34 };
-            camera.fov = 34; // sleek telephoto studio lens — bolder, less distortion
+            camera.fov = 34;
             const vFov = THREE.MathUtils.degToRad(camera.fov);
             const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-            const fill = Math.min(0.94, cfg.fill ?? 0.92); // up to 92% near-edge (94% MacBook)
-            // v13 ASPECT-AWARE PER-AXIS FIT: solve distance for BOTH width and height,
-            // then take the larger. The old bounding-sphere-vs-hFov approach over-shrank
-            // tall/narrow devices on portrait mobile. This widens every model cleanly.
+            const fill = Math.min(0.96, cfg.fill ?? 0.95);
+            // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
+            // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
+            // so animated pose changes can never drift the framing after idle wake.
             const distV = (size.y * 0.5) / (Math.tan(vFov / 2) * fill);
-            // hypot(x,z) is rotation-invariant: prevents square-footprint machines from
-            // cropping at 45° yaw on portrait, with ~0.6% change to thin phones (frozen models safe).
             const distH = (Math.hypot(size.x, size.z) * 0.5) / (Math.tan(hFov / 2) * fill);
             const dist = Math.max(distV, distH);
-            // More FRONTAL camera (smaller x/y offset) => wider silhouette, less narrow look.
             camera.position.set(dist * 0.16, dist * 0.10, dist * 0.982);
             camera.near = Math.max(0.05, dist - maxDim * 2.5);
             camera.far = dist + maxDim * 4;
@@ -1471,8 +1481,11 @@
             }
             if ((!s.autoFramed || s.autoWake) && cw && ch) { s.autoWake = false;
               s.autoFramed = true;
-              // v9: responsive MODEL_FRAMING — mobileFill vs desktopFill, min(vFov,hFov),
-              // exact [0,0,0] centring and a 3/4 camera angle. Shared renderer untouched.
+              // v14 STALE-ASPECT GUARD: ResizeObserver may not have delivered the new
+              // aspect yet after an idle wake; fit against the ACTUAL canvas dims so a
+              // stale aspect can never leave the model looking smaller than target fill.
+              s.camera.aspect = cw / ch;
+              s.camera.updateProjectionMatrix();
               const id = s.canvas.id;
               centerAndFitResponsive(s.camera, s.root, id);
             }
