@@ -1280,6 +1280,15 @@
           });
           slots.forEach((x) => ro.observe(x.canvas));
         }
+        // Wake handler: on app-switch return, re-fit + redraw all canvases (no manual refresh)
+        const wakeAll = () => {
+          if (document.visibilityState !== 'visible') return;
+          slots.forEach((x) => { x.autoFramed = false; x.autoWake = true; });
+        };
+        document.addEventListener('visibilitychange', wakeAll);
+        window.addEventListener('pageshow', wakeAll);
+        window.addEventListener('focus', wakeAll);
+
         let t = 0;
         function animate() {
           requestAnimationFrame(animate);
@@ -1288,7 +1297,7 @@
           const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
             const s = slots[i];
-            if (!s.visible) continue;
+            if (!s.visible || s.contextLost) continue;
             let cw = s.cw, ch = s.ch;
             if (!cw || !ch) { cw = s.canvas.clientWidth; ch = s.canvas.clientHeight; s.cw = cw; s.ch = ch; }
             if (!cw || !ch) continue;
@@ -1298,7 +1307,7 @@
               s.canvas.width = rw;
               s.canvas.height = rh;
             }
-            if (!s.autoFramed && cw && ch) {
+            if ((!s.autoFramed || s.autoWake) && cw && ch) { s.autoWake = false;
               s.autoFramed = true;
               // First 3 device models (hero iPhone, estimate iPad, pickup iPhone) zoom in
               // tuned per model; machines/small models slightly bigger (0.94).
@@ -1348,7 +1357,15 @@
           el.requestFullscreen ? el.requestFullscreen() : el.webkitRequestFullscreen?.();
           requestAnimationFrame(() => resizeSlot(slot));
         }
-        function resizeSlot(slot) { try { slot.camera.aspect = slot.canvas.clientWidth / slot.canvas.clientHeight; slot.camera.updateProjectionMatrix(); } catch(e){} }
+        function resizeSlot(slot) {
+          try {
+            const w = Math.max(1, slot.canvas.clientWidth), h = Math.max(1, slot.canvas.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(w, h, false);          // false = CSS keeps size -> ZERO stretch
+            slot.camera.aspect = w / h; slot.camera.updateProjectionMatrix();
+            slot.rw = Math.min(w, MAX_W); slot.rh = Math.min(h, MAX_H);
+          } catch (e) {}
+        }
         document.addEventListener('fullscreenchange', () => {
           const canvas = document.fullscreenElement?.querySelector('canvas') || null;
           const slot = slots.find((x) => x.canvas === canvas);

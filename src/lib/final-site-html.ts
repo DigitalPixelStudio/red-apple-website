@@ -64,7 +64,7 @@ export const finalSiteHtml = `
   
 
   <!-- 1. HERO SECTION (PROPERLY FRAMED iPhone 17 Pro Max · Orange 3D) -->
-    <section id="hero" class="ambient-warm border-b border-zinc-100 py-8 sm:py-12">
+    <section id="hero" class="laser-stage ambient-warm border-b border-zinc-100 py-8 sm:py-12"><span class="laser-line" aria-hidden="true"></span>
       <div class="ambient-orb -left-20 -top-20 h-72 w-72 bg-red-500"></div>
       <div class="ambient-orb -bottom-24 right-10 h-80 w-80 bg-orange-400" style="animation-delay: -4s;"></div>
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
@@ -1328,9 +1328,9 @@ export const finalSiteHtml = `
         <div>
           <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Legal</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><a href="#faq" class="hover:text-red-600">Privacy Policy</a></li>
-            <li><a href="#faq" class="hover:text-red-600">Terms of Service</a></li>
-            <li><a href="#faq" class="hover:text-red-600">Refund &amp; 6 Months Warranty</a></li>
+            <li><a href="/privacy" class="hover:text-red-600">Privacy Policy</a></li>
+            <li><a href="/terms" class="hover:text-red-600">Terms of Service</a></li>
+            <li><a href="/refund-policy" class="hover:text-red-600">Refund &amp; 6 Months Warranty</a></li>
           </ul>
         </div>
         <div>
@@ -1373,12 +1373,12 @@ export const finalSiteHtml = `
   </div>
 
   <!-- SLEEK MATTE CHARCOAL AI BENCH LAUNCHER (Bottom Right, Matching Screenshot) -->
-  <button type="button" id="btn-open-ai" aria-label="Open Red Apple AI Bench Chat" class="dock-dark-btn fixed bottom-4 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-700/60 shadow-2xl active:scale-95">
+  <button type="button" id="btn-open-ai" aria-label="Open Red Apple AI Bench Chat" class="dock-dark-btn fixed bottom-[88px] right-4 z-40 flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-700/60 shadow-2xl active:scale-95">
     <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="4"/><path d="M12 8V4H8"/><circle cx="9" cy="14" r="1.2" fill="currentColor"/><circle cx="15" cy="14" r="1.2" fill="currentColor"/></svg>
   </button>
 
   <!-- Surprise: Non-Annoying 10-Second Auto-Dismiss AI Concierge Toast (Triggers after 3 mins active browsing or manual preview) -->
-  <div id="ai-auto-toast" class="fixed bottom-20 right-4 z-40 hidden w-72 rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-2xl">
+  <div id="ai-auto-toast" class="fixed bottom-[148px] right-4 z-40 hidden w-72 rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-2xl">
     <div class="flex items-start justify-between gap-2">
       <div>
         <div class="text-xs font-extrabold text-zinc-950">Need a fixed Apple repair quote?</div>
@@ -1393,7 +1393,7 @@ export const finalSiteHtml = `
   </div>
 
   <!-- UPGRADED AI BENCH CONCIERGE DRAWER (FULL MANUAL TEXT CHAT + SMART REPLIES + WHATSAPP HANDOFF) -->
-  <div id="ai-drawer" class="fixed bottom-20 right-4 z-50 hidden w-[360px] max-w-[94vw] flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
+  <div id="ai-drawer" class="fixed bottom-[148px] right-4 z-50 hidden w-[360px] max-w-[94vw] flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
     <div class="dock-ai-header flex items-center justify-between px-4 py-3.5 text-white">
       <div class="flex items-center gap-2.5">
         <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 text-sm font-black">✦</span>

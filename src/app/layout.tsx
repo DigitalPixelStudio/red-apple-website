@@ -165,13 +165,6 @@ const localBusinessSchema = {
   ],
   hasMap: SITE.mapsUrl,
   sameAs: SOCIAL_LINKS.map((s) => s.href).filter(Boolean),
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: SITE.rating,
-    reviewCount: SITE.ratingCount.replace(",", ""),
-    bestRating: "5",
-    worstRating: "1",
-  },
   currenciesAccepted: "INR",
   paymentAccepted: "Cash, UPI, Credit Card, Debit Card",
   knowsAbout: [
@@ -252,7 +245,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, organizationSchema, faqSchema, serviceSchema]) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, organizationSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
           <>
