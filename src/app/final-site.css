@@ -75,19 +75,15 @@
         radial-gradient(rgba(24, 24, 27, 0.05) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 32px 32px;
     }
-    .orange-glass-sweep {
-      display: none;
+    /* Static warm hairline sheen — paint-only, no animation, never blocks pointer input. */
+    .studio-laser-hairline {
+      display: block;
       position: absolute;
       inset: 0;
-      background: linear-gradient(118deg, transparent 16%, rgba(249, 115, 22, 0.34) 46%, rgba(251, 146, 60, 0.14) 56%, transparent 82%);
-      transform: translateX(-120%);
-      animation: orangeGlassSweep 4.2s ease-in-out infinite;
       pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.10), rgba(249, 115, 22, 0.14), transparent);
+      opacity: .5;
       z-index: 10;
-    }
-    @keyframes orangeGlassSweep {
-      0%, 18% { transform: translateX(-120%); }
-      56%, 100% { transform: translateX(125%); }
     }
     /* Interactive Card Laser Sheen Hover */
     .card-sheen {
@@ -467,8 +463,8 @@
     #paired-crm, #gallery, #machines-static, #wow-cards { contain: layout style; }
 
     /* ===== PHASE D2: Zero-Lag Warm Bokeh Particles (30 FPS, 18 motes) ===== */
-    /* ===== PHASE D3: ORANGE GLASS GLOW — STRICTLY on store & machine images ===== */
-    .orange-glass-glow {
+    /* ===== PHASE D3: STUDIO WARM GLOW — STRICTLY on store & machine images ===== */
+    .studio-warm-glow {
       border-radius: 1.25rem;
       background:
         linear-gradient(135deg, rgba(255, 111, 0, 0.06), rgba(255,255,255,0.72), rgba(246, 60, 60, 0.12)),
@@ -479,12 +475,12 @@
         inset 0 1px 1px rgba(255,255,255,0.85);
       border: 1px solid rgba(249, 115, 22, 0.36);
     }
-    .orange-glass-glow::after {
+    .studio-warm-glow::after {
       content: ""; position: absolute; inset: -4px; border-radius: 1.45rem;
       background: radial-gradient(circle at 50% 45%, rgba(249, 115, 22, 0.30), transparent 72%);
       opacity: 0; pointer-events: none; transition: opacity 240ms ease-out;
     }
-    .orange-glass-glow:hover::after { opacity: 0.9; }
+    .studio-warm-glow:hover::after { opacity: 0.9; }
     /* Scope: ONLY store/gallery/machine images (exclude logos, text cards, icons) */
     #gallery img, #tbk-machines img, #glass-lab img, #real-shop img, #craft-showcase img {
       border-radius: 1.25rem;
@@ -589,13 +585,69 @@
 
     /* ===== STRIP FIX + NO-CROP + ZERO-JITTER POLISH (2026-11-22) ===== */
     /* Machine / gallery images: full frame, warm matte, never cropped */
-    .orange-glass-wrap { background-color: #F7EFE6; }
+    .studio-photo-frame { background-color: #F7EFE6; }
     /* Store / bench / craft photos: fill the frame (old behaviour) — no empty matte, natural framing. */
-    .orange-glass-wrap img { object-fit: cover !important; }
+    .studio-photo-frame img { object-fit: cover !important; }
     /* Machine studio shots only: keep full machine visible, no crop (3:4 cards match 3:4 files). */
-    .orange-glass-wrap.machine-frame img { object-fit: contain !important; }
+    .studio-photo-frame.machine-frame img { object-fit: contain !important; }
     /* Tall portrait store signs: bias the visible band toward the sign, not the ceiling. */
-    .orange-glass-wrap img[src*="logo-counter"] { object-position: center 35% !important; }
+    .studio-photo-frame img[src*="logo-counter"] { object-position: center 35% !important; }
+
+    /* ===== ELITE VISUAL PASS (2026-11-22) ===== */
+    /* Vivid animated spectrum on the flagship repair-value quote. Paint-only. */
+    .quote-color-shift {
+      background: linear-gradient(90deg, #dc2626 0%, #e11d48 30%, #8b5cf6 58%, #2563eb 100%);
+      background-size: 240% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: vivid-spectrum-flow 4.2s linear infinite;
+    }
+    @keyframes vivid-spectrum-flow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 240% 50%; }
+    }
+    /* Fast GPU-only breathing ring on the live-status pill (opacity + scale only). */
+    .fast-breathe-badge { position: relative; isolation: isolate; }
+    .fast-breathe-badge::before {
+      content: ""; position: absolute; inset: -2px; border-radius: inherit;
+      background: radial-gradient(circle at 50% 50%, rgba(225, 29, 72, 0.30), transparent 72%);
+      opacity: .3; transform: scale(.96) translateZ(0); pointer-events: none; z-index: -1;
+      animation: fast-breathe 2.2s ease-in-out infinite;
+      will-change: opacity, transform;
+    }
+    @keyframes fast-breathe {
+      0%, 100% { opacity: .28; transform: scale(.96) translateZ(0); }
+      50% { opacity: .7; transform: scale(1.04) translateZ(0); }
+    }
+    /* Deferred paint for the dense comparison / four-reasons copy zone. */
+    .perf-text-zone {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 560px;
+      contain: layout style;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .quote-color-shift, .fast-breathe-badge::before { animation: none !important; }
+      .fast-breathe-badge::before { opacity: .28; transform: none; }
+    }
+
+    /* Warm orangish medium-light studio tiles for the 3D device stages. */
+    .tile-3d-studio-pearl {
+      background: radial-gradient(circle at 50% 42%, #FFF6EE 0%, #F7E2CC 62%, #EBC9A8 100%) !important;
+    }
+    .tile-3d-studio-lab {
+      background: radial-gradient(circle at 50% 42%, #FFF3E7 0%, #F4D9BC 62%, #E7B98F 100%) !important;
+    }
+    .tile-3d-studio-uv-lab {
+      background: radial-gradient(circle at 50% 42%, #FFF2F8 0%, #F4DCEB 62%, #E7C0D8 100%) !important;
+    }
+    .tile-3d-studio-graphite {
+      background: radial-gradient(circle at 50% 42%, #3A2E28 0%, #251C18 62%, #16100E 100%) !important;
+    }
+    .tile-3d-studio-mac {
+      background: radial-gradient(circle at 50% 42%, #FFF4E9 0%, #EED5BC 100%) !important;
+    }
     /* WCAG 2.4.7: the before/after slider is keyboard-operable — give it a visible focus ring (paint-only). */
     #ba-slider-box:focus-visible { outline: 2px solid #ea580c; outline-offset: 3px; }
     /* Light backdrop means stage hint labels need warm-dark ink */

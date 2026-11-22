@@ -11,7 +11,7 @@ export default function WhyChooseUs() {
         <Reveal className="text-center mb-14">
           <span className="kicker">The Honest Comparison</span>
           <h2 className="breath-heading section-title font-apple mt-3 text-[var(--text)]">
-            Red Apple vs <span className="topic-gradient">Authorised Service Centres</span>
+            Red Apple vs <span className="topic-gradient">Standard Brand Mail-In Centers</span>
           </h2>
           <p className="section-subtitle mx-auto mt-4">
             We are not another repair shop. We are Apple specialists with OEM-grade
@@ -32,7 +32,7 @@ export default function WhyChooseUs() {
                 <LineIcon name="shield" size={16} className="shrink-0" />
                 {SITE.name}
               </div>
-              <div className="compare-head flex items-center">Authorised service centre</div>
+              <div className="compare-head flex items-center">Standard brand mail-in center</div>
             </div>
             {WHY_VS_LOCAL.map((row, i) => (
               <Reveal key={i} delay={i * 50}>

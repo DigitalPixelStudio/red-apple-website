@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
+import { RED_APPLE_JSON_LD } from "@/lib/seo/localSchema";
 
 /* GA4 — dormant until NEXT_PUBLIC_GA_ID is set in Vercel.
    No env var -> nothing is rendered, zero bytes shipped. */
@@ -245,7 +246,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, organizationSchema, serviceSchema]) }} />
+        {/* Single JSON-LD array: existing entities are preserved and the local
+            MobilePhoneRepair entity is merged in as one extra node. None of the
+            other nodes carries an aggregateRating, so the 4.9/1103 rating in
+            RED_APPLE_JSON_LD stays unique on the page. */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, organizationSchema, serviceSchema, RED_APPLE_JSON_LD]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (
           <>

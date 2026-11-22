@@ -2,8 +2,8 @@
 """Audit image aspect-ratio handling (the 2026-11-22 strip-fix / no-crop rules).
 
 Hard rules (non-zero exit on violation):
-  (a) `.orange-glass-wrap img` defaults to object-fit: cover
-  (b) `.orange-glass-wrap.machine-frame img` scopes to object-fit: contain
+  (a) `.studio-photo-frame img` defaults to object-fit: cover
+  (b) `.studio-photo-frame.machine-frame img` scopes to object-fit: contain
   (c) exactly 3 machine wrappers carry the `machine-frame` class
 
 Advisory only (never fails the audit):
@@ -46,7 +46,7 @@ def count_machine_wrappers(html: str) -> int:
     count = 0
     for match in re.finditer(r'class="([^"]*)"', html):
         classes = set(match.group(1).split())
-        if {"orange-glass-wrap", "machine-frame"} <= classes:
+        if {"studio-photo-frame", "machine-frame"} <= classes:
             count += 1
     return count
 
@@ -96,15 +96,15 @@ def main() -> int:
         except OSError as exc:
             read_errors.append(f"{path.relative_to(ROOT)}: {exc}")
 
-    cover = css_object_fit(css, ".orange-glass-wrap img")
-    contain = css_object_fit(css, ".orange-glass-wrap.machine-frame img")
+    cover = css_object_fit(css, ".studio-photo-frame img")
+    contain = css_object_fit(css, ".studio-photo-frame.machine-frame img")
     wrappers = count_machine_wrappers(html)
 
     checks = [
         {"id": "a_default_cover", "ok": cover == "cover",
-         "detail": f".orange-glass-wrap img -> {cover!r} (expected 'cover')"},
+         "detail": f".studio-photo-frame img -> {cover!r} (expected 'cover')"},
         {"id": "b_machine_contain", "ok": contain == "contain",
-         "detail": f".orange-glass-wrap.machine-frame img -> {contain!r} (expected 'contain')"},
+         "detail": f".studio-photo-frame.machine-frame img -> {contain!r} (expected 'contain')"},
         {"id": "c_three_machine_wrappers", "ok": wrappers == EXPECTED_WRAPPERS,
          "detail": f"machine-frame wrappers: {wrappers} (expected {EXPECTED_WRAPPERS})"},
     ]

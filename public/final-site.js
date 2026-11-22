@@ -1212,8 +1212,10 @@
           if (v) v.textContent = Math.round(apFactor * 100) + '%';
         });
         queueSlot(() => { registerSlot('canvas-airpods', 5.2, (root) => {
-          const apGlossWhite = new THREE.MeshStandardMaterial({ color: 0xf4f4f5, metalness: 0.12, roughness: 0.16 });
-          const apSilicone = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.04, roughness: 0.42 });
+          // v7: warm champagne shell + deep espresso silicone tips — AirPods now READ clearly
+          // against the lighter orange studio tile instead of disappearing into it.
+          const apGlossWhite = new THREE.MeshStandardMaterial({ color: 0xd9b892, metalness: 0.28, roughness: 0.22 });
+          const apSilicone = new THREE.MeshStandardMaterial({ color: 0x7a4a2f, metalness: 0.05, roughness: 0.5 });
           const apShadow = new THREE.Mesh(
             new THREE.CircleGeometry(1.38, 36),
             new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.36 })
@@ -1348,16 +1350,18 @@
               // Hero/IPad/Pickup tuned; others 0.94; tablet reduced.
               // FROZEN: hero, pickup, airpods, watch — exact framing. ADJUSTED (mobile): iPad slight; TBK + MacBook medium.
               const isMobileView = window.innerWidth < 768;
-              let pad = 0.94;
-              if (id === 'canvas-hero') pad = 0.55;
-              else if (id === 'canvas-pickup-iphone') pad = 0.62;
-              else if (id === 'canvas-airpods' || id === 'canvas-watch') pad = 0.94;
-              else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.82 * 1.14 : 0.82;
-              else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.80 * 1.10 : 0.80;
-              else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.84 * 1.10 : 0.84;
-              else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.84 * 1.12 : 0.84;
-              else if (id === 'canvas-macbook') pad = isMobileView ? 0.94 * 1.28 : 0.94;
-              else if (id === 'canvas-internals') pad = isMobileView ? 0.94 * 1.14 : 0.94;
+              // v7 ELITE: smaller pad = bigger, bolder model. Every value is LOWER than v9 —
+              // no model shrinks. Bounding-sphere fit still guarantees zero crop on 360 spin.
+              let pad = 0.80;
+              if (id === 'canvas-hero') pad = 0.50;
+              else if (id === 'canvas-pickup-iphone') pad = 0.55;
+              else if (id === 'canvas-airpods' || id === 'canvas-watch') pad = 0.82;
+              else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.74 * 1.14 : 0.74;
+              else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.68 * 1.10 : 0.68;
+              else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.70 * 1.10 : 0.70;
+              else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.70 * 1.12 : 0.70;
+              else if (id === 'canvas-macbook') pad = isMobileView ? 0.78 * 1.28 : 0.78;
+              else if (id === 'canvas-internals') pad = isMobileView ? 0.80 * 1.14 : 0.80;
               // Tablet: slight zoom across models (was 1.20 -> 1.14)
               if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);
@@ -1384,8 +1388,10 @@
         for (const slot of slots) {
           const fsBtn = document.createElement('button');
           fsBtn.setAttribute('type','button'); fsBtn.dataset.fsToggle = '1';
-          fsBtn.className = 'absolute top-2.5 right-2.5 z-12 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/90 border border-zinc-300 shadow transition-all hover:scale-110 hover:bg-red-600 hover:text-white';
-          fsBtn.textContent = '⎈';
+          fsBtn.className = 'absolute top-2.5 right-2.5 z-20 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/95 border border-zinc-300 shadow-lg transition-all hover:scale-110 hover:bg-red-600 hover:text-white';
+          fsBtn.title = 'Enlarge 3D model · fullscreen 360° view';
+          fsBtn.setAttribute('aria-label', 'Enlarge 3D model');
+          fsBtn.textContent = '⛶';
           const wrap = slot.canvas.closest('.stage-3d-box');
           if (wrap) { fsBtn.style.position='absolute'; wrap.appendChild(fsBtn); }
           fsBtn.addEventListener('click', () => toggleFullscreen(slot));

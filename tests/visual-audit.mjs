@@ -155,9 +155,9 @@ async function main() {
       let galleryCount = await page.locator(gallerySel).count();
       let galleryNote = 'selector=#gallery img';
       if (galleryCount === 0) {
-        gallerySel = '#real-shop .orange-glass-wrap img';
+        gallerySel = '#real-shop .studio-photo-frame img';
         galleryCount = await page.locator(gallerySel).count();
-        galleryNote = 'selector=#real-shop .orange-glass-wrap img (#gallery not in DOM)';
+        galleryNote = 'selector=#real-shop .studio-photo-frame img (#gallery not in DOM)';
       }
       const galleryFits = await page.locator(gallerySel).evaluateAll((els) =>
         els.map((el) => getComputedStyle(el).objectFit));
@@ -167,7 +167,7 @@ async function main() {
         `${galleryFits.length - galleryBad.length}/${galleryFits.length} cover; ${galleryNote}` +
         (galleryBad.length ? ` bad=${JSON.stringify(galleryBad)}` : ''));
 
-      const machineSel = '.orange-glass-wrap.machine-frame img';
+      const machineSel = '.studio-photo-frame.machine-frame img';
       const machineFits = await page.locator(machineSel).evaluateAll((els) =>
         els.map((el) => getComputedStyle(el).objectFit));
       const machineBad = machineFits.filter((f) => f !== 'contain');

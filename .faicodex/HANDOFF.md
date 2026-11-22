@@ -127,3 +127,13 @@ Real bugs found via Playwright (not string checks) and fixed:
 - Build artifacts valid: `BUILD_ID=2hZajWIhaMmA7Bcteqh24`; TypeScript OK; compiler OK (exit 139 = benign sandbox teardown — verify via BUILD_ID, not exit code).
 - Deploy: **PENDING** (FaiCodex has not deployed this pass). QA: **NOT run / not claimed** — do not report QA PASS until gates are executed.
 - NEXT SESSION FIRST ACTION (gift): run `bash scripts/predeploy-check.sh` + QA gates on this pass, then deploy from `fix/disable-orange-glass-sweep` via `vercel deploy --prod --scope digital-pixel-studio --project redmobile-repair.in --yes` and verify the live URL.
+
+---
+
+## 13. v9 FINAL PUSH — DEPLOYED (2026-11-22) — SAFE TO RESTART
+- Section 12 is now RESOLVED: pass committed, pushed, deployed, verified.
+- HEAD: `b2c13b7` on `fix/disable-orange-glass-sweep` (prior `a992de7`). Rollback tag: `backup-before-image-3d-fix` (commit `4097815`).
+- Fixes live: store/bench/craft photos fill frames (`object-fit: cover`); TBK machine photos keep natural 3:4 no-crop (`machine-frame` → contain); tablet header nav fills the old empty gap (`md:flex`, low-priority links `lg:inline`); glass slider labels no longer overlap (strict left/right halves); 3D fullscreen no longer corrupts the shared renderer (`fitDims` aspect-preserving, `resizeSlot` no longer calls `setSize`/`setPixelRatio`); nav focus ring + `x-vercel-deployment-url` noindex shield.
+- Verification: `tests/visual-audit.mjs` **23/23 PASS** (tablet 2x / mobile 3x / desktop), `scripts/predeploy-check.sh` ALL PASS, live health 200 on all 8 checked routes, live HTML confirmed to carry the new classes.
+- New tools: `tests/visual-audit.mjs` (`BASE_URL=... node tests/visual-audit.mjs --shots`), `scripts/audit/image_fit_audit.py` (`--json`).
+- NEXT SESSION: CRM build. Use `/catch-up` — no website work remains open. Live: https://www.redmobilerepair.in

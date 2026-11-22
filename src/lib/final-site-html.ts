@@ -20,7 +20,7 @@ export const finalSiteHtml = `
     <div class="pt-4">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
-        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow max-[379px]:hidden" onerror="this.src='/icon-512.png'">
+        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-8 w-8 sm:h-9 sm:w-9 shrink-0 block rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div>
           <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> <span class="brand-dark-glow">Mobile Repair</span></div>
           <div class="mt-0.5 whitespace-nowrap text-[10px] font-medium text-zinc-500">Halasuru · Bengaluru</div>
@@ -64,13 +64,13 @@ export const finalSiteHtml = `
   
 
   <!-- 1. HERO SECTION (PROPERLY FRAMED iPhone 17 Pro Max · Orange 3D) -->
-    <section id="hero" class="laser-stage ambient-warm border-b border-zinc-100 py-8 sm:py-12"><span class="laser-line" aria-hidden="true"></span>
+    <section id="hero" class="laser-stage ambient-warm border-b border-zinc-100 pt-5 sm:pt-7 pb-10"><span class="laser-line" aria-hidden="true"></span>
       <div class="ambient-orb -left-20 -top-20 h-72 w-72 bg-red-500"></div>
       <div class="ambient-orb -bottom-24 right-10 h-80 w-80 bg-orange-400" style="animation-delay: -4s;"></div>
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
         <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
           <div class="flex flex-col gap-4 lg:col-span-6">
-            <div class="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
+            <div class="fast-breathe-badge inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
               <span class="relative flex h-2 w-2"><span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-emerald-500"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>
               <span id="live-ist-clock">Open now · 10 AM – 12 AM · Halasuru, Bengaluru</span>
             </div>
@@ -198,9 +198,9 @@ export const finalSiteHtml = `
 
         <div class="mt-9 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/store-glass-front.webp" alt="Walk in off MG Road — Halasuru Storefront" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · Store</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -210,9 +210,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/lab-wide-three-techs.webp" alt="Three benches, three technicians, one room" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/lab-wide-three-techs.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · Store</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -222,9 +222,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/tech-at-microscope.webp" alt="Board-level work under the microscope" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/tech-at-microscope.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · Bench</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -234,9 +234,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/bench-phone-store.webp" alt="Our Halasuru bench — live repair in progress with a restored iPhone" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/bench-phone-store.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">04 · Bench</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -246,9 +246,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/tech-under-red-apple-sign.webp" alt="Our own sign, our own bench" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/tech-under-red-apple-sign.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">05 · Store</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -258,9 +258,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/logo-counter.jpg" alt="Where Repair Meets Connectivity" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/logo-counter.jpg'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">06 · Store</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -270,9 +270,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-orange-200 bg-orange-50/40 shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-orange-600 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-orange-600 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/orange-wall.jpg" alt="The orange wall" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/orange-wall.jpg'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">07 · Store</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -282,9 +282,9 @@ export const finalSiteHtml = `
           </article>
 
           <article class="reveal-up card-sheen group flex flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1">
-            <div class="orange-glass-wrap relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
+            <div class="studio-photo-frame relative h-64 w-full shrink-0 overflow-hidden bg-zinc-900 sm:h-72">
               <img loading="lazy" decoding="async" src="/images/gallery/waiting-area.jpg" alt="Diagnostics desk" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/waiting-area.jpg'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">08 · Store</span>
             </div>
             <div class="flex flex-col justify-center p-4 sm:p-5">
@@ -310,7 +310,7 @@ export const finalSiteHtml = `
         <div class="mt-9 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
           <!-- Left: Animated 3D iPad Pro Carrying Live Info Badges -->
           <div class="flex flex-col justify-between overflow-hidden rounded-3xl border border-orange-200 bg-white p-4 shadow-md lg:col-span-5">
-            <div class="stage-3d-box relative h-[420px] w-full rounded-2xl sm:h-[500px]">
+            <div class="stage-3d-box tile-3d-studio-pearl relative h-[420px] w-full rounded-2xl sm:h-[500px]">
               <canvas id="canvas-estimate-ipad" aria-label="Animated 3D iPad Pro Estimate Showcase"></canvas>
               <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-extrabold text-zinc-900 shadow">Front Glass from ₹2,500</div>
               <div class="pointer-events-none absolute right-3 top-14 rounded-full bg-red-600/95 px-3 py-1 text-[11px] font-bold text-white shadow">OLED Display ~45 min</div>
@@ -505,9 +505,9 @@ export const finalSiteHtml = `
 
         <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="orange-glass-wrap relative h-72 bg-amber-500/20 sm:h-80">
+            <div class="studio-photo-frame relative h-72 bg-amber-500/20 sm:h-80">
               <img loading="lazy" decoding="async" src="/images/craft/before-after-screen.webp" alt="Screen replacement Before and After" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/before-after-screen.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-3 py-1 text-[10px] font-bold uppercase text-white">Screen Replacement · Before / After</span>
             </div>
             <div class="p-4">
@@ -517,9 +517,9 @@ export const finalSiteHtml = `
           </div>
 
           <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="orange-glass-wrap relative h-72 bg-amber-500/20 sm:h-80">
+            <div class="studio-photo-frame relative h-72 bg-amber-500/20 sm:h-80">
               <img loading="lazy" decoding="async" src="/images/craft/before-after-backglass.webp" alt="Back glass Before and After" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/before-after-backglass.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
               <span class="absolute left-3 top-3 z-20 rounded-full bg-zinc-950/80 px-3 py-1 text-[10px] font-bold uppercase text-white">Back Glass · Before / After</span>
             </div>
             <div class="p-4">
@@ -570,9 +570,9 @@ export const finalSiteHtml = `
 
         <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
           <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="orange-glass-wrap h-56 bg-zinc-900">
+            <div class="studio-photo-frame h-56 bg-zinc-900">
               <img loading="lazy" decoding="async" src="/images/craft/uv-laser-station.webp" alt="UV Laser Separation" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/uv-laser-station.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
             </div>
             <div class="p-4">
               <h3 class="font-display text-base font-extrabold text-zinc-950">UV Laser Separation</h3>
@@ -580,9 +580,9 @@ export const finalSiteHtml = `
             </div>
           </div>
           <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="orange-glass-wrap h-56 bg-zinc-900">
+            <div class="studio-photo-frame h-56 bg-zinc-900">
               <img loading="lazy" decoding="async" src="/images/craft/microsolder-setup.webp" alt="Micro-Soldering Station" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/microsolder-setup.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
             </div>
             <div class="p-4">
               <h3 class="font-display text-base font-extrabold text-zinc-950">Micro-Soldering Station</h3>
@@ -590,9 +590,9 @@ export const finalSiteHtml = `
             </div>
           </div>
           <div class="card-sheen overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-            <div class="orange-glass-wrap h-56 bg-zinc-900">
+            <div class="studio-photo-frame h-56 bg-zinc-900">
               <img loading="lazy" decoding="async" src="/images/craft/bench-overhead-tools.webp" alt="Organised by Part, Not by Habit" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/bench-overhead-tools.webp'">
-              <div class="orange-glass-sweep"></div>
+              <span class="studio-laser-hairline" aria-hidden="true"></span>
             </div>
             <div class="p-4">
               <h3 class="font-display text-base font-extrabold text-zinc-950">Organised by Part, Not by Habit</h3>
@@ -603,9 +603,9 @@ export const finalSiteHtml = `
 
         <!-- Every Repair, On Record (Preserved CRM Editorial Collage with Signature Orange Glass Effect) -->
         <div class="mt-8 grid grid-cols-1 items-stretch overflow-hidden rounded-3xl border border-orange-200 bg-white shadow-md lg:grid-cols-12">
-          <div class="orange-glass-wrap min-h-[260px] bg-zinc-900 lg:col-span-6">
+          <div class="studio-photo-frame min-h-[260px] bg-zinc-900 lg:col-span-6">
             <img loading="lazy" decoding="async" src="/images/craft/website-crm-desk.webp" alt="Every Repair On Record CRM Desk" class="h-full w-full object-cover object-center" onerror="this.src='/images/craft/website-crm-desk.webp'">
-            <div class="orange-glass-sweep"></div>
+            <span class="studio-laser-hairline" aria-hidden="true"></span>
           </div>
           <div class="flex flex-col justify-center p-6 sm:p-8 lg:col-span-6">
             <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Every Repair, On Record</div>
@@ -715,9 +715,9 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
             <div class="flex flex-col">
-              <div class="orange-glass-wrap machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
+              <div class="studio-photo-frame machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-oca-press.webp'">
-                <div class="orange-glass-sweep"></div>
+                <span class="studio-laser-hairline" aria-hidden="true"></span>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
               </div>
               <div class="flex flex-1 flex-col p-5 sm:p-6">
@@ -727,7 +727,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">OCA VACUUM LAMINATION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">VACUUM PRESS</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ORIGINAL OLED SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
+            <div class="stage-3d-box tile-3d-studio-lab relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-oca" aria-label="Interactive 4D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -737,9 +737,9 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
             <div class="flex flex-col">
-              <div class="orange-glass-wrap machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
+              <div class="studio-photo-frame machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
-                <div class="orange-glass-sweep"></div>
+                <span class="studio-laser-hairline" aria-hidden="true"></span>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
               </div>
               <div class="flex flex-1 flex-col p-5 sm:p-6">
@@ -749,7 +749,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">90-LITRE AUTOCLAVE</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ZERO-BUBBLE OCA</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">PRESSURE CURVED</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
+            <div class="stage-3d-box tile-3d-studio-lab relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-90l" aria-label="Interactive 4D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -759,9 +759,9 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
             <div class="flex flex-col">
-              <div class="orange-glass-wrap machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
+              <div class="studio-photo-frame machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
-                <div class="orange-glass-sweep"></div>
+                <span class="studio-laser-hairline" aria-hidden="true"></span>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
               </div>
               <div class="flex flex-1 flex-col p-5 sm:p-6">
@@ -771,7 +771,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">COLD UV LASER</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">355NM PRECISION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">BACK GLASS SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
+            <div class="stage-3d-box tile-3d-studio-uv-lab relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-958" aria-label="Interactive 4D TBK-958 Cold UV Purple Laser"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 4D · 355nm Beam</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -813,7 +813,7 @@ export const finalSiteHtml = `
         <div class="mt-9 flex flex-col gap-5">
           <!-- Stacked 3D #1: iPhone 17 Pro Max Internal Teardown -->
           <div class="grid grid-cols-1 items-center overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm lg:grid-cols-12">
-            <div class="stage-3d-box relative h-[520px] lg:col-span-7 sm:h-[600px]">
+            <div class="stage-3d-box tile-3d-studio-graphite relative h-[520px] lg:col-span-7 sm:h-[600px]">
               <canvas id="canvas-internals" aria-label="Interactive 4D iPhone Internal Teardown"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · 4-Layer Internal Teardown</span>
             </div>
@@ -839,7 +839,7 @@ export const finalSiteHtml = `
               </div>
               <a href="#estimate" class="mt-4 inline-block rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-red-600">Get AirPods Quote →</a>
             </div>
-            <div class="stage-3d-box relative order-1 h-[520px] w-full border-b border-zinc-800 sm:h-[600px] lg:order-2 lg:border-b-0">
+            <div class="stage-3d-box tile-3d-studio-pearl relative order-1 h-[520px] w-full border-b border-zinc-800 sm:h-[600px] lg:order-2 lg:border-b-0">
               <canvas id="canvas-airpods" aria-label="Interactive 4D Realistic AirPods Pro"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">AirPods Pro · Interactive 4D</span>
             </div>
@@ -848,7 +848,7 @@ export const finalSiteHtml = `
           <!-- Stacked 3D #3: Apple Watch & MacBook Pro Pair -->
           <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative h-[520px] sm:h-[600px]">
+              <div class="stage-3d-box tile-3d-studio-graphite relative h-[520px] sm:h-[600px]">
                 <canvas id="canvas-watch" aria-label="Interactive 4D Apple Watch Ultra"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">Apple Watch Ultra &amp; Series</span>
               </div>
@@ -859,7 +859,7 @@ export const finalSiteHtml = `
             </div>
 
             <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-              <div class="stage-3d-box relative h-[520px] sm:h-[600px]">
+              <div class="stage-3d-box tile-3d-studio-mac relative h-[520px] sm:h-[600px]">
                 <canvas id="canvas-macbook" aria-label="Interactive 4D MacBook Pro"></canvas>
                 <span class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-bold text-orange-300">MacBook Pro / Air · Logic Board &amp; Display</span>
               </div>
@@ -958,7 +958,7 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 14. REPAIR TRIAGE + SOFTWARE & SIGNED RESTORE (ORANGE GLASS EFFECT) -->
+    <!-- 14. REPAIR TRIAGE + SOFTWARE & SIGNED RESTORE (STUDIO WARM GLOW) -->
     <section class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
@@ -1087,9 +1087,9 @@ export const finalSiteHtml = `
               <span class="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5">Firmware</span>
             </div>
           </div>
-          <div class="orange-glass-wrap relative h-56 rounded-2xl border-2 border-orange-300 bg-zinc-900 shadow-lg lg:col-span-6">
+          <div class="studio-photo-frame relative h-56 rounded-2xl border-2 border-orange-300 bg-zinc-900 shadow-lg lg:col-span-6">
             <img loading="lazy" decoding="async" src="/images/gallery/waiting-area.jpg" alt="Software and Signed Restore Desk" class="h-full w-full object-cover object-center" onerror="this.src='/images/gallery/waiting-area.jpg'">
-            <div class="orange-glass-sweep"></div>
+            <span class="studio-laser-hairline" aria-hidden="true"></span>
             <span class="absolute bottom-3 left-3 z-20 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-orange-800 shadow">Data-Safe First</span>
           </div>
         </div>
@@ -1097,11 +1097,11 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 15. COMPARISON + FOUR REASONS ₹1,00,000 + SURPRISE #3: 3D HOLOGRAPHIC WARRANTY CARD -->
-    <section id="comparison" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
+    <section id="comparison" class="perf-text-zone laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Honest Comparison</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Red Apple vs <span class="text-brand-grad">Authorised Service Centres</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Red Apple vs <span class="text-brand-grad">Standard Brand Mail-In Centers</span></h2>
         </div>
 
         <div class="mt-7 overflow-x-auto rounded-3xl border border-zinc-200 bg-white shadow-sm">
@@ -1110,7 +1110,7 @@ export const finalSiteHtml = `
               <tr>
                 <th class="px-4 py-3">Feature</th>
                 <th class="px-4 py-3 text-red-600">Red Apple Mobile Repair Store</th>
-                <th class="px-4 py-3">Authorised Service Centre</th>
+                <th class="px-4 py-3">Standard Brand Mail-In Center</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-zinc-100">
@@ -1128,7 +1128,7 @@ export const finalSiteHtml = `
         <div class="mt-12 grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
           <div class="lg:col-span-7">
             <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Standard</div>
-            <h3 class="mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Four Reasons People Hand Us a Phone Worth <span class="text-red-600">₹1,00,000</span></h3>
+            <h3 class="mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Four Reasons People Hand Us a Phone Worth <span class="quote-color-shift">₹1,00,000</span></h3>
             <p class="mt-2 text-xs leading-relaxed text-zinc-600">Every repair shop says they are careful. These are the four things we can actually prove — and why other shops quietly send us their board-level work.</p>
             <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
@@ -1267,11 +1267,11 @@ export const finalSiteHtml = `
     </section>
 
     <!-- 19. FINAL CTA -->
-    <section class="bg-zinc-950 py-12 text-center text-white">
+    <section class="border-t border-red-200 bg-[#F7F3EE] py-12 text-center text-zinc-900">
       <div class="mx-auto max-w-3xl px-4">
-        <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-400">Apple Repair · Halasuru, Bengaluru</div>
+        <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-600">Apple Repair · Halasuru, Bengaluru</div>
         <h2 class="heading-breathe mt-2 font-display text-3xl font-extrabold sm:text-4xl">Your Apple Device, <span class="text-brand-grad">Fixed Right.</span></h2>
-        <p class="mt-2 text-xs text-zinc-400 sm:text-sm">Tell us the device and the fault. We'll send a fixed estimate and a convenient slot — usually within minutes. Apple Device Repairs, Perfected.</p>
+        <p class="mt-2 text-xs text-zinc-600 sm:text-sm">Tell us the device and the fault. We'll send a fixed estimate and a convenient slot — usually within minutes. Apple Device Repairs, Perfected.</p>
         <div class="mt-5 flex flex-wrap justify-center gap-3">
           <a href="#estimate" class="dock-quote-btn rounded-full px-6 py-3 text-xs font-extrabold text-white">Get Instant Estimate</a>
           <a href="tel:+918660663776" class="rounded-full border border-zinc-700 bg-zinc-900 px-6 py-3 font-mono-num text-xs font-bold text-white hover:border-orange-500">+91 86606 63776</a>
@@ -1281,13 +1281,13 @@ export const finalSiteHtml = `
   </main>
 
   <!-- 20. COMPLETE 4-COLUMN FOOTER WITH ENLARGED STORE PHOTO, SOCIAL/DIRECTORY HUB & TRACKED PIXEL FORGE CREDIT -->
-  <footer id="footer-contact" class="premium-footer border-t border-red-100 bg-white/75 pt-12 text-xs text-zinc-600">
+  <footer id="footer-contact" class="premium-footer border-t border-red-100 bg-white/75 pb-28 pt-12 text-xs text-zinc-600">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
       <!-- Enlarged Real Store Photo Banner -->
       <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
-        <div class="orange-glass-wrap h-64 overflow-hidden rounded-2xl bg-zinc-900 lg:col-span-5 sm:h-72">
+        <div class="studio-photo-frame h-64 overflow-hidden rounded-2xl bg-zinc-900 lg:col-span-5 sm:h-72">
           <img loading="lazy" decoding="async" src="/images/gallery/store-glass-front.webp" alt="Live repair bench at our Halasuru store — technician with a restored iPhone" class="aspect-square h-full w-full object-cover object-center" onerror="this.src='/images/gallery/store-glass-front.webp'">
-          <div class="orange-glass-sweep"></div>
+          <span class="studio-laser-hairline" aria-hidden="true"></span>
         </div>
         <div class="lg:col-span-7">
           <div class="font-display text-lg font-extrabold text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair Store</div>
@@ -1380,7 +1380,7 @@ export const finalSiteHtml = `
   </button>
 
   <!-- Surprise: Non-Annoying 10-Second Auto-Dismiss AI Concierge Toast (Triggers after 3 mins active browsing or manual preview) -->
-  <div id="ai-auto-toast" class="fixed bottom-[148px] right-4 z-40 hidden w-72 rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-2xl">
+  <div id="ai-auto-toast" class="fixed bottom-[96px] right-4 z-40 hidden w-72 rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-2xl">
     <div class="flex items-start justify-between gap-2">
       <div>
         <div class="text-xs font-extrabold text-zinc-950">Need a fixed Apple repair quote?</div>

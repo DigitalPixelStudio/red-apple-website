@@ -18,7 +18,7 @@ export default function PricingSection() {
           </p>
           <h2 className="section-title">Apple India vs Red Apple</h2>
           <p className="section-subtitle mx-auto mt-4">
-            A like-for-like price comparison against authorised service centres, with
+            A like-for-like price comparison against standard brand mail-in centers, with
             OEM-grade parts and a 6 Months warranty. All prices are indicative — confirm
             the final figure at the store before work begins.
           </p>
