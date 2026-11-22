@@ -875,6 +875,8 @@
           const onTick = buildFn(root);
           const orbit = addOrbit(canvas, root, initY, initX);
           const slot = { canvas, ctx, scene, camera, root, orbit, onTick, visible: true };
+          canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); slot.contextLost = true; }, false);
+          canvas.addEventListener('webglcontextrestored', () => { slot.contextLost = false; slot.autoFramed = false; slot.autoWake = true; try { renderer.resetState(); } catch (_) {} }, false);
           slots.push(slot);
           if (io) io.observe(canvas);
           return slot;
@@ -1313,12 +1315,18 @@
               // tuned per model; machines/small models slightly bigger (0.94).
               const id = s.canvas.id;
               // Hero/IPad/Pickup tuned; others 0.94; tablet reduced.
+              // FROZEN: hero, pickup, airpods, watch — exact framing. ADJUSTED (mobile): iPad slight; TBK + MacBook medium.
+              const isMobileView = window.innerWidth < 768;
               let pad = 0.94;
-              if (id === 'canvas-hero') pad = 0.55;              // slight zoom in (was 0.58)
-              else if (id === 'canvas-pickup-iphone') pad = 0.62; // more zoom (was 0.72)
-              else if (id === 'canvas-estimate-ipad') pad = 0.82; // untouched
-              else if (id === 'canvas-tbk-oca') pad = 0.80;        // table press: slight more zoom (was 0.84)
-              else if (id === 'canvas-tbk-90l' || id === 'canvas-tbk-958') pad = 0.84; // other machinery
+              if (id === 'canvas-hero') pad = 0.55;
+              else if (id === 'canvas-pickup-iphone') pad = 0.62;
+              else if (id === 'canvas-airpods' || id === 'canvas-watch') pad = 0.94;
+              else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.82 * 1.14 : 0.82;
+              else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.80 * 1.26 : 0.80;
+              else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.84 * 1.26 : 0.84;
+              else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.84 * 1.28 : 0.84;
+              else if (id === 'canvas-macbook') pad = isMobileView ? 0.94 * 1.28 : 0.94;
+              else if (id === 'canvas-internals') pad = isMobileView ? 0.94 * 1.14 : 0.94;
               // Tablet: slight zoom across models (was 1.20 -> 1.14)
               if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
               centerAndFitEdgeToEdge(s.camera, s.root, pad);

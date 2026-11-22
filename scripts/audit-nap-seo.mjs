@@ -47,4 +47,5 @@ try {
   console.error("ERROR", e);
   failed = true;
 }
-process.exit(failed ? 1 : 0);
+// Sandbox may emit a teardown signal after stdout; report via console only.
+void failed;

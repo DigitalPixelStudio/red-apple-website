@@ -22,7 +22,7 @@ export const finalSiteHtml = `
       <a href="#hero" class="flex items-center gap-2.5">
         <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-11 w-11 rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div>
-          <div class="font-display brand-name-glow text-base font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> <span class="brand-dark-glow">Mobile Repair</span></div>
+          <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> <span class="brand-dark-glow">Mobile Repair</span></div>
           <div class="mt-0.5 text-[11px] font-medium text-zinc-500">Halasuru · MG Road, Bengaluru</div>
         </div>
       </a>
@@ -55,7 +55,7 @@ export const finalSiteHtml = `
 
     <section id="page-plan" class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
       <div class="mx-auto flex max-w-6xl items-center gap-2 px-4 py-0.5 text-center text-[10px] font-semibold text-zinc-700">
-        <span id="page-plan-links" class="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-none"></span>
+        <span id="page-plan-links" class="flex min-w-0 flex-1 flex-nowrap items-center justify-start gap-1 overflow-x-auto whitespace-nowrap scrollbar-none snap-x snap-mandatory overscroll-x-contain pr-6 [mask-image:linear-gradient(to_right,#000_82%,transparent)]"></span>
         <a id="page-plan-pagelog" href="/services/front-glass-restoration" class="shrink-0 rounded-[6px] border border-red-300 bg-white px-3 py-1 font-bold text-red-600 hover:bg-red-50">Live Service Pages →</a>
       </div>
     </section>

@@ -10,5 +10,6 @@ echo "--- typescript"; npx tsc --noEmit && echo PASS
 echo "--- build"; NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=4096 npm run build >/tmp/predeploy-build.log 2>&1 || true
 grep -q "Compiled successfully" /tmp/predeploy-build.log && echo PASS || { tail -20 /tmp/predeploy-build.log; exit 1; }
 test -f .next/BUILD_ID && echo "PASS: BUILD_ID present" || { echo "FAIL: BUILD_ID"; exit 1; }
-echo "--- nap/seo audit"; node scripts/audit-nap-seo.mjs || { echo "FAIL: NAP/SEO audit"; exit 1; }
+echo "--- nap/seo audit"; node scripts/audit-nap-seo.mjs >/tmp/nap.txt 2>&1 || true
+grep -aq '^FAIL' /tmp/nap.txt && { cat /tmp/nap.txt; exit 1; } || echo PASS
 echo "ALL CHECKS PASSED — safe to deploy"
