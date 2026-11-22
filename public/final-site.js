@@ -901,6 +901,50 @@
           } catch (e) { console.warn('centerAndFitEdgeToEdge skipped', e); }
         }
 
+        // v9: responsive per-model framing (Faisu's MODEL_FRAMING spec).
+        // ADAPTATION: we keep the document's fill math + 3/4 camera, but DO NOT call
+        // renderer.setSize/setPixelRatio here — the renderer is SHARED by all 10 stages
+        // and resizing it per slot reintroduces the old bottom-right shift bug.
+        const MODEL_FRAMING = {
+          'canvas-hero':          { mobileFill: 0.86, desktopFill: 0.84, fov: 36 },
+          'canvas-estimate-ipad': { mobileFill: 0.66, desktopFill: 0.68, fov: 40 },
+          'canvas-pickup-iphone': { mobileFill: 0.76, desktopFill: 0.74, fov: 38 },
+          'canvas-tbk-oca':       { mobileFill: 0.74, desktopFill: 0.76, fov: 40 },
+          'canvas-tbk-90l':       { mobileFill: 0.74, desktopFill: 0.76, fov: 40 },
+          'canvas-tbk-958':       { mobileFill: 0.74, desktopFill: 0.76, fov: 40 },
+          'canvas-internals':     { mobileFill: 0.76, desktopFill: 0.76, fov: 38 },
+          'canvas-airpods':       { mobileFill: 0.74, desktopFill: 0.74, fov: 38 },
+          'canvas-watch':         { mobileFill: 0.74, desktopFill: 0.74, fov: 38 },
+          'canvas-macbook':       { mobileFill: 0.76, desktopFill: 0.76, fov: 38 },
+        };
+        function centerAndFitResponsive(camera, root, id) {
+          try {
+            root.updateWorldMatrix(true, true);
+            const raw = new THREE.Box3().setFromObject(root, true).getBoundingSphere(new THREE.Sphere());
+            if (raw.radius > 0) root.scale.multiplyScalar(2.0 / raw.radius);
+            root.position.set(0, 0, 0);
+            root.updateWorldMatrix(true, true);
+            const c = new THREE.Box3().setFromObject(root).getCenter(new THREE.Vector3());
+            root.position.sub(c);
+            root.updateWorldMatrix(true, true);
+            const r = new THREE.Box3().setFromObject(root).getBoundingSphere(new THREE.Sphere()).radius;
+            const cfg = MODEL_FRAMING[id] || { mobileFill: 0.74, desktopFill: 0.74, fov: 38 };
+            camera.fov = cfg.fov;
+            const vFov = THREE.MathUtils.degToRad(camera.fov);
+            const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+            const minHalf = Math.min(vFov, hFov) / 2;
+            const isPortrait = camera.aspect < 0.95;
+            const fill = isPortrait ? cfg.mobileFill : cfg.desktopFill;
+            const dist = r / (Math.sin(minHalf) * fill);
+            camera.position.set(dist * 0.22, dist * 0.12, dist * 0.96);
+            camera.near = Math.max(0.05, dist - r * 3);
+            camera.far = dist + r * 4;
+            camera.lookAt(0, 0, 0);
+            camera.updateProjectionMatrix();
+            return { radius: r, distance: dist, fill };
+          } catch (e) { return centerAndFitEdgeToEdge(camera, root, 0.8); }
+        }
+
         function registerSlot(canvasId, camZ, buildFn, initY = -0.4, initX = 0.12) {
           const canvas = document.getElementById(canvasId);
           if (!canvas) return null;
@@ -1394,28 +1438,10 @@
             }
             if ((!s.autoFramed || s.autoWake) && cw && ch) { s.autoWake = false;
               s.autoFramed = true;
-              // First 3 device models (hero iPhone, estimate iPad, pickup iPhone) zoom in
-              // tuned per model; machines/small models slightly bigger (0.94).
+              // v9: responsive MODEL_FRAMING — mobileFill vs desktopFill, min(vFov,hFov),
+              // exact [0,0,0] centring and a 3/4 camera angle. Shared renderer untouched.
               const id = s.canvas.id;
-              // Hero/IPad/Pickup tuned; others 0.94; tablet reduced.
-              // FROZEN: hero, pickup, airpods, watch — exact framing. ADJUSTED (mobile): iPad slight; TBK + MacBook medium.
-              const isMobileView = window.innerWidth < 768;
-              // v7 ELITE: smaller pad = bigger, bolder model. Every value is LOWER than v9 —
-              // no model shrinks. Bounding-sphere fit still guarantees zero crop on 360 spin.
-              let pad = 0.80;
-              if (id === 'canvas-hero') pad = 0.50;
-              else if (id === 'canvas-pickup-iphone') pad = 0.55;
-              else if (id === 'canvas-airpods') pad = isMobileView ? 0.76 * 1.06 : 0.76; // v8: slight-to-medium zoom in
-              else if (id === 'canvas-watch') pad = 0.82; // untouched
-              else if (id === 'canvas-estimate-ipad') pad = isMobileView ? 0.70 * 1.14 : 0.70; // v8: slight zoom in + centred 3/4
-              else if (id === 'canvas-tbk-oca') pad = isMobileView ? 0.68 * 1.10 : 0.68;
-              else if (id === 'canvas-tbk-90l') pad = isMobileView ? 0.70 * 1.10 : 0.70;
-              else if (id === 'canvas-tbk-958') pad = isMobileView ? 0.70 * 1.12 : 0.70;
-              else if (id === 'canvas-macbook') pad = isMobileView ? 0.70 * 1.28 : 0.70; // v8: medium zoom in + fix stretch
-              else if (id === 'canvas-internals') pad = isMobileView ? 0.80 * 1.14 : 0.80;
-              // Tablet: slight zoom across models (was 1.20 -> 1.14)
-              if (window.innerWidth >= 768 && window.innerWidth <= 1100 && id !== 'canvas-hero' && id !== 'canvas-pickup-iphone') pad = pad * 1.14;
-              centerAndFitEdgeToEdge(s.camera, s.root, pad);
+              centerAndFitResponsive(s.camera, s.root, id);
             }
             if (typeof ResizeObserver === 'undefined') { s.camera.aspect = cw / ch; s.camera.updateProjectionMatrix(); }
             s.orbit.update(s === heroSlot && heroAmbient ? 0.0028 : 0.0016);

@@ -24,11 +24,10 @@ const nextConfig: NextConfig = {
         has: [{ type: "header", key: "host", value: ".*\\.vercel\\.app(?::\\d+)?" }],
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
-      {
-        source: "/(.*)",
-        has: [{ type: "header", key: "x-vercel-deployment-url", value: ".*\\.vercel\\.app(?::\\d+)?" }],
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
-      },
+      // CRITICAL: do NOT add an x-vercel-deployment-url rule here. Vercel injects a
+      // *.vercel.app value into that header even on the production domain, which made
+      // www.redmobilerepair.in serve `noindex, nofollow` and deindex itself (v8 regression).
+      // The host rule above already covers every staging clone.
     ];
   },
 };

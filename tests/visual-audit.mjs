@@ -8,7 +8,7 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (34 total = 23 legacy + 11 v8):
+ * GATES (50 total = 34 legacy/v8 + 16 v9):
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -31,6 +31,17 @@
  *       Never FAILs solely because of no-WebGL.
  *   12. per: all 10 .stage-3d-box wrappers carry .stage-3d-orange-bg
  *   13. per: #ambient-particles host exists in DOM
+ *   v9 NEW (3 per viewport + 7 responsive = 16):
+ *    14. per: hero top -> first real content flow wrapper < 80px (blank-gap guard).
+ *            Catches the 608px regression from orbs in flow; h1 / "Open now" pill
+ *            gaps reported as evidence (they sit ~93-145px down by design at >=sm
+ *            because the grid uses items-center beside a 600px stage).
+ *    15. per: both #hero .ambient-orb computed position === 'absolute'.
+ *    16. per: "Drag to orbit 360°" and "iPhone 17 Pro Max · Orange" pills do not intersect.
+ *    17-19: #full-price-grid computed columns = 1 @390px, 2 @768px, 3 @1440px.
+ *    20-21: footer wrapper computed columns = 1 @390px, 4 @1440px.
+ *    22: footer mailto anchor overflow-wrap === 'break-word'.
+ *    23: all 4 footer column headings computed textAlign === 'left'.
  *
  * Gift: `node tests/visual-audit.mjs --shots` writes one screenshot per viewport
  * to tests/shots/ for eyeball review. Set SHOTS_FULL=1 for full-page captures.
@@ -50,6 +61,13 @@ const SHOTS = process.argv.includes('--shots');
 const SHOTS_FULL = process.env.SHOTS_FULL === '1';
 const SHOTS_DIR = process.env.SHOTS_DIR || path.join(SCRIPT_DIR, 'shots');
 const OVERLAP_TOLERANCE_PX = 1; // ignore sub-pixel/rounding-only intersections
+
+// v9 anchors (blank-gap guard + responsive layout). All are pure DOM/computed-
+// style measurements — no WebGL, no canvas pixels, no string-only heuristics.
+const HERO_GAP_MAX_PX = 80;          // hero top -> first real content top
+const FULL_PRICE_GRID_EXPECT = { 390: 1, 768: 2, 1440: 3 };
+const FOOTER_COLS_EXPECT = { 390: 1, 1440: 4 };
+const RESPONSIVE_WIDTHS = [390, 768, 1440];
 
 // v8 source anchors (read once; shared by the global source gates and the
 // fullscreen SOURCE-CHECK fallback). Exact strings from the shipped v8 files.
@@ -133,6 +151,17 @@ function intersection(a, b) {
 function boxesOverlap(a, b) {
   const i = intersection(a, b);
   return !!i && i.w > OVERLAP_TOLERANCE_PX && i.h > OVERLAP_TOLERANCE_PX;
+}
+// Count columns from a computed grid-template-columns value. Chromium resolves
+// fr tracks to used px ("460px 460px 460px"), but tolerate an unresolved
+// repeat(N, ...) form too so the gate never miscounts on a rendering diff.
+function gridColumns(value) {
+  if (!value) return 0;
+  const v = String(value).trim();
+  if (!v || v === 'none') return 0;
+  const rep = v.match(/^repeat\(\s*(\d+)\s*,/i);
+  if (rep) return Number(rep[1]);
+  return v.split(/\s+/).filter(Boolean).length;
 }
 
 /* ------------------------------------------------------------------ *
@@ -307,6 +336,61 @@ async function main() {
       const ambCount = await page.locator('#ambient-particles').count();
       record(ambCount > 0, `${vp.name}: #ambient-particles host present`, `count=${ambCount}`);
 
+      /* ---- v9 GATE 14: hero content flow starts < 80px below #hero top ---- */
+      // The 608px regression was caused by decorative orbs staying in flow and
+      // displacing the hero's FIRST REAL CONTENT WRAPPER. Guard that wrapper with
+      // the strict <80px threshold (that is the element that actually moved), and
+      // report the h1 / "Open now" pill gaps as evidence.
+      // NOTE: at >=sm the grid uses `items-center` with a 600px stage beside a
+      // ~452px text column, so h1/pill legitimately sit ~93-145px below the hero
+      // top BY DESIGN. Gating on those with <80 would false-fail on correct code.
+      // Bug simulation (orbs forced position:relative): wrapper 28px -> 636px,
+      // pill 107px -> 715px — a clean +608px regression signal either way.
+      const heroGap = await page.evaluate(() => {
+        const hero = document.getElementById('hero');
+        if (!hero) return { ok: false, reason: 'no #hero' };
+        const inner = hero.querySelector(':scope > .relative.z-10');
+        const h1 = hero.querySelector('h1');
+        const clock = document.getElementById('live-ist-clock'); // "Open now · ..." pill
+        if (!inner) return { ok: false, reason: 'no hero content wrapper' };
+        const heroTop = hero.getBoundingClientRect().top;
+        return {
+          ok: true,
+          gap: inner.getBoundingClientRect().top - heroTop,
+          heroTop,
+          pillGap: clock ? clock.getBoundingClientRect().top - heroTop : null,
+          h1Gap: h1 ? h1.getBoundingClientRect().top - heroTop : null,
+        };
+      });
+      record(heroGap.ok && heroGap.gap >= -1 && heroGap.gap < HERO_GAP_MAX_PX,
+        `${vp.name}: hero content flow starts < ${HERO_GAP_MAX_PX}px below #hero top (blank-gap guard)`,
+        heroGap.ok
+          ? `flowGap=${heroGap.gap.toFixed(1)}px heroTop=${heroGap.heroTop.toFixed(1)} ` +
+            `pillGap=${heroGap.pillGap === null ? 'n/a' : `${heroGap.pillGap.toFixed(1)}px`} ` +
+            `h1Gap=${heroGap.h1Gap === null ? 'n/a' : `${heroGap.h1Gap.toFixed(1)}px`}`
+          : heroGap.reason,
+        'DOM-CHECK');
+
+      /* ---- v9 GATE 15: both #hero .ambient-orb are position:absolute ---- */
+      const orbPositions = await page.locator('#hero .ambient-orb').evaluateAll(
+        (els) => els.map((el) => getComputedStyle(el).position));
+      const orbsOk = orbPositions.length === 2 && orbPositions.every((p) => p === 'absolute');
+      record(orbsOk, `${vp.name}: both #hero .ambient-orb are position:absolute`,
+        `count=${orbPositions.length} positions=${JSON.stringify(orbPositions)} (expected 2 × absolute)`,
+        'DOM-CHECK');
+
+      /* ---- v9 GATE 16: Drag pill and iPhone pill bounding boxes do not intersect ---- */
+      const dragPill = page.locator('#hero #hero-hud');
+      const iphonePill = page.locator('#hero').getByText('iPhone 17 Pro Max · Orange', { exact: true }).first();
+      const dragBox = (await dragPill.count()) ? await dragPill.boundingBox() : null;
+      const iphoneBox = (await iphonePill.count()) ? await iphonePill.boundingBox() : null;
+      const pillOv = intersection(dragBox, iphoneBox);
+      const pillsOk = !!dragBox && !!iphoneBox && !boxesOverlap(dragBox, iphoneBox);
+      record(pillsOk, `${vp.name}: Drag pill & iPhone pill do not intersect`,
+        `drag[${fmtBox(dragBox)}] iphone[${fmtBox(iphoneBox)}] ` +
+        `intersection=${pillOv ? `${pillOv.w.toFixed(1)}x${pillOv.h.toFixed(1)}px` : 'n/a'}`,
+        'DOM-CHECK');
+
       /* ---- LEGACY: no app JS errors (HMR/Turbopack teardown noise ignored) ---- */
       const devNoise = pageErrors.filter((e) => /turbopack|hmr-client/i.test(e));
       const appErrors = pageErrors.filter((e) => !/turbopack|hmr-client/i.test(e));
@@ -334,6 +418,79 @@ async function main() {
       }
       await context.close();
     }
+
+    /* ---- v9 GATES 17-23: responsive computed grid columns + footer details ---- */
+    // These are layout gates, not tied to a single deviceScaleFactor, so they
+    // use their own dpr=1 context and resize across the exact widths specified.
+    console.log('\n--- v9 responsive gates: computed grid columns + footer ---');
+    const respContext = await browser.newContext({
+      viewport: { width: 390, height: 900 }, deviceScaleFactor: 1,
+    });
+    const respPage = await respContext.newPage();
+    await respPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await respPage.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
+    async function setRespWidth(w) {
+      await respPage.setViewportSize({ width: w, height: 900 });
+      await respPage.waitForTimeout(200);
+    }
+
+    // 17-19: #full-price-grid columns — 1 @390, 2 @768, 3 @1440.
+    for (const w of RESPONSIVE_WIDTHS) {
+      await setRespWidth(w);
+      const fp = await respPage.evaluate(() => {
+        const el = document.getElementById('full-price-grid');
+        if (!el) return { ok: false, reason: 'no #full-price-grid' };
+        const v = getComputedStyle(el).gridTemplateColumns;
+        return { ok: true, value: v };
+      });
+      const cols = fp.ok ? gridColumns(fp.value) : 0;
+      const expected = FULL_PRICE_GRID_EXPECT[w];
+      record(fp.ok && cols === expected,
+        `v9 responsive: #full-price-grid columns @${w}px = ${expected}`,
+        fp.ok ? `computed="${fp.value}" cols=${cols} expected=${expected}` : fp.reason,
+        'DOM-CHECK');
+    }
+
+    // 20-21: footer wrapper columns — 1 @390, 4 @1440.
+    for (const w of [390, 1440]) {
+      await setRespWidth(w);
+      const fc = await respPage.evaluate(() => {
+        const wrap = [...document.querySelectorAll('#footer-contact div')].find(
+          (el) => typeof el.className === 'string' && el.className.includes('lg:grid-cols-4'));
+        if (!wrap) return { ok: false, reason: 'no footer 4-col wrapper (lg:grid-cols-4)' };
+        return { ok: true, value: getComputedStyle(wrap).gridTemplateColumns };
+      });
+      const cols = fc.ok ? gridColumns(fc.value) : 0;
+      const expected = FOOTER_COLS_EXPECT[w];
+      record(fc.ok && cols === expected,
+        `v9 responsive: footer wrapper columns @${w}px = ${expected}`,
+        fc.ok ? `computed="${fc.value}" cols=${cols} expected=${expected}` : fc.reason,
+        'DOM-CHECK');
+    }
+
+    // 22: footer mailto anchor overflow-wrap=break-word (check at 390px).
+    await setRespWidth(390);
+    const mail = await respPage.evaluate(() => {
+      const a = document.querySelector('#footer-contact a[href^="mailto:"]');
+      if (!a) return { ok: false, reason: 'no footer mailto anchor' };
+      return { ok: true, value: getComputedStyle(a).overflowWrap, href: a.getAttribute('href') };
+    });
+    record(mail.ok && mail.value === 'break-word',
+      'v9 responsive: footer mailto anchor overflow-wrap=break-word',
+      mail.ok ? `overflowWrap="${mail.value}" href=${mail.href}` : mail.reason,
+      'DOM-CHECK');
+
+    // 23: all 4 footer column headings computed textAlign=left.
+    const heads = await respPage.evaluate(() =>
+      [...document.querySelectorAll('#footer-contact .font-display.uppercase')].map((el) => ({
+        text: el.textContent.trim(), align: getComputedStyle(el).textAlign,
+      })));
+    const headsOk = heads.length === 4 && heads.every((h) => h.align === 'left');
+    record(headsOk, 'v9 responsive: all 4 footer column headings textAlign=left',
+      `count=${heads.length} (expected 4) aligns=${JSON.stringify(heads.map((h) => `${h.text}:${h.align}`))}`,
+      'DOM-CHECK');
+
+    await respContext.close();
   } finally {
     await browser.close();
   }

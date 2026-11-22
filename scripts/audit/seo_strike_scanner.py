@@ -16,13 +16,24 @@ Fetches the ten public routes with a Googlebot UA and asserts:
   (h) source src/app/final-site.css has NO ACTIVE declaration of the retired
       ambient animations (laserDrift|ambientDrift|shimmerLine|gridBreathe|
       sparkleFloat). Commented-out CSS does not count as active.
+  (i) HARD GATE: no fetched HTML route serves an X-Robots-Tag response header
+      containing 'noindex'/'nofollow', AND every SSR <meta name=robots> contains
+      'index'. Grew out of the v8 regression where an x-vercel-deployment-url
+      header rule made PRODUCTION serve `noindex, nofollow` and self-deindex.
+  (j) HARD GATE: next.config.ts keeps the `host` + *.vercel.app noindex shield
+      AND contains NO `has` rule keyed on `x-vercel-deployment-url` (the exact
+      regression that fired on the production domain).
+  (k) src/app/final-site.css keeps the ambient-orb blank-gap guard:
+      `:not(.ambient-orb)` and `.ambient-orb { position: absolute !important`.
+  (l) src/lib/final-site-html.ts keeps the v9 price-grid responsive classes
+      (`full-price-grid` with grid-cols-1 sm:grid-cols-2 lg:grid-cols-3) and the
+      footer grid-cols-1 + break-words email guard.
+  (m) public/final-site.js keeps the v9 MODEL_FRAMING + centerAndFitResponsive
+      framing implementation.
 
-Checks (a)-(f) reflect what is actually deployed live. Checks (g)/(h) read local
-repo source and are EXPECTED TO FAIL until the FE work lands (number animation
-and ambient CSS drift removal); they are forward gates for that cleanup.
-
+Checks (a)-(f) reflect deployed live state; (g)-(m) read local repo source.
 Prints PASS/FAIL per check, exits 1 on any FAIL.
-Gift: --json for machine-readable output.
+Gift: --json for machine-readable output (now includes live response headers).
 """
 from __future__ import annotations
 
@@ -44,6 +55,8 @@ TIMEOUT_SECONDS = 20
 SOURCE_ROOT = Path(__file__).resolve().parents[2]
 JS_SOURCE = SOURCE_ROOT / "public" / "final-site.js"
 CSS_SOURCE = SOURCE_ROOT / "src" / "app" / "final-site.css"
+HTML_SOURCE = SOURCE_ROOT / "src" / "lib" / "final-site-html.ts"
+NEXT_CONFIG = SOURCE_ROOT / "next.config.ts"
 
 HTML_ROUTES = (
     "/",
@@ -92,9 +105,63 @@ CSS_ACTIVE_ANIM_RE = re.compile(
     r"animation(?:-name)?\s*:\s*[^;}]*?\b(" + "|".join(CSS_ANIM_NAMES) + r")\b"
 )
 
+# (i) response-header + SSR meta-robots guards.
+META_TAG_RE = re.compile(r"<meta\b[^>]*>", re.IGNORECASE)
+META_NAME_RE = re.compile(r"\bname\s*=\s*['\"]([^'\"]*)['\"]", re.IGNORECASE)
+META_CONTENT_RE = re.compile(r"\bcontent\s*=\s*['\"]([^'\"]*)['\"]", re.IGNORECASE)
+FORBIDDEN_XROBOTS_TOKENS = ("noindex", "nofollow")
 
-def fetch(base_url: str, path: str) -> tuple[int | None, str, str | None]:
-    """Return (http_status, decoded_body, error). Never raises."""
+# (j) next.config.ts shield guard. Comments are stripped so the explanatory
+# warning comment about the regression cannot itself trip the forbidden rule.
+TS_BLOCK_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+TS_LINE_COMMENT_RE = re.compile(r"//[^\n]*")
+# A single rule: has[{key:"host", value:"...vercel.app..."}] ... X-Robots-Tag:noindex
+SHIELD_RULE_RE = re.compile(
+    r"key\s*:\s*['\"]host['\"]\s*,?\s*value\s*:\s*['\"][^'\"]*vercel\\*\.\\*app[^'\"]*['\"]"
+    r"[\s\S]{0,500}?['\"]X-Robots-Tag['\"]\s*,\s*value\s*:\s*['\"][^'\"]*noindex[^'\"]*['\"]",
+    re.IGNORECASE,
+)
+FORBIDDEN_DEPLOY_HEADER_RE = re.compile(r"x-vercel-deployment-url", re.IGNORECASE)
+
+# (k)/(l)/(m) v9 source-gate patterns.
+AMBIENT_ORB_NOT_RE = re.compile(r":not\(\s*\.ambient-orb\s*\)")
+AMBIENT_ORB_FLOW_RE = re.compile(r"\.ambient-orb\s*\{\s*position:\s*absolute\s*!important")
+PRICE_GRID_RE = re.compile(
+    r"id=['\"]full-price-grid['\"][^>]*class=['\"][^'\"]*"
+    r"grid-cols-1[^'\"]*sm:grid-cols-2[^'\"]*lg:grid-cols-3[^'\"]*['\"]"
+)
+FOOTER_GRID_RE = re.compile(r"4 Footer Columns[\s\S]{0,200}?grid-cols-1")
+EMAIL_BREAK_RE = re.compile(
+    r"mailto:support@redmobilerepair\.in['\"][^>]*class=['\"][^'\"]*break-words[^'\"]*['\"]"
+)
+
+
+def headers_to_dict(headers) -> dict[str, str]:
+    """Normalise an email.message.Message (or None) to a lower-keyed dict."""
+    if not headers:
+        return {}
+    try:
+        return {str(k).lower(): str(v) for k, v in headers.items()}
+    except Exception:  # pragma: no cover - defensive
+        return {}
+
+
+def meta_robots_contents(html: str) -> list[str]:
+    """Return the content attribute of every <meta name="robots"> tag."""
+    contents: list[str] = []
+    for tag in META_TAG_RE.findall(html):
+        name = META_NAME_RE.search(tag)
+        if not name or name.group(1).strip().lower() != "robots":
+            continue
+        content = META_CONTENT_RE.search(tag)
+        contents.append(content.group(1) if content else "")
+    return contents
+
+
+def fetch(
+    base_url: str, path: str
+) -> tuple[int | None, str, dict[str, str], str | None]:
+    """Return (http_status, decoded_body, response_headers, error). Never raises."""
     url = base_url.rstrip("/") + path
     request = Request(
         url,
@@ -103,15 +170,15 @@ def fetch(base_url: str, path: str) -> tuple[int | None, str, str | None]:
     try:
         with urlopen(request, timeout=TIMEOUT_SECONDS) as response:  # noqa: S310
             body = response.read().decode("utf-8", errors="replace")
-            return response.status, body, None
+            return response.status, body, headers_to_dict(response.headers), None
     except HTTPError as exc:
         try:
             body = exc.read().decode("utf-8", errors="replace")
         except Exception:  # pragma: no cover - defensive
             body = ""
-        return exc.code, body, f"HTTP {exc.code}"
+        return exc.code, body, headers_to_dict(exc.headers), f"HTTP {exc.code}"
     except (URLError, OSError, TimeoutError) as exc:
-        return None, "", str(exc)
+        return None, "", {}, str(exc)
 
 
 def snippet(text: str, needle: str, width: int = 60) -> str:
@@ -132,8 +199,13 @@ def main() -> int:
 
     pages: dict[str, dict] = {}
     for path in ALL_ROUTES:
-        status, body, error = fetch(args.base_url, path)
-        pages[path] = {"status": status, "body": body, "error": error}
+        status, body, headers, error = fetch(args.base_url, path)
+        pages[path] = {
+            "status": status,
+            "body": body,
+            "headers": headers,
+            "error": error,
+        }
 
     checks: list[dict] = []
 
@@ -274,6 +346,126 @@ def main() -> int:
             else "active animation declaration(s): " + ", ".join(active_animations),
         )
 
+    # (i) HARD GATE — no noindex/nofollow may leak onto a production HTML route.
+    i_hits: list[str] = []
+    for path in HTML_ROUTES:
+        page = pages[path]
+        xrobots = page["headers"].get("x-robots-tag", "")
+        if any(token in xrobots.lower() for token in FORBIDDEN_XROBOTS_TOKENS):
+            i_hits.append(f"{path}: X-Robots-Tag={xrobots!r}")
+        contents = meta_robots_contents(page["body"])
+        if not contents:
+            i_hits.append(f"{path}: missing <meta name=robots>")
+        elif not any("index" in c.lower() for c in contents):
+            i_hits.append(f"{path}: meta robots={contents!r} lacks 'index'")
+    add(
+        "i_no_noindex_on_production",
+        not i_hits,
+        "all HTML routes: no noindex/nofollow header; meta robots contains 'index'"
+        if not i_hits
+        else "NOINDEX EXPOSURE: " + " | ".join(i_hits),
+    )
+
+    # (j) HARD GATE — next.config.ts source must keep the shield and drop the
+    # x-vercel-deployment-url rule that caused the v8 deindex regression.
+    try:
+        config_raw = NEXT_CONFIG.read_text(encoding="utf-8")
+        config_error = None
+    except OSError as exc:  # pragma: no cover - defensive
+        config_raw, config_error = "", str(exc)
+    if config_error:
+        add(
+            "j_noindex_shield_source",
+            False,
+            f"cannot read {NEXT_CONFIG}: {config_error}",
+        )
+    else:
+        config_code = TS_BLOCK_COMMENT_RE.sub("", config_raw)
+        config_code = TS_LINE_COMMENT_RE.sub("", config_code)
+        j_problems: list[str] = []
+        if not SHIELD_RULE_RE.search(config_code):
+            j_problems.append("missing host + *.vercel.app X-Robots-Tag:noindex shield")
+        if FORBIDDEN_DEPLOY_HEADER_RE.search(config_code):
+            j_problems.append("FORBIDDEN x-vercel-deployment-url has-rule present")
+        add(
+            "j_noindex_shield_source",
+            not j_problems,
+            "next.config.ts keeps host/.vercel.app shield and has no x-vercel-deployment-url rule"
+            if not j_problems
+            else "; ".join(j_problems),
+        )
+
+    # (k) ambient-orb blank-gap guard in CSS.
+    if css_error:
+        add(
+            "k_ambient_orb_blank_gap_guard",
+            False,
+            f"cannot read {CSS_SOURCE}: {css_error}",
+        )
+    else:
+        k_missing: list[str] = []
+        if not AMBIENT_ORB_NOT_RE.search(css_text):
+            k_missing.append(":not(.ambient-orb)")
+        if not AMBIENT_ORB_FLOW_RE.search(css_text):
+            k_missing.append(".ambient-orb { position: absolute !important")
+        add(
+            "k_ambient_orb_blank_gap_guard",
+            not k_missing,
+            "ambient-orb blank-gap guard present in src/app/final-site.css"
+            if not k_missing
+            else "missing CSS guard(s): " + ", ".join(k_missing),
+        )
+
+    # (l) v9 price-grid + footer layout guard in the SSR HTML template.
+    try:
+        html_src = HTML_SOURCE.read_text(encoding="utf-8")
+        html_error = None
+    except OSError as exc:  # pragma: no cover - defensive
+        html_src, html_error = "", str(exc)
+    if html_error:
+        add(
+            "l_v9_layout_source",
+            False,
+            f"cannot read {HTML_SOURCE}: {html_error}",
+        )
+    else:
+        l_missing: list[str] = []
+        if not PRICE_GRID_RE.search(html_src):
+            l_missing.append(
+                "full-price-grid with grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            )
+        if not FOOTER_GRID_RE.search(html_src):
+            l_missing.append("footer grid-cols-1")
+        if not EMAIL_BREAK_RE.search(html_src):
+            l_missing.append("footer email break-words")
+        add(
+            "l_v9_layout_source",
+            not l_missing,
+            "v9 price-grid + footer grid/break-words guard present in final-site-html.ts"
+            if not l_missing
+            else "missing HTML guard(s): " + ", ".join(l_missing),
+        )
+
+    # (m) v9 responsive model framing must remain in the JS source.
+    if js_error:
+        add(
+            "m_v9_model_framing",
+            False,
+            f"cannot read {JS_SOURCE}: {js_error}",
+        )
+    else:
+        m_missing = [
+            token for token in ("MODEL_FRAMING", "centerAndFitResponsive")
+            if token not in js_text
+        ]
+        add(
+            "m_v9_model_framing",
+            not m_missing,
+            "MODEL_FRAMING + centerAndFitResponsive present in public/final-site.js"
+            if not m_missing
+            else "missing JS token(s): " + ", ".join(m_missing),
+        )
+
     violations = [c["detail"] for c in checks if not c["ok"]]
     ok = not violations
     result = {
@@ -282,7 +474,13 @@ def main() -> int:
         "user_agent": GOOGLEBOT_UA,
         "routes_checked": list(ALL_ROUTES),
         "statuses": {p: pages[p]["status"] for p in ALL_ROUTES},
-        "source_files": {"js": str(JS_SOURCE), "css": str(CSS_SOURCE)},
+        "response_headers": {p: pages[p]["headers"] for p in ALL_ROUTES},
+        "source_files": {
+            "js": str(JS_SOURCE),
+            "css": str(CSS_SOURCE),
+            "html": str(HTML_SOURCE),
+            "next_config": str(NEXT_CONFIG),
+        },
         "checks": checks,
         "violations": violations,
     }

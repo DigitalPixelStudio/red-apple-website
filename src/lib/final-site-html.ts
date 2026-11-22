@@ -107,8 +107,8 @@ export const finalSiteHtml = `
           <div class="lg:col-span-6">
             <div class="stage-3d-box stage-3d-orange-bg relative h-[520px] w-full rounded-3xl border border-zinc-800 shadow-2xl sm:h-[600px]">
               <canvas id="canvas-hero" aria-label="Interactive 4D iPhone 17 Pro Max Orange"></canvas>
-              <div id="hero-hud" class="pointer-events-none absolute left-3 top-3 rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360° · HD Keynote Animation</div>
-              <div class="pointer-events-none absolute right-3 top-3 rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
+              <div id="hero-hud" class="pointer-events-none absolute bottom-3 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full bg-zinc-950/80 px-3 py-1 text-[11px] font-semibold text-zinc-200">Drag to orbit 360°</div>
+              <div class="pointer-events-none absolute left-3 top-3 z-20 max-w-[85%] rounded-full border border-orange-500/40 bg-orange-950/85 px-3 py-1 font-mono-num text-[11px] font-bold text-orange-300">iPhone 17 Pro Max · Orange</div>
             </div>
           </div>
         </div>
@@ -698,7 +698,7 @@ export const finalSiteHtml = `
             </div>
             <input id="price-search" type="text" placeholder="Filter model (e.g. 16 Pro)..." class="rounded-full border border-zinc-300 bg-zinc-50 px-4 py-2 text-xs outline-none focus:border-red-600">
           </div>
-          <div id="full-price-grid" class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4"></div>
+          <div id="full-price-grid" class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"></div>
         </div>
       </div>
     </section>
@@ -1307,7 +1307,7 @@ export const finalSiteHtml = `
       </div>
 
       <!-- 4 Footer Columns -->
-      <div class="grid grid-cols-2 gap-6 pb-8 md:grid-cols-4">
+      <div class="grid grid-cols-1 gap-6 pb-8 text-left sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Services</div>
           <ul class="mt-2.5 space-y-1.5">
@@ -1342,7 +1342,7 @@ export const finalSiteHtml = `
             <li><button id="copy-address" type="button" class="hover:underline hover:text-red-600">Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
             <li class="font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
             <li><a href="tel:+918660663776" class="font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
-            <li><a href="mailto:support@redmobilerepair.in" class="font-semibold text-red-600">support@redmobilerepair.in</a></li>
+            <li><a href="mailto:support@redmobilerepair.in" class="text-xs break-words font-semibold text-red-600">support@redmobilerepair.in</a></li>
           </ul>
         </div>
       </div>

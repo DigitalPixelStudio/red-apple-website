@@ -44,6 +44,8 @@
       will-change: auto;
       animation: none !important;
     }
+    /* Defensive: decorative orbs MUST stay out of normal flow (blank-gap guard) */
+    .ambient-orb { position: absolute !important; }
     /* Signature Orange Glass-Sweep Shimmer */
     /* Section Backgrounds with Smooth Ambient Motion */
     .ambient-warm {
@@ -270,7 +272,7 @@
       animation: none !important;
       contain: strict;
     }
-    .laser-stage > *:not(.laser-line) { position: relative; z-index: 1; }
+    .laser-stage > *:not(.laser-line):not(.ambient-orb) { position: relative; z-index: 1; }
     /* Lazy reveal for machine cards & 3D stages */
     .laser-stage .reveal-up:nth-child(2) { transition-delay: 70ms; }
     .laser-stage .reveal-up:nth-child(3) { transition-delay: 140ms; }
