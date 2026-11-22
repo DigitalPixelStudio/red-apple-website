@@ -757,6 +757,13 @@
         // times regress, then restores it when the device has headroom again.
         let adaptiveDpr = dpr, perfAcc = 0, perfFrames = 0;
         const MAX_W = 1280, MAX_H = 960;
+        // Fit a slot's render target inside the shared GL canvas while PRESERVING aspect ratio.
+        // Clamping width and height independently distorted camera.aspect on 2x-DPI tablets
+        // (models looked stretched / pushed off-centre). Never resize the shared renderer per slot.
+        function fitDims(cw, ch) {
+          const scale = Math.max(0.1, Math.min(adaptiveDpr, MAX_W / Math.max(1, cw), MAX_H / Math.max(1, ch)));
+          return [Math.max(1, Math.round(cw * scale)), Math.max(1, Math.round(ch * scale))];
+        }
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
         renderer.setPixelRatio(1);
         renderer.setSize(MAX_W, MAX_H, false);
@@ -1292,8 +1299,8 @@
               if (!slot) return;
               const cs = en.contentRect;
               slot.cw = Math.round(cs.width); slot.ch = Math.round(cs.height);
-              slot.rw = Math.min(Math.round(slot.cw * adaptiveDpr), MAX_W);
-              slot.rh = Math.min(Math.round(slot.ch * adaptiveDpr), MAX_H);
+              const [rw, rh] = fitDims(slot.cw, slot.ch);
+              slot.rw = rw; slot.rh = rh;
               if (slot.canvas.width !== slot.rw || slot.canvas.height !== slot.rh) {
                 slot.canvas.width = slot.rw; slot.canvas.height = slot.rh;
               }
@@ -1327,8 +1334,8 @@
             let cw = s.cw, ch = s.ch;
             if (!cw || !ch) { cw = s.canvas.clientWidth; ch = s.canvas.clientHeight; s.cw = cw; s.ch = ch; }
             if (!cw || !ch) continue;
-            const rw = s.rw || Math.min(Math.round(cw * adaptiveDpr), MAX_W);
-            const rh = s.rh || Math.min(Math.round(ch * adaptiveDpr), MAX_H);
+            const dims = (s.rw && s.rh) ? [s.rw, s.rh] : fitDims(cw, ch);
+            const rw = dims[0], rh = dims[1];
             if (s.canvas.width !== rw || s.canvas.height !== rh) {
               s.canvas.width = rw;
               s.canvas.height = rh;
@@ -1392,10 +1399,14 @@
         function resizeSlot(slot) {
           try {
             const w = Math.max(1, slot.canvas.clientWidth), h = Math.max(1, slot.canvas.clientHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-            renderer.setSize(w, h, false);          // false = CSS keeps size -> ZERO stretch
+            slot.cw = w; slot.ch = h;
+            const [rw, rh] = fitDims(w, h);
+            slot.rw = rw; slot.rh = rh;
             slot.camera.aspect = w / h; slot.camera.updateProjectionMatrix();
-            slot.rw = Math.min(w, MAX_W); slot.rh = Math.min(h, MAX_H);
+            slot.autoWake = true;
+            // IMPORTANT: never call renderer.setSize/setPixelRatio here. The renderer is SHARED
+            // by all 10 stages at MAX_W×MAX_H; resizing it for one fullscreen stage corrupted
+            // the offscreen drawImage source rect and pushed every model to the bottom-right.
           } catch (e) {}
         }
         document.addEventListener('fullscreenchange', () => {

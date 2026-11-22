@@ -27,15 +27,15 @@ export const finalSiteHtml = `
         </div>
       </a>
 
-      <nav class="hidden items-center gap-5 text-xs font-semibold text-zinc-600 lg:flex">
+      <nav class="hidden items-center gap-3 text-[11px] font-semibold text-zinc-600 md:flex xl:gap-5">
         <a href="#real-shop" class="hover:text-red-600">Our Shop</a>
         <a href="#estimate" class="hover:text-red-600">30s Estimate</a>
         <a href="#paired-crm" class="hover:text-red-600">Track Repair</a>
         <a href="#glass-lab" class="hover:text-red-600">Glass Lab</a>
         <a href="#tbk-machines" class="hover:text-red-600">TBK 4D</a>
-        <a href="#ecosystem-3d" class="hover:text-red-600">Devices</a>
-        <a href="#reviews" class="hover:text-red-600">Reviews</a>
-        <a href="#faq" class="hover:text-red-600">FAQ</a>
+        <a href="#ecosystem-3d" class="hidden hover:text-red-600 lg:inline">Devices</a>
+        <a href="#reviews" class="hidden hover:text-red-600 lg:inline">Reviews</a>
+        <a href="#faq" class="hidden hover:text-red-600 lg:inline">FAQ</a>
       </nav>
 
       <div class="flex items-center gap-1">
@@ -539,20 +539,22 @@ export const finalSiteHtml = `
             <span id="ba-pct-lbl" class="rounded-full bg-zinc-800 px-3 py-1 font-mono-num text-xs font-bold text-orange-300">50% Restored</span>
           </div>
           <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative h-72 w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-80" style="touch-action: pan-y;">
-            <div class="flex h-full w-full items-center justify-center text-center">
+            <!-- Restored side: label lives ONLY in the right half so it never overlaps the cracked label -->
+            <div class="absolute inset-0 flex items-center justify-end px-6 text-right sm:px-10">
               <div>
-                <div class="font-display text-lg font-extrabold text-white sm:text-2xl">Factory-Grade OLED &amp; Glass Engineering</div>
-                <div class="text-xs text-blue-200">Original OLED · True Tone · 90L Zero-Bubble OCA Finish</div>
+                <div class="font-display text-base font-extrabold leading-tight text-white drop-shadow sm:text-2xl">Factory-Grade OLED &amp; Glass Engineering</div>
+                <div class="mt-1 text-xs font-semibold text-blue-200">Original OLED · True Tone · 90L Zero-Bubble OCA Finish</div>
               </div>
             </div>
-            <div id="ba-overlay" class="absolute inset-0 flex items-center justify-center bg-zinc-900/95" style="clip-path: inset(0 50% 0 0);">
-              <svg class="h-full w-full opacity-50" viewBox="0 0 800 320" preserveAspectRatio="none">
+            <!-- Cracked side: full-width overlay clipped by the slider; label pinned inside the visible LEFT half -->
+            <div id="ba-overlay" class="absolute inset-0 overflow-hidden bg-[#17171a]/95" style="clip-path: inset(0 50% 0 0);">
+              <svg class="absolute inset-0 h-full w-full opacity-50" viewBox="0 0 800 320" preserveAspectRatio="none">
                 <path d="M120,20 L260,110 L420,40 M260,110 L180,210 M260,110 L470,190 M260,110 L650,90 M60,130 L260,110" stroke="#f87171" stroke-width="2" fill="none"/>
               </svg>
-              <span class="absolute font-display text-lg font-extrabold text-red-400 sm:text-2xl">Cracked Outer Glass Layer</span>
+              <span class="absolute left-0 top-1/2 w-1/2 -translate-y-1/2 px-6 text-center font-display text-base font-extrabold leading-tight text-rose-400 drop-shadow sm:text-2xl">Cracked Outer Glass Layer</span>
             </div>
             <div id="ba-line" class="pointer-events-none absolute inset-y-0 left-1/2 w-0.5 bg-red-500"></div>
-            <div id="ba-knob" class="pointer-events-none absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white shadow-lg">&lt;&gt;</div>
+            <div id="ba-knob" class="pointer-events-none absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white shadow-lg">↔</div>
           </div>
         </div>
       </div>
@@ -713,7 +715,7 @@ export const finalSiteHtml = `
           <!-- Machine 01 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
             <div class="flex flex-col">
-              <div class="orange-glass-wrap relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
+              <div class="orange-glass-wrap machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
@@ -735,7 +737,7 @@ export const finalSiteHtml = `
           <!-- Machine 02 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
             <div class="flex flex-col">
-              <div class="orange-glass-wrap relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
+              <div class="orange-glass-wrap machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
@@ -757,7 +759,7 @@ export const finalSiteHtml = `
           <!-- Machine 03 -->
           <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
             <div class="flex flex-col">
-              <div class="orange-glass-wrap relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
+              <div class="orange-glass-wrap machine-frame relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>

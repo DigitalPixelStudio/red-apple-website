@@ -590,7 +590,14 @@
     /* ===== STRIP FIX + NO-CROP + ZERO-JITTER POLISH (2026-11-22) ===== */
     /* Machine / gallery images: full frame, warm matte, never cropped */
     .orange-glass-wrap { background-color: #F7EFE6; }
-    .orange-glass-wrap img { object-fit: contain !important; }
+    /* Store / bench / craft photos: fill the frame (old behaviour) — no empty matte, natural framing. */
+    .orange-glass-wrap img { object-fit: cover !important; }
+    /* Machine studio shots only: keep full machine visible, no crop (3:4 cards match 3:4 files). */
+    .orange-glass-wrap.machine-frame img { object-fit: contain !important; }
+    /* Tall portrait store signs: bias the visible band toward the sign, not the ceiling. */
+    .orange-glass-wrap img[src*="logo-counter"] { object-position: center 35% !important; }
+    /* WCAG 2.4.7: the before/after slider is keyboard-operable — give it a visible focus ring (paint-only). */
+    #ba-slider-box:focus-visible { outline: 2px solid #ea580c; outline-offset: 3px; }
     /* Light backdrop means stage hint labels need warm-dark ink */
     .stage-3d-box span.text-zinc-400,
     .stage-3d-box span.text-zinc-500 { color: #9a3412 !important; }
