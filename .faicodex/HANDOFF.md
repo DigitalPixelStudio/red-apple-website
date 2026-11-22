@@ -149,6 +149,15 @@ Real bugs found via Playwright (not string checks) and fixed:
 
 ---
 
+## 15b. v8 FLAWLESS POLISH — DEPLOYED (2026-11-22) — FINAL
+- Section 15 (PENDING) is RESOLVED. HEAD `4c594ad`; runtime commit `4c28cb0`; rollback `stable-pre-v8-final`.
+- Live: 34/34 QA gates PASS, SEO scanner 8/8 PASS on live, 10/10 routes 200, predeploy ALL PASS, BUILD_ID `ywbfY68blWQ-kRby774bY`.
+- v8 shipped: number animation removed (bot cannot render 1.3/5), 12 jitter animations killed, 18-mote dpr=1 30 FPS particles, static orange studio on all 10 stages, hero fullscreen removed only, hero lock-screen text re-slotted, selective tuning (tablet 0.70 / MacBook 0.70 / AirPods 0.76 + Space Grey #8A8F98).
+- Faisu's GSC action (only he can do it): Request Indexing on /, /privacy, /terms, /refund-policy, /services/iphone-display-repair — cached 1.3/5 / 90-day snippets clear only after re-crawl.
+- SAFE TO RESTART — `/catch-up`; next milestone: CRM.
+
+---
+
 ## 15. v8 JITTER-FREE / BOT-PROOF BUILD — IN PROGRESS (2026-11-22, deploy PENDING)
 > Sections 7/13/14 PASS refer to previously deployed builds. v8 is NEW, uncommitted, and NOT deployed. Do not report QA PASS or deploy until FaiCodex confirms.
 - Safety tag before edits: `stable-pre-v8-final` (rollback point on `fix/disable-orange-glass-sweep`). HEAD `2d29150` (docs); v8 changes uncommitted: `public/final-site.js`, `src/app/final-site.css`, `src/lib/final-site-html.ts`, `scripts/audit/seo_strike_scanner.py`, new `scripts/audit/verify_v8_live.py`.
