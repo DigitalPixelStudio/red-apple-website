@@ -180,3 +180,21 @@ Real bugs found via Playwright (not string checks) and fixed:
 - FaiCodex: stat counter bot-proof (removed number animation — Googlebot can no longer render 1.3/5); hero fullscreen button removed only; hero lock-screen text re-slotted into non-overlapping corners; selective 3-model tuning ONLY (tablet 0.70, MacBook 0.70, AirPods 0.76 + Space Grey `#8A8F98`); 18-mote dpr=1 30 FPS particle canvas; `.stat-final` paint-only fade.
 - KEY NUANCE: stale 1.3/5 / 90-day in Google snippets = Google's CACHE, not live SSR (live SSR clean). Needs Faisu's GSC Request Indexing on 5 URLs: `/`, `/privacy`, `/terms`, `/refund-policy`, `/services/iphone-display-repair`.
 - STATUS: deploy **PENDING**; QA not claimed. NEXT-SESSION REMINDER: run predeploy + QA v8 gates, commit, deploy after FaiCodex confirms; ask Faisu to Request Indexing the 5 URLs. Live: https://www.redmobilerepair.in
+
+---
+
+## 17. v10 CLOSURE BUILD — APPROVED BY FAISU, DEPLOY PENDING (2026-11-22)
+> Faisu thanked all engineers and approved v10. This build is NEW/uncommitted — do NOT claim QA PASS or deploy until FaiCodex confirms.
+- Safety tag: `stable-pre-v10-closure` created from HEAD `f105fa0` (rollback point on `fix/disable-orange-glass-sweep`). Working tree uncommitted (v10 files across `public/`, `src/app/`, `scripts/predeploy-check.sh`, `docs/`).
+- 7 agents parallel, each with a gift:
+  - **FE-1**: rebuilt jittery glass-lab CTA — `.glass-lab-cta-band` + 9 `.lab-hash-chip`, exact text preserved; luxury Obsidian Black + neon-orange footer anchored near bottom with `pb-84px` dock clearance; store photo/aspect untouched. Gift: 5 animations (GPU scroll hairline, lazy reveals, tactile buttons, 16-mote dust, `@view-transition`).
+  - **BE-1**: repair-status page now POSTs `/api/crm-status` (zero 405s), honest WhatsApp handoff kept, no fabricated stages. Gift: input normalization.
+  - **RES-1**: robots allows 10 crawlers incl Applebot + Bingbot; IndexNow key file; Apple Maps deep link; llms discovery; `docs/GMB_ADS_COMPLIANCE.md` + 48h Google index-flip check.
+  - **PY-1**: both noindex gates (header + source) wired as BLOCKING in `scripts/predeploy-check.sh`.
+  - **QA-1**: v10 gates (not yet PASS-claimed). **DevOps**: deploy (pending). **DOC-1**: memory.
+- **FaiCodex 3D root-cause fix**: v9 models shrank because `Box3.setFromObject(root)` included decorative Torus halos + Circle shadow discs (~2x inflation). v10 adds `computeTightDeviceBounds()` measuring ONLY device meshes + near-edge 0.88–0.90 fill; shared renderer intact (no per-slot `setSize`). Also re-allowed `/_next/` in `robots.ts` (Google rendering guidance).
+- **PRESERVATION**: all store/machine images, aspect ratios, quotations, WhatsApp flows, and v9 gap/noindex fixes untouched.
+- **STATUS**: deploy PENDING until FaiCodex confirms. QA not claimed.
+- **48h follow-up (approved)**: after GSC Request Indexing on /, /privacy, /terms, /refund-policy, /services/iphone-display-repair, confirm cached 1.3/5 & 90-day snippets replaced by 4.9/5 & 6 Months.
+- **Manual (Faisu only)**: GSC Request Indexing 5 URLs; delete old Vercel projects `redappplemobilerepair` + `red-apple-repair`; optionally claim Apple Business Connect.
+- Next action: FaiCodex runs predeploy + QA v10 gates → commit → deploy from `fix/disable-orange-glass-sweep` → verify live. Live: https://www.redmobilerepair.in

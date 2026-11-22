@@ -57,6 +57,8 @@ export const metadata: Metadata = {
     "geo.placename": "Halasuru, Bengaluru",
     "geo.position": `${SITE.geo.lat};${SITE.geo.lng}`,
     ICBM: `${SITE.geo.lat}, ${SITE.geo.lng}`,
+    // Apple Maps deep link for the Halasuru store (public; no secrets).
+    "apple-maps": "https://maps.apple.com/?q=Red+Apple+Mobile+Repair+Halasuru+Bengaluru",
   },
   openGraph: {
     title: "Red Apple Mobile Repair — Apple Device Repairs, Mastered | Halasuru, Bengaluru",

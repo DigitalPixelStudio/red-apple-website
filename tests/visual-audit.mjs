@@ -8,7 +8,7 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (50 total = 34 legacy/v8 + 16 v9):
+ * GATES (62 total = 34 legacy/v8 + 16 v9 + 12 v10):
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -42,6 +42,20 @@
  *    20-21: footer wrapper computed columns = 1 @390px, 4 @1440px.
  *    22: footer mailto anchor overflow-wrap === 'break-word'.
  *    23: all 4 footer column headings computed textAlign === 'left'.
+ *   v10 NEW (6 global source/scripts + 2 per viewport = 12):
+ *    24. GLOBAL SOURCE: final-site.js computeTightDeviceBounds + near-edge 0.90/0.88
+ *        fill inside centerAndFitResponsive; NO per-slot renderer.setSize; NO inflated
+ *        setFromObject(root, true) in the fit path. (source/structural only — headless
+ *        Chromium has no WebGL, so this gate NEVER reads canvas pixels.)
+ *    25. GLOBAL SOURCE: final-site-html.ts .glass-lab-cta-band + 9 .lab-hash-chip;
+ *        final-site.css has box-shadow:none on chips + contain:layout style on band.
+ *    26. SOURCE robots.ts: Googlebot/Bingbot/Applebot allowed, /_next/ NOT disallowed.
+ *    27. SOURCE public/indexnow-key.txt: exactly one key line (value never printed).
+ *    28. SOURCE repair-status/page.tsx: /api/crm-status uses POST, never GET.
+ *    29. SCRIPTS predeploy-check.sh: blocking noindex gate calls BOTH scanners.
+ *    30-31. per viewport: glass-lab CTA DOM byte-identical to source (9 hashtags +
+ *        both buttons + hours line); footer obsidian bg + store photo src/aspect-square
+ *        + copyright/credit text + dark computed background.
  *
  * Gift: `node tests/visual-audit.mjs --shots` writes one screenshot per viewport
  * to tests/shots/ for eyeball review. Set SHOTS_FULL=1 for full-page captures.
@@ -76,6 +90,29 @@ const CSS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'final-site.css');
 const HERO_FS_EXCLUSION = "if (slot.canvas.id === 'canvas-hero') continue;";
 const EXPECTED_FS_BUTTONS = 9; // 10 stages − hero
 const EXPECTED_STAGE_BOXES = 10;
+
+// ---- v10 source anchors (source/structural gates — headless has no WebGL) ----
+const HTML_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'lib', 'final-site-html.ts');
+const ROBOTS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'robots.ts');
+const REPAIR_STATUS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'repair-status', 'page.tsx');
+const INDEXNOW_PATH = path.join(REPO_ROOT, 'public', 'indexnow-key.txt');
+const PREDEPLOY_PATH = path.join(REPO_ROOT, 'scripts', 'predeploy-check.sh');
+
+// Slice a function body out of a source string using two adjacent markers.
+// Scopes the 3D framing assertions to centerAndFitResponsive ONLY — the shared
+// renderer setup and the legacy fallback live elsewhere and are not per-slot.
+function sliceBetween(src, startMarker, endMarker) {
+  const a = src.indexOf(startMarker);
+  if (a < 0) return '';
+  const b = src.indexOf(endMarker, a + startMarker.length);
+  return b < 0 ? src.slice(a) : src.slice(a, b);
+}
+function extractAll(src, re) {
+  const out = [];
+  let m;
+  while ((m = re.exec(src)) !== null) out.push(m[1]);
+  return out;
+}
 
 const VIEWPORTS = [
   { name: 'tablet', width: 1024, height: 768, deviceScaleFactor: 2 },
@@ -171,6 +208,16 @@ async function main() {
   // v8 source snapshots (global gates + fullscreen fallback).
   const jsSource = readSource(JS_SOURCE_PATH);
   const cssSource = readSource(CSS_SOURCE_PATH);
+  const htmlSource = readSource(HTML_SOURCE_PATH);
+
+  // v10 expected DOM texts are DERIVED FROM SOURCE so the DOM gate compares
+  // real source<->DOM byte identity (never a hardcoded copy that can drift).
+  // If extraction fails the gate fails closed (length/emptiness assertions below).
+  const V10_CHIPS = extractAll(htmlSource, /<span class="lab-hash-chip">([^<]*)<\/span>/g);
+  const V10_BUTTONS = extractAll(htmlSource, /<a[^>]*class="[^"]*cta-tactile[^"]*"[^>]*>([^<]*)<\/a>/g)
+    .map((s) => s.trim());
+  const hoursMatch = htmlSource.match(/<p class="mt-2\.5[^"]*">(Store open[^<]*)<\/p>/);
+  const V10_HOURS = hoursMatch ? hoursMatch[1].trim() : '';
 
   const { chromium } = await loadPlaywright();
   const executablePath = resolveChromium(chromium);
@@ -215,6 +262,77 @@ async function main() {
       'SOURCE final-site.css: .stage-3d-orange-bg + .stat-final',
       `.stage-3d-orange-bg=${cssHasOrangeBg} .stat-final=${cssHasStatFinal} (expected present,present)`,
       'SOURCE-CHECK');
+
+    /* ---- v10 GLOBAL SOURCE Gate 24: tight device bounds + near-edge fill ---- */
+    // 3D is verified STRUCTURALLY only: headless Chromium has no WebGL, so we
+    // never read canvas pixels or judge model size from a screenshot.
+    const fitFn = sliceBetween(jsSource, 'function centerAndFitResponsive', 'function registerSlot');
+    const hasTightFn = /function\s+computeTightDeviceBounds\s*\(/.test(jsSource) && fitFn.includes('computeTightDeviceBounds');
+    const hasNearEdge = fitFn.includes('Math.min(0.90') || fitFn.includes('0.90');
+    const hasFill088 = fitFn.includes('0.88');
+    const noPerSlotSetSize = !/\.setSize\s*\(/.test(fitFn);
+    const noInflatedFit = !/setFromObject\s*\(\s*root\s*,\s*true\s*\)/.test(fitFn);
+    record(hasTightFn && hasNearEdge && hasFill088 && noPerSlotSetSize && noInflatedFit,
+      'v10 SOURCE final-site.js: tight bounds + near-edge 0.90/0.88, no per-slot setSize, no inflated fit',
+      `fitFnLen=${fitFn.length} computeTightDeviceBounds=${hasTightFn} nearEdge0.90=${hasNearEdge} ` +
+      `fill0.88=${hasFill088} perSlotSetSizeAbsent=${noPerSlotSetSize} inflatedFitAbsent=${noInflatedFit} ` +
+      `(expected true x5)`, 'SOURCE-CHECK');
+
+    /* ---- v10 GLOBAL SOURCE Gate 25: glass-lab CTA (zero-jitter) source ---- */
+    const hasCtaBand = htmlSource.includes('glass-lab-cta-band');
+    const chipCountSrc = (htmlSource.match(/class="lab-hash-chip"/g) || []).length;
+    const cssBandContain = /\.glass-lab-cta-band\s*\{[^}]*contain:\s*layout style/.test(cssSource);
+    const cssChipShadow = /\.lab-hash-chip\s*\{[^}]*box-shadow:\s*none/.test(cssSource);
+    record(hasCtaBand && chipCountSrc === 9 && cssBandContain && cssChipShadow,
+      'v10 SOURCE glass-lab CTA: band + 9 chips, CSS box-shadow:none + contain:layout style',
+      `band=${hasCtaBand} chipCount=${chipCountSrc} (expected 9) cssContain=${cssBandContain} ` +
+      `cssChipShadowNone=${cssChipShadow}`, 'SOURCE-CHECK');
+
+    /* ---- v10 SOURCE Gate 26: robots rules allow crawlers, keep /_next/ crawlable ---- */
+    const robots = readSource(ROBOTS_SOURCE_PATH);
+    const hasGooglebot = /userAgent:\s*["']Googlebot["']/.test(robots);
+    const hasBingbot = /userAgent:\s*["']Bingbot["']/.test(robots);
+    const hasApplebot = /["']Applebot["']/.test(robots);
+    const allowsNext = /allow:\s*\[[^\]]*["']\/_next\/["']/.test(robots);
+    const disallowNext = /disallow:\s*\[[^\]]*["']\/_next\/["']/.test(robots);
+    record(hasGooglebot && hasBingbot && hasApplebot && allowsNext && !disallowNext,
+      'v10 SOURCE robots.ts: Googlebot/Bingbot/Applebot allowed, /_next/ not disallowed',
+      `Googlebot=${hasGooglebot} Bingbot=${hasBingbot} Applebot=${hasApplebot} ` +
+      `allowNext=${allowsNext} disallowNext=${disallowNext} (expected true,true,true,true,false)`,
+      'SOURCE-CHECK');
+
+    /* ---- v10 SOURCE Gate 27: indexnow key file = exactly one key line (value never printed) ---- */
+    let indexnowOk = false, indexnowDetail = 'missing or unreadable';
+    try {
+      const knLines = fs.readFileSync(INDEXNOW_PATH, 'utf8').split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+      indexnowOk = knLines.length === 1 && knLines[0].length >= 8 && !/\s/.test(knLines[0]);
+      indexnowDetail = `nonEmptyLines=${knLines.length} (expected 1) keyChars=${knLines[0] ? knLines[0].length : 0} (value redacted)`;
+    } catch { /* keep default detail — never print the key */ }
+    record(indexnowOk, 'v10 SOURCE public/indexnow-key.txt: single key line (value redacted)',
+      indexnowDetail, 'SOURCE-CHECK');
+
+    /* ---- v10 SOURCE Gate 28: repair-status posts to /api/crm-status, never GET ---- */
+    const rs = readSource(REPAIR_STATUS_SOURCE_PATH);
+    const crmIdx = rs.indexOf('/api/crm-status');
+    const crmWindow = crmIdx >= 0 ? rs.slice(crmIdx, crmIdx + 320) : '';
+    const crmPost = /method:\s*["']POST["']/.test(crmWindow);
+    const crmGet = /method:\s*["']GET["']/.test(crmWindow);
+    record(crmIdx >= 0 && crmPost && !crmGet,
+      'v10 SOURCE repair-status/page.tsx: /api/crm-status uses POST, not GET',
+      `endpointFound=${crmIdx >= 0} POST=${crmPost} GET=${crmGet} (expected true,true,false)`,
+      'SOURCE-CHECK');
+
+    /* ---- v10 SCRIPTS Gate 29: predeploy-check.sh blocking noindex gate calls both scanners ---- */
+    const pre = readSource(PREDEPLOY_PATH);
+    const blockingAt = pre.indexOf('noindex/strike gate (blocking) [live:');
+    const seoAt = pre.indexOf('seo_strike_scanner.py', blockingAt);
+    const v8At = pre.indexOf('verify_v8_live.py', blockingAt);
+    const seoBlocking = seoAt >= 0 && /\|\s*\{/.test(pre.slice(seoAt, seoAt + 260));
+    const v8Blocking = v8At >= 0 && /\|\s*\{/.test(pre.slice(v8At, v8At + 260));
+    record(blockingAt >= 0 && seoBlocking && v8Blocking,
+      'v10 SCRIPTS predeploy-check.sh: blocking noindex gate calls both scanners',
+      `blockingSection=${blockingAt >= 0} seo_strike_scanner=${seoBlocking} verify_v8_live=${v8Blocking} ` +
+      `(expected true x3)`, 'SOURCE-CHECK');
 
     for (const vp of VIEWPORTS) {
       console.log(`\n--- viewport ${vp.name}: ${vp.width}x${vp.height} @${vp.deviceScaleFactor}x ---`);
@@ -336,6 +454,51 @@ async function main() {
       const ambCount = await page.locator('#ambient-particles').count();
       record(ambCount > 0, `${vp.name}: #ambient-particles host present`, `count=${ambCount}`);
 
+      /* ---- v10 GATE 30 (per viewport): glass-lab CTA DOM byte-identical to source ---- */
+      const band = page.locator('.glass-lab-cta-band').first();
+      const bandCount = await band.count();
+      const domChips = await page.locator('.lab-hash-chip').evaluateAll(
+        (els) => els.map((el) => el.textContent.trim()));
+      // Fail closed: extraction from source must have produced exactly 9/2/1.
+      const chipsIdentical = V10_CHIPS.length === 9 && domChips.length === 9 &&
+        domChips.every((t, i) => t === V10_CHIPS[i]);
+      const domButtons = await band.locator('a.cta-tactile').evaluateAll(
+        (els) => els.map((el) => el.textContent.trim()));
+      const buttonsIdentical = V10_BUTTONS.length === 2 && domButtons.length === 2 &&
+        domButtons.every((t, i) => t === V10_BUTTONS[i]);
+      const domHours = await band.locator('p').evaluateAll((els) => els.map((el) => el.textContent.trim()));
+      const hoursIdentical = !!V10_HOURS && domHours.includes(V10_HOURS);
+      record(bandCount > 0 && chipsIdentical && buttonsIdentical && hoursIdentical,
+        `${vp.name}: glass-lab CTA DOM byte-identical (9 hashtags + 2 buttons + hours line)`,
+        `band=${bandCount} chips=${domChips.length}/9 identical=${chipsIdentical} ` +
+        `buttons=${domButtons.length}/2 identical=${buttonsIdentical} hoursIdentical=${hoursIdentical} ` +
+        `srcChips=${V10_CHIPS.length} srcButtons=${V10_BUTTONS.length} hoursLen=${V10_HOURS.length}`,
+        'DOM-CHECK');
+
+      /* ---- v10 GATE 31 (per viewport): footer DOM obsidian theme + photo + credit ---- */
+      const footer = page.locator('#footer-contact').first();
+      const footerCount = await footer.count();
+      const isObsidian = footerCount > 0
+        ? await footer.evaluate((el) => el.classList.contains('footer-neon-obsidian')) : false;
+      const bgRgb = footerCount > 0 ? await footer.evaluate((el) => getComputedStyle(el).backgroundColor) : '';
+      const mRgb = bgRgb.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+      const rgb = mRgb ? [Number(mRgb[1]), Number(mRgb[2]), Number(mRgb[3])] : [];
+      // Shipped .footer-neon-obsidian bg is #0A0A0C = rgb(10,10,12), near #0B0D12.
+      const darkBg = rgb.length === 3 && Math.max(...rgb) <= 40 && rgb[0] <= 20;
+      const storeImg = page.locator('#footer-contact .studio-photo-frame img').first();
+      const storeImgCount = await storeImg.count();
+      const storeSrc = storeImgCount ? await storeImg.getAttribute('src') : null;
+      const storeCls = storeImgCount ? ((await storeImg.getAttribute('class')) || '') : '';
+      const storePhotoOk = storeSrc === '/images/gallery/store-glass-front.webp' && storeCls.includes('aspect-square');
+      const footerText = footerCount > 0 ? await footer.evaluate((el) => el.textContent) : '';
+      const hasCredit = footerText.includes('Developed by The Pixel Forge Studio · 96200 24812');
+      const hasCopyright = footerText.includes('© 2026 Red Apple Mobile Repair Store');
+      record(footerCount > 0 && isObsidian && darkBg && storePhotoOk && hasCredit && hasCopyright,
+        `${vp.name}: footer obsidian theme + store photo + copyright/credit`,
+        `footer=${footerCount} obsidianClass=${isObsidian} bg="${bgRgb}" dark=${darkBg} ` +
+        `storeSrc=${storeSrc} aspectSquare=${storeCls.includes('aspect-square')} ` +
+        `credit=${hasCredit} copyright=${hasCopyright}`, 'DOM-CHECK');
+
       /* ---- v9 GATE 14: hero content flow starts < 80px below #hero top ---- */
       // The 608px regression was caused by decorative orbs staying in flow and
       // displacing the hero's FIRST REAL CONTENT WRAPPER. Guard that wrapper with
@@ -404,10 +567,14 @@ async function main() {
         console.log(`[SHOT] ${vp.name} -> ${file}`);
         // Element shots: the QA regions sit far below the fold, so a viewport
         // shot alone cannot show them. Auto-scrolls into view.
+        // Gift (v10): also capture the glass-lab CTA and obsidian footer so the
+        // two new DOM gate regions can be eyeballed, not just measured.
         for (const [tag, sel] of [
           ['ba', '#ba-slider-box'],
           ['gallery', gallerySel],
           ['machines', '#tbk-machines'],
+          ['glasslab', '.glass-lab-cta-band'],
+          ['footer', '#footer-contact'],
         ]) {
           const target = page.locator(sel).first();
           if (!(await target.count())) continue;

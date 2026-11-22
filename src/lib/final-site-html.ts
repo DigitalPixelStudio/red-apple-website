@@ -780,22 +780,22 @@ export const finalSiteHtml = `
           </div>
         </div>
 
-        <!-- Upgraded Hashtag Strip & Lab Hours Banner -->
-        <div class="mt-8 rounded-3xl border border-red-200 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 p-5 text-center shadow-sm">
+        <!-- Zero-jitter, GPU-isolated glass-lab CTA band (flat, shadow-free, composited) -->
+        <div class="glass-lab-cta-band mt-8 p-5 text-center">
           <div class="flex flex-wrap justify-center gap-1.5 text-[11px] font-bold text-zinc-700">
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#PremiumMobileRepair</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#iPhoneGlassReplacement</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#FactoryLevelRepair</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#OLEDRepair</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#TBK958</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#ColdUVLaser</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#OCALamination</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#Halasuru</span>
-            <span class="rounded-full bg-white px-2.5 py-1 shadow-sm">#ZeroPasswordPolicy</span>
+            <span class="lab-hash-chip">#PremiumMobileRepair</span>
+            <span class="lab-hash-chip">#iPhoneGlassReplacement</span>
+            <span class="lab-hash-chip">#FactoryLevelRepair</span>
+            <span class="lab-hash-chip">#OLEDRepair</span>
+            <span class="lab-hash-chip">#TBK958</span>
+            <span class="lab-hash-chip">#ColdUVLaser</span>
+            <span class="lab-hash-chip">#OCALamination</span>
+            <span class="lab-hash-chip">#Halasuru</span>
+            <span class="lab-hash-chip">#ZeroPasswordPolicy</span>
           </div>
           <div class="mt-4 flex flex-wrap justify-center gap-3">
-            <a href="#estimate" class="dock-quote-btn rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get a glass-restoration quote</a>
-            <a href="tel:+918660663776" class="rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-xs font-bold text-zinc-900 hover:border-red-500">Call the lab · +91 86606 63776</a>
+            <a href="#estimate" class="dock-quote-btn cta-tactile active:scale-[0.98] rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get a glass-restoration quote</a>
+            <a href="tel:+918660663776" class="cta-tactile active:scale-[0.98] rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-xs font-bold text-zinc-900 hover:border-red-500">Call the lab · +91 86606 63776</a>
           </div>
           <p class="mt-2.5 text-[11px] font-semibold text-zinc-600">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
         </div>
@@ -1282,7 +1282,7 @@ export const finalSiteHtml = `
   </main>
 
   <!-- 20. COMPLETE 4-COLUMN FOOTER WITH ENLARGED STORE PHOTO, SOCIAL/DIRECTORY HUB & TRACKED PIXEL FORGE CREDIT -->
-  <footer id="footer-contact" class="premium-footer border-t border-red-100 bg-white/75 pb-28 pt-12 text-xs text-zinc-600">
+  <footer id="footer-contact" class="premium-footer footer-neon-obsidian border-t border-red-100 pb-28 pt-12 text-xs text-zinc-600">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
       <!-- Enlarged Real Store Photo Banner -->
       <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
@@ -1306,55 +1306,55 @@ export const finalSiteHtml = `
         </div>
       </div>
 
-      <!-- 4 Footer Columns -->
-      <div class="grid grid-cols-1 gap-6 pb-8 text-left sm:grid-cols-2 lg:grid-cols-4">
+      <!-- 4 Footer Columns — left-aligned, obsidian neon theme -->
+      <div class="footer-neon-cols grid grid-cols-1 gap-6 pb-8 text-left sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Services</div>
+          <div class="footer-neon-heading font-display text-xs font-extrabold uppercase text-zinc-950">Services</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><a href="#estimate" class="hover:text-red-600">iPhone Repair — All Models</a></li>
-            <li><a href="#estimate" class="hover:text-red-600">iPhone Display Replacement</a></li>
-            <li><a href="#glass-lab" class="hover:text-red-600">Front Glass Restoration</a></li>
-            <li><a href="#tbk-machines" class="hover:text-red-600">iPhone Back Glass Replacement</a></li>
-            <li><a href="#ecosystem-3d" class="hover:text-red-600">iPad, Watch &amp; AirPods Repair</a></li>
+            <li><a href="#estimate" class="footer-neon-link hover:text-red-600">iPhone Repair — All Models</a></li>
+            <li><a href="#estimate" class="footer-neon-link hover:text-red-600">iPhone Display Replacement</a></li>
+            <li><a href="#glass-lab" class="footer-neon-link hover:text-red-600">Front Glass Restoration</a></li>
+            <li><a href="#tbk-machines" class="footer-neon-link hover:text-red-600">iPhone Back Glass Replacement</a></li>
+            <li><a href="#ecosystem-3d" class="footer-neon-link hover:text-red-600">iPad, Watch &amp; AirPods Repair</a></li>
           </ul>
         </div>
         <div>
-          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Company</div>
+          <div class="footer-neon-heading font-display text-xs font-extrabold uppercase text-zinc-950">Company</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><a href="#estimate" class="hover:text-red-600">Get a Quote</a></li>
-            <li><a href="#paired-crm" class="hover:text-red-600">Repair Status (CRM)</a></li>
-            <li><a href="#halasuru-map" class="hover:text-red-600">Contact &amp; Halasuru Map</a></li>
-            <li><a href="#faq" class="hover:text-red-600">FAQ</a></li>
-            <li><a href="#reviews" class="hover:text-red-600">Google Reviews</a></li>
+            <li><a href="#estimate" class="footer-neon-link hover:text-red-600">Get a Quote</a></li>
+            <li><a href="#paired-crm" class="footer-neon-link hover:text-red-600">Repair Status (CRM)</a></li>
+            <li><a href="#halasuru-map" class="footer-neon-link hover:text-red-600">Contact &amp; Halasuru Map</a></li>
+            <li><a href="#faq" class="footer-neon-link hover:text-red-600">FAQ</a></li>
+            <li><a href="#reviews" class="footer-neon-link hover:text-red-600">Google Reviews</a></li>
           </ul>
         </div>
         <div>
-          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Legal</div>
+          <div class="footer-neon-heading font-display text-xs font-extrabold uppercase text-zinc-950">Legal</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><a href="/privacy" class="hover:text-red-600">Privacy Policy</a></li>
-            <li><a href="/terms" class="hover:text-red-600">Terms of Service</a></li>
-            <li><a href="/refund-policy" class="hover:text-red-600">Refund &amp; 6 Months Warranty</a></li>
+            <li><a href="/privacy" class="footer-neon-link hover:text-red-600">Privacy Policy</a></li>
+            <li><a href="/terms" class="footer-neon-link hover:text-red-600">Terms of Service</a></li>
+            <li><a href="/refund-policy" class="footer-neon-link hover:text-red-600">Refund &amp; 6 Months Warranty</a></li>
           </ul>
         </div>
         <div>
-          <div class="font-display text-xs font-extrabold uppercase text-zinc-950">Contact</div>
+          <div class="footer-neon-heading font-display text-xs font-extrabold uppercase text-zinc-950">Contact</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><button id="copy-address" type="button" class="hover:underline hover:text-red-600">Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
-            <li class="font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
-            <li><a href="tel:+918660663776" class="font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
-            <li><a href="mailto:support@redmobilerepair.in" class="text-xs break-words font-semibold text-red-600">support@redmobilerepair.in</a></li>
+            <li><button id="copy-address" type="button" class="footer-neon-link hover:underline hover:text-red-600">Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
+            <li class="footer-neon-hours font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
+            <li><a href="tel:+918660663776" class="footer-neon-link font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
+            <li><a href="mailto:support@redmobilerepair.in" class="footer-neon-link text-xs break-words font-semibold text-red-600">support@redmobilerepair.in</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Bottom Independent Disclaimer + ONLY Tracked Pixel Forge Studio Credit -->
-      <div class="border-t border-zinc-200 py-5 text-center">
-        <p class="text-[11px] text-zinc-500">© 2026 Red Apple Mobile Repair Store · Halasuru, Bengaluru 560008 · Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</p>
-        <div class="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
-          <a href="https://wa.me/919620024812?text=The%20Pixel%20Forge%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20Business%20Build.%20I%20came%20via%20redmobilerepair.in%20website%20that%20you%20have%20build." target="_blank" rel="noopener noreferrer" class="font-display text-xs font-extrabold text-zinc-950 hover:text-red-600">
+      <!-- Bottom Independent Disclaimer + ONLY Tracked Pixel Forge Studio Credit — anchored near footer bottom edge -->
+      <div class="footer-bottom-edge-bar border-t border-zinc-200 py-5 text-center">
+        <p class="footer-neon-sub text-[11px] text-zinc-500">© 2026 Red Apple Mobile Repair Store · Halasuru, Bengaluru 560008 · Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</p>
+        <div class="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+          <a href="https://wa.me/919620024812?text=The%20Pixel%20Forge%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20Business%20Build.%20I%20came%20via%20redmobilerepair.in%20website%20that%20you%20have%20build." target="_blank" rel="noopener noreferrer" class="footer-neon-link font-display text-xs font-extrabold text-zinc-950 hover:text-red-600">
             Developed by The Pixel Forge Studio · 96200 24812
           </a>
-          <div class="mt-0.5 text-[11px] text-zinc-600">Contact Us for your Business Build — Website · App · CRM · AI Integration &amp; All Business Management.</div>
+          <div class="footer-neon-sub mt-0.5 text-[11px] text-zinc-600">Contact Us for your Business Build — Website · App · CRM · AI Integration &amp; All Business Management.</div>
         </div>
       </div>
     </div>

@@ -8,16 +8,54 @@ import StickyCta from "@/components/StickyCta";
 import { REPAIR_STATUS_FLOW, wa, SITE } from "@/lib/site";
 import { track } from "@/lib/analytics";
 
+type StatusStage = { key: string; label: string; icon: string; desc: string };
+type StatusResponse = {
+  ok: boolean;
+  error?: string;
+  ticket?: string;
+  phoneMasked?: string;
+  configured: boolean;
+  stages?: StatusStage[];
+  currentStage: StatusStage | null;
+  message: string;
+  whatsapp?: string;
+};
+
 export default function RepairStatusPage() {
   const [ticket, setTicket] = useState("");
   const [phone, setPhone] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<StatusResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (ticket.trim().length < 3 || phone.trim().length < 10) return;
+    // Normalise common input formats so valid tickets/phones don't bounce as 400.
+    const cleanTicket = ticket.trim().replace(/\s+/g, "");
+    const cleanPhone = phone.trim().replace(/[\s()-]/g, "");
+    if (cleanTicket.length < 3 || cleanPhone.replace(/\D/g, "").length < 10) return;
     track("repair_status_checked", { ticket });
-    setChecked(true);
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    try {
+      // POST-only endpoint — never GET (GET returns 405). Body carries the form values.
+      const res = await fetch("/api/crm-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ticket: cleanTicket, phone: cleanPhone }),
+      });
+      const data = (await res.json()) as StatusResponse;
+      if (!res.ok || data.ok === false) {
+        setError("We couldn't check that ticket right now. Please confirm your stage on WhatsApp.");
+        return;
+      }
+      setResult(data);
+    } catch {
+      setError("We couldn't check that ticket right now. Please confirm your stage on WhatsApp.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,42 +75,50 @@ export default function RepairStatusPage() {
             <label className="mt-4 block text-[12.5px] font-bold text-[#1d1d1f]">Registered phone number</label>
             <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 …" inputMode="tel" required
               className="mt-2 w-full rounded-2xl border border-black/[0.08] bg-white px-5 py-3.5 text-[14px] outline-none focus:border-[#ff2d55]/50" />
-            <button type="submit" className="cta-primary mt-6 w-full">Track My Repair</button>
+            <button type="submit" disabled={loading} className="cta-primary mt-6 w-full disabled:opacity-60">{loading ? "Checking…" : "Track My Repair"}</button>
           </form>
         </div>
 
-        {checked && (
+        {(result || error) && (
           <div className="mx-auto mt-14 max-w-[860px] px-6">
             <div className="rounded-[30px] bg-white p-8 shadow-lg ring-1 ring-black/[0.05]">
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/[0.06] pb-5">
                 <div>
-                  <div className="text-[12px] font-semibold text-[#86868b]">Ticket <span className="font-black text-[#1d1d1f]">{ticket.toUpperCase()}</span></div>
-                  <div className="mt-1 text-[13px] text-[#6e6e73]">Registered to <strong>{phone}</strong></div>
+                  <div className="text-[12px] font-semibold text-[#86868b]">Ticket <span className="font-black text-[#1d1d1f]">{result?.ticket ?? ticket.toUpperCase()}</span></div>
+                  <div className="mt-1 text-[13px] text-[#6e6e73]">Registered to <strong>{result?.phoneMasked ?? phone}</strong></div>
                 </div>
-                <div className="rounded-full bg-[#ff2d55]/10 px-4 py-2 text-[12.5px] font-bold text-[#ff2d55]">Repair in Progress</div>
+                <div className="rounded-full bg-[#ff2d55]/10 px-4 py-2 text-[12.5px] font-bold text-[#ff2d55]">
+                  {result?.currentStage ? result.currentStage.label : "Awaiting WhatsApp confirmation"}
+                </div>
               </div>
 
-              <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                {REPAIR_STATUS_FLOW.map((s, i) => {
-                  const done = i < 2;
-                  const current = i === 2;
-                  return (
-                    <div key={s.key} className={`rounded-[20px] p-5 ${
-                      current ? "bg-[#1d1d1f] text-white shadow-xl" : done ? "bg-[#30d158]/[0.08]" : "bg-black/[0.03]"
-                    }`}>
-                      <div className="flex items-center gap-2.5">
-                        <span className={`grid h-9 w-9 place-items-center rounded-full text-[16px] ${
-                          current ? "bg-white/15" : done ? "bg-[#30d158]/15" : "bg-black/[0.05]"
-                        }`}>{s.icon}</span>
-                        <span className={`text-[13px] font-bold ${done && !current ? "text-[#1d1d1f]/70" : ""}`}>{s.label}</span>
-                      </div>
-                      <p className={`mt-2 text-[11.5px] leading-relaxed ${current ? "text-white/60" : "text-[#86868b]"}`}>{s.desc}</p>
-                      {done && !current && <div className="mt-2 text-[11px] font-bold text-[#30d158]">Done</div>}
-                      {current && <div className="mt-2 inline-flex rounded-full bg-[#ff2d55] px-3 py-1 text-[10.5px] font-bold text-white">● In progress</div>}
-                    </div>
-                  );
-                })}
+              <div className="mt-6 rounded-[20px] bg-[#fff5f6] p-5 text-center">
+                <p className="text-[13.5px] font-semibold text-[#1d1d1f]">{result?.message ?? error}</p>
+                {result && !result.configured && (
+                  <p className="mt-1 text-[12.5px] text-[#6e6e73]">We don&rsquo;t publish live tracking stages online yet — our team confirms your exact stage personally on WhatsApp.</p>
+                )}
               </div>
+
+              {result && (
+                <div className="mt-8">
+                  <p className="mb-3 text-[12.5px] font-bold uppercase tracking-widest text-[#86868b]">The stages we record for every repair</p>
+                  <div className="mt-3 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                    {(result.stages ?? REPAIR_STATUS_FLOW).map((s) => {
+                      const isCurrent = result.currentStage?.key === s.key;
+                      return (
+                        <div key={s.key} className={`rounded-[20px] p-5 ${isCurrent ? "bg-[#1d1d1f] text-white shadow-xl" : "bg-black/[0.03]"}`}>
+                          <div className="flex items-center gap-2.5">
+                            <span className={`grid h-9 w-9 place-items-center rounded-full text-[16px] ${isCurrent ? "bg-white/15" : "bg-black/[0.05]"}`}>{s.icon}</span>
+                            <span className={`text-[13px] font-bold ${isCurrent ? "text-white" : "text-[#1d1d1f]"}`}>{s.label}</span>
+                          </div>
+                          <p className={`mt-2 text-[11.5px] leading-relaxed ${isCurrent ? "text-white/60" : "text-[#86868b]"}`}>{s.desc}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-3 text-[11.5px] text-[#86868b]">These are the stages we log — your live stage is confirmed by our team, never inferred from this page.</p>
+                </div>
+              )}
 
               <div className="mt-8 rounded-[20px] bg-[#f5f5f7] p-5 text-center">
                 <p className="text-[13px] text-[#6e6e73]">Questions about your repair? Our team is one message away.</p>

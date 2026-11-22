@@ -917,28 +917,54 @@
           'canvas-watch':         { mobileFill: 0.74, desktopFill: 0.74, fov: 38 },
           'canvas-macbook':       { mobileFill: 0.76, desktopFill: 0.76, fov: 38 },
         };
+        // v10: measure ONLY the real device/machine meshes. The v9 code measured
+        // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
+        // Circle floor-shadow discs — inflating the radius ~2x and pushing the camera
+        // back so every model sat tiny (~35-45%) inside a huge empty stage.
+        function computeTightDeviceBounds(root) {
+          const box = new THREE.Box3();
+          let found = false;
+          root.updateMatrixWorld(true);
+          root.traverse((obj) => {
+            if (!obj.isMesh || !obj.visible) return;
+            const name = (obj.name || '').toLowerCase();
+            if (name.includes('ring') || name.includes('orbit') || name.includes('shadow') || name.includes('halo')) return;
+            const gt = obj.geometry?.type || '';
+            if (gt === 'RingGeometry' || gt === 'TorusGeometry' || gt === 'CircleGeometry') return;
+            box.expandByObject(obj);
+            found = true;
+          });
+          return found ? box : new THREE.Box3().setFromObject(root);
+        }
         function centerAndFitResponsive(camera, root, id) {
           try {
             root.updateWorldMatrix(true, true);
-            const raw = new THREE.Box3().setFromObject(root, true).getBoundingSphere(new THREE.Sphere());
-            if (raw.radius > 0) root.scale.multiplyScalar(2.0 / raw.radius);
-            root.position.set(0, 0, 0);
+            // Normalise scale ONCE against the tight device bounds (not the halos).
+            const tight0 = computeTightDeviceBounds(root);
+            const r0 = tight0.getBoundingSphere(new THREE.Sphere()).radius;
+            if (r0 > 0 && isFinite(r0)) root.scale.multiplyScalar(2.0 / r0);
             root.updateWorldMatrix(true, true);
-            const c = new THREE.Box3().setFromObject(root).getCenter(new THREE.Vector3());
+            // Re-measure tight bounds after normalisation and centre on the DEVICE.
+            const tight = computeTightDeviceBounds(root);
+            const c = tight.getCenter(new THREE.Vector3());
             root.position.sub(c);
             root.updateWorldMatrix(true, true);
-            const r = new THREE.Box3().setFromObject(root).getBoundingSphere(new THREE.Sphere()).radius;
-            const cfg = MODEL_FRAMING[id] || { mobileFill: 0.74, desktopFill: 0.74, fov: 38 };
-            camera.fov = cfg.fov;
+            const tight2 = computeTightDeviceBounds(root);
+            const size = tight2.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const r = tight2.getBoundingSphere(new THREE.Sphere()).radius;
+            const cfg = MODEL_FRAMING[id] || { mobileFill: 0.88, desktopFill: 0.88, fov: 34 };
+            camera.fov = 34; // sleek telephoto studio lens — bolder, less distortion
             const vFov = THREE.MathUtils.degToRad(camera.fov);
             const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
             const minHalf = Math.min(vFov, hFov) / 2;
-            const isPortrait = camera.aspect < 0.95;
-            const fill = isPortrait ? cfg.mobileFill : cfg.desktopFill;
-            const dist = r / (Math.sin(minHalf) * fill);
-            camera.position.set(dist * 0.22, dist * 0.12, dist * 0.96);
-            camera.near = Math.max(0.05, dist - r * 3);
-            camera.far = dist + r * 4;
+            // NEAR-EDGE 90% fill on every device/viewport. Fullscreen a touch tighter.
+            const fill = Math.min(0.90, (cfg.mobileFill > 0.8 ? cfg.mobileFill : 0.88) + 0.02);
+            const effR = Math.max(r, maxDim * 0.56);
+            const dist = effR / (Math.sin(minHalf) * fill);
+            camera.position.set(dist * 0.24, dist * 0.14, dist * 0.96);
+            camera.near = Math.max(0.05, dist - maxDim * 2.5);
+            camera.far = dist + maxDim * 4;
             camera.lookAt(0, 0, 0);
             camera.updateProjectionMatrix();
             return { radius: r, distance: dist, fill };

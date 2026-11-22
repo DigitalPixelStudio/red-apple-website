@@ -34,3 +34,10 @@
 - v8 work: 12 jitter animations killed; static `.stage-3d-orange-bg` on 10 stages + `#ambient-particles` host; stat counter bot-proof (number animation removed); selective 3-model tuning ONLY (tablet/MacBook 0.70, AirPods 0.76 + Space Grey `#8A8F98`); 18-mote dpr=1 30 FPS particle canvas; `.stat-final` paint-only fade.
 - Stale 1.3/5 / 90-day in Google snippets = Google CACHE, not live SSR — needs Faisu's GSC Request Indexing on 5 URLs: `/`, `/privacy`, `/terms`, `/refund-policy`, `/services/iphone-display-repair`.
 - NEXT SESSION: predeploy + QA v8 gates → commit → deploy after FaiCodex confirms.
+
+## v10 status (2026-11-22, APPROVED by Faisu, deploy PENDING)
+- Safety tag `stable-pre-v10-closure` from HEAD `f105fa0`. v10 uncommitted; do NOT claim QA PASS/deploy until FaiCodex confirms.
+- FE-1 glass-lab CTA rebuild (`.glass-lab-cta-band` + 9 `.lab-hash-chip`, text preserved) + luxury Obsidian/neon-orange footer (`pb-84px`) + 5 animations; BE-1 repair-status → POST `/api/crm-status` (0 405s, no fabricated stages) + input normalization; RES-1 robots 10 crawlers + IndexNow key + Apple Maps + `docs/GMB_ADS_COMPLIANCE.md` + 48h index-flip check; PY-1 both noindex gates BLOCKING in predeploy; QA-1 v10 gates; DevOps deploy; DOC-1 memory.
+- FaiCodex 3D fix: `computeTightDeviceBounds()` (device meshes only, 0.88–0.90 near-edge fill) replaces inflating `Box3.setFromObject(root)`; `/_next/` re-allowed in robots.ts. Shared renderer intact.
+- Preservation: store/machine images, aspect ratios, quotations, WhatsApp flows, v9 gap/noindex fixes untouched.
+- 48h follow-up: after GSC indexing 5 URLs, confirm cached 1.3/5 & 90-day → 4.9/5 & 6 Months. Faisu-only: GSC 5 URLs, delete 2 old Vercel projects (`redappplemobilerepair`, `red-apple-repair`), optional Apple Business Connect.
