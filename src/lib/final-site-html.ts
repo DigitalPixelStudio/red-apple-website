@@ -711,9 +711,9 @@ export const finalSiteHtml = `
 
         <div class="mt-9 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <!-- Machine 01 -->
-          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
-            <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[3/4] min-h-[420px] w-full overflow-hidden bg-[#F7EFE6] sm:min-h-[460px]">
+          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="flex flex-col">
+              <div class="orange-glass-wrap relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-oca-studio.webp" alt="TBK OCA Laminating Vacuum Hydraulic Press" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-oca-press.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">01 · OCA VACUUM LAMINATION</span>
@@ -725,7 +725,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">OCA VACUUM LAMINATION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">VACUUM PRESS</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ORIGINAL OLED SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[520px] w-full border-t border-orange-100 lg:col-span-6 lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-oca" aria-label="Interactive 4D TBK OCA Laminating Vacuum Hydraulic Press"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -733,9 +733,9 @@ export const finalSiteHtml = `
           </div>
 
           <!-- Machine 02 -->
-          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
-            <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[3/4] min-h-[420px] w-full overflow-hidden bg-[#F7EFE6] sm:min-h-[460px]">
+          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="flex flex-col">
+              <div class="orange-glass-wrap relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-90l-studio.webp" alt="TBK 90-Litre High-Pressure Bubble Remover Chamber" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-bubble-chamber.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">02 · 90-LITRE AUTOCLAVE</span>
@@ -747,7 +747,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">90-LITRE AUTOCLAVE</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">ZERO-BUBBLE OCA</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">PRESSURE CURVED</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[520px] w-full border-t border-orange-100 lg:col-span-6 lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-90l" aria-label="Interactive 4D TBK 90-Litre High-Pressure Bubble Remover"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-zinc-950/80 text-orange-300">Interactive 4D · Drag to Orbit</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
@@ -755,9 +755,9 @@ export const finalSiteHtml = `
           </div>
 
           <!-- Machine 03 -->
-          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md lg:grid-cols-12">
-            <div class="flex flex-col lg:col-span-6">
-              <div class="orange-glass-wrap relative aspect-[3/4] min-h-[420px] w-full overflow-hidden bg-[#F7EFE6] sm:min-h-[460px]">
+          <div class="reveal-up grid grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-md">
+            <div class="flex flex-col">
+              <div class="orange-glass-wrap relative aspect-[3/4] w-full overflow-hidden bg-[#F7EFE6]">
                 <img loading="lazy" decoding="async" src="/images/tbk-958-studio.webp" alt="TBK-958 Cold UV Purple Laser" class="h-full w-full object-contain object-center p-1" onerror="this.src='/images/machines/tbk-uv-laser.webp'">
                 <div class="orange-glass-sweep"></div>
                 <span class="absolute left-3 top-3 z-20 rounded-full bg-red-700/90 px-2.5 py-0.5 font-mono-num text-[10px] font-bold text-white">03 · COLD UV LASER</span>
@@ -769,7 +769,7 @@ export const finalSiteHtml = `
                 <div class="mt-3 flex flex-wrap gap-1.5"><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">COLD UV LASER</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">355NM PRECISION</span><span class="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">BACK GLASS SAFE</span></div>
               </div>
             </div>
-            <div class="stage-3d-box relative h-[520px] w-full border-t border-orange-100 lg:col-span-6 lg:border-l lg:border-t-0">
+            <div class="stage-3d-box relative h-[480px] w-full border-t border-orange-100 sm:h-[520px]">
               <canvas id="canvas-tbk-958" aria-label="Interactive 4D TBK-958 Cold UV Purple Laser"></canvas>
               <span class="pointer-events-none absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold bg-purple-950/85 text-purple-200">Interactive 4D · 355nm Beam</span>
               <span class="pointer-events-none absolute bottom-3 left-3 right-3 text-center text-[10px] font-semibold text-zinc-400">Drag to orbit · scroll-safe</span>
