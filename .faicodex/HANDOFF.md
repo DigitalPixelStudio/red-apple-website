@@ -158,6 +158,15 @@ Real bugs found via Playwright (not string checks) and fixed:
 
 ---
 
+## 16. v9 FINAL SETUP — DEPLOYED (2026-11-22) — HEAD 1219210
+- Rollback tags: `stable-pre-v9-final`, `stable-pre-v8-final`. Live proof: hero gap gone (content top 147px, h1 206px), pills 0 overlap, price 1/2/3 cols, footer 1/4 cols, email break-words.
+- CRITICAL: production noindex header regression (from v8 x-vercel-deployment-url rule) FIXED and verified absent on live; PY-1 scanner now hard-gates it (14/14 PASS).
+- 3D: responsive MODEL_FRAMING (hero 0.86, tablet 0.66, pickup 0.76, 3/4 camera) with shared renderer intact.
+- Gates: QA 50/50 PASS, SEO scanner 14/14 live PASS, predeploy ALL PASS, 10 routes 200. BUILD_ID `CUlBTafDpTCvkbWed933c`.
+- Faisu's manual actions: GSC Request Indexing on 5 URLs; delete 2 old Vercel projects. Next: CRM. `/catch-up`.
+
+---
+
 ## 15. v8 JITTER-FREE / BOT-PROOF BUILD — IN PROGRESS (2026-11-22, deploy PENDING)
 > Sections 7/13/14 PASS refer to previously deployed builds. v8 is NEW, uncommitted, and NOT deployed. Do not report QA PASS or deploy until FaiCodex confirms.
 - Safety tag before edits: `stable-pre-v8-final` (rollback point on `fix/disable-orange-glass-sweep`). HEAD `2d29150` (docs); v8 changes uncommitted: `public/final-site.js`, `src/app/final-site.css`, `src/lib/final-site-html.ts`, `scripts/audit/seo_strike_scanner.py`, new `scripts/audit/verify_v8_live.py`.
