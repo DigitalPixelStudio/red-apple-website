@@ -1030,6 +1030,25 @@
 
         // 1. HERO: Flagship Keynote iPhone 17 Pro Max · Orange
         let heroAmbient = false;
+        // Anti-jank: build 9 remaining models in idle slices (~50ms each)
+        // instead of one ~500ms main-thread block during initial load.
+        const slotBuildQueue = [];
+        const queueSlot = (fn) => slotBuildQueue.push(fn);
+        const scheduleSlice = window.requestIdleCallback
+          ? (fn) => requestIdleCallback(fn, { timeout: 250 })
+          : (fn) => setTimeout(fn, 24);
+        function drainSlots() {
+          const job = slotBuildQueue.shift();
+          if (!job) return;
+          try {
+            job();
+            const just = slots[slots.length - 1];
+            if (just) { try { renderer.compile(just.scene, just.camera); } catch (_) {} }
+          } catch (e) { console.warn('[3D] deferred slot build failed', e); }
+          if (slotBuildQueue.length) scheduleSlice(drainSlots);
+        }
+        scheduleSlice(drainSlots);
+
         const heroSlot = registerSlot('canvas-hero', 6.1, (root) => {
           const phone = buildBeveledPhone(cosmicOrangeFrame, true);
           const laserScan = new THREE.Mesh(
@@ -1076,7 +1095,7 @@
         });
 
         // 2. 30-Second Estimate — Animated 3D iPad Pro
-        registerSlot('canvas-estimate-ipad', 6.0, (root) => {
+        queueSlot(() => { registerSlot('canvas-estimate-ipad', 6.0, (root) => {
           const padGeo = new THREE.ExtrudeGeometry(roundedShape(2.4, 3.05, 0.16), { depth: 0.07, bevelEnabled: true, bevelThickness: 0.015, bevelSize: 0.015, bevelSegments: 3 });
           padGeo.center();
           const pad = new THREE.Mesh(padGeo, silverMat);
@@ -1092,10 +1111,10 @@
             root.position.y = Math.sin(t * 1.2) * 0.08;
             pencil.position.y = 1.72 + Math.sin(t * 1.8) * 0.1;
           };
-        }, -0.3, 0.1);
+        }, -0.3, 0.1) });;
 
         // 3. Free Doorstep Pickup 24/7 — Animated 3D iPhone
-        registerSlot('canvas-pickup-iphone', 5.9, (root) => {
+        queueSlot(() => { registerSlot('canvas-pickup-iphone', 5.9, (root) => {
           const phone = buildBeveledPhone(slateMat, false);
           const halo = new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.02, 12, 60), new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.5 }));
           halo.rotation.x = Math.PI / 2.3;
@@ -1104,10 +1123,10 @@
             phone.position.y = Math.sin(t * 1.4) * 0.1;
             halo.rotation.z = t * 0.7;
           };
-        }, 0.4, 0.12);
+        }, 0.4, 0.12) });;
 
         // 4. TBK OCA Hydraulic Press 3D
-        registerSlot('canvas-tbk-oca', 5.8, (root) => {
+        queueSlot(() => { registerSlot('canvas-tbk-oca', 5.8, (root) => {
           root.position.y = -0.2;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.9, 1.8), silverMat); base.position.y = -0.8;
           const top = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, 1.8), slateMat); top.position.y = 1.05;
@@ -1116,10 +1135,10 @@
           const platen = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.14, 1.25), orangeTit); platen.position.y = 0.5;
           root.add(base, top, cyl, win, platen);
           return (t) => { platen.position.y = 0.5 - ((Math.sin(t * 2.2) + 1) * 0.5) * 0.7; };
-        }, -0.4, 0.2);
+        }, -0.4, 0.2) });;
 
         // 5. TBK 90L Autoclave Bubble Chamber 3D
-        registerSlot('canvas-tbk-90l', 5.9, (root) => {
+        queueSlot(() => { registerSlot('canvas-tbk-90l', 5.9, (root) => {
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.42, 2.0), darkObs); base.position.y = -1.15;
           const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.98, 0.98, 2.05, 32), slateMat); tank.rotation.x = Math.PI / 2;
           const dPivot = new THREE.Group(); dPivot.position.set(-0.98, 0, 1.04);
@@ -1129,10 +1148,10 @@
           dPivot.add(hatch, wheel, hub);
           root.add(base, tank, dPivot);
           return (t) => { dPivot.rotation.y = -Math.max(0, Math.sin(t * 0.9)) * 0.72; };
-        }, -0.35, 0.18);
+        }, -0.35, 0.18) });;
 
         // 6. TBK-958 Cold UV Purple Laser 3D
-        registerSlot('canvas-tbk-958', 5.8, (root) => {
+        queueSlot(() => { registerSlot('canvas-tbk-958', 5.8, (root) => {
           root.position.y = -0.25;
           const base = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.4, 2.2), silverMat); base.position.y = -1.05;
           const bed = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.08, 1.5), darkObs); bed.position.set(0, -0.82, 0.2);
@@ -1149,7 +1168,7 @@
             beam.position.set(sx * 0.5, -0.02, 0.2 + (sz - 0.2) * 0.5);
             beam.rotation.z = sx * 0.3;
           };
-        }, -0.4, 0.2);
+        }, -0.4, 0.2) });;
 
         // 7. Stacked iPhone 17 Pro Max Internal Teardown 3D
         let intFactor = 0.65;
@@ -1158,7 +1177,7 @@
           const v = document.getElementById('val-internals');
           if (v) v.textContent = Math.round(intFactor * 100) + '%';
         });
-        registerSlot('canvas-internals', 5.8, (root) => {
+        queueSlot(() => { registerSlot('canvas-internals', 5.8, (root) => {
           const lBack = new THREE.Mesh(new THREE.BoxGeometry(1.4, 2.8, 0.05), darkObs);
           const lFrame = new THREE.Mesh(new THREE.BoxGeometry(1.42, 2.84, 0.08), slateMat);
           const lBoard = new THREE.Group();
@@ -1176,7 +1195,7 @@
             lBoard.position.z = sp * 0.5;
             lOled.position.z = sp * 1.5;
           };
-        }, -0.45, 0.14);
+        }, -0.45, 0.14) });;
 
         // 8. Stacked Realistic AirPods Pro 3D (Matched Dark Crimson-Orange Studio Backdrop)
         let apFactor = 0.7;
@@ -1185,7 +1204,7 @@
           const v = document.getElementById('val-airpods');
           if (v) v.textContent = Math.round(apFactor * 100) + '%';
         });
-        registerSlot('canvas-airpods', 5.2, (root) => {
+        queueSlot(() => { registerSlot('canvas-airpods', 5.2, (root) => {
           const apGlossWhite = new THREE.MeshStandardMaterial({ color: 0xf4f4f5, metalness: 0.12, roughness: 0.16 });
           const apSilicone = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.04, roughness: 0.42 });
           const apShadow = new THREE.Mesh(
@@ -1236,10 +1255,10 @@
             lb.position.set(-0.42 - apFactor * 0.44, 0.08 + apFactor * 0.92 + fl, 0.08);
             rb.position.set(0.42 + apFactor * 0.44, 0.08 + apFactor * 0.92 - fl, 0.08);
           };
-        }, -0.32, 0.16);
+        }, -0.32, 0.16) });;
 
         // 9. Apple Watch Ultra 3D
-        registerSlot('canvas-watch', 5.0, (root) => {
+        queueSlot(() => { registerSlot('canvas-watch', 5.0, (root) => {
           const wCase = new THREE.Mesh(new THREE.BoxGeometry(1.12, 1.38, 0.28), slateMat);
           const face = new THREE.Mesh(new THREE.BoxGeometry(0.94, 1.18, 0.04), darkObs); face.position.z = 0.16;
           const ring = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.032, 12, 32), redGlow); ring.position.z = 0.19;
@@ -1248,12 +1267,12 @@
           const bBot = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.95, 0.08), darkObs); bBot.position.set(0, -1.15, -0.04);
           root.add(wCase, face, ring, act, bTop, bBot);
           return (t) => { ring.scale.setScalar(0.95 + Math.sin(t * 2.2) * 0.05); };
-        }, -0.35, 0.12);
+        }, -0.35, 0.12) });;
 
         // 10. MacBook Pro 3D
         let mbFactor = 0.75;
         document.getElementById('sl-macbook')?.addEventListener('input', (e) => { mbFactor = parseFloat(e.target.value) / 100; });
-        registerSlot('canvas-macbook', 6.0, (root) => {
+        queueSlot(() => { registerSlot('canvas-macbook', 6.0, (root) => {
           root.position.y = -0.35;
           const deck = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.11, 1.95), darkObs);
           const lidPivot = new THREE.Group(); lidPivot.position.set(0, 0.06, -0.96);
@@ -1262,7 +1281,7 @@
           lidPivot.add(lid, scr);
           root.add(deck, lidPivot);
           return () => { lidPivot.rotation.x = Math.PI / 2 - mbFactor * 1.88; };
-        }, -0.4, 0.18);
+        }, -0.4, 0.18) });;
 
         // Cache dimensions via ResizeObserver (no layout reads in the render loop)
         if (typeof ResizeObserver !== 'undefined') {
