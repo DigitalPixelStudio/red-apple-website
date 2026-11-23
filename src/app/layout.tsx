@@ -5,6 +5,7 @@ import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES } from "@/lib/site";
 import Script from "next/script";
 import { RED_APPLE_JSON_LD } from "@/lib/seo/localSchema";
 import { PRIMARY_KEYWORDS, CONTENT_CATEGORY, CITY } from "@/lib/seo/adsTargeting";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 /* Apple-display-led metadata from the ads single source. Deduplicated
    case-insensitively against the legacy keyword list so no term is repeated
@@ -258,6 +259,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         {children}
+        <PWAInstallPrompt />
         {/* Single JSON-LD array: existing entities are preserved and the local
             MobilePhoneRepair entity is merged in as one extra node. None of the
             other nodes carries an aggregateRating, so the 4.9/1103 rating in
@@ -279,3 +281,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
+[executed on device: ForgeBeast (e038fbbc-063f-49d1-9164-37e8bf8ab528)]
