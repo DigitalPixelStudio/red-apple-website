@@ -20,8 +20,8 @@ export default function Reveal({ children, className = "", delay = 0, as = "div"
 
     // No IntersectionObserver (very old browsers, prerender): show immediately.
     if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
+      const frame = window.requestAnimationFrame(() => setVisible(true));
+      return () => window.cancelAnimationFrame(frame);
     }
 
     // Trigger slightly before the block reaches the viewport so the content is

@@ -7,7 +7,7 @@ import { SITE, SOCIAL_LINKS, wa, SERVICE_PAGES } from "@/lib/site";
 import { track } from "@/lib/analytics";
 import { LineIcon, type IconName } from "./Icons";
 
-const SOCIALS = SOCIAL_LINKS.filter((s) => s.href).map((s) => ({
+const SOCIALS = SOCIAL_LINKS.filter((s) => s.href && s.label !== "X (Twitter)").map((s) => ({
   ...s,
   icon: s.icon as IconName,
 }));

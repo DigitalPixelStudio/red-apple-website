@@ -1298,7 +1298,6 @@ export const finalSiteHtml = `
             <a href="#footer-contact" class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700 hover:bg-blue-100">Facebook</a>
             <a href="#footer-contact" class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100">Instagram</a>
             <a href="#footer-contact" class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700 hover:bg-red-100">YouTube</a>
-            <a href="#footer-contact" class="rounded-full border border-zinc-300 bg-zinc-100 px-2.5 py-1 text-zinc-800 hover:bg-zinc-200">X</a>
             <a href="#halasuru-map" class="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">Google Maps</a>
             <a href="#footer-contact" class="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-amber-800">JustDial</a>
             <a href="#footer-contact" class="rounded-full border border-zinc-300 bg-white px-2.5 py-1 text-zinc-800">Apple Maps</a>

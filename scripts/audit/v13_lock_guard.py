@@ -7,8 +7,8 @@ if any of the device-locked framing rules drift.
 Faisu's v17 spec (DESKTOP / TABLET >=768px ONLY — ALL MOBILE FROZEN):
 
   DEVICE-AWARE models (desktopFill ranges, mobile untouched):
-    - canvas-tbk-oca, canvas-tbk-90l, canvas-tbk-958 -> 0.74..0.76 (TBK x3)
-    - canvas-airpods                                 -> 0.65..0.67
+    - canvas-tbk-oca, canvas-tbk-90l, canvas-tbk-958 -> 0.69..0.71 (TBK x3)
+    - canvas-airpods                                 -> 0.60..0.62
     - canvas-internals                               -> 0.86 desktop AND 0.88 mobile
                                                         (the ONLY mobile override)
 
@@ -43,8 +43,8 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_JS = ROOT / "public" / "final-site.js"
 
 # --- Faisu's locked v17 desktop spec -----------------------------------------
-TBK_MIN, TBK_MAX = 0.74, 0.76
-AIRPODS_MIN, AIRPODS_MAX = 0.65, 0.67
+TBK_MIN, TBK_MAX = 0.69, 0.71
+AIRPODS_MIN, AIRPODS_MAX = 0.60, 0.62
 MACBOOK_FROZEN = 0.90  # frozen base fill; MacBook must have NO device override
 INTERNALS_DESKTOP = 0.86
 INTERNALS_MOBILE = 0.88
@@ -319,7 +319,7 @@ def check_desktop_fills(merged: dict[str, dict]) -> tuple[bool, str, dict]:
                 f"{cid}: desktop fill {shown} outside locked {lo:.2f}-{hi:.2f}"
             )
     detail = (
-        "v17 desktop fills all in range (TBK 0.74-0.76, AirPods 0.65-0.67, "
+        "v17 desktop fills all in range (TBK 0.69-0.71, AirPods 0.60-0.62, "
         "internals 0.86; MacBook frozen 0.90 checked separately)"
         if not bad
         else "; ".join(bad)
@@ -593,7 +593,7 @@ def main() -> int:
     checks = [
         {"id": "a_model_framing_present", "title": "MODEL_FRAMING parsed", "ok": framing_ok, "detail": framing_detail},
         {"id": "b_device_aware_mechanism", "title": "device-fill mechanism present", "ok": a_ok, "detail": a_detail},
-        {"id": "c_locked_desktop_fills", "title": "TBK 0.74-0.76 / AirPods 0.65-0.67 / internals 0.86", "ok": b_ok, "detail": b_detail},
+        {"id": "c_locked_desktop_fills", "title": "TBK 0.69-0.71 / AirPods 0.60-0.62 / internals 0.86", "ok": b_ok, "detail": b_detail},
         {"id": "c2_macbook_frozen_fill", "title": "canvas-macbook FROZEN at 0.90, no device override", "ok": cx_ok, "detail": cx_detail},
         {"id": "d_internals_mobile_fill", "title": "canvas-internals mobileFill locked at 0.88", "ok": c_ok, "detail": c_detail},
         {"id": "d2_mobile_frozen", "title": "no NEW mobile overrides (only internals)", "ok": c2_ok, "detail": c2_detail},

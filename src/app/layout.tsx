@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
+import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES } from "@/lib/site";
 import Script from "next/script";
 import { RED_APPLE_JSON_LD } from "@/lib/seo/localSchema";
 import { PRIMARY_KEYWORDS, CONTENT_CATEGORY, CITY } from "@/lib/seo/adsTargeting";
@@ -105,24 +105,12 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/* FAQPage describes the visible FAQ content. Google currently limits FAQ rich results
-   primarily to authoritative government and health sites; no display is promised. */
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQS.slice(0, 12).map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
-
 /* Service schema — one entry per repair we publish, so each shows as a service. */
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   serviceType: "Apple device repair",
-  provider: { "@type": "LocalBusiness", name: SITE.legalName, url: baseUrl },
+  provider: { "@id": baseUrl + "/#business" },
   areaServed: { "@type": "City", name: "Bengaluru" },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
@@ -137,7 +125,7 @@ const serviceSchema = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": ["LocalBusiness", "Store", "Organization", "AutoRepair"],
+  "@type": ["LocalBusiness", "Store"],
   "@id": `${baseUrl}/#business`,
   name: SITE.legalName,
   alternateName: SITE.shortName,

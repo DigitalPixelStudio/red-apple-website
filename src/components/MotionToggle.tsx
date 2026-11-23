@@ -20,9 +20,12 @@ export default function MotionToggle() {
       /* storage blocked — keep the default */
     }
     const isOn = stored !== "off";
-    setOn(isOn);
-    setReady(true);
+    const frame = window.requestAnimationFrame(() => {
+      setOn(isOn);
+      setReady(true);
+    });
     document.documentElement.dataset.motion = isOn ? "on" : "off";
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   function toggle() {

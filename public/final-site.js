@@ -643,6 +643,22 @@
             <p class="mt-2 text-xs leading-relaxed text-zinc-600">${a}</p>
           </details>
         `).join('');
+        // Keep FAQ structured data in sync with the exact FAQ content visitors see.
+        if (!document.getElementById('faq-jsonld')) {
+          const faqScript = document.createElement('script');
+          faqScript.id = 'faq-jsonld';
+          faqScript.type = 'application/ld+json';
+          faqScript.textContent = JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map(([q, a]) => ({
+              '@type': 'Question',
+              name: q,
+              acceptedAnswer: { '@type': 'Answer', text: a },
+            })),
+          });
+          document.head.appendChild(faqScript);
+        }
       }
 
       // ============================================================
@@ -942,7 +958,7 @@
               webglRafId = 0;
               return;
             }
-            renderFrame();
+            renderFrame(now);
             webglRafId = requestAnimationFrame(tick);
           };
           webglRafId = requestAnimationFrame(tick);
@@ -1003,10 +1019,11 @@
           return {
             setEnabled(v) { enabled = v; },
             reset() { ty = initY; tx = initX; },
-            update(autoSpeed) {
-              if (!drag) ty += autoSpeed;
-              ry += (ty - ry) * 0.14;
-              rx += (tx - rx) * 0.14;
+            update(autoSpeed, frameScale = 1) {
+              if (!drag) ty += autoSpeed * frameScale;
+              const follow = 1 - Math.pow(1 - 0.14, frameScale);
+              ry += (ty - ry) * follow;
+              rx += (tx - rx) * follow;
               group.rotation.y = ry;
               group.rotation.x = rx;
             }
@@ -1075,11 +1092,11 @@
         // Mobile (<768px): ONLY internals slightly smaller (0.88); all else frozen.
         // MacBook is FROZEN at 0.90 — no device override.
         const V13_DEVICE_FILL = {
-          'canvas-tbk-oca':   { desktopFill: 0.75 }, // mobile frozen
-          'canvas-tbk-90l':   { desktopFill: 0.75 }, // mobile frozen
-          'canvas-tbk-958':   { desktopFill: 0.75 }, // mobile frozen
+          'canvas-tbk-oca':   { desktopFill: 0.70 }, // mobile frozen; slightly smaller only on tablet/desktop
+          'canvas-tbk-90l':   { desktopFill: 0.70 }, // mobile frozen; slightly smaller only on tablet/desktop
+          'canvas-tbk-958':   { desktopFill: 0.70 }, // mobile frozen; slightly smaller only on tablet/desktop
           'canvas-internals': { desktopFill: 0.86, mobileFill: 0.88 },
-          'canvas-airpods':   { desktopFill: 0.66 }, // medium reduction, mobile frozen
+          'canvas-airpods':   { desktopFill: 0.61 }, // slightly smaller only on tablet/desktop; mobile frozen
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -1607,7 +1624,13 @@
               const slot = slots.find((x) => x.canvas === target);
               if (!slot) return;
               const cs = en.contentRect;
+              const previousAspect = slot.cw && slot.ch ? slot.cw / slot.ch : 0;
               slot.cw = Math.round(cs.width); slot.ch = Math.round(cs.height);
+              const nextAspect = slot.cw && slot.ch ? slot.cw / slot.ch : 0;
+              if (previousAspect && nextAspect && Math.abs(previousAspect - nextAspect) > 0.015) {
+                slot.autoFramed = false;
+                slot.autoWake = true;
+              }
               const [rw, rh] = fitDims(slot.cw, slot.ch);
               slot.rw = rw; slot.rh = rh;
               if (slot.canvas.width !== slot.rw || slot.canvas.height !== slot.rh) {
@@ -1631,11 +1654,14 @@
         document.addEventListener('visibilitychange', wakeAll);
         window.addEventListener('pageshow', wakeAll);
         window.addEventListener('focus', wakeAll);
+        window.addEventListener('orientationchange', wakeAll, { passive: true });
 
-        let t = 0;
-        function renderFrame() {
+        let t = 0, lastFrameTime = 0;
+        function renderFrame(now = performance.now()) {
           if (document.hidden || visibleSlots.size === 0) return;
-          t += 0.018;
+          const frameScale = lastFrameTime ? Math.min(2, Math.max(0.5, (now - lastFrameTime) / 16.667)) : 1;
+          lastFrameTime = now;
+          t += 0.018 * frameScale;
           const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
             const s = slots[i];
@@ -1660,7 +1686,7 @@
               centerAndFitResponsive(s.camera, s.root, id);
             }
             if (typeof ResizeObserver === 'undefined') { s.camera.aspect = cw / ch; s.camera.updateProjectionMatrix(); }
-            s.orbit.update(s === heroSlot && heroAmbient ? 0.0028 : 0.0016);
+            s.orbit.update(s === heroSlot && heroAmbient ? 0.0028 : 0.0016, frameScale);
             if (s.onTick) s.onTick(t);
             renderer.setViewport(0, 0, rw, rh);
             renderer.setScissor(0, 0, rw, rh);
@@ -1672,8 +1698,25 @@
           perfFrames++;
           if (perfFrames >= 45) {
             const avg = perfAcc / perfFrames;
-            if (avg > 18 && adaptiveDpr > 1) adaptiveDpr = Math.max(1, adaptiveDpr - 0.25);
-            else if (avg < 9 && adaptiveDpr < dpr) adaptiveDpr = Math.min(dpr, adaptiveDpr + 0.25);
+            const nextDpr = avg > 8.5 && adaptiveDpr > 1
+              ? Math.max(1, adaptiveDpr - 0.25)
+              : avg < 6.2 && adaptiveDpr < dpr
+                ? Math.min(dpr, adaptiveDpr + 0.25)
+                : adaptiveDpr;
+            if (nextDpr !== adaptiveDpr) {
+              adaptiveDpr = nextDpr;
+              // Apply adaptive resolution immediately when the frame budget tightens.
+              slots.forEach((slot) => {
+                if (!slot.cw || !slot.ch) return;
+                const [rw, rh] = fitDims(slot.cw, slot.ch);
+                slot.rw = rw; slot.rh = rh;
+                if (slot.canvas.width !== rw || slot.canvas.height !== rh) {
+                  slot.canvas.width = rw; slot.canvas.height = rh;
+                }
+                slot.autoFramed = false;
+                slot.autoWake = true;
+              });
+            }
             perfAcc = 0; perfFrames = 0;
           }
         }

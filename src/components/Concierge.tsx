@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
-import { LineIcon, type IconName } from "./Icons";
+import { LineIcon } from "./Icons";
 import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
 import { GLASS_PRICE_ROWS, GLASS_PRICE_MIN, GLASS_PRICE_MAX } from "@/lib/glass-pricing";
 import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
@@ -472,7 +472,7 @@ export default function Concierge() {
      minutes on the page, and never on top of an open chat. Dismissal is
      remembered for the session. */
   useEffect(() => {
-    if (open) { setTeaser(false); return; }
+    if (open) return;
     let seen = false;
     try { seen = window.sessionStorage.getItem("ramr-concierge-teaser") === "1"; } catch {}
     if (seen) return;

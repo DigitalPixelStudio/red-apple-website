@@ -4945,3 +4945,95 @@ html[data-motion="off"] .glass-machine-scan { opacity: 0 !important; }
 
     /* FINAL OVERRIDE (zero-jank): no backdrop blur over scrolling text anywhere */
     .glass-premium, .concierge-teaser { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+/* 2026 responsive polish: stronger typography and compositor-safe breathing. */
+main h1,
+main h2,
+main h3 {
+  font-weight: 900 !important;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+main h1, main h2 { line-height: 1.12; }
+main .section-title { margin-inline: auto; }
+main .section-subtitle { line-height: 1.72; text-wrap: pretty; }
+.whyus-heading {
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.038em !important;
+  max-width: 18ch;
+}
+.why-head-red {
+  background: linear-gradient(100deg, #dc2626 0%, #f97316 52%, #9f1239 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+.why-rupee { color: #dc2626 !important; font-weight: 950 !important; white-space: nowrap; }
+/* Only the small gradient accent breathes; opacity stays compositor-friendly. */
+main h1 .text-brand-grad,
+main h2 .quote-color-shift,
+main h3 .quote-color-shift,
+.whyus-heading .why-head-red {
+  animation: v17AccentBreath 3.2s ease-in-out infinite !important;
+  will-change: opacity;
+}
+html[data-motion="off"] main h1 .text-brand-grad,
+html[data-motion="off"] main h2 .quote-color-shift,
+html[data-motion="off"] main h3 .quote-color-shift,
+html[data-motion="off"] .whyus-heading .why-head-red {
+  animation: none !important;
+  opacity: 1 !important;
+  will-change: auto;
+}
+html, body { max-width: 100%; }
+body { overflow-x: clip; }
+@media (min-width: 768px) and (max-width: 1199px) {
+  .section-apple { padding-block: clamp(4.25rem, 8vw, 6.5rem); }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .section-apple { padding-block: clamp(2.25rem, 5vh, 3.5rem); }
+  .section-apple .section-title { line-height: 1.08; }
+  .stage-3d-box, .stage-3d-white { min-height: min(62vh, 420px); }
+}
+@media (max-width: 767px) {
+  .section-apple { padding-block: clamp(3.75rem, 11vw, 5rem); }
+  .section-title { max-width: 18ch; }
+}
+@media (prefers-reduced-motion: reduce) {
+  main .section-title,
+  .whyus-heading .why-head-red { animation: none !important; opacity: 1 !important; }
+}
+
+/* Responsive header: the compact section rail becomes the tablet/mobile navigation. */
+@media (max-width: 1279px) {
+  .site-header-120fps nav { display: none !important; }
+}
+@media (max-width: 480px) {
+  .site-header-120fps .mx-auto { padding-inline: 12px !important; gap: 6px !important; }
+  .site-header-120fps .brand-dark-glow { display: none !important; }
+  .site-header-120fps #btn-pwa-open { width: 34px; min-width: 34px; justify-content: center; padding-inline: 7px !important; }
+  .site-header-120fps #btn-pwa-open span:last-child { display: none !important; }
+  .site-header-120fps #btn-pwa-open span:first-child { font-size: 14px; line-height: 1; }
+  .site-header-120fps .dock-quote-btn { padding: 7px 9px !important; font-size: 9px !important; }
+  #page-plan-pagelog { max-width: 116px; padding-inline: 8px !important; font-size: 9px !important; }
+}
+
+/* Short landscape screens: keep hero copy and the 3D stage in one balanced row. */
+@media (orientation: landscape) and (max-height: 600px) and (min-width: 768px) {
+  #hero { padding-top: clamp(1rem, 3vh, 1.75rem) !important; padding-bottom: clamp(1.25rem, 3vh, 2rem) !important; }
+  #hero .grid.grid-cols-1 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; gap: clamp(1rem, 2.2vw, 2rem) !important; }
+  #hero .stage-3d-box { height: min(65vh, 360px) !important; min-height: 230px !important; }
+  #hero h1 { font-size: clamp(1.75rem, 3.3vw, 2.8rem) !important; line-height: 1.08 !important; }
+  #hero p { font-size: clamp(.75rem, 1.15vw, .95rem) !important; line-height: 1.55 !important; }
+  #hero .fast-breathe-badge { max-width: 100%; font-size: 10px; }
+  #hero .grid.grid-cols-1 > div { min-width: 0; }
+}
+
+@media (orientation: landscape) and (max-height: 600px) and (min-width: 768px) {
+  /* The fixed action dock otherwise covers the short landscape hero; primary CTAs remain in the header and hero. */
+  .floating-dock { display: none !important; }
+  #btn-open-ai { bottom: 12px !important; }
+  #ai-auto-toast { bottom: 68px !important; }
+  #ai-drawer { bottom: 116px !important; }
+}

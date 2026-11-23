@@ -75,7 +75,7 @@ function groupModels() {
 type Passport = { model: string; symptom: string; at: number };
 
 export default function DeviceTriage() {
-  const groups = useMemo(groupModels, []);
+  const groups = useMemo(() => groupModels(), []);
   const [model, setModel] = useState("iPhone 14");
   const [symptomId, setSymptomId] = useState("screen");
   const [passport, setPassport] = useState<Passport | null>(null);
@@ -102,7 +102,7 @@ export default function DeviceTriage() {
         typeof parsed.symptom === "string" &&
         Date.now() - Number(parsed.at) < 90 * 24 * 60 * 60 * 1000
       ) {
-        setPassport(parsed);
+        window.requestAnimationFrame(() => setPassport(parsed));
       }
     } catch {
       /* storage is optional */
