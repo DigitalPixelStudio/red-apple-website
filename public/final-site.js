@@ -881,12 +881,6 @@
       });
 
 
-      // PWA Modal
-      const pwaModal = document.getElementById('pwa-modal');
-      document.getElementById('btn-pwa-open')?.addEventListener('click', () => { pwaModal?.classList.remove('hidden'); pwaModal?.classList.add('flex'); });
-      document.getElementById('btn-pwa-close')?.addEventListener('click', () => { pwaModal?.classList.add('hidden'); pwaModal?.classList.remove('flex'); });
-      document.getElementById('btn-pwa-confirm')?.addEventListener('click', () => { document.getElementById('pwa-status')?.classList.remove('hidden'); });
-
       // Scroll Reveal + Left Page Rail Active Tracker
       if (typeof IntersectionObserver !== 'undefined') {
         const revIo = new IntersectionObserver((entries) => {
@@ -1768,3 +1762,5 @@
     window.onload();
   }
 })();
+
+[executed on device: ForgeBeast (e038fbbc-063f-49d1-9164-37e8bf8ab528)]
