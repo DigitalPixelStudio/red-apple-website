@@ -25,7 +25,7 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  alternates: { canonical: `${baseUrl}/` },
+  alternates: { canonical: baseUrl },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${baseUrl}/og-image.png`,
+        url: `${baseUrl}/og-card.jpg`,
         width: 1200,
         height: 630,
         alt: "Red Apple Mobile Repair Store — Halasuru, Bengaluru",
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Red Apple Mobile Repair — Apple Device Repairs, Mastered | Halasuru, Bengaluru",
     description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
-    images: [`${baseUrl}/og-image.png`],
+    images: [`${baseUrl}/og-card.jpg`],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true }, "max-image-preview": "large", "max-snippet": -1 },
 };

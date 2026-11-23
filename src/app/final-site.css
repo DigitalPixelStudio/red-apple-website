@@ -76,8 +76,8 @@
       background-image:
         radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.075), transparent 52%),
         radial-gradient(circle at 88% 82%, rgba(234, 88, 12, 0.095), transparent 52%),
-        radial-gradient(rgba(220, 38, 38, 0.07) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 28px 28px;
+        radial-gradient(rgba(194, 65, 12, 0.24) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
     }
     .ambient-clean {
       position: relative;
@@ -86,8 +86,8 @@
       background-image:
         radial-gradient(circle at 82% 15%, rgba(234, 88, 12, 0.06), transparent 50%),
         radial-gradient(circle at 18% 85%, rgba(220, 38, 38, 0.045), transparent 50%),
-        radial-gradient(rgba(24, 24, 27, 0.05) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 32px 32px;
+        radial-gradient(rgba(194, 65, 12, 0.24) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
     }
     /* Static warm hairline sheen — paint-only, no animation, never blocks pointer input. */
     .studio-laser-hairline {
@@ -122,6 +122,7 @@
     /* One-shot reveal via IntersectionObserver only (no per-frame scroll work, no reverse jitter) */
     .reveal-up { transition: opacity 560ms ease-out, transform 560ms cubic-bezier(.22,1,.36,1); will-change: auto; }
     @media (prefers-reduced-motion: reduce) { .reveal-up { transition: none !important; } }
+    /* ZLE (d) off-screen WebGL auto-sleep: owned by final-site.js (visibilitychange / IntersectionObserver) — CSS never wakes it */
     /* High-Contrast Obsidian Studio Backdrop for 3D Stages */
     .stage-3d-box {
       contain: paint;
@@ -479,6 +480,7 @@
       opacity: 0; pointer-events: none; transition: opacity 240ms ease-out;
     }
     .studio-warm-glow:hover::after { opacity: 0.9; }
+    /* ZLE (e) below-the-fold images: decoding="async" + intrinsic width/height in HTML — zero CLS, no JS */
     /* Scope: ONLY store/gallery/machine images (exclude logos, text cards, icons) */
     #gallery img, #tbk-machines img, #glass-lab img, #real-shop img, #craft-showcase img {
       border-radius: 1.25rem;
@@ -546,6 +548,7 @@
     ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #dc2626, #ea580c); border-radius: 8px; border: 2px solid #faf6f2; }
 
     /* ===== Agent E: zero-jank floating chrome (preserves look) ===== */
+    /* ZLE (a) floating dock: backdrop-filter:none — zero-blur, GPU translate only */
     .floating-dock { contain: layout style; transform: translate3d(-50%, 0, 0); backface-visibility: hidden; backdrop-filter: none; }
     #back-to-top, #btn-open-ai, #rm-dock { transform: translateZ(0); backface-visibility: hidden; will-change: auto; }
     .brand-name-glow::before, .brand-name-glow { filter: none; transition: none; }
@@ -615,6 +618,7 @@
       0%, 100% { opacity: .28; transform: scale(.96) translateZ(0); }
       50% { opacity: .7; transform: scale(1.04) translateZ(0); }
     }
+    /* ZLE (c) perf-text-zone: content-visibility:auto on dense text sections — paint skip, no scroll listener */
     /* Deferred paint for the dense comparison / four-reasons copy zone. */
     .perf-text-zone {
       content-visibility: auto;
@@ -666,6 +670,7 @@
     /* Gift (e): cross-document view transitions — compositor-driven navigation. */
     @view-transition { navigation: auto; }
 
+    /* ZLE (f) scroll progress hairline: animation-timeline:scroll() + scaleX fallback — transform-only, no JS */
     /* Gift (a): GPU scroll-progress hairline. CSS scroll timeline, no JS, no layout. */
     .scroll-progress-css {
       position: fixed;
@@ -693,6 +698,23 @@
     @media (prefers-reduced-motion: reduce) {
       .scroll-progress-css { animation: none !important; transform: scaleX(1) translateZ(0) !important; }
     }
+
+    /* Rebuilt technical ticker — static, shadow-free, compositor-only (no listeners, no transitions). */
+    .studio-cap-grid {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 6px; max-width: 72rem; margin-inline: auto; padding: 0 16px;
+      text-align: center; font-size: 11px; font-weight: 700; color: #3f3f46;
+      contain: layout style;
+    }
+    .studio-cap-chip {
+      display: inline-block; border: 1px solid #fee2e2; border-radius: 9999px;
+      background: rgba(255,255,255,.8); padding: 4px 10px;
+      transform: translateZ(0); will-change: auto; box-shadow: none !important;
+    }
+    /* Rebuilt glass-lab CTA band — static rows, zero shadows, zero scroll work. */
+    .lab-hash-row { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; font-size:11px; font-weight:700; color:#3f3f46; contain:layout style; }
+    .lab-cta-row { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:16px; contain:layout style; }
+    .lab-hours-line { margin-top:10px; font-size:11px; font-weight:600; color:#52525b; }
 
     /* --- 1. Flat, GPU-isolated glass-lab CTA band --- */
     .glass-lab-cta-band {
@@ -723,6 +745,7 @@
       .lab-hash-chip:hover { transform: translate3d(0, -2px, 0) scale(1.03) !important; }
     }
 
+    /* ZLE (g) tactile card lift + active:scale-[0.98]: transform-only, zero blur, no layout-animating props */
     /* --- Gift (c): tactile CTA press + zero-blur sheen (transform only) --- */
     .cta-tactile { position: relative; overflow: hidden; isolation: isolate; }
     .cta-tactile::after {
@@ -749,10 +772,10 @@
       color: #1E293B !important;
       border-top: 1px solid rgba(214,211,209,.85) !important;
       padding-top: 2.5rem !important;
-      padding-bottom: 72px !important; /* mobile floating-dock clearance — disclaimer sits tight to bottom edge */
+      padding-bottom: 66px !important; /* mobile floating-dock clearance — disclaimer sits tight to bottom edge */
     }
     @media (min-width:1024px) {
-      .footer-light-modern { padding-bottom: 18px !important; }
+      .footer-light-modern { padding-bottom: 16px !important; }
     }
     .footer-light-modern::before { background: none !important; }
     .footer-light-heading {
@@ -800,6 +823,7 @@
        no layout reads, no backdrop-filter, no blur-filter, no CLS.
        ============================================================ */
 
+    /* ZLE (b) listeners: no touch/scroll handlers in HTML; JS pointer listeners reported to FaiCodex ({passive:true} where safe) */
     /* ZERO-LOAD EFFECT 1/12 — scroll progress hairline (CSS scroll timeline, already mounted) */
     .scroll-progress-css { pointer-events: none; }
 
@@ -819,7 +843,7 @@
     .laser-line { opacity: .8 !important; animation: none !important; }
 
     /* ZERO-LOAD EFFECT 7/12 — micro-grid editorial texture (static radial dot grid, paint-once) */
-    .ambient-warm, .ambient-clean { background-size: 100% 100%, 100% 100%, 28px 28px; }
+    .ambient-warm, .ambient-clean { background-size: 100% 100%, 100% 100%, 24px 24px; }
 
     /* ZERO-LOAD EFFECT 8/12 — nav underline scaleX on hover (transform-only, no layout) */
     .top-nav-item::before {

@@ -34,6 +34,11 @@ Fetches the ten public routes with a Googlebot UA and asserts:
 Checks (a)-(f) reflect deployed live state; (g)-(m) read local repo source.
 Prints PASS/FAIL per check, exits 1 on any FAIL.
 Gift: --json for machine-readable output (now includes live response headers).
+
+Emergency maintenance: --skip-noindex bypasses ONLY check (i), the live
+noindex/nofollow exposure assertion. All strike/SSR/source gates — including
+(j) the next.config.ts shield — stay BLOCKING. Predeploy drives this via
+ALLOW_NOINDEX_MAINTENANCE=1; default behaviour is unchanged.
 """
 from __future__ import annotations
 
@@ -195,6 +200,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--json", action="store_true", help="emit machine-readable JSON")
+    parser.add_argument(
+        "--skip-noindex",
+        action="store_true",
+        help="EMERGENCY ONLY: bypass the live noindex exposure check (i); all strike/source gates stay blocking",
+    )
     args = parser.parse_args()
 
     pages: dict[str, dict] = {}
@@ -347,24 +357,33 @@ def main() -> int:
         )
 
     # (i) HARD GATE — no noindex/nofollow may leak onto a production HTML route.
-    i_hits: list[str] = []
-    for path in HTML_ROUTES:
-        page = pages[path]
-        xrobots = page["headers"].get("x-robots-tag", "")
-        if any(token in xrobots.lower() for token in FORBIDDEN_XROBOTS_TOKENS):
-            i_hits.append(f"{path}: X-Robots-Tag={xrobots!r}")
-        contents = meta_robots_contents(page["body"])
-        if not contents:
-            i_hits.append(f"{path}: missing <meta name=robots>")
-        elif not any("index" in c.lower() for c in contents):
-            i_hits.append(f"{path}: meta robots={contents!r} lacks 'index'")
-    add(
-        "i_no_noindex_on_production",
-        not i_hits,
-        "all HTML routes: no noindex/nofollow header; meta robots contains 'index'"
-        if not i_hits
-        else "NOINDEX EXPOSURE: " + " | ".join(i_hits),
-    )
+    # EMERGENCY OVERRIDE: --skip-noindex bypasses ONLY this live noindex check.
+    if args.skip_noindex:
+        add(
+            "i_no_noindex_on_production",
+            True,
+            "SKIPPED via --skip-noindex (ALLOW_NOINDEX_MAINTENANCE=1) — "
+            "live noindex assertions bypassed; all strike/source gates still blocking",
+        )
+    else:
+        i_hits: list[str] = []
+        for path in HTML_ROUTES:
+            page = pages[path]
+            xrobots = page["headers"].get("x-robots-tag", "")
+            if any(token in xrobots.lower() for token in FORBIDDEN_XROBOTS_TOKENS):
+                i_hits.append(f"{path}: X-Robots-Tag={xrobots!r}")
+            contents = meta_robots_contents(page["body"])
+            if not contents:
+                i_hits.append(f"{path}: missing <meta name=robots>")
+            elif not any("index" in c.lower() for c in contents):
+                i_hits.append(f"{path}: meta robots={contents!r} lacks 'index'")
+        add(
+            "i_no_noindex_on_production",
+            not i_hits,
+            "all HTML routes: no noindex/nofollow header; meta robots contains 'index'"
+            if not i_hits
+            else "NOINDEX EXPOSURE: " + " | ".join(i_hits),
+        )
 
     # (j) HARD GATE — next.config.ts source must keep the shield and drop the
     # x-vercel-deployment-url rule that caused the v8 deindex regression.
@@ -472,6 +491,7 @@ def main() -> int:
         "ok": ok,
         "base_url": args.base_url,
         "user_agent": GOOGLEBOT_UA,
+        "noindex_skipped": bool(args.skip_noindex),
         "routes_checked": list(ALL_ROUTES),
         "statuses": {p: pages[p]["status"] for p in ALL_ROUTES},
         "response_headers": {p: pages[p]["headers"] for p in ALL_ROUTES},

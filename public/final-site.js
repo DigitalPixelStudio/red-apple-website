@@ -109,7 +109,8 @@
 
       function buildExactWhatsAppTicket() {
         const repair = estRepair ? estRepair.value : 'Front Display Replacement';
-        const cond = (document.getElementById('est-condition')?.value || 'Not specified').trim();
+        // v13: the separate 'Cracked glass / working display' field was removed —
+        // the single full-width 'What is wrong?' input now carries all condition detail.
         const wrong = (document.getElementById('est-wrong')?.value || 'Need bench inspection').trim();
         const mode = document.getElementById('est-mode')?.value || 'Walk-in at store';
         const when = (document.getElementById('est-when')?.value || 'Today').trim();
@@ -129,7 +130,6 @@
           `- Type  :  ${selectedDev}`,
           `- Model :  ${selectedModel}`,
           `- Repair:  ${repair}`,
-          `- Condition:  ${cond}`,
           '',
           'WHAT IS WRONG',
           wrong,
@@ -905,21 +905,30 @@
         // ADAPTATION: we keep the document's fill math + 3/4 camera, but DO NOT call
         // renderer.setSize/setPixelRatio here — the renderer is SHARED by all 10 stages
         // and resizing it per slot reintroduces the old bottom-right shift bug.
-        // v13: widened near-edge fills. Shared renderer — never per-slot setSize.
-        // AirPods deliberately eased back slightly; MacBook pushed furthest.
+        // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 0.96, fov: 34 }, // slight zoom increase per Faisu
+          'canvas-hero':          { fill: 0.96, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
-          // Machines eased back slightly from 0.95 -> 0.88 for a clean centred view (no crop).
           'canvas-tbk-oca':       { fill: 0.88, fov: 34 },
           'canvas-tbk-90l':       { fill: 0.88, fov: 34 },
           'canvas-tbk-958':       { fill: 0.88, fov: 34 },
           'canvas-internals':     { fill: 0.95, fov: 34 },
-          'canvas-airpods':       { fill: 0.86, fov: 34 }, // eased slightly per Faisu
+          'canvas-airpods':       { fill: 0.86, fov: 34 },
           'canvas-watch':         { fill: 0.95, fov: 34 },
-          'canvas-macbook':       { fill: 0.96, fov: 34 }, // biggest — per Faisu
+          'canvas-macbook':       { fill: 0.96, fov: 34 },
+        };
+        // FAISU's HARD DEVICE-LOCKED 3D RULEBOOK (v13). Only these 5 models are
+        // device-aware; every OTHER model + ALL mobile views are frozen untouched.
+        // Desktop/tablet/PC (>=768px): 3 TBK machines + internals + AirPods slightly smaller.
+        // Mobile (<768px): ONLY internals slightly smaller (0.88); all other mobile frozen.
+        const V13_DEVICE_FILL = {
+          'canvas-tbk-oca':   { desktopFill: 0.86 }, // mobile frozen
+          'canvas-tbk-90l':   { desktopFill: 0.86 }, // mobile frozen
+          'canvas-tbk-958':   { desktopFill: 0.86 }, // mobile frozen
+          'canvas-internals': { desktopFill: 0.86, mobileFill: 0.88 },
+          'canvas-airpods':   { desktopFill: 0.86 }, // mobile frozen
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -973,7 +982,15 @@
             camera.fov = 34;
             const vFov = THREE.MathUtils.degToRad(camera.fov);
             const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-            const fill = Math.min(0.96, cfg.fill ?? 0.95);
+            // FAISU HARD LOCK: only V13_DEVICE_FILL models vary by viewport.
+            // <768px mobile uses mobileFill; >=768px uses desktopFill; everyone
+            // else falls back to their frozen baseline `fill`.
+            const dev = V13_DEVICE_FILL[id];
+            const isMobileView = window.innerWidth < 768;
+            const chosen = dev
+              ? (isMobileView ? (dev.mobileFill ?? cfg.fill) : (dev.desktopFill ?? cfg.fill))
+              : cfg.fill;
+            const fill = Math.min(0.96, chosen ?? 0.95);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
             // so animated pose changes can never drift the framing after idle wake.

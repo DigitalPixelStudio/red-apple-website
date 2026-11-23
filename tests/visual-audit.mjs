@@ -8,7 +8,7 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (64 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14):
+ * GATES (81 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13):
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -68,6 +68,24 @@
  *    NOTE: gate 24's fill check is version-tolerant (legacy 0.92/0.86/0.94 OR raised
  *    tiers) so all 62 original gates stay green across the v13->v14 transition; the
  *    strict raised-value assertion lives in gate 33.
+ *   v13 NEW (8 global SOURCE + 6 per-viewport DOM + 3 responsive DOM = 17):
+ *    S1. CSS dark-orange dot rgba(194,65,12,.24) + 24px grid, legacy dot gone.
+ *    S2. Header logo h-10/w-10 + sm:h-11/sm:w-11 + flex-col items-center alignment.
+ *    S3. #est-condition removed from HTML source; #est-wrong carries col-span-full.
+ *    S4. Both rebuilt sections keep their new structure: .studio-cap-grid with 9
+ *        .studio-cap-chip, .lab-hash-row / .lab-cta-row / .lab-hours-line,
+ *        #ba-slider-box min-h-[290px] with sm:h-80 preserved.
+ *    S5. Footer padding source: 66px mobile + 16px @min-width:1024px + pb/lg:pb classes.
+ *    S6. public/og-card.jpg is a real JPEG, 1200x630 and <250000 bytes.
+ *    S7. robots.ts names WhatsApp / facebookexternalhit / AdsBot-Google, >=14 bots,
+ *        /_next/ allowed and never disallowed.
+ *    S8. final-site.js has NO est-condition reference; window-level pointermove /
+ *        resize listeners are {passive:true}; no non-passive touch/wheel listener.
+ *    D1/D2 (per viewport): est fields correct; both rebuilt sections byte-identical
+ *        to source (9 capabilities + 9 hashtags + 2 buttons + hours line).
+ *    R1/R2/R3 (responsive DOM): visualiser min-height 290px @390 and 320px height
+ *        unchanged @1024; footer padding 66px @390 / 16px @1440; header logo 40px
+ *        @390 / 44px @1440 with centred column alignment.
  *
  * Gift: `node tests/visual-audit.mjs --source-only` runs ONLY the SOURCE gates —
  * no browser, no local build. Use it to verify a final-site.js edit in seconds
@@ -113,6 +131,8 @@ const ROBOTS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'robots.ts');
 const REPAIR_STATUS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'repair-status', 'page.tsx');
 const INDEXNOW_PATH = path.join(REPO_ROOT, 'public', 'indexnow-key.txt');
 const PREDEPLOY_PATH = path.join(REPO_ROOT, 'scripts', 'predeploy-check.sh');
+// v13 source anchors (all verified from disk — headless has no WebGL, so 3D stays source-only).
+const OG_CARD_PATH = path.join(REPO_ROOT, 'public', 'og-card.jpg');
 
 // Slice a function body out of a source string using two adjacent markers.
 // Scopes the 3D framing assertions to centerAndFitResponsive ONLY — the shared
@@ -242,6 +262,29 @@ function readSource(file) {
   catch (e) { console.log(`[WARN] cannot read ${file}: ${e && e.message ? e.message : e}`); return ''; }
 }
 
+// v13: read SOF dimensions from a real JPEG (no external image deps). Returns
+// null unless the file is a valid JPEG with a baseline/extended SOF marker.
+function jpegSize(file) {
+  try {
+    const b = fs.readFileSync(file);
+    if (b.length < 4 || b[0] !== 0xff || b[1] !== 0xd8) return null;
+    let i = 2;
+    const sof = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf];
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const m = b[i + 1];
+      if (m === 0xd8 || m === 0xd9 || (m >= 0xd0 && m <= 0xd7)) { i += 2; continue; }
+      const seg = b.readUInt16BE(i + 2);
+      if (seg < 2) return null;
+      if (sof.includes(m)) {
+        return { width: b.readUInt16BE(i + 7), height: b.readUInt16BE(i + 5), bytes: b.length };
+      }
+      i += 2 + seg;
+    }
+  } catch { /* keep null */ }
+  return null;
+}
+
 /* ------------------------------------------------------------------ *
  * Geometry helpers
  * ------------------------------------------------------------------ */
@@ -286,8 +329,13 @@ async function main() {
   const V10_CHIPS = extractAll(htmlSource, /<span class="lab-hash-chip">([^<]*)<\/span>/g);
   const V10_BUTTONS = extractAll(htmlSource, /<a[^>]*class="[^"]*cta-tactile[^"]*"[^>]*>([^<]*)<\/a>/g)
     .map((s) => s.trim());
-  const hoursMatch = htmlSource.match(/<p class="mt-2\.5[^"]*">(Store open[^<]*)<\/p>/);
+  // v13: the hours line moved from `mt-2.5 ...` to `lab-hours-line`. Accept both
+  // so the byte-identity gate tracks source instead of breaking on the class change.
+  const hoursMatch = htmlSource.match(/<p class="lab-hours-line">(Store open[^<]*)<\/p>/) ||
+    htmlSource.match(/<p class="mt-2\.5[^"]*">(Store open[^<]*)<\/p>/);
   const V10_HOURS = hoursMatch ? hoursMatch[1].trim() : '';
+  // v13: the technical ticker's 9 capability chips are derived from source too.
+  const V13_CAPS = extractAll(htmlSource, /<span class="studio-cap-chip">([^<]*)<\/span>/g);
 
   let browser = null;
   if (!SOURCE_ONLY) {
@@ -504,6 +552,90 @@ async function main() {
       `tabletWider=${tabletWider} (token=${tabletToken} idCond=${tabletIdCond}) ` +
       `fillCap=${capVal} (expected >=0.95)`, 'SOURCE-CHECK');
 
+    /* ================= v13 GLOBAL SOURCE GATES (S1–S8) =================
+     * All run before the SOURCE-ONLY early return, so `--source-only` covers them.
+     * 3D framing stays SOURCE-only — headless Chromium has no WebGL. */
+
+    /* S1: dark-orange static dot grid replaced the red/grey dots. */
+    const dotRgba = /rgba\(\s*194\s*,\s*65\s*,\s*12\s*,\s*0?\.24\s*\)/.test(cssSource);
+    const dotGrid24 = (cssSource.match(/100%\s+100%\s*,\s*100%\s+100%\s*,\s*24px\s+24px/g) || []).length;
+    const legacyDotAbsent = !/rgba\(\s*220\s*,\s*38\s*,\s*38\s*,\s*0?\.07\s*\)\s+1px/.test(cssSource) &&
+      !/rgba\(\s*24\s*,\s*24\s*,\s*27\s*,\s*0?\.05\s*\)\s+1px/.test(cssSource);
+    record(dotRgba && dotGrid24 >= 2 && legacyDotAbsent,
+      'v13 SOURCE final-site.css: dark-orange dot rgba(194,65,12,.24) + 24px grid, legacy dot gone',
+      `darkOrangeRgba=${dotRgba} grid24px=${dotGrid24} (expected >=2) legacyDotAbsent=${legacyDotAbsent}`,
+      'SOURCE-CHECK');
+
+    /* S2: header logo enlarged and its brand block centred. */
+    const logoTag = (htmlSource.match(/<img[^>]*alt="Red Apple Mobile Repair Logo"[^>]*>/) || [''])[0];
+    const logoH10 = /\bh-10\b/.test(logoTag) && /\bw-10\b/.test(logoTag);
+    const logoH11 = /\bsm:h-11\b/.test(logoTag) && /\bsm:w-11\b/.test(logoTag);
+    const logoAlign = /<div class="flex flex-col items-center">/.test(htmlSource);
+    record(logoH10 && logoH11 && logoAlign,
+      'v13 SOURCE final-site-html.ts: header logo h-10/w-10 + sm:h-11/sm:w-11 + centred column',
+      `h10w10=${logoH10} smH11W11=${logoH11} centredColumn=${logoAlign}`, 'SOURCE-CHECK');
+
+    /* S3: device-condition field deleted; the single "wrong" field spans full width. */
+    const srcEstCondition = /id=["']est-condition["']/.test(htmlSource);
+    const srcEstWrongFull = /<input[^>]*id=["']est-wrong["'][^>]*class="[^"]*\bcol-span-full\b/.test(htmlSource);
+    record(!srcEstCondition && srcEstWrongFull,
+      'v13 SOURCE final-site-html.ts: #est-condition removed, #est-wrong col-span-full',
+      `estConditionPresent=${srcEstCondition} (expected false) estWrongColSpanFull=${srcEstWrongFull}`,
+      'SOURCE-CHECK');
+
+    /* S4: both rebuilt jitter sections keep their new static structure. */
+    const capGridSrc = htmlSource.includes('studio-cap-grid');
+    const capCountSrc = (htmlSource.match(/class="studio-cap-chip"/g) || []).length;
+    const hashRowSrc = htmlSource.includes('lab-hash-row');
+    const ctaRowSrc = htmlSource.includes('lab-cta-row');
+    const hoursLineSrc = htmlSource.includes('lab-hours-line');
+    const visMinSrc = /id="ba-slider-box"[^>]*\bmin-h-\[290px\]/.test(htmlSource);
+    const visSmSrc = /id="ba-slider-box"[^>]*\bsm:h-80\b/.test(htmlSource);
+    record(capGridSrc && capCountSrc === 9 && hashRowSrc && ctaRowSrc && hoursLineSrc && visMinSrc && visSmSrc,
+      'v13 SOURCE rebuilt sections: .studio-cap-grid + 9 chips, lab-hash/cta/hours rows, visualiser min-h-[290px] + sm:h-80 kept',
+      `capGrid=${capGridSrc} capabilities=${capCountSrc}/9 hashRow=${hashRowSrc} ctaRow=${ctaRowSrc} ` +
+      `hoursLine=${hoursLineSrc} visMin290=${visMinSrc} visSmH80=${visSmSrc}`, 'SOURCE-CHECK');
+
+    /* S5: footer dock-clearance padding in BOTH CSS and utility classes. */
+    const pad66 = /\.footer-light-modern\s*\{[^}]*padding-bottom:\s*66px\s*!important/.test(cssSource);
+    const pad16 = /@media\s*\(min-width:\s*1024px\)\s*\{\s*\.footer-light-modern\s*\{\s*padding-bottom:\s*16px\s*!important/.test(cssSource);
+    const htmlPad = /id="footer-contact"[^>]*\bpb-\[66px\][^>]*\blg:pb-4\b/.test(htmlSource);
+    record(pad66 && pad16 && htmlPad,
+      'v13 SOURCE footer: padding-bottom 66px mobile / 16px @min-width:1024px + pb-[66px] lg:pb-4',
+      `css66=${pad66} css16=${pad16} htmlClasses=${htmlPad}`, 'SOURCE-CHECK');
+
+    /* S6: og-card.jpg is a genuine JPEG with the declared OG dimensions. */
+    const og = jpegSize(OG_CARD_PATH);
+    const ogOk = !!og && og.width === 1200 && og.height === 630 && og.bytes < 250000;
+    record(ogOk, 'v13 SOURCE public/og-card.jpg: real JPEG 1200x630, <250000 bytes',
+      og ? `width=${og.width} height=${og.height} bytes=${og.bytes} (expected 1200x630,<250000)`
+         : 'missing, unreadable or not a JPEG', 'SOURCE-CHECK');
+
+    /* S7: link-preview + ads crawlers explicitly allowed; /_next/ stays crawlable. */
+    const rWhats = /["']WhatsApp["']/.test(robots);
+    const rFb = /["']facebookexternalhit["']/.test(robots);
+    const rAds = /["']AdsBot-Google["']/.test(robots);
+    const rNextAllow = /allow:\s*\[[^\]]*["']\/_next\/["']/.test(robots);
+    const rNextDisallow = /disallow:\s*\[[^\]]*["']\/_next\/["']/.test(robots);
+    const uaArray = robots.match(/userAgent:\s*\[([\s\S]*?)\]/);
+    const botNames = uaArray ? (uaArray[1].match(/["'][^"']+["']/g) || []).length : 0;
+    record(rWhats && rFb && rAds && botNames >= 14 && rNextAllow && !rNextDisallow,
+      'v13 SOURCE robots.ts: WhatsApp + facebookexternalhit + AdsBot-Google, >=14 bots, /_next/ allowed',
+      `WhatsApp=${rWhats} facebookexternalhit=${rFb} AdsBot-Google=${rAds} botNames=${botNames} ` +
+      `(expected >=14) allowNext=${rNextAllow} disallowNext=${rNextDisallow}`, 'SOURCE-CHECK');
+
+    /* S8: no stale JS reference to the deleted field; scroll-critical listeners passive. */
+    const jsEstCondition = /est-condition/.test(jsSource);
+    const winPointerPassive = /window\.addEventListener\(\s*['"]pointermove['"][\s\S]{0,220}?\{\s*passive:\s*true\s*\}\s*\)/.test(jsSource);
+    const winResizePassive = /window\.addEventListener\(\s*['"]resize['"][\s\S]{0,140}?\{\s*passive:\s*true\s*\}\s*\)/.test(jsSource);
+    const passiveTrueCount = (jsSource.match(/passive:\s*true/g) || []).length;
+    const nonPassiveTouch = /addEventListener\(\s*['"](?:touchstart|touchmove|wheel)['"](?![^;]{0,180}passive:\s*true)/.test(jsSource);
+    record(!jsEstCondition && winPointerPassive && winResizePassive && passiveTrueCount >= 2 && !nonPassiveTouch,
+      'v13 SOURCE final-site.js: no est-condition reference + passive window pointermove/resize listeners',
+      `estConditionRef=${jsEstCondition} (expected false) windowPointermovePassive=${winPointerPassive} ` +
+      `windowResizePassive=${winResizePassive} passiveTrueCount=${passiveTrueCount} (expected >=2) ` +
+      `nonPassiveTouchWheel=${nonPassiveTouch} (expected false)`, 'SOURCE-CHECK');
+
     if (SOURCE_ONLY) {
       const failedEarly = results.filter((r) => r.status === 'FAIL');
       const srcCount = results.filter((r) => r.mode === 'SOURCE-CHECK').length;
@@ -657,6 +789,32 @@ async function main() {
         `band=${bandCount} chips=${domChips.length}/9 identical=${chipsIdentical} ` +
         `buttons=${domButtons.length}/2 identical=${buttonsIdentical} hoursIdentical=${hoursIdentical} ` +
         `srcChips=${V10_CHIPS.length} srcButtons=${V10_BUTTONS.length} hoursLen=${V10_HOURS.length}`,
+        'DOM-CHECK');
+
+      /* ---- v13 GATE D1 (per viewport): estimate form deletion + full-width field ---- */
+      const estCondCount = await page.locator('#est-condition').count();
+      const estWrong = page.locator('#est-wrong').first();
+      const estWrongCount = await estWrong.count();
+      const estWrongCls = estWrongCount ? ((await estWrong.getAttribute('class')) || '') : '';
+      const estWrongFull = estWrongCls.split(/\s+/).includes('col-span-full');
+      record(estCondCount === 0 && estWrongCount === 1 && estWrongFull,
+        `${vp.name}: v13 estimate form — #est-condition absent, #est-wrong col-span-full`,
+        `estCondition=${estCondCount} (expected 0) estWrong=${estWrongCount} (expected 1) ` +
+        `colSpanFull=${estWrongFull} class="${estWrongCls}"`, 'DOM-CHECK');
+
+      /* ---- v13 GATE D2 (per viewport): BOTH rebuilt sections byte-identical to source ----
+       * 9 capability chips + 9 hashtags + both CTA buttons + hours line. Every
+       * expected string is DERIVED FROM SOURCE, so a silent text edit fails closed. */
+      const domCaps = await page.locator('.studio-cap-chip').evaluateAll(
+        (els) => els.map((el) => el.textContent.trim()));
+      const capsIdentical = V13_CAPS.length === 9 && domCaps.length === 9 &&
+        domCaps.every((t, i) => t === V13_CAPS[i]);
+      record(bandCount > 0 && capsIdentical && chipsIdentical && buttonsIdentical && hoursIdentical,
+        `${vp.name}: v13 rebuilt text byte-identical (9 capabilities + 9 hashtags + 2 buttons + hours)`,
+        `band=${bandCount} caps=${domCaps.length}/9 identical=${capsIdentical} ` +
+        `chips=${domChips.length}/9 identical=${chipsIdentical} buttons=${domButtons.length}/2 ` +
+        `identical=${buttonsIdentical} hoursIdentical=${hoursIdentical} ` +
+        `srcCaps=${V13_CAPS.length} srcChips=${V10_CHIPS.length} srcButtons=${V10_BUTTONS.length}`,
         'DOM-CHECK');
 
       /* ---- v15 GATE 31 (per viewport): footer LIGHT theme + photo + credit ---- */
@@ -848,6 +1006,71 @@ async function main() {
     record(headsOk, 'v9 responsive: all 4 footer column headings textAlign=left',
       `count=${heads.length} (expected 4) aligns=${JSON.stringify(heads.map((h) => `${h.text}:${h.align}`))}`,
       'DOM-CHECK');
+
+    /* ---- v13 RESPONSIVE DOM GATES (R1–R3): real computed styles, never string heuristics ---- */
+
+    // R1: visualiser min-height 290px on mobile; desktop sm:h-80 (320px) untouched.
+    const readVisualiser = () => respPage.evaluate(() => {
+      const el = document.getElementById('ba-slider-box');
+      if (!el) return { ok: false, reason: 'no #ba-slider-box' };
+      const cs = getComputedStyle(el);
+      return { ok: true, minHeight: cs.minHeight, height: cs.height, boxH: el.getBoundingClientRect().height };
+    });
+    await setRespWidth(390);
+    const visM = await readVisualiser();
+    await setRespWidth(1024);
+    const visD = await readVisualiser();
+    const mobileVisOk = visM.ok && visM.minHeight === '290px' && visM.boxH >= 289.5;
+    const desktopUnchanged = visD.ok && visD.minHeight === '290px' && visD.height === '320px' && visD.boxH >= 319.5;
+    record(mobileVisOk && desktopUnchanged,
+      'v13 responsive: glass visualiser min-height 290px @390, desktop height 320px unchanged @1024',
+      `mobile[min=${visM.minHeight} height=${visM.height} boxH=${visM.boxH}] ` +
+      `desktop[min=${visD.minHeight} height=${visD.height} boxH=${visD.boxH}] ` +
+      `(expected mobile min=290px, desktop height=320px)`, 'DOM-CHECK');
+
+    // R2: footer dock-clearance padding — 66px mobile, 16px desktop (CSS !important wins).
+    const readFooterPad = () => respPage.evaluate(() => {
+      const f = document.getElementById('footer-contact');
+      return f ? { ok: true, v: getComputedStyle(f).paddingBottom } : { ok: false, reason: 'no #footer-contact' };
+    });
+    await setRespWidth(390);
+    const padM = await readFooterPad();
+    await setRespWidth(1440);
+    const padD = await readFooterPad();
+    record(padM.ok && padD.ok && padM.v === '66px' && padD.v === '16px',
+      'v13 responsive: footer padding-bottom 66px @390 / 16px @1440 (computed)',
+      `mobile=${padM.v} desktop=${padD.v} (expected 66px / 16px)`, 'DOM-CHECK');
+
+    // R3: header logo 40px (h-10) mobile, 44px (sm:h-11) desktop, centred column.
+    const readLogo = () => respPage.evaluate(() => {
+      const img = document.querySelector('img[alt="Red Apple Mobile Repair Logo"]');
+      if (!img) return { ok: false, reason: 'no header logo img' };
+      const r = img.getBoundingClientRect();
+      // The v13 alignment change is on the BRAND-TEXT sibling (flex flex-col
+      // items-center); the <a> wrapper itself stays flex items-center row.
+      const brand = img.nextElementSibling;
+      const anchorCs = getComputedStyle(img.parentElement);
+      const brandCs = brand ? getComputedStyle(brand) : null;
+      return {
+        ok: true, w: r.width, h: r.height,
+        dir: brandCs ? brandCs.flexDirection : 'missing',
+        align: brandCs ? brandCs.alignItems : 'missing',
+        anchorAlign: anchorCs.alignItems,
+      };
+    });
+    await setRespWidth(390);
+    const logoM = await readLogo();
+    await setRespWidth(1440);
+    const logoD = await readLogo();
+    const logoOk = logoM.ok && logoD.ok &&
+      Math.abs(logoM.w - 40) <= 1 && Math.abs(logoM.h - 40) <= 1 &&
+      Math.abs(logoD.w - 44) <= 1 && Math.abs(logoD.h - 44) <= 1 &&
+      logoM.dir === 'column' && logoM.align === 'center' && logoM.anchorAlign === 'center';
+    record(logoOk,
+      'v13 responsive: header logo 40px @390 (h-10) / 44px @1440 (sm:h-11) + centred column',
+      `mobile=${logoM.ok ? `${logoM.w.toFixed(1)}x${logoM.h.toFixed(1)} brand=${logoM.dir}/${logoM.align} anchor=${logoM.anchorAlign}` : logoM.reason} ` +
+      `desktop=${logoD.ok ? `${logoD.w.toFixed(1)}x${logoD.h.toFixed(1)}` : logoD.reason} ` +
+      `(expected 40x40 / 44x44, brand column/center, anchor center)`, 'DOM-CHECK');
 
     await respContext.close();
   } finally {
