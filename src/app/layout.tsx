@@ -4,6 +4,19 @@ import "./globals.css";
 import { SITE, SOCIAL_LINKS, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
 import { RED_APPLE_JSON_LD } from "@/lib/seo/localSchema";
+import { PRIMARY_KEYWORDS, CONTENT_CATEGORY, CITY } from "@/lib/seo/adsTargeting";
+
+/* Apple-display-led metadata from the ads single source. Deduplicated
+   case-insensitively against the legacy keyword list so no term is repeated
+   (repetition is a keyword-stuffing signal, and none of this is visible copy). */
+const SEO_KEYWORDS = [
+  "iPhone repair Bangalore", "iPhone screen replacement Halasuru", "iPhone back glass repair",
+  "iPad repair Bangalore", "MacBook repair Halasuru", "Apple Watch repair Bengaluru",
+  "AirPods repair", "iPhone battery replacement", "board-level storage IC repair", "Mac repair store",
+  "Apple repair specialist Bangalore", "Red Apple Mobile Repair Store",
+  ...PRIMARY_KEYWORDS,
+  `${CONTENT_CATEGORY} ${CITY}`,
+].filter((k, i, all) => all.findIndex((x) => x.toLowerCase() === k.toLowerCase()) === i);
 
 /* GA4 — dormant until NEXT_PUBLIC_GA_ID is set in Vercel.
    No env var -> nothing is rendered, zero bytes shipped. */
@@ -40,17 +53,12 @@ export const metadata: Metadata = {
     template: "%s | Red Apple Mobile Repair Store",
   },
   description: "Independent Apple repair studio on MG Road, Halasuru, Bengaluru. iPhone front glass restoration on TBK machinery, OLED displays, MacBook logic boards, iPad, Watch & AirPods. 6 Months written warranty.",
-  keywords: [
-    "iPhone repair Bangalore", "iPhone screen replacement Halasuru", "iPhone back glass repair",
-    "iPad repair Bangalore", "MacBook repair Halasuru", "Apple Watch repair Bengaluru",
-    "AirPods repair", "iPhone battery replacement", "board-level storage IC repair", "Mac repair store",
-    "Apple repair specialist Bangalore", "Red Apple Mobile Repair Store",
-  ],
+  keywords: SEO_KEYWORDS,
   authors: [{ name: SITE.name }],
   creator: SITE.name,
   publisher: SITE.name,
   applicationName: SITE.name,
-  category: "Electronics Repair",
+  category: CONTENT_CATEGORY,
   /* Legacy but still read by some local-search crawlers. */
   other: {
     "geo.region": "IN-KA",

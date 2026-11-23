@@ -8,7 +8,7 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (81 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13):
+ * GATES (86 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13 + 2 v16 SOURCE + 3 v16 DOM):
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -86,6 +86,18 @@
  *    R1/R2/R3 (responsive DOM): visualiser min-height 290px @390 and 320px height
  *        unchanged @1024; footer padding 66px @390 / 16px @1440; header logo 40px
  *        @390 / 44px @1440 with centred column alignment.
+ *   v16 NEW (2 global SOURCE + 1 per viewport = 5):
+ *    V16-A SOURCE: >=10 ZLE-V16 markers, .studio-cap-item/.studio-cap-static/
+ *        .studio-tag rules declare animation:none (no live infinite animation on
+ *        the rebuilt labels), and no @keyframes block animates a blur filter.
+ *    V16-B SOURCE: HARD device lock — TBK + AirPods desktopFill lowered, mobile
+ *        unchanged, internals desktop+mobile lock, MacBook frozen, fit selects by
+ *        `window.innerWidth < 768`. Structural only (headless has no WebGL).
+ *    V16-C per viewport: computed animationName === 'none' on all rebuilt labels,
+ *        measured BEFORE the audit's animation-kill style (real CSS evidence).
+ *    NOTE: the v10 ticker/band gates (25, 30, S4, D2) were RETARGETED to v16
+ *    classes (.studio-cap-row/.studio-cap-item, .studio-glass-band/.studio-tag)
+ *    with byte-identical TEXT checks preserved (texts derived from source).
  *
  * Gift: `node tests/visual-audit.mjs --source-only` runs ONLY the SOURCE gates —
  * no browser, no local build. Use it to verify a final-site.js edit in seconds
@@ -202,6 +214,42 @@ function parseFills(block) {
   let m;
   while ((m = re.exec(block)) !== null) fills[m[1]] = Number(m[2]);
   return fills;
+}
+
+// v16: return every @keyframes rule body so "no blur-filter keyframes" is a
+// per-block structural check, not a loose whole-file substring guess.
+function keyframeBlocks(css) {
+  const blocks = [];
+  const re = /@keyframes\s+[\w-]+\s*\{/g;
+  let m;
+  while ((m = re.exec(css)) !== null) {
+    let depth = 1, i = m.index + m[0].length;
+    for (; i < css.length && depth > 0; i++) {
+      if (css[i] === '{') depth++;
+      else if (css[i] === '}') depth--;
+    }
+    blocks.push(css.slice(m.index + m[0].length, i - 1));
+  }
+  return blocks;
+}
+
+// v16: parse a `const <Name>DEVICE_FILL = { 'canvas-id': { desktopFill: 0.86,
+// mobileFill: 0.88 }, ... };` map into a plain object (no eval, values numeric).
+function parseDeviceFillMap(js) {
+  const m = /const\s+(\w*DEVICE_FILL)\s*=\s*\{([\s\S]*?)\n\s*\};/.exec(js);
+  if (!m) return { name: '', entries: {} };
+  const entries = {};
+  const re = /['"](canvas-[\w-]+)['"]\s*:\s*\{([^}]*)\}/g;
+  let e;
+  while ((e = re.exec(m[2])) !== null) {
+    const d = /\bdesktopFill:\s*(0?\.\d+|1(?:\.0+)?)/.exec(e[2]);
+    const mob = /\bmobileFill:\s*(0?\.\d+|1(?:\.0+)?)/.exec(e[2]);
+    entries[e[1]] = {
+      desktopFill: d ? Number(d[1]) : null,
+      mobileFill: mob ? Number(mob[1]) : null,
+    };
+  }
+  return { name: m[1], entries };
 }
 
 const VIEWPORTS = [
@@ -326,16 +374,18 @@ async function main() {
   // v10 expected DOM texts are DERIVED FROM SOURCE so the DOM gate compares
   // real source<->DOM byte identity (never a hardcoded copy that can drift).
   // If extraction fails the gate fails closed (length/emptiness assertions below).
-  const V10_CHIPS = extractAll(htmlSource, /<span class="lab-hash-chip">([^<]*)<\/span>/g);
-  const V10_BUTTONS = extractAll(htmlSource, /<a[^>]*class="[^"]*cta-tactile[^"]*"[^>]*>([^<]*)<\/a>/g)
+  // v16: FE-1 rebuilt the band as .studio-glass-band > .studio-tag-row (9
+  // .studio-tag) + .studio-cta-row (2 .studio-cta-btn) + .studio-hours-line.
+  // Selectors moved; the byte-identical TEXT checks below are unchanged.
+  const V10_CHIPS = extractAll(htmlSource, /<span class="studio-tag">([^<]*)<\/span>/g);
+  const V10_BUTTONS = extractAll(htmlSource, /<a[^>]*class="[^"]*studio-cta-btn[^"]*"[^>]*>([^<]*)<\/a>/g)
     .map((s) => s.trim());
-  // v13: the hours line moved from `mt-2.5 ...` to `lab-hours-line`. Accept both
-  // so the byte-identity gate tracks source instead of breaking on the class change.
-  const hoursMatch = htmlSource.match(/<p class="lab-hours-line">(Store open[^<]*)<\/p>/) ||
-    htmlSource.match(/<p class="mt-2\.5[^"]*">(Store open[^<]*)<\/p>/);
+  // v16: hours line is now .studio-hours-line (was lab-hours-line / mt-2.5).
+  const hoursMatch = htmlSource.match(/<p class="studio-hours-line">(Store open[^<]*)<\/p>/);
   const V10_HOURS = hoursMatch ? hoursMatch[1].trim() : '';
-  // v13: the technical ticker's 9 capability chips are derived from source too.
-  const V13_CAPS = extractAll(htmlSource, /<span class="studio-cap-chip">([^<]*)<\/span>/g);
+  // v16: the technical ticker's 9 capability labels are .studio-cap-item (the
+  // last 6 also carry .studio-cap-static). Derived from source, never hardcoded.
+  const V13_CAPS = extractAll(htmlSource, /<span class="studio-cap-item[^"]*">([^<]*)<\/span>/g);
 
   let browser = null;
   if (!SOURCE_ONLY) {
@@ -431,15 +481,17 @@ async function main() {
       `retiredDist024Absent=${noRetiredDist024} retiredFill088Absent=${noRetiredFill088} ` +
       `(expected true x12)`, 'SOURCE-CHECK');
 
-    /* ---- v10 GLOBAL SOURCE Gate 25: glass-lab CTA (zero-jitter) source ---- */
-    const hasCtaBand = htmlSource.includes('glass-lab-cta-band');
-    const chipCountSrc = (htmlSource.match(/class="lab-hash-chip"/g) || []).length;
-    const cssBandContain = /\.glass-lab-cta-band\s*\{[^}]*contain:\s*layout style/.test(cssSource);
-    const cssChipShadow = /\.lab-hash-chip\s*\{[^}]*box-shadow:\s*none/.test(cssSource);
+    /* ---- v16 SOURCE Gate 25: rebuilt hashtag/CTA band (zero-jitter) source ----
+     * v16: .glass-lab-cta-band/.lab-hash-chip -> .studio-glass-band/.studio-tag.
+     * Structural contract (contain:layout style, box-shadow:none) is unchanged. */
+    const hasCtaBand = htmlSource.includes('studio-glass-band');
+    const chipCountSrc = (htmlSource.match(/class="studio-tag"/g) || []).length;
+    const cssBandContain = /\.studio-glass-band\s*\{[^}]*contain:\s*layout style/.test(cssSource);
+    const cssChipShadow = /\.studio-tag\s*\{[^}]*box-shadow:\s*none/.test(cssSource);
     record(hasCtaBand && chipCountSrc === 9 && cssBandContain && cssChipShadow,
-      'v10 SOURCE glass-lab CTA: band + 9 chips, CSS box-shadow:none + contain:layout style',
-      `band=${hasCtaBand} chipCount=${chipCountSrc} (expected 9) cssContain=${cssBandContain} ` +
-      `cssChipShadowNone=${cssChipShadow}`, 'SOURCE-CHECK');
+      'v16 SOURCE glass-lab CTA: .studio-glass-band + 9 .studio-tag, CSS box-shadow:none + contain:layout style',
+      `band=${hasCtaBand} tagCount=${chipCountSrc} (expected 9) cssContain=${cssBandContain} ` +
+      `cssTagShadowNone=${cssChipShadow}`, 'SOURCE-CHECK');
 
     /* ---- v10 SOURCE Gate 26: robots rules allow crawlers, keep /_next/ crawlable ---- */
     const robots = readSource(ROBOTS_SOURCE_PATH);
@@ -583,18 +635,22 @@ async function main() {
       `estConditionPresent=${srcEstCondition} (expected false) estWrongColSpanFull=${srcEstWrongFull}`,
       'SOURCE-CHECK');
 
-    /* S4: both rebuilt jitter sections keep their new static structure. */
-    const capGridSrc = htmlSource.includes('studio-cap-grid');
-    const capCountSrc = (htmlSource.match(/class="studio-cap-chip"/g) || []).length;
-    const hashRowSrc = htmlSource.includes('lab-hash-row');
-    const ctaRowSrc = htmlSource.includes('lab-cta-row');
-    const hoursLineSrc = htmlSource.includes('lab-hours-line');
+    /* S4 (v16): both rebuilt jitter sections keep their new static structure.
+     * Ticker: .studio-cap-row > 9 .studio-cap-item (6 also .studio-cap-static).
+     * Band: .studio-glass-band > .studio-tag-row/.studio-cta-row/.studio-hours-line. */
+    const capGridSrc = htmlSource.includes('studio-cap-row');
+    const capCountSrc = (htmlSource.match(/\bstudio-cap-item\b/g) || []).length;
+    const staticCountSrc = (htmlSource.match(/\bstudio-cap-static\b/g) || []).length;
+    const hashRowSrc = htmlSource.includes('studio-tag-row');
+    const ctaRowSrc = htmlSource.includes('studio-cta-row');
+    const hoursLineSrc = htmlSource.includes('studio-hours-line');
     const visMinSrc = /id="ba-slider-box"[^>]*\bmin-h-\[290px\]/.test(htmlSource);
     const visSmSrc = /id="ba-slider-box"[^>]*\bsm:h-80\b/.test(htmlSource);
-    record(capGridSrc && capCountSrc === 9 && hashRowSrc && ctaRowSrc && hoursLineSrc && visMinSrc && visSmSrc,
-      'v13 SOURCE rebuilt sections: .studio-cap-grid + 9 chips, lab-hash/cta/hours rows, visualiser min-h-[290px] + sm:h-80 kept',
-      `capGrid=${capGridSrc} capabilities=${capCountSrc}/9 hashRow=${hashRowSrc} ctaRow=${ctaRowSrc} ` +
-      `hoursLine=${hoursLineSrc} visMin290=${visMinSrc} visSmH80=${visSmSrc}`, 'SOURCE-CHECK');
+    record(capGridSrc && capCountSrc === 9 && staticCountSrc === 6 && hashRowSrc && ctaRowSrc &&
+      hoursLineSrc && visMinSrc && visSmSrc,
+      'v16 SOURCE rebuilt sections: .studio-cap-row + 9 .studio-cap-item (6 static), studio-tag/cta/hours rows, visualiser min-h-[290px] + sm:h-80 kept',
+      `capRow=${capGridSrc} capabilities=${capCountSrc}/9 static=${staticCountSrc}/6 tagRow=${hashRowSrc} ` +
+      `ctaRow=${ctaRowSrc} hoursLine=${hoursLineSrc} visMin290=${visMinSrc} visSmH80=${visSmSrc}`, 'SOURCE-CHECK');
 
     /* S5: footer dock-clearance padding in BOTH CSS and utility classes. */
     const pad66 = /\.footer-light-modern\s*\{[^}]*padding-bottom:\s*66px\s*!important/.test(cssSource);
@@ -636,6 +692,79 @@ async function main() {
       `windowResizePassive=${winResizePassive} passiveTrueCount=${passiveTrueCount} (expected >=2) ` +
       `nonPassiveTouchWheel=${nonPassiveTouch} (expected false)`, 'SOURCE-CHECK');
 
+    /* ================= v16 GLOBAL SOURCE GATES =================
+     * FE-1's zero-latency-effects (ZLE-V16) rebuild: static ticker + hashtag band,
+     * no infinite paint animations, no blur-filter keyframes; plus the device-lock
+     * contract. All STRUCTURAL/source checks — headless has no WebGL. */
+
+    /* V16-A: >=10 ZLE-V16 markers; no active infinite animation on the rebuilt
+     * ticker/band labels; no @keyframes block animates a blur filter. */
+    const zleMarkerCount = (cssSource.match(/ZLE-V16/g) || []).length;
+    // Per-selector rule bodies must declare `animation: none` (fail-closed: a
+    // missing rule means the label is not proven static).
+    const capItemRule = (cssSource.match(/\.studio-cap-item\s*\{[^}]*\}/) || [''])[0];
+    const capStaticRule = (cssSource.match(/\.studio-cap-static\s*\{[^}]*\}/) || [''])[0];
+    const tagRule = (cssSource.match(/\.studio-tag\s*\{[^}]*\}/) || [''])[0];
+    const capItemStatic = /animation:\s*none/.test(capItemRule);
+    const capStaticStatic = /animation:\s*none/.test(capStaticRule);
+    const tagStatic = /animation:\s*none/.test(tagRule);
+    // No rule for these label classes may carry a live (non-none) infinite animation.
+    const liveLabelAnim = new RegExp(
+      `\\.studio-(?:cap-item|cap-static|tag)[^{]*\\{[^}]*animation:\\s*(?!none)[^;}]*infinite`
+    ).test(cssSource);
+    const kf = keyframeBlocks(cssSource);
+    const blurKeyframes = kf.filter((b) => /filter:\s*(?:blur|backdrop-filter)/.test(b)).length;
+    record(zleMarkerCount >= 10 && capItemStatic && capStaticStatic && tagStatic &&
+      !liveLabelAnim && blurKeyframes === 0,
+      'v16 SOURCE final-site.css: >=10 ZLE-V16 markers, static ticker/band labels (no infinite anim), no blur-filter keyframes',
+      `zleMarkers=${zleMarkerCount} (expected >=10) capItemStatic=${capItemStatic} ` +
+      `capStaticStatic=${capStaticStatic} tagStatic=${tagStatic} liveLabelInfiniteAnim=${liveLabelAnim} ` +
+      `(expected false) keyframes=${kf.length} blurFilterKeyframes=${blurKeyframes} (expected 0)`,
+      'SOURCE-CHECK');
+
+    /* V16-B: HARD device lock. TBK machines + AirPods carry a lowered
+     * desktopFill; internals carries BOTH desktopFill and a mobileFill lock;
+     * mobile is unchanged (no mobileFill on TBK/AirPods); MacBook stays frozen.
+     * The fit path selects by `window.innerWidth < 768`. Source-only (no WebGL). */
+    const devMap = parseDeviceFillMap(jsSource);
+    const tbkIds = ['canvas-tbk-oca', 'canvas-tbk-90l', 'canvas-tbk-958'];
+    const tbkLowered = tbkIds.every((id) => {
+      const e = devMap.entries[id];
+      return e && e.desktopFill !== null && e.desktopFill <= 0.88;
+    });
+    const airpodsLock = devMap.entries['canvas-airpods'] &&
+      devMap.entries['canvas-airpods'].desktopFill !== null &&
+      devMap.entries['canvas-airpods'].desktopFill <= 0.88;
+    const internals = devMap.entries['canvas-internals'];
+    const internalsBaseline = fills['canvas-internals']; // MODEL_FRAMING fill (0.95)
+    // "internals lock" = BOTH viewports explicitly pinned below the frozen
+    // baseline (desktop 0.86, mobile 0.88 < baseline 0.95); every other model
+    // is frozen at its baseline on mobile.
+    const internalsLock = !!internals && internals.desktopFill !== null && internals.mobileFill !== null &&
+      internalsBaseline !== undefined && internals.desktopFill < internalsBaseline &&
+      internals.mobileFill < internalsBaseline;
+    // "mobile unchanged": the TBK machines + AirPods must NOT override mobileFill.
+    const mobileUnchanged = [...tbkIds, 'canvas-airpods'].every(
+      (id) => devMap.entries[id] && devMap.entries[id].mobileFill === null);
+    // MacBook: either frozen in MODEL_FRAMING (absent from the device map, so
+    // mobile is untouched) or, if a desktopFill was added, it must be lowered.
+    const macFramingFill = fills['canvas-macbook'];
+    const macDev = devMap.entries['canvas-macbook'];
+    const macbookOk = macFramingFill !== undefined &&
+      (!macDev || (macDev.desktopFill !== null && macDev.desktopFill <= 0.96)) &&
+      (!macDev || macDev.mobileFill === null);
+    const hardLockLogic = !!devMap.name &&
+      /window\.innerWidth\s*<\s*768/.test(fitFn) &&
+      /isMobileView[\s\S]{0,160}mobileFill[\s\S]{0,160}desktopFill/.test(fitFn) &&
+      new RegExp(`const\\s+dev\\s*=\\s*${devMap.name}\\s*\\[`).test(fitFn);
+    record(tbkLowered && !!airpodsLock && internalsLock && mobileUnchanged && macbookOk && hardLockLogic,
+      'v16 SOURCE final-site.js: device lock — TBK/AirPods desktopFill lowered, mobile unchanged, internals locked, MacBook frozen',
+      `map=${devMap.name || 'MISSING'} tbkLowered=${tbkLowered} airpodsLock=${!!airpodsLock} ` +
+      `internalsLock=${internalsLock} (${internals ? `desktop=${internals.desktopFill} mobile=${internals.mobileFill} baseline=${internalsBaseline}` : 'missing'}) ` +
+      `mobileUnchanged=${mobileUnchanged} macbookFramingFill=${macFramingFill} ` +
+      `macbookDev=${macDev ? JSON.stringify(macDev) : 'not-in-map(frozen)'} macbookOk=${macbookOk} ` +
+      `hardLockLogic=${hardLockLogic}`, 'SOURCE-CHECK');
+
     if (SOURCE_ONLY) {
       const failedEarly = results.filter((r) => r.status === 'FAIL');
       const srcCount = results.filter((r) => r.mode === 'SOURCE-CHECK').length;
@@ -660,6 +789,33 @@ async function main() {
       const pageErrors = [];
       page.on('pageerror', (e) => pageErrors.push(String(e && e.message ? e.message : e)));
       await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+
+      /* ---- v16 GATE (per viewport C): computed animationName on rebuilt labels ----
+       * Measured BEFORE the audit's global animation-kill style is injected, so this
+       * proves FE-1's ZLE-V16 CSS itself renders the ticker/band labels static. A
+       * sentinel (.pulse-ring, intentionally animated) is reported as integrity
+       * evidence — it is NOT required to animate (headless may force reduce-motion). */
+      const v16Anim = await page.evaluate(() => {
+        const names = (sel) => [...document.querySelectorAll(sel)]
+          .map((el) => getComputedStyle(el).animationName);
+        const pulse = document.querySelector('.pulse-ring');
+        return {
+          capItem: names('.studio-cap-item'),
+          capStatic: names('.studio-cap-static'),
+          tag: names('.studio-tag'),
+          sentinel: pulse ? getComputedStyle(pulse).animationName : 'no-sentinel',
+        };
+      });
+      const animLabels = [...v16Anim.capItem, ...v16Anim.capStatic, ...v16Anim.tag];
+      const animAllNone = animLabels.length >= 18 && animLabels.every((n) => n === 'none');
+      const v16DomAnimOk = v16Anim.capItem.length === 9 && v16Anim.capStatic.length === 6 &&
+        v16Anim.tag.length === 9 && animAllNone;
+      record(v16DomAnimOk,
+        `${vp.name}: v16 ticker/band labels computed animationName=none (real CSS, pre-freeze)`,
+        `capItem=${v16Anim.capItem.length} capStatic=${v16Anim.capStatic.length} tag=${v16Anim.tag.length} ` +
+        `allNone=${animAllNone} nonNone=${JSON.stringify(animLabels.filter((n) => n !== 'none'))} ` +
+        `sentinel(.pulse-ring)=${v16Anim.sentinel}`, 'DOM-CHECK');
+
       // Freeze animation/transition end-state so geometry is deterministic.
       await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
       await page.waitForTimeout(250);
@@ -770,25 +926,26 @@ async function main() {
       const ambCount = await page.locator('#ambient-particles').count();
       record(ambCount > 0, `${vp.name}: #ambient-particles host present`, `count=${ambCount}`);
 
-      /* ---- v10 GATE 30 (per viewport): glass-lab CTA DOM byte-identical to source ---- */
-      const band = page.locator('.glass-lab-cta-band').first();
+      /* ---- v16 GATE 30 (per viewport): rebuilt CTA band DOM byte-identical to source ---- */
+      const band = page.locator('.studio-glass-band').first();
       const bandCount = await band.count();
-      const domChips = await page.locator('.lab-hash-chip').evaluateAll(
+      const domChips = await page.locator('.studio-tag').evaluateAll(
         (els) => els.map((el) => el.textContent.trim()));
       // Fail closed: extraction from source must have produced exactly 9/2/1.
       const chipsIdentical = V10_CHIPS.length === 9 && domChips.length === 9 &&
         domChips.every((t, i) => t === V10_CHIPS[i]);
-      const domButtons = await band.locator('a.cta-tactile').evaluateAll(
+      const domButtons = await band.locator('a.studio-cta-btn').evaluateAll(
         (els) => els.map((el) => el.textContent.trim()));
       const buttonsIdentical = V10_BUTTONS.length === 2 && domButtons.length === 2 &&
         domButtons.every((t, i) => t === V10_BUTTONS[i]);
-      const domHours = await band.locator('p').evaluateAll((els) => els.map((el) => el.textContent.trim()));
+      const domHours = await band.locator('p.studio-hours-line').evaluateAll(
+        (els) => els.map((el) => el.textContent.trim()));
       const hoursIdentical = !!V10_HOURS && domHours.includes(V10_HOURS);
       record(bandCount > 0 && chipsIdentical && buttonsIdentical && hoursIdentical,
-        `${vp.name}: glass-lab CTA DOM byte-identical (9 hashtags + 2 buttons + hours line)`,
-        `band=${bandCount} chips=${domChips.length}/9 identical=${chipsIdentical} ` +
+        `${vp.name}: v16 CTA band DOM byte-identical (9 hashtags + 2 buttons + hours line)`,
+        `band=${bandCount} tags=${domChips.length}/9 identical=${chipsIdentical} ` +
         `buttons=${domButtons.length}/2 identical=${buttonsIdentical} hoursIdentical=${hoursIdentical} ` +
-        `srcChips=${V10_CHIPS.length} srcButtons=${V10_BUTTONS.length} hoursLen=${V10_HOURS.length}`,
+        `srcTags=${V10_CHIPS.length} srcButtons=${V10_BUTTONS.length} hoursLen=${V10_HOURS.length}`,
         'DOM-CHECK');
 
       /* ---- v13 GATE D1 (per viewport): estimate form deletion + full-width field ---- */
@@ -805,12 +962,12 @@ async function main() {
       /* ---- v13 GATE D2 (per viewport): BOTH rebuilt sections byte-identical to source ----
        * 9 capability chips + 9 hashtags + both CTA buttons + hours line. Every
        * expected string is DERIVED FROM SOURCE, so a silent text edit fails closed. */
-      const domCaps = await page.locator('.studio-cap-chip').evaluateAll(
+      const domCaps = await page.locator('.studio-cap-item').evaluateAll(
         (els) => els.map((el) => el.textContent.trim()));
       const capsIdentical = V13_CAPS.length === 9 && domCaps.length === 9 &&
         domCaps.every((t, i) => t === V13_CAPS[i]);
       record(bandCount > 0 && capsIdentical && chipsIdentical && buttonsIdentical && hoursIdentical,
-        `${vp.name}: v13 rebuilt text byte-identical (9 capabilities + 9 hashtags + 2 buttons + hours)`,
+        `${vp.name}: v16 rebuilt text byte-identical (9 capabilities + 9 hashtags + 2 buttons + hours)`,
         `band=${bandCount} caps=${domCaps.length}/9 identical=${capsIdentical} ` +
         `chips=${domChips.length}/9 identical=${chipsIdentical} buttons=${domButtons.length}/2 ` +
         `identical=${buttonsIdentical} hoursIdentical=${hoursIdentical} ` +
@@ -923,7 +1080,7 @@ async function main() {
           ['ba', '#ba-slider-box'],
           ['gallery', gallerySel],
           ['machines', '#tbk-machines'],
-          ['glasslab', '.glass-lab-cta-band'],
+          ['glasslab', '.studio-glass-band'],
           ['footer', '#footer-contact'],
         ]) {
           const target = page.locator(sel).first();

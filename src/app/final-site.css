@@ -21,26 +21,17 @@
       /* v11 vivid accent glow — text-shadow only, static paint, never blur-filter */
       text-shadow: 0 0 18px rgba(234,88,12,.22);
     }
-    /* Kinetic Breathing + Color-Shifting Headings (GPU-Only, Zero CLS) */
+    /* Kinetic Breathing + Color-Shifting Headings — ZLE-V16: STATIC, zero continuous animation */
     .heading-breathe {
       position: relative; isolation: isolate;
       backface-visibility: hidden;
-      will-change: opacity, transform;
-      animation: headingBreath 3.6s ease-in-out infinite;
+      will-change: auto; /* ZLE-V16 */
+      animation: none; /* ZLE-V16: headingBreath infinite scale removed -> static */
     }
-    /* Stagger across sections — compositor phase offset only, no JS */
-    section:nth-of-type(2n) .heading-breathe { animation-delay: -1.2s; }
-    section:nth-of-type(3n) .heading-breathe { animation-delay: -2.4s; }
-    /* Rail label keeps its rotate-180 transform: opacity-only breathing for that one node */
-    #rail-label.heading-breathe { animation-name: headingBreathFade; transform: rotate(180deg) translateZ(0); }
-    @keyframes headingBreath {
-      0%, 100% { opacity: .94; transform: scale(1) translateZ(0); }
-      50% { opacity: 1; transform: scale(1.005) translateZ(0); }
-    }
-    @keyframes headingBreathFade {
-      0%, 100% { opacity: .72; }
-      50% { opacity: 1; }
-    }
+    /* ZLE-V16: section stagger animation-delay rules removed (no animation to offset) */
+    /* Rail label keeps its rotate-180 transform — ZLE-V16: static, no opacity breathing */
+    #rail-label.heading-breathe { animation: none; transform: rotate(180deg) translateZ(0); }
+    /* ZLE-V16: breathing keyframe definitions removed (no element references them) */
     .heading-breathe::after {
       content: ""; position: absolute; left: 12%; right: 12%; bottom: -4px; height: 2px;
       border-radius: 999px; background: linear-gradient(90deg, transparent, rgba(220,38,38,.45), rgba(234,88,12,.5), transparent);
@@ -58,7 +49,7 @@
     .ambient-orb {
       position: absolute;
       border-radius: 9999px;
-      filter: blur(28px);
+      filter: none; /* ZLE-V16: removed the 28px paint-blur on ambient orbs */
       opacity: 0.2;
       pointer-events: none;
       transform: translate3d(0, 0, 0) scale(1);
@@ -67,8 +58,7 @@
     }
     /* Defensive: decorative orbs MUST stay out of normal flow (blank-gap guard) */
     .ambient-orb { position: absolute !important; }
-    /* Signature Orange Glass-Sweep Shimmer */
-    /* Section Backgrounds with Smooth Ambient Motion */
+    /* ZLE-V16: removed stale warm-shimmer effect/comment — no residual sweep effect remains in owned files */
     .ambient-warm {
       position: relative;
       overflow: hidden;
@@ -152,30 +142,25 @@
       background: radial-gradient(circle at 50% 45%, #ffffff 0%, #f8fafc 62%, #e4e4e7 100%);
       overflow: hidden;
     }
-    /* Live Pulse & Radar Calibration Aura */
+    /* Live Pulse & Radar Calibration Aura — ZLE-V16: livePing scale removed; opacity-only pulse defined in V16 block */
     .pulse-ring {
-      animation: livePing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+      animation: pulseOpacityV16 2.4s ease-in-out infinite; /* ZLE-V16: opacity-only, no scale */
+      transform: none; will-change: opacity;
     }
-    @keyframes livePing {
-      0% { transform: scale(1); opacity: 0.75; }
-      100% { transform: scale(2.4); opacity: 0; }
-    }
+    /* ZLE-V16: the livePing keyframe definition was removed (scale 1->2.4 was the jitter source) */
     .aura-ring {
       position: absolute;
       inset: -14px;
       border-radius: 9999px;
       border: 2px solid rgba(220, 38, 38, 0.45);
-      animation: auraPulse 3.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      animation: none; /* ZLE-V16: auraPulse scale removed -> static ring */
+      transform: scale(1) translateZ(0); opacity: .45;
       pointer-events: none;
     }
     .aura-ring-2 {
-      animation-delay: 1.8s;
-      border-color: rgba(234, 88, 12, 0.45);
+      border-color: rgba(234, 88, 12, 0.45); /* ZLE-V16: animation-delay removed */
     }
-    @keyframes auraPulse {
-      0% { transform: scale(0.88); opacity: 0.85; }
-      100% { transform: scale(1.38); opacity: 0; }
-    }
+    /* ZLE-V16: the auraPulse keyframe definition was removed (no element references it) */
     /* Smooth Infinite Marquee (Technical Ticker + Google Reviews) */
     .marquee-track {
       width: 100%;
@@ -319,7 +304,7 @@
 
     /* ===== HEADER BRAND GLOW + 5 LIGHTWEIGHT BACKGROUND AMBIENCES ===== */
     .brand-name-glow { color: #111; font-weight: 900; letter-spacing: .02em; position: relative; display:inline-block; text-transform: uppercase; }
-    .brand-name-glow::before { content:""; position:absolute; inset:-3px; border-radius:50%; background:radial-gradient(circle at 26% 22%,rgba(249,107,9,.42),transparent 60%); pointer-events:none; filter: blur(1.5px); transition:background 1.5s ease; }
+    .brand-name-glow::before { content:""; position:absolute; inset:-3px; border-radius:50%; background:radial-gradient(circle at 26% 22%,rgba(249,107,9,.42),transparent 60%); pointer-events:none; filter: none; transition: none; } /* ZLE-V16: removed residual 1.5px paint-blur + background transition */
     .brand-name-glow { filter: drop-shadow(0 0 6px rgba(220,38,38,.28)); }
     .brand-dark-glow { color: #0a0a0b; }
     .brand-icon-glow { box-shadow: 0 0 0 2px rgba(220,38,38,.10), 0 0 16px rgba(234,88,12,.28); }
@@ -344,11 +329,12 @@
     }
     /* 3. Static dot-grid accent */
     .grid-breathe { opacity: .65; transform: translateZ(0); animation: none !important; }
-    /* 4. Soft radial pulse behind the logo (transform/opacity only) */
+    /* 4. Soft radial glow behind the logo — ZLE-V16: STATIC, auraPulse scale removed */
     .logo-laser::before {
       content: ""; position: absolute; inset: -18px; border-radius: 9999px;
       background: radial-gradient(circle, rgba(220,38,38,.16), transparent 70%);
-      animation: auraPulse 6s ease-in-out infinite; pointer-events: none; z-index: -1;
+      animation: none; transform: none; opacity: .18; /* ZLE-V16 */
+      pointer-events: none; z-index: -1;
     }
     /* 5. Static sparkles on machine stages (no per-frame work) */
     .stage-3d-box::after {
@@ -383,14 +369,8 @@
       background: linear-gradient(135deg, rgba(220,38,38,0.08), rgba(234,88,12,0.04));
       z-index: -1;
     }
-    /* ===== COLORED DOT NOTCH (re-enabled, slow color cycle — zero perf cost) ===== */
-    .notch-led { background: #dc2626; }
-    @keyframes notchColor {
-      0%,45% { background:#22c55e; } 10%,35% { background:#ef4444; }
-      12%,30% { background:#06b6d4; } 15%,28% { background:#8b5cf6; }
-      18%,25% { background:#f59e0b; } 20%,22% { background:#ec4899; }
-      21% { background:#ea580c; }
-    }
+    /* ===== COLORED DOT NOTCH — ZLE-V16: static red, notchColor color-cycle keyframe removed ===== */
+    .notch-led { background: #dc2626 !important; animation: none !important; }
     /* ===== DEVICE GRID HOVER: rotated lift (3D, GPU-only) ===== */
     .spotlight-card { will-change: transform, opacity; backface-visibility: hidden; transform: translateZ(0); }
     .spotlight-card:hover { transform: translateY(-3px) rotate(0.5deg); box-shadow: 0 16px 40px -14px rgba(220,38,38,0.25); }
@@ -591,33 +571,28 @@
     .studio-photo-frame img[src*="logo-counter"] { object-position: center 35% !important; }
 
     /* ===== ELITE VISUAL PASS (2026-11-22) ===== */
-    /* Vivid animated spectrum on the flagship repair-value quote. Paint-only. */
+    /* Flagship repair-value quote — ZLE-V16: STATIC gradient text, background-position animation removed */
     .quote-color-shift {
       background: linear-gradient(90deg, #dc2626 0%, #e11d48 30%, #8b5cf6 58%, #2563eb 100%);
       background-size: 240% auto;
+      background-position: 0% 50%; /* ZLE-V16: static stop */
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
-      animation: vivid-spectrum-flow 5.4s linear infinite;
+      animation: none; /* ZLE-V16: vivid-spectrum-flow paint animation removed */
     }
-    @keyframes vivid-spectrum-flow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 240% 50%; }
-    }
-    /* Fast GPU-only breathing ring on the live-status pill (opacity + scale only). */
+    /* ZLE-V16: the vivid-spectrum-flow keyframe definition was removed (no element references it) */
+    /* Live-status pill ring — ZLE-V16: STATIC, fast-breathe scale removed */
     .fast-breathe-badge { position: relative; isolation: isolate; }
     .fast-breathe-badge::before {
       content: ""; position: absolute; inset: -2px; border-radius: inherit;
       background: radial-gradient(circle at 50% 50%, rgba(225, 29, 72, 0.30), transparent 72%);
-      opacity: .3; transform: scale(.96) translateZ(0); pointer-events: none; z-index: -1;
-      animation: fast-breathe 3.2s ease-in-out infinite;
-      will-change: opacity, transform;
+      opacity: .3; transform: scale(1) translateZ(0); pointer-events: none; z-index: -1;
+      animation: none; /* ZLE-V16: fast-breathe scale/translate removed -> static */
+      will-change: auto; /* ZLE-V16 */
     }
-    @keyframes fast-breathe {
-      0%, 100% { opacity: .28; transform: scale(.96) translateZ(0); }
-      50% { opacity: .7; transform: scale(1.04) translateZ(0); }
-    }
+    /* ZLE-V16: the fast-breathe keyframe definition was removed (no element references it) */
     /* ZLE (c) perf-text-zone: content-visibility:auto on dense text sections — paint skip, no scroll listener */
     /* Deferred paint for the dense comparison / four-reasons copy zone. */
     .perf-text-zone {
@@ -699,51 +674,50 @@
       .scroll-progress-css { animation: none !important; transform: scaleX(1) translateZ(0) !important; }
     }
 
-    /* Rebuilt technical ticker — static, shadow-free, compositor-only (no listeners, no transitions). */
-    .studio-cap-grid {
+    /* ===== V16 REBUILD 2 — capability ticker: clean aligned flex-wrap row, ZERO keyframes/animation ===== */
+    .studio-cap-row {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
       gap: 6px; max-width: 72rem; margin-inline: auto; padding: 0 16px;
       text-align: center; font-size: 11px; font-weight: 700; color: #3f3f46;
       contain: layout style;
     }
-    .studio-cap-chip {
+    .studio-cap-item {
       display: inline-block; border: 1px solid #fee2e2; border-radius: 9999px;
       background: rgba(255,255,255,.8); padding: 4px 10px;
       transform: translateZ(0); will-change: auto; box-shadow: none !important;
+      animation: none !important; transition: none !important; /* ZLE-V16: static text only */
     }
-    /* Rebuilt glass-lab CTA band — static rows, zero shadows, zero scroll work. */
-    .lab-hash-row { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; font-size:11px; font-weight:700; color:#3f3f46; contain:layout style; }
-    .lab-cta-row { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:16px; contain:layout style; }
-    .lab-hours-line { margin-top:10px; font-size:11px; font-weight:600; color:#52525b; }
+    .studio-cap-static { animation: none !important; transition: none !important; } /* ZLE-V16: the 6 jitter labels — static, no transition */
 
-    /* --- 1. Flat, GPU-isolated glass-lab CTA band --- */
-    .glass-lab-cta-band {
+    /* ===== V16 REBUILD 1 — ultra-light hashtag/CTA band: static card, shadow-free tags, compositor-only hover ===== */
+    .studio-glass-band {
       content-visibility: auto;
       contain-intrinsic-size: auto 220px;
       contain: layout style;
-      position: relative;
-      isolation: isolate;
+      position: relative; isolation: isolate;
       border: 1px solid #fecaca;
       border-radius: 1.5rem;
       background: linear-gradient(90deg, #fef2f2 0%, #fff7ed 50%, #fffbeb 100%);
-      transform: translateZ(0);
-      will-change: auto;
+      transform: translateZ(0); will-change: auto;
       box-shadow: none !important;
     }
-    .lab-hash-chip {
-      display: inline-block;
-      border: 1px solid #fee2e2;
-      border-radius: 9999px;
-      background: #ffffff;
-      padding: 0.25rem 0.625rem;
-      transform: translateZ(0);
-      will-change: transform;
-      transition: transform 220ms cubic-bezier(.22,1,.36,1) !important;
-      box-shadow: none !important;
+    .studio-tag-row { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; font-size:11px; font-weight:700; color:#3f3f46; contain:layout style; }
+    .studio-tag {
+      display:inline-block; border:1px solid #fee2e2; border-radius:9999px;
+      background:#fff; padding:.25rem .625rem;
+      box-shadow:none !important; transform:translateZ(0); will-change:auto;
+      animation:none !important; transition:none !important; /* ZLE-V16: ZERO animation on tags */
+    }
+    .studio-cta-row { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:16px; contain:layout style; }
+    .studio-cta-btn {
+      position:relative; isolation:isolate; transform:translateZ(0); will-change:auto;
+      transition: transform 200ms cubic-bezier(.22,1,.36,1) !important; /* EFFECT-V16: compositor-only transform hover */
     }
     @media (hover: hover) {
-      .lab-hash-chip:hover { transform: translate3d(0, -2px, 0) scale(1.03) !important; }
+      .studio-glass-band a.studio-cta-btn:hover { transform: translate3d(0,-2px,0) !important; } /* EFFECT-V16 */
     }
+    .studio-glass-band a.studio-cta-btn:active { transform: scale(.98) translateZ(0) !important; } /* EFFECT-V16: tactile active:scale-[0.98] */
+    .studio-hours-line { margin-top:10px; font-size:11px; font-weight:600; color:#52525b; }
 
     /* ZLE (g) tactile card lift + active:scale-[0.98]: transform-only, zero blur, no layout-animating props */
     /* --- Gift (c): tactile CTA press + zero-blur sheen (transform only) --- */
@@ -761,7 +735,7 @@
     /* Beats the global a[href]:active { transform:none !important } jitter guard. */
     a.cta-tactile:active,
     button.cta-tactile:active,
-    .glass-lab-cta-band a.cta-tactile:active { transform: scale(.98) translateZ(0) !important; }
+    .studio-glass-band a.cta-tactile:active { transform: scale(.98) translateZ(0) !important; } /* ZLE-V16: retargeted to rebuilt band */
     @media (prefers-reduced-motion: reduce) {
       .cta-tactile::after { transition: none !important; }
     }
@@ -866,10 +840,11 @@
       outline: 2px solid #ea580c; outline-offset: 3px; border-radius: 4px;
     }
 
-    /* ZERO-LOAD EFFECT 11/12 — text gradient sheen on key headings (background-position, no filter) */
+    /* ZLE-V16 — ZERO-LOAD EFFECT 11/12 revised: STATIC gradient text (background-position animation removed) */
     .quote-color-shift {
       background-size: 240% auto;
-      animation: vivid-spectrum-flow 5.4s linear infinite;
+      background-position: 0% 50%;
+      animation: none !important;
     }
 
     /* ZERO-LOAD EFFECT 12/12 — lazy image fade via view timeline (declarative, no JS listeners) */
@@ -893,3 +868,62 @@
       #tbk-machines img[loading="lazy"] { animation: none !important; opacity: 1 !important; }
       .top-nav-item:hover::before { transform: none !important; }
     }
+
+    /* ============================================================
+       ZLE-V16 — KILL HEAVY CONTINUOUS ANIMATIONS (static / compositor-only)
+       Each neutralized culprit carries the ZLE-V16 marker. No blur-filter,
+       no box-shadow animation, no width/height animation, no scroll listeners.
+       ============================================================ */
+
+    /* ZLE-V16 — .heading-breathe: headingBreath infinite scale/opacity -> STATIC (rail rotate preserved) */
+    .heading-breathe { animation: none !important; opacity: 1 !important; will-change: auto !important; }
+    /* ZLE-V16 — #rail-label: opacity-only breathing -> STATIC, keeps rotate(180deg) */
+    #rail-label.heading-breathe { animation: none !important; opacity: .85 !important; transform: rotate(180deg) translateZ(0) !important; }
+    /* ZLE-V16 — orphaned keyframes headingBreath / headingBreathFade: no element references them (zero runtime cost) */
+
+    /* ZLE-V16 — .pulse-ring: livePing (scale 1->2.4 + opacity) REMOVED; opacity-only pulse added (see EFFECT-V16) */
+    @keyframes pulseOpacityV16 { 0%, 100% { opacity: .75; } 50% { opacity: .3; } }
+    .pulse-ring { animation: pulseOpacityV16 2.4s ease-in-out infinite !important; transform: none !important; will-change: opacity !important; }
+    /* ZLE-V16 — livePing keyframe definition removed above; no element references it */
+
+    /* ZLE-V16 — .aura-ring / .aura-ring-2: auraPulse infinite scale -> STATIC outline ring */
+    .aura-ring, .aura-ring-2 { animation: none !important; transform: scale(1) translateZ(0) !important; opacity: .45 !important; }
+    /* ZLE-V16 — .logo-laser::before: auraPulse 6s infinite scale -> STATIC radial glow */
+    .logo-laser::before { animation: none !important; transform: none !important; opacity: .18 !important; }
+    /* ZLE-V16 — auraPulse keyframe definition removed above; no element references it */
+
+    /* ZLE-V16 — .quote-color-shift: vivid-spectrum-flow background-position paint animation -> STATIC red stop */
+    .quote-color-shift { animation: none !important; background-position: 0% 50% !important; }
+    /* ZLE-V16 — vivid-spectrum-flow keyframe definition removed above; no element references it */
+
+    /* ZLE-V16 — .fast-breathe-badge::before: fast-breathe infinite scale -> STATIC */
+    .fast-breathe-badge::before { animation: none !important; opacity: .3 !important; transform: scale(1) translateZ(0) !important; will-change: auto !important; }
+    /* ZLE-V16 — fast-breathe keyframe definition removed above; no element references it */
+
+    /* ZLE-V16 — .notch-led: notchColor color-cycle removed in place -> STATIC brand red */
+    .notch-led { animation: none !important; background: #dc2626 !important; }
+    /* ZLE-V16 — .logo-laser / ::after / img: logoLaser sweep already none; reinforce STATIC */
+    .logo-laser, .logo-laser::after, .logo-laser img { animation: none !important; transform: translateZ(0) !important; }
+    /* ZLE-V16 — .brand-name-glow::before: residual blur(1.5px) -> none */
+    .brand-name-glow::before { filter: none !important; transition: none !important; }
+    /* ZLE-V16 — .ambient-orb: 28px paint-blur removed in place; reinforce no filter */
+    .ambient-orb { filter: none !important; animation: none !important; will-change: auto !important; }
+    /* ZLE-V16 — .marquee-track / .grid-breathe / .stage-3d-orange-bg: already static, reinforce */
+    .marquee-track, .grid-breathe, .stage-3d-orange-bg { animation: none !important; will-change: auto !important; }
+
+    /* ============================================================
+       EFFECT-V16 — ~10 PROVEN ZERO-LOAD EFFECTS (compositor-only, zero JS listeners)
+       Law: transform / opacity / static paint only. No blur, no
+       box-shadow animation, no width/height animation, no scroll listeners.
+       ============================================================ */
+    /* EFFECT-V16 1/10 — scroll progress hairline: CSS animation-timeline:scroll(), no JS (already mounted) */
+    /* EFFECT-V16 2/10 — one-shot lazy reveal: .reveal-up -> .is-in via IntersectionObserver, no scroll work */
+    /* EFFECT-V16 3/10 — tactile CTA press: .studio-cta-btn/.cta-tactile :active scale(.98), transform-only */
+    /* EFFECT-V16 4/10 — focus-visible rings: a/button/input/select :focus-visible outline, WCAG 2.4.7 paint-only */
+    /* EFFECT-V16 5/10 — lazy image fade: imgLazyFade via animation-timeline:view(), opacity-only, one-shot */
+    /* EFFECT-V16 6/10 — micro-grid static texture: .ambient-warm/.ambient-clean 24px radial dot grid, paint-once */
+    /* EFFECT-V16 7/10 — cross-document view transition: @view-transition navigation auto, browser-composited */
+    /* EFFECT-V16 8/10 — nav underline scaleX hover: .top-nav-item::before, transform-only */
+    /* EFFECT-V16 9/10 — card lift translateY hover: .card-sheen:hover, transform-only */
+    /* EFFECT-V16 10/10 — pulse ring opacity-only: .pulse-ring pulseOpacityV16 (opacity only, no scale/translate/blur) */
+    .text-brand-grad { animation: none !important; } /* EFFECT-V16 — static gradient text (background-clip, no animation) */

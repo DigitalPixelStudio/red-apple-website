@@ -1,29 +1,35 @@
 #!/usr/bin/env python3
-"""STATIC guard for FAISU's HARD DEVICE-LOCKED 3D rules (v13). Stdlib only, read-only.
+"""STATIC guard for FAISU's HARD DEVICE-LOCKED 3D rules (v16). Stdlib only, read-only.
 
 This checker NEVER edits source. It reads public/final-site.js and FAILS (exit 1)
-if any of the device-locked framing rules drift:
+if any of the device-locked framing rules drift.
 
-  MODEL_FRAMING must carry a device-aware mechanism — optional per-model
-  `mobileFill` / `desktopFill` keys, and/or a `V13_DEVICE_FILL` map.
+Faisu's v16 spec (DESKTOP / TABLET only — MOBILE is FROZEN):
 
-  LOCKED (device-aware) models and their locked values:
-    - canvas-tbk-oca, canvas-tbk-90l, canvas-tbk-958,
-      canvas-internals, canvas-airpods  -> desktop fill 0.86..0.87
-    - canvas-internals                  -> ALSO explicit mobileFill 0.88
-  EVERY OTHER model (canvas-hero, canvas-estimate-ipad, canvas-pickup-iphone,
-  canvas-watch, canvas-macbook) is FROZEN: it must have NO device override.
+  DEVICE-AWARE models (desktopFill ranges):
+    - canvas-tbk-oca, canvas-tbk-90l, canvas-tbk-958 -> 0.80..0.83 (slightly smaller)
+    - canvas-airpods                                 -> 0.76..0.80 (medium reduction)
+    - canvas-macbook                                 -> 0.88..0.92 (slightly smaller)
+    - canvas-internals                               -> 0.86 desktop AND 0.88 mobile
+                                                        (the ONLY mobile override)
 
-  Additionally:
-    - the fit function must choose fill from viewport width <768 vs >=768;
+  FROZEN models (NO device override at all):
+    canvas-hero, canvas-estimate-ipad, canvas-pickup-iphone, canvas-watch
+    — plus any other model not named above.
+
+  Mechanism: MODEL_FRAMING must be present, and the device-aware values may live in
+  per-model `mobileFill`/`desktopFill` keys and/or a device-fill map. Both the old
+  `V13_DEVICE_FILL` name and the renamed `V16_DEVICE_FILL` name are accepted, so
+  this guard keeps working while the rename lands.
+
+  Additionally (unchanged from v13/v14):
+    - fit function must choose fill from viewport width <768 vs >=768;
     - the v14 one-time normalization guard must still be present;
     - the renderer must remain SHARED (no per-slot renderer.setSize).
 
-It FAILS if a non-locked model gains a device override or if any locked mobile
-value is altered away from its v13 spec.
-
 Gift: --json for machine-readable output and --file to point at a scratch copy,
-so the guard can be tested without touching production source.
+so the guard can be tested without touching production source. The filename is
+intentionally kept as v13_lock_guard.py so the predeploy gate command is stable.
 """
 from __future__ import annotations
 
@@ -36,8 +42,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_JS = ROOT / "public" / "final-site.js"
 
-# --- Faisu's locked v13 spec -------------------------------------------------
-DESKTOP_MIN, DESKTOP_MAX = 0.86, 0.87
+# --- Faisu's locked v16 desktop spec -----------------------------------------
+TBK_MIN, TBK_MAX = 0.80, 0.83
+AIRPODS_MIN, AIRPODS_MAX = 0.76, 0.80
+MACBOOK_MIN, MACBOOK_MAX = 0.88, 0.92
+INTERNALS_DESKTOP = 0.86
 INTERNALS_MOBILE = 0.88
 _EPS = 1e-9
 
@@ -45,12 +54,24 @@ DEVICE_LOCKED = (
     "canvas-tbk-oca",
     "canvas-tbk-90l",
     "canvas-tbk-958",
-    "canvas-internals",
     "canvas-airpods",
+    "canvas-macbook",
+    "canvas-internals",
 )
 INTERNALS_ID = "canvas-internals"
-V13_MAP_NAME = "V13_DEVICE_FILL"
+
+# Accept either map name: FaiCodex may rename V13_DEVICE_FILL -> V16_DEVICE_FILL.
+DEVICE_MAP_NAMES = ("V16_DEVICE_FILL", "V13_DEVICE_FILL")
 DEVICE_KEYS = ("mobileFill", "desktopFill", "mobile", "desktop")
+
+DESKTOP_RANGES = {
+    "canvas-tbk-oca": (TBK_MIN, TBK_MAX),
+    "canvas-tbk-90l": (TBK_MIN, TBK_MAX),
+    "canvas-tbk-958": (TBK_MIN, TBK_MAX),
+    "canvas-airpods": (AIRPODS_MIN, AIRPODS_MAX),
+    "canvas-macbook": (MACBOOK_MIN, MACBOOK_MAX),
+    # canvas-internals has its own exact 0.86 desktop check.
+}
 
 _NUMBER = r"(-?\d+(?:\.\d+)?)"
 _ENTRY_RE = re.compile(r"['\"](canvas-[\w-]+)['\"]\s*:\s*\{")
@@ -197,26 +218,34 @@ def parse_entries(obj_body: str) -> dict[str, dict]:
     return result
 
 
-def merge_overrides(framing: dict[str, dict], v13: dict[str, dict]) -> dict[str, dict]:
-    """Merge MODEL_FRAMING entries with an optional V13_DEVICE_FILL map.
+def merge_overrides(framing: dict[str, dict], maps: list[dict[str, dict]]) -> dict[str, dict]:
+    """Merge MODEL_FRAMING with all device-fill maps found (v16 and/or v13 name).
 
-    MODEL_FRAMING's own keys take precedence; the V13 map fills in anything the
-    entry omits. A model counts as 'device-aware' if either source gives it a
-    mobile/desktop override or it appears in the V13 map at all.
+    MODEL_FRAMING's own keys take precedence; the device map(s) fill in anything
+    the entry omits. A model counts as 'device-aware' if either source gives it a
+    mobile/desktop override or it appears in any device map at all.
     """
+    map_ids: set[str] = set()
+    for m in maps:
+        map_ids |= set(m)
     merged: dict[str, dict] = {}
-    for cid in set(framing) | set(v13):
+    for cid in set(framing) | map_ids:
         f = framing.get(cid, {})
-        v = v13.get(cid, {})
         row: dict[str, object] = {}
         for key in ("fill", "desktopFill", "mobileFill", "desktop", "mobile"):
-            row[key] = f.get(key) if f.get(key) is not None else v.get(key)
+            val = f.get(key)
+            if val is None:
+                for m in maps:
+                    val = m.get(cid, {}).get(key)
+                    if val is not None:
+                        break
+            row[key] = val
         row["has_override"] = bool(
             f.get("desktopFill") is not None
             or f.get("mobileFill") is not None
             or f.get("desktop") is not None
             or f.get("mobile") is not None
-            or cid in v13
+            or cid in map_ids
         )
         merged[cid] = row
     return merged
@@ -243,15 +272,16 @@ def check_framing_present(js_flat: str) -> tuple[bool, str, dict]:
     return True, f"MODEL_FRAMING parsed: {len(framing)} model entries", framing
 
 
-def check_device_mechanism(merged: dict[str, dict]) -> tuple[bool, str, list[str]]:
+def check_device_mechanism(merged: dict[str, dict], map_names: list[str]) -> tuple[bool, str, list[str]]:
     overridden = sorted(cid for cid, row in merged.items() if row["has_override"])
     ok = bool(overridden)
+    label = "/".join(map_names) if map_names else "device-fill map"
     detail = (
         "device-aware fill mechanism present: " + ", ".join(overridden)
         if ok
         else (
             "NO device-aware fill mechanism: neither mobileFill/desktopFill nor a "
-            f"{V13_MAP_NAME} map was found (v13 device-locked fills missing)"
+            f"{label} map was found (v16 device-locked fills missing)"
         )
     )
     return ok, detail, overridden
@@ -263,7 +293,7 @@ def check_desktop_fills(merged: dict[str, dict]) -> tuple[bool, str, dict]:
     for cid in DEVICE_LOCKED:
         row = merged.get(cid)
         if row is None:
-            bad.append(f"{cid}: missing from MODEL_FRAMING/{V13_MAP_NAME}")
+            bad.append(f"{cid}: missing from MODEL_FRAMING/device-fill map")
             effective[cid] = None
             continue
         desk = (
@@ -274,15 +304,23 @@ def check_desktop_fills(merged: dict[str, dict]) -> tuple[bool, str, dict]:
             else row["fill"]
         )
         effective[cid] = desk
-        if not _in_range(desk, DESKTOP_MIN, DESKTOP_MAX):
+        if cid == INTERNALS_ID:
+            if not _near(desk, INTERNALS_DESKTOP):
+                shown = "missing" if desk is None else f"{desk:.2f}"
+                bad.append(
+                    f"{cid}: desktop fill {shown} was altered — locked value is "
+                    f"{INTERNALS_DESKTOP:.2f}"
+                )
+            continue
+        lo, hi = DESKTOP_RANGES[cid]
+        if not _in_range(desk, lo, hi):
             shown = "missing" if desk is None else f"{desk:.2f}"
             bad.append(
-                f"{cid}: desktop fill {shown} outside locked "
-                f"{DESKTOP_MIN:.2f}-{DESKTOP_MAX:.2f}"
+                f"{cid}: desktop fill {shown} outside locked {lo:.2f}-{hi:.2f}"
             )
     detail = (
-        "all 5 locked models have desktop fill in "
-        f"{DESKTOP_MIN:.2f}-{DESKTOP_MAX:.2f}"
+        "v16 desktop fills all in range (TBK 0.80-0.83, AirPods 0.76-0.80, "
+        "MacBook 0.88-0.92, internals 0.86)"
         if not bad
         else "; ".join(bad)
     )
@@ -296,8 +334,8 @@ def check_internals_mobile(merged: dict[str, dict]) -> tuple[bool, str]:
         mobile = row["mobileFill"] if row["mobileFill"] is not None else row["mobile"]
     if mobile is None:
         return False, (
-            f"{INTERNALS_ID} has NO explicit mobileFill — v13 requires mobileFill "
-            f"{INTERNALS_MOBILE:.2f}"
+            f"{INTERNALS_ID} has NO explicit mobileFill — v16 requires mobileFill "
+            f"{INTERNALS_MOBILE:.2f} (the only mobile reduction)"
         )
     if not _near(mobile, INTERNALS_MOBILE):
         return False, (
@@ -307,17 +345,48 @@ def check_internals_mobile(merged: dict[str, dict]) -> tuple[bool, str]:
     return True, f"{INTERNALS_ID} mobileFill locked at {mobile:.2f}"
 
 
-def check_frozen_models(merged: dict[str, dict], framing: dict[str, dict], v13: dict[str, dict]) -> tuple[bool, str, list[str]]:
+def check_mobile_frozen(merged: dict[str, dict]) -> tuple[bool, str, list[str]]:
+    """No NEW mobile overrides: only internals may differ on <768px."""
+    bad: list[str] = []
+    for cid in DEVICE_LOCKED:
+        if cid == INTERNALS_ID:
+            continue
+        row = merged.get(cid, {})
+        mobile = row.get("mobileFill")
+        if mobile is None:
+            mobile = row.get("mobile")
+        if mobile is not None:
+            bad.append(f"{cid}: NEW mobile override {mobile:.2f} (mobile must stay frozen)")
+    for cid, row in merged.items():
+        if cid in DEVICE_LOCKED:
+            continue
+        mobile = row.get("mobileFill")
+        if mobile is None:
+            mobile = row.get("mobile")
+        if mobile is not None:
+            bad.append(f"{cid}: FROZEN model gained mobile override {mobile:.2f}")
+    detail = (
+        "mobile views frozen — only canvas-internals has a mobile override"
+        if not bad
+        else "; ".join(bad)
+    )
+    return not bad, detail, bad
+
+
+def check_frozen_models(
+    merged: dict[str, dict], framing: dict[str, dict], maps: list[dict[str, dict]]
+) -> tuple[bool, str, list[str]]:
     offenders: list[str] = []
     frozen = sorted(set(framing) - set(DEVICE_LOCKED))
     for cid in frozen:
         if merged.get(cid, {}).get("has_override"):
             offenders.append(cid)
-    # An override in the V13 map for any model outside the locked set is also a
+    # An override in a device map for any model outside the locked set is also a
     # breach, even if that model is not currently listed in MODEL_FRAMING.
-    for cid in sorted(set(v13) - set(DEVICE_LOCKED)):
-        if cid not in offenders:
-            offenders.append(cid)
+    for m in maps:
+        for cid in sorted(set(m) - set(DEVICE_LOCKED)):
+            if cid not in offenders:
+                offenders.append(cid)
     detail = (
         "all frozen models have NO device override"
         if not offenders
@@ -333,7 +402,10 @@ def check_viewport_selection(js_flat: str) -> tuple[bool, str]:
         r"innerWidth|outerWidth|clientWidth|screen\.width|viewportWidth|\bw\b|\bvw\b",
         re.I,
     )
-    fill_rx = re.compile(r"mobileFill|desktopFill|" + V13_MAP_NAME + r"|isMobile|isDesktop", re.I)
+    map_alt = "|".join(re.escape(n) for n in DEVICE_MAP_NAMES)
+    fill_rx = re.compile(
+        r"mobileFill|desktopFill|" + map_alt + r"|isMobile|isDesktop", re.I
+    )
     cmp_rx = re.compile(r"<=?|>=?")
     for m in re.finditer(r"\b768\b", js_flat):
         window = js_flat[max(0, m.start() - 340) : m.end() + 340]
@@ -472,20 +544,26 @@ def main() -> int:
     js_flat = blank_comments(js)
     framing_ok, framing_detail, framing = check_framing_present(js_flat)
 
-    v13_span = extract_body_span(js_flat, r"\b" + V13_MAP_NAME + r"\s*=\s*\{")
-    v13 = parse_entries(v13_span[2]) if v13_span else {}
+    maps: list[dict[str, dict]] = []
+    map_names_found: list[str] = []
+    for name in DEVICE_MAP_NAMES:
+        span = extract_body_span(js_flat, r"\b" + name + r"\s*=\s*\{")
+        if span:
+            maps.append(parse_entries(span[2]))
+            map_names_found.append(name)
 
-    merged = merge_overrides(framing, v13)
+    merged = merge_overrides(framing, maps)
 
     if framing_ok:
-        a_ok, a_detail, overridden = check_device_mechanism(merged)
+        a_ok, a_detail, overridden = check_device_mechanism(merged, map_names_found)
         b_ok, b_detail, effective = check_desktop_fills(merged)
         c_ok, c_detail = check_internals_mobile(merged)
-        d_ok, d_detail, frozen_offenders = check_frozen_models(merged, framing, v13)
+        c2_ok, c2_detail, mobile_offenders = check_mobile_frozen(merged)
+        d_ok, d_detail, frozen_offenders = check_frozen_models(merged, framing, maps)
     else:
-        a_ok = b_ok = c_ok = d_ok = False
-        a_detail = b_detail = c_detail = d_detail = "blocked: MODEL_FRAMING unreadable"
-        overridden, effective, frozen_offenders = [], {}, []
+        a_ok = b_ok = c_ok = c2_ok = d_ok = False
+        a_detail = b_detail = c_detail = c2_detail = d_detail = "blocked: MODEL_FRAMING unreadable"
+        overridden, effective, mobile_offenders, frozen_offenders = [], {}, [], []
 
     e_ok, e_detail = check_viewport_selection(js_flat)
     f_ok, f_detail = check_one_time_guard(js)
@@ -493,9 +571,10 @@ def main() -> int:
 
     checks = [
         {"id": "a_model_framing_present", "title": "MODEL_FRAMING parsed", "ok": framing_ok, "detail": framing_detail},
-        {"id": "b_device_aware_mechanism", "title": "mobileFill/desktopFill or V13_DEVICE_FILL present", "ok": a_ok, "detail": a_detail},
-        {"id": "c_locked_desktop_fills", "title": "TBK/internals/AirPods desktop fill 0.86-0.87", "ok": b_ok, "detail": b_detail},
+        {"id": "b_device_aware_mechanism", "title": "device-fill mechanism present", "ok": a_ok, "detail": a_detail},
+        {"id": "c_locked_desktop_fills", "title": "TBK 0.80-0.83 / AirPods 0.76-0.80 / MacBook 0.88-0.92 / internals 0.86", "ok": b_ok, "detail": b_detail},
         {"id": "d_internals_mobile_fill", "title": "canvas-internals mobileFill locked at 0.88", "ok": c_ok, "detail": c_detail},
+        {"id": "d2_mobile_frozen", "title": "no NEW mobile overrides (only internals)", "ok": c2_ok, "detail": c2_detail},
         {"id": "e_frozen_models_untouched", "title": "no frozen model has a device override", "ok": d_ok, "detail": d_detail},
         {"id": "f_viewport_768_selection", "title": "fit chooses fill by width <768 vs >=768", "ok": e_ok, "detail": e_detail},
         {"id": "g_one_time_normalization", "title": "one-time normalization guard intact", "ok": f_ok, "detail": f_detail},
@@ -504,27 +583,32 @@ def main() -> int:
     ok = all(c["ok"] for c in checks)
     passed = sum(c["ok"] for c in checks)
     result = {
-        "script": "v13_lock_guard",
+        "script": "v16_lock_guard (file kept as v13_lock_guard.py)",
         "status": "PASS" if ok else "FAIL",
         "exit_code": 0 if ok else 1,
         "file": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
         "locked_spec": {
-            "desktop_range": [DESKTOP_MIN, DESKTOP_MAX],
+            "tbk_desktop_range": [TBK_MIN, TBK_MAX],
+            "airpods_desktop_range": [AIRPODS_MIN, AIRPODS_MAX],
+            "macbook_desktop_range": [MACBOOK_MIN, MACBOOK_MAX],
+            "internals_desktop": INTERNALS_DESKTOP,
             "internals_mobile": INTERNALS_MOBILE,
-            "locked_models": list(DEVICE_LOCKED),
+            "device_locked_models": list(DEVICE_LOCKED),
+            "device_map_names_accepted": list(DEVICE_MAP_NAMES),
+            "device_map_names_found": map_names_found,
         },
         "effective_desktop_fills": effective,
         "device_overridden_models": overridden,
+        "mobile_override_offenders": mobile_offenders,
         "frozen_offenders": frozen_offenders,
-        "v13_map_entries": sorted(v13),
-        "summary": f"{passed}/{len(checks)} checks passed — " + ("PASS" if ok else "FAIL (v13 device-lock drift)"),
+        "summary": f"{passed}/{len(checks)} checks passed — " + ("PASS" if ok else "FAIL (v16 device-lock drift)"),
         "checks": checks,
     }
 
     if args.json:
         print(json.dumps(result, indent=2))
     else:
-        print(f"v13_lock_guard — {result['file']}")
+        print(f"v16_lock_guard — {result['file']}")
         for c in checks:
             print(f"  [{'OK ' if c['ok'] else 'BAD'}] {c['id']}: {c['title']}")
             print(f"        {c['detail']}")

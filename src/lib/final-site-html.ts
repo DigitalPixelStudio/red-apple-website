@@ -17,7 +17,8 @@ export const finalSiteHtml = `
   <!-- STICKY HEADER (No "Visit Us" in Header per Client Lock) -->
   <header class="site-header-120fps sticky top-0 z-40 border-b border-zinc-200 bg-[#FDFCFB] pt-0 shadow-[0_1px_0_rgba(231,229,228,0.85)]">
     <div class="h-[3px] w-full bg-gradient-to-r from-red-600 via-orange-500 to-red-600"></div>
-    <div class="pt-4">
+    <!-- ZLE-V16: reduced excess top gap above logo (pt-4 -> pt-2); logo h-10/sm:h-11 + all links unchanged -->
+    <div class="pt-2">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
         <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-10 w-10 sm:h-11 sm:w-11 shrink-0 block rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
@@ -170,18 +171,18 @@ export const finalSiteHtml = `
 
 
 
-    <!-- 2. TECHNICAL TICKER STRIP — rebuilt static, shadow-free, compositor-only -->
+    <!-- 2. TECHNICAL TICKER STRIP — ZLE-V16 rebuild: clean aligned flex-wrap row, shadow-free, zero animation/keyframes -->
     <div class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
-      <div class="studio-cap-grid">
-        <span class="studio-cap-chip">Front glass restoration</span>
-        <span class="studio-cap-chip">TBK OCA vacuum lamination</span>
-        <span class="studio-cap-chip">90-litre bubble remover</span>
-        <span class="studio-cap-chip">TBK-958 cold UV laser</span>
-        <span class="studio-cap-chip">Original OLED retained</span>
-        <span class="studio-cap-chip">6 Months repair warranty</span>
-        <span class="studio-cap-chip">Zero-password privacy</span>
-        <span class="studio-cap-chip">Apple Diagnostic Mode testing</span>
-        <span class="studio-cap-chip">Halasuru · Bengaluru</span>
+      <div class="studio-cap-row">
+        <span class="studio-cap-item">Front glass restoration</span>
+        <span class="studio-cap-item">TBK OCA vacuum lamination</span>
+        <span class="studio-cap-item">90-litre bubble remover</span>
+        <span class="studio-cap-item studio-cap-static">TBK-958 cold UV laser</span>
+        <span class="studio-cap-item studio-cap-static">Original OLED retained</span>
+        <span class="studio-cap-item studio-cap-static">6 Months repair warranty</span>
+        <span class="studio-cap-item studio-cap-static">Zero-password privacy</span>
+        <span class="studio-cap-item studio-cap-static">Apple Diagnostic Mode testing</span>
+        <span class="studio-cap-item studio-cap-static">Halasuru · Bengaluru</span>
       </div>
     </div>
 
@@ -779,24 +780,24 @@ export const finalSiteHtml = `
           </div>
         </div>
 
-        <!-- Zero-jitter, GPU-isolated glass-lab CTA band — rebuilt static, shadow-free, compositor-only -->
-        <div class="glass-lab-cta-band mt-8 p-5 text-center">
-          <div class="lab-hash-row">
-            <span class="lab-hash-chip">#PremiumMobileRepair</span>
-            <span class="lab-hash-chip">#iPhoneGlassReplacement</span>
-            <span class="lab-hash-chip">#FactoryLevelRepair</span>
-            <span class="lab-hash-chip">#OLEDRepair</span>
-            <span class="lab-hash-chip">#TBK958</span>
-            <span class="lab-hash-chip">#ColdUVLaser</span>
-            <span class="lab-hash-chip">#OCALamination</span>
-            <span class="lab-hash-chip">#Halasuru</span>
-            <span class="lab-hash-chip">#ZeroPasswordPolicy</span>
+        <!-- ZLE-V16 rebuild: ultra-light static card, shadow-free tags, zero tag animation, content-visibility:auto, compositor-only hover -->
+        <div class="studio-glass-band mt-8 p-5 text-center">
+          <div class="studio-tag-row">
+            <span class="studio-tag">#PremiumMobileRepair</span>
+            <span class="studio-tag">#iPhoneGlassReplacement</span>
+            <span class="studio-tag">#FactoryLevelRepair</span>
+            <span class="studio-tag">#OLEDRepair</span>
+            <span class="studio-tag">#TBK958</span>
+            <span class="studio-tag">#ColdUVLaser</span>
+            <span class="studio-tag">#OCALamination</span>
+            <span class="studio-tag">#Halasuru</span>
+            <span class="studio-tag">#ZeroPasswordPolicy</span>
           </div>
-          <div class="lab-cta-row">
-            <a href="#estimate" class="dock-quote-btn cta-tactile rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get a glass-restoration quote</a>
-            <a href="tel:+918660663776" class="cta-tactile rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-xs font-bold text-zinc-900">Call the lab · +91 86606 63776</a>
+          <div class="studio-cta-row">
+            <a href="#estimate" class="studio-cta-btn dock-quote-btn cta-tactile rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get a glass-restoration quote</a>
+            <a href="tel:+918660663776" class="studio-cta-btn cta-tactile rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-xs font-bold text-zinc-900">Call the lab · +91 86606 63776</a>
           </div>
-          <p class="lab-hours-line">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
+          <p class="studio-hours-line">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
         </div>
       </div>
     </section>

@@ -16,7 +16,7 @@ a public verification token, referenced by filename only.
 - Canonical GBP: https://share.google/12Pqrwl3lJq4mL75p
 - robots.txt explicitly allows Googlebot, Bingbot, Google-Extended,
   OAI-SearchBot, GPTBot, ChatGPT-User, PerplexityBot, Claude-SearchBot,
-  ClaudeBot and Applebot; disallows /api/ and /_next/. llms.txt and sitemap.xml
+  ClaudeBot and Applebot; disallows /api/ only; /_next/ is explicitly ALLOWED so Google can fetch CSS/JS. llms.txt and sitemap.xml
   are public.
 
 ## IndexNow (Bing / IndexNow.org) — how Faisu submits

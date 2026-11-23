@@ -919,16 +919,19 @@
           'canvas-watch':         { fill: 0.95, fov: 34 },
           'canvas-macbook':       { fill: 0.96, fov: 34 },
         };
-        // FAISU's HARD DEVICE-LOCKED 3D RULEBOOK (v13). Only these 5 models are
-        // device-aware; every OTHER model + ALL mobile views are frozen untouched.
-        // Desktop/tablet/PC (>=768px): 3 TBK machines + internals + AirPods slightly smaller.
-        // Mobile (<768px): ONLY internals slightly smaller (0.88); all other mobile frozen.
+        // FAISU's HARD DEVICE-LOCKED 3D RULEBOOK (v16). ONLY these models are
+        // device-aware; every OTHER model + ALL mobile views are FROZEN untouched.
+        // Desktop/tablet/PC (>=768px): 3 TBK machines slightly smaller (0.82),
+        //   AirPods medium reduction (0.78), MacBook slight reduction (0.90),
+        //   internals held at 0.86.
+        // Mobile (<768px): ONLY internals slightly smaller (0.88); all else frozen.
         const V13_DEVICE_FILL = {
-          'canvas-tbk-oca':   { desktopFill: 0.86 }, // mobile frozen
-          'canvas-tbk-90l':   { desktopFill: 0.86 }, // mobile frozen
-          'canvas-tbk-958':   { desktopFill: 0.86 }, // mobile frozen
+          'canvas-tbk-oca':   { desktopFill: 0.82 }, // mobile frozen
+          'canvas-tbk-90l':   { desktopFill: 0.82 }, // mobile frozen
+          'canvas-tbk-958':   { desktopFill: 0.82 }, // mobile frozen
           'canvas-internals': { desktopFill: 0.86, mobileFill: 0.88 },
-          'canvas-airpods':   { desktopFill: 0.86 }, // mobile frozen
+          'canvas-airpods':   { desktopFill: 0.78 }, // medium reduction, mobile frozen
+          'canvas-macbook':   { desktopFill: 0.90 }, // slight reduction, mobile frozen
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and

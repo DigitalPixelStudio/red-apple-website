@@ -1,4 +1,6 @@
-// Ad-platform signal hooks — consent-aware, dependency-free, SSR-safe.
+import { CONTENT_CATEGORY, CITY } from "@/lib/seo/adsTargeting";
+
+// Ad-platform signal hooks — consent-aware, SDK-free, SSR-safe (config-only import).
 //
 // Every hook pushes a typed event to window.dataLayer and, only when the matching
 // public destination ID is configured, forwards it to the Meta pixel (fbq) and/or
@@ -20,9 +22,11 @@ const GTAG_ID = process.env.NEXT_PUBLIC_GTAG_ID || process.env.NEXT_PUBLIC_GA_ID
 /** True when at least one ad destination is configured. */
 export const AD_SIGNALS_READY = Boolean(META_PIXEL_ID || GTAG_ID);
 
+// Context fields are sourced from the single ads-targeting config so events can
+// never drift from the canonical category/city used across SEO and layout.
 type CommonFields = {
-  content_category: "Apple Display Repair";
-  city: "Bengaluru";
+  content_category: typeof CONTENT_CATEGORY;
+  city: typeof CITY;
 };
 
 export type AdSignalName = "ViewContent" | "InitiateCheckout" | "Contact";
@@ -87,7 +91,10 @@ function emit(event: AdSignalEvent): void {
   }
 }
 
-const COMMON: CommonFields = { content_category: "Apple Display Repair", city: "Bengaluru" };
+const COMMON: CommonFields = Object.freeze({
+  content_category: CONTENT_CATEGORY,
+  city: CITY,
+});
 
 /** ViewContent — a visitor viewed a device/service offering. */
 export function trackViewContent(input: { device: string; service: string }): void {
