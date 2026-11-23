@@ -5037,3 +5037,78 @@ body { overflow-x: clip; }
   #ai-auto-toast { bottom: 68px !important; }
   #ai-drawer { bottom: 116px !important; }
 }
+
+/* ===== FAI FINAL RESPONSIVE OVERRIDES (loaded after legacy breakpoint rules) ===== */
+.site-header-120fps a[href="#hero"] { gap: .65rem !important; min-width: 0; }
+.site-header-120fps img.brand-icon-glow { width: 44px !important; height: 44px !important; }
+.site-header-120fps .brand-name-glow {
+  display: inline-block !important;
+  font-size: 12px !important;
+  line-height: 1.08 !important;
+  letter-spacing: .005em !important;
+  white-space: nowrap !important;
+}
+.site-header-120fps .brand-dark-glow { display: inline !important; white-space: nowrap !important; }
+.site-header-120fps a[href="#hero"] > div { align-items: flex-start !important; min-width: 0; }
+.site-header-120fps a[href="#hero"] > div > div:last-child { font-size: 9px !important; }
+@media (min-width: 481px) {
+  .site-header-120fps .brand-name-glow { font-size: 14px !important; }
+}
+@media (min-width: 768px) {
+  .site-header-120fps img.brand-icon-glow { width: 48px !important; height: 48px !important; }
+  .site-header-120fps .brand-name-glow { font-size: 16px !important; letter-spacing: .015em !important; }
+  .site-header-120fps a[href="#hero"] > div > div:last-child { font-size: 10px !important; }
+}
+
+/* Hero visual area is restored and enlarged without altering its orange studio theme. */
+#hero { padding-top: 1.75rem !important; padding-bottom: 2.5rem !important; }
+#hero .stage-3d-box { height: 560px !important; min-height: 560px !important; width: 100% !important; }
+#hero h1 { font-size: clamp(2.45rem, 4.2vw, 3.65rem) !important; }
+@media (min-width: 768px) {
+  #hero .stage-3d-box { height: 640px !important; min-height: 640px !important; }
+}
+@media (min-width: 1367px) {
+  #hero .stage-3d-box { height: 680px !important; min-height: 680px !important; }
+}
+/* Tablet landscape short viewport: retain the larger hero while keeping copy readable. */
+@media (orientation: landscape) and (max-height: 600px) and (min-width: 768px) {
+  #hero { padding-top: 1rem !important; padding-bottom: 1.25rem !important; }
+  #hero .stage-3d-box { height: min(82vh, 520px) !important; min-height: 360px !important; }
+  #hero h1 { font-size: clamp(1.9rem, 3.2vw, 2.8rem) !important; }
+}
+
+/* Moderate stage height across every non-hero 3D model; models are fitted by camera, not cropped. */
+.stage-3d-box:not(#hero .stage-3d-box) { height: 470px !important; min-height: 430px !important; }
+@media (min-width: 768px) {
+  .stage-3d-box:not(#hero .stage-3d-box) { height: 500px !important; min-height: 460px !important; }
+}
+@media (min-width: 1367px) {
+  .stage-3d-box:not(#hero .stage-3d-box) { height: 520px !important; min-height: 480px !important; }
+}
+
+/* Fixed action controls use distinct safe-area lanes so Call, AI, Web Tour and dock never collide. */
+.floating-dock {
+  left: 50% !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  max-width: calc(100vw - 20px) !important;
+  gap: 5px !important;
+  padding: 5px !important;
+  white-space: nowrap;
+}
+.floating-dock a { padding-left: clamp(9px, 1.2vw, 18px) !important; padding-right: clamp(9px, 1.2vw, 18px) !important; }
+#btn-open-ai { right: 14px !important; bottom: 104px !important; width: 46px !important; height: 46px !important; }
+#ai-auto-toast { right: 14px !important; bottom: 160px !important; max-width: calc(100vw - 28px) !important; }
+#ai-drawer { right: 14px !important; bottom: 160px !important; max-width: calc(100vw - 28px) !important; max-height: calc(100dvh - 184px) !important; }
+#tour-dock { left: 14px !important; right: auto !important; bottom: 160px !important; }
+#tour-done { display: none !important; }
+#back-to-top { left: 14px !important; bottom: 104px !important; }
+@media (max-width: 480px) {
+  .floating-dock { width: max-content; }
+  .floating-dock a { font-size: 10px !important; padding-top: 10px !important; padding-bottom: 10px !important; }
+  .floating-dock a svg { flex: 0 0 auto; }
+  #btn-open-ai, #tour-dock { right: 12px !important; }
+  #tour-dock { left: 12px !important; right: auto !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floating-dock a, #btn-open-ai, #tour-start { transition-duration: .01ms !important; }
+}

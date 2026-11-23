@@ -748,7 +748,7 @@
       document.getElementById('tour-start')?.addEventListener('click', () => {
         const btn = document.getElementById('tour-start');
         const done = document.getElementById('tour-done');
-        if (btn && done) { btn.classList.add('active'); done.textContent = '✓ Tour complete — tap any chip to jump'; }
+        if (btn && done) { btn.classList.add('active'); done.textContent = ''; }
         startTour();
       });
       const _sd = () => { const b = document.getElementById('tour-start'); if (b) b.classList.remove('active'); const d=document.getElementById('tour-done'); if (d) d.textContent=''; };
@@ -803,9 +803,7 @@
       if (typingIn && typingSend && !typingIn.dataset.bound) {
         typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
         typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t) replyToUser(t); });
-      typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && aiDrawer && !aiDrawer.classList.contains('hidden')) { aiDrawer.classList.add('hidden'); aiDrawer.classList.remove('flex'); } });
-      document.querySelectorAll('#footer-contact li:has(button[id="copy-address"])')?.length;
       const copyBtn = document.getElementById('copy-address');
       if (copyBtn) {
         copyBtn.addEventListener('click', async () => {
@@ -913,7 +911,10 @@
       // ============================================================
       if (typeof THREE === 'undefined') return;
       try {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
+        // Preserve the live animation loop while avoiding needless HiDPI overdraw on touch devices.
+        const dprCap = viewportWidth < 768 ? 1.35 : (viewportWidth <= 1366 ? 1.6 : 2);
+        const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
         // Gift: adaptive resolution governor — lowers DPR only if real frame
         // times regress, then restores it when the device has headroom again.
         let adaptiveDpr = dpr, perfAcc = 0, perfFrames = 0;
@@ -1072,18 +1073,21 @@
           'canvas-watch':         { fill: 0.95, fov: 34 },
           'canvas-macbook':       { fill: 0.90, fov: 34 }, // FROZEN at 0.90 (no device override)
         };
-        // FAISU's HARD DEVICE-LOCKED 3D RULEBOOK (v17). ONLY these models are
-        // device-aware; every OTHER model + ALL mobile views are FROZEN untouched.
-        // Desktop/tablet/PC (>=768px): 3 TBK machines slightly smaller (0.75),
-        //   AirPods medium reduction (0.66), internals held at 0.86.
-        // Mobile (<768px): ONLY internals slightly smaller (0.88); all else frozen.
-        // MacBook is FROZEN at 0.90 — no device override.
+        // Responsive model framing: desktop/tablet/PWA use per-model medium pull-back values.
+        // Mobile keeps the prior model-specific baseline so the already-approved mobile models stay unchanged.
+        // The aspect-aware camera fit below keeps every assembly fully in frame at all rotations.
         const V13_DEVICE_FILL = {
-          'canvas-tbk-oca':   { desktopFill: 0.70 }, // mobile frozen; slightly smaller only on tablet/desktop
-          'canvas-tbk-90l':   { desktopFill: 0.70 }, // mobile frozen; slightly smaller only on tablet/desktop
-          'canvas-tbk-958':   { desktopFill: 0.70 }, // mobile frozen; slightly smaller only on tablet/desktop
-          'canvas-internals': { desktopFill: 0.86, mobileFill: 0.88 },
-          'canvas-airpods':   { desktopFill: 0.61 }, // slightly smaller only on tablet/desktop; mobile frozen
+          // Tablet/PWA/Chrome desktop framing: moderate camera pull-back, aspect-aware and uncropped.
+          'canvas-hero':          { desktopFill: 0.98 },
+          'canvas-estimate-ipad': { desktopFill: 0.84 },
+          'canvas-pickup-iphone': { desktopFill: 0.86 },
+          'canvas-tbk-oca':       { desktopFill: 0.66 },
+          'canvas-tbk-90l':       { desktopFill: 0.66 },
+          'canvas-tbk-958':       { desktopFill: 0.66 },
+          'canvas-internals':     { desktopFill: 0.82, mobileFill: 0.88 },
+          'canvas-airpods':       { desktopFill: 0.56 },
+          'canvas-watch':         { desktopFill: 0.84 },
+          'canvas-macbook':       { desktopFill: 0.82 },
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -1142,9 +1146,9 @@
             // else falls back to their frozen baseline `fill`.
             const dev = V13_DEVICE_FILL[id];
             const isMobileView = window.innerWidth < 768;
-            const chosen = dev
-              ? (isMobileView ? (dev.mobileFill ?? cfg.fill) : (dev.desktopFill ?? cfg.fill))
-              : cfg.fill;
+            const chosen = isMobileView
+              ? (dev?.mobileFill ?? cfg.fill)
+              : (dev?.desktopFill ?? cfg.fill);
             const fill = Math.min(0.96, chosen ?? 0.95);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
@@ -1725,7 +1729,8 @@
         function toggleFullscreen(slot) {
           if (document.fullscreenElement) { document.exitFullscreen(); return; }
           const el = slot.canvas.closest('.stage-3d-box') || slot.canvas;
-          el.requestFullscreen ? el.requestFullscreen() : el.webkitRequestFullscreen?.();
+          if (el.requestFullscreen) el.requestFullscreen();
+          else el.webkitRequestFullscreen?.();
           requestAnimationFrame(() => resizeSlot(slot));
         }
         function resizeSlot(slot) {
