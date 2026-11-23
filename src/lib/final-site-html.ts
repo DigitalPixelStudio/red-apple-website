@@ -77,7 +77,7 @@ export const finalSiteHtml = `
               <span id="live-ist-clock">Open now · 10 AM – 12 AM · Halasuru, Bengaluru</span>
             </div>
 
-            <h1 class="heading-breathe font-display text-4xl font-extrabold leading-[1.06] tracking-tight text-zinc-950 sm:text-5xl">
+            <h1 class="heading-breathe font-display text-4xl font-black leading-[1.06] tracking-tight text-zinc-950 sm:text-5xl">
               Apple Device Repairs, <span class="text-brand-grad">Mastered.</span>
             </h1>
 
@@ -194,7 +194,7 @@ export const finalSiteHtml = `
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Real Store</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">A Real Shop, a Real Bench &amp; <span class="text-brand-grad">The Real People</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">A Real Shop, a Real Bench &amp; <span class="text-brand-grad">The Real People</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Before you hand over a ₹80,000 phone, you should know where it goes. This is our store on MG Road, our benches, and the people who will open it — <strong class="text-zinc-900">photographed, not illustrated.</strong></p>
         </div>
 
@@ -305,7 +305,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Smart Estimate</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Get Your Estimate in <span class="text-brand-grad">30 Seconds.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Get Your Estimate in <span class="text-brand-grad">30 Seconds.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">No forms to fill from memory — tap your device, model and issue. Sends the exact structured repair ticket straight to our Halasuru bench WhatsApp.</p>
         </div>
 
@@ -403,7 +403,7 @@ export const finalSiteHtml = `
         <div class="grid grid-cols-1 items-center gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-md lg:grid-cols-12">
           <div class="lg:col-span-7">
             <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Paired · Live Repair Status from Our Halasuru Bench</div>
-            <h2 class="heading-breathe mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Paired — your device, <span class="text-brand-grad">tracked live</span></h2>
+            <h2 class="heading-breathe mt-1 font-display text-2xl font-black text-zinc-950 sm:text-3xl">Paired — your device, <span class="text-brand-grad">tracked live</span></h2>
             <p class="mt-2 text-xs leading-relaxed text-zinc-600 sm:text-sm">Red Apple sends live WhatsApp updates from our repair CRM at every repair stage — for walk-in and free doorstep pickup customers alike. Your CRM invoice is your 6 Months warranty record.</p>
             <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-bold">
               <span class="rounded-full bg-zinc-900 px-3 py-1 text-white">1. Received</span>
@@ -433,7 +433,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Doorstep Convenience</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Free Doorstep <span class="text-brand-grad">Pickup, 24/7.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Free Doorstep <span class="text-brand-grad">Pickup, 24/7.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Free insured pickup and drop across Bengaluru — 24 hours a day, 7 days a week. Zero password policy, live status tracking and expert diagnosis before we touch a screw.</p>
         </div>
 
@@ -500,7 +500,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Work, Shown Plainly</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Before, After, &amp; the <span class="text-brand-grad">Bench in Between</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Before, After, &amp; the <span class="text-brand-grad">Bench in Between</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Anyone can promise a repair. These are the two we are asked for most, photographed on our own bench.</p>
         </div>
 
@@ -566,7 +566,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Inside the Bench</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">The Machines Most Shops <span class="text-brand-grad">Do Not Own</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">The Machines Most Shops <span class="text-brand-grad">Do Not Own</span></h2>
         </div>
 
         <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -629,7 +629,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Front Glass Restoration · Halasuru Lab</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Keep the Original OLED. <span class="text-brand-grad">Restore the Glass.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Keep the Original OLED. <span class="text-brand-grad">Restore the Glass.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Why replace a ₹1,40,000 iPhone when only the top glass is cracked? Using specialised TBK machinery, we bond new glass to your original OLED and preserve touch sensitivity and True Tone.</p>
         </div>
 
@@ -708,7 +708,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Equipment Behind the Finish</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Three Machines. <span class="text-brand-grad">One Original Display.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Three Machines. <span class="text-brand-grad">One Original Display.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">This is not a heat-gun and a suction cup. Glass restoration runs through a calibrated TBK line photographed on our Halasuru bench, paired with live interactive 3D models below each machine.</p>
         </div>
 
@@ -807,7 +807,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-3xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Mastered Inside &amp; Out · Every Apple Device</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">We Know &amp; Master Every <span class="text-brand-grad">Apple Device Inside Out.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">We Know &amp; Master Every <span class="text-brand-grad">Apple Device Inside Out.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">From the latest iPhone Pro Max teardown to AirPods Pro, iPad Pro, Apple Watch &amp; MacBook Pro — explore and rotate every Apple architecture we service in Halasuru.</p>
         </div>
 
@@ -882,7 +882,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Where We Excel</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">iPhone Display &amp; Back Glass <span class="text-brand-grad">Restored Right.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">iPhone Display &amp; Back Glass <span class="text-brand-grad">Restored Right.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Every iPhone — from 6 to 18 Pro Max — restored with precision tools and OEM-grade panels.</p>
         </div>
 
@@ -935,7 +935,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Repair Services</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Every Repair. <span class="text-brand-grad">One Expert Team.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Every Repair. <span class="text-brand-grad">One Expert Team.</span></h2>
         </div>
 
         <div id="services-grid" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
@@ -964,7 +964,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Repair Triage</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Not Sure What’s Wrong? <span class="text-brand-grad">Start Here.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Not Sure What’s Wrong? <span class="text-brand-grad">Start Here.</span></h2>
         </div>
 
         <div class="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -1102,7 +1102,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Honest Comparison</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Red Apple vs <span class="text-brand-grad">Standard Brand Mail-In Centers</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Red Apple vs <span class="text-brand-grad">Standard Brand Mail-In Centers</span></h2>
         </div>
 
         <div class="mt-7 overflow-x-auto rounded-3xl border border-zinc-200 bg-white shadow-sm">
@@ -1129,27 +1129,27 @@ export const finalSiteHtml = `
         <div class="mt-12 grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
           <div class="lg:col-span-7">
             <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">The Standard</div>
-            <h3 class="mt-1 font-display text-2xl font-extrabold text-zinc-950 sm:text-3xl">Four Reasons People Hand Us a Phone Worth <span class="quote-color-shift">₹1,00,000</span></h3>
+            <h3 class="mt-1 font-display text-2xl font-black tracking-tight text-zinc-950 sm:text-3xl">Four Reasons People Hand Us a Phone Worth <span class="quote-color-shift">₹1,00,000</span></h3>
             <p class="mt-2 text-xs leading-relaxed text-zinc-600">Every repair shop says they are careful. These are the four things we can actually prove — and why other shops quietly send us their board-level work.</p>
             <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                <div class="text-[11px] font-extrabold text-red-600">01 · BOARD-LEVEL</div>
-                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">Board-Level, Not Part-Swapping</div>
+                <div class="text-[11px] font-black tracking-tight text-red-600">01 · BOARD-LEVEL</div>
+                <div class="mt-1 font-display text-sm font-black tracking-tight text-zinc-950">Board-Level, Not Part-Swapping</div>
                 <p class="mt-1 text-[11px] text-zinc-600">We micro-solder at component level under stereo microscopes instead of writing off logic boards.</p>
               </div>
               <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                <div class="text-[11px] font-extrabold text-orange-600">02 · FIXED QUOTE</div>
-                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">One Price, Quoted Before Opening</div>
+                <div class="text-[11px] font-black tracking-tight text-orange-600">02 · FIXED QUOTE</div>
+                <div class="mt-1 font-display text-sm font-black tracking-tight text-zinc-950">One Price, Quoted Before Opening</div>
                 <p class="mt-1 text-[11px] text-zinc-600">Written estimate before any screw comes out. Nothing added to the bill after work is done.</p>
               </div>
               <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                <div class="text-[11px] font-extrabold text-red-600">03 · SAME-DAY</div>
-                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">Same-Day, Because You Need It</div>
+                <div class="text-[11px] font-black tracking-tight text-red-600">03 · SAME-DAY</div>
+                <div class="mt-1 font-display text-sm font-black tracking-tight text-zinc-950">Same-Day, Because You Need It</div>
                 <p class="mt-1 text-[11px] text-zinc-600">Display and battery work done in 30–45 mins while you wait, plus 24/7 doorstep pickup.</p>
               </div>
               <div class="card-sheen rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                <div class="text-[11px] font-extrabold text-emerald-700">04 · FULL TRANSPARENCY</div>
-                <div class="mt-1 font-display text-sm font-extrabold text-zinc-950">You Watch the Whole Repair</div>
+                <div class="text-[11px] font-black tracking-tight text-emerald-700">04 · FULL TRANSPARENCY</div>
+                <div class="mt-1 font-display text-sm font-black tracking-tight text-zinc-950">You Watch the Whole Repair</div>
                 <p class="mt-1 text-[11px] text-zinc-600">CRM WhatsApp updates at every stage with strict Zero-Password Privacy.</p>
               </div>
             </div>
@@ -1163,7 +1163,7 @@ export const finalSiteHtml = `
                 <span class="font-mono-num text-[10px] font-bold uppercase tracking-widest text-orange-300">RED APPLE · CRM VERIFIED</span>
                 <span class="rounded-full bg-red-600 px-2.5 py-0.5 text-[10px] font-bold shadow">6 Months</span>
               </div>
-              <div class="relative z-10 mt-5 font-display text-2xl font-extrabold">Written Repair Warranty</div>
+              <div class="relative z-10 mt-5 font-display text-2xl font-black tracking-tight">Written Repair Warranty</div>
               <p id="holo-device-line" class="relative z-10 mt-1 text-xs text-zinc-200">iPhone 17 Pro Max · Front Glass &amp; OLED Coverage — Linked to your Halasuru CRM Job ID &amp; serial-tracked part record.</p>
               <div class="relative z-10 mt-4 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 font-mono-num text-[11px] text-orange-200">
                 <span id="holo-job-id">JOB ID: RA-2048-CERT</span>
@@ -1197,7 +1197,7 @@ export const finalSiteHtml = `
             <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-40 w-40 object-contain" onerror="this.src='/logo.png'">
           </div>
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Reviews · Apple Device Repairs, Perfected.</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
           <div class="mt-3 inline-flex items-center gap-3 rounded-2xl border border-amber-200 bg-white px-5 py-3 shadow-sm">
             <span class="font-display text-3xl font-extrabold text-zinc-950 font-mono-num">4.9</span>
             <div class="text-left text-xs">
@@ -1224,7 +1224,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-4xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">FAQ</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Questions? <span class="text-brand-grad">Answered.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Questions? <span class="text-brand-grad">Answered.</span></h2>
           <p class="mt-1 text-xs text-zinc-600">Straight answers on warranty, claims, WhatsApp updates and pickup.</p>
         </div>
         <div id="faq-list" class="mt-7 space-y-2.5"></div>
@@ -1236,7 +1236,7 @@ export const finalSiteHtml = `
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Visit Us</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-extrabold text-zinc-950 sm:text-4xl">Easy to Reach. <span class="text-brand-grad">Right in Halasuru.</span></h2>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Easy to Reach. <span class="text-brand-grad">Right in Halasuru.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Metro Pillar No 125, No.38 — next to Vignesh Dresses, opposite Bhadra Landmark, Halasuru, Bengaluru 560008.</p>
         </div>
 
@@ -1271,7 +1271,7 @@ export const finalSiteHtml = `
     <section class="border-t border-red-200 bg-[#F7F3EE] py-12 text-center text-zinc-900">
       <div class="mx-auto max-w-3xl px-4">
         <div class="font-mono-num text-[11px] font-bold uppercase tracking-widest text-orange-600">Apple Repair · Halasuru, Bengaluru</div>
-        <h2 class="heading-breathe mt-2 font-display text-3xl font-extrabold sm:text-4xl">Your Apple Device, <span class="text-brand-grad">Fixed Right.</span></h2>
+        <h2 class="heading-breathe mt-2 font-display text-3xl font-black sm:text-4xl">Your Apple Device, <span class="text-brand-grad">Fixed Right.</span></h2>
         <p class="mt-2 text-xs text-zinc-600 sm:text-sm">Tell us the device and the fault. We'll send a fixed estimate and a convenient slot — usually within minutes. Apple Device Repairs, Perfected.</p>
         <div class="mt-5 flex flex-wrap justify-center gap-3">
           <a href="#estimate" class="dock-quote-btn rounded-full px-6 py-3 text-xs font-extrabold text-white">Get Instant Estimate</a>
@@ -1282,7 +1282,7 @@ export const finalSiteHtml = `
   </main>
 
   <!-- 20. COMPLETE 4-COLUMN FOOTER WITH ENLARGED STORE PHOTO, SOCIAL/DIRECTORY HUB & TRACKED PIXEL FORGE CREDIT -->
-  <footer id="footer-contact" class="premium-footer footer-light-modern pb-[66px] lg:pb-4 text-xs text-zinc-600">
+  <footer id="footer-contact" class="premium-footer footer-light-modern mb-0 pb-[66px] lg:pb-4 text-xs text-zinc-600">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
       <!-- Enlarged Real Store Photo Banner -->
       <div class="mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 lg:grid-cols-12">
@@ -1348,7 +1348,7 @@ export const finalSiteHtml = `
       </div>
 
       <!-- Bottom Independent Disclaimer + ONLY Tracked Pixel Forge Studio Credit — anchored near footer bottom edge -->
-      <div class="footer-bottom-edge-bar border-t border-zinc-200 py-5 text-center">
+      <div class="footer-bottom-edge-bar mb-0 border-t border-zinc-200 py-5 text-center">
         <p class="footer-light-sub text-[11px] text-zinc-500">© 2026 Red Apple Mobile Repair Store · Halasuru, Bengaluru 560008 · Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</p>
         <div class="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
           <a href="https://wa.me/919620024812?text=The%20Pixel%20Forge%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20Business%20Build.%20I%20came%20via%20redmobilerepair.in%20website%20that%20you%20have%20build." target="_blank" rel="noopener noreferrer" class="footer-light-link font-display text-xs font-extrabold text-zinc-950 hover:text-red-600">

@@ -22,7 +22,7 @@ export const SITE = {
   pickupHours: "24/7 — doorstep pickup any hour, any day",
   openTime: "10:00",
   closeTime: "23:59",
-  geo: { lat: 12.9748, lng: 77.6249 },
+  geo: { lat: 12.9767, lng: 77.6245 },
   rating: "4.9",
   ratingCount: "1,103",
   yearsActive: "9+",

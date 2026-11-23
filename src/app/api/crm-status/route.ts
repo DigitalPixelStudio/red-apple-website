@@ -59,7 +59,15 @@ export async function POST(req: Request) {
     );
   } catch {
     return NextResponse.json(
-      { ok: true, ticket: ticket.toUpperCase(), configured: true, currentStage: null, message: "CRM temporarily unavailable — confirm on WhatsApp." },
+      {
+        ok: true,
+        ticket: ticket.toUpperCase(),
+        phoneMasked: mask(phone),
+        configured: true,
+        stages: REPAIR_STATUS_FLOW,
+        currentStage: null,
+        message: "CRM temporarily unavailable — confirm on WhatsApp.",
+      },
       { headers: { "Cache-Control": "no-store" } }
     );
   }

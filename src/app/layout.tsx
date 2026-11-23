@@ -38,7 +38,13 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  alternates: { canonical: baseUrl },
+  /* en-IN self-referencing hreflang for local-search eligibility. Sub-routes
+     that export their own `alternates` must restate it (Next replaces the
+     whole object per route — see services/[slug]/generateMetadata). */
+  alternates: {
+    canonical: baseUrl,
+    languages: { "en-IN": baseUrl },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
@@ -62,9 +68,9 @@ export const metadata: Metadata = {
   /* Legacy but still read by some local-search crawlers. */
   other: {
     "geo.region": "IN-KA",
-    "geo.placename": "Halasuru, Bengaluru",
-    "geo.position": `${SITE.geo.lat};${SITE.geo.lng}`,
-    ICBM: `${SITE.geo.lat}, ${SITE.geo.lng}`,
+    "geo.placename": "Bengaluru",
+    "geo.position": "12.9767;77.6245",
+    ICBM: "12.9767, 77.6245",
     // Apple Maps deep link for the Halasuru store (public; no secrets).
     "apple-maps": "https://maps.apple.com/?q=Red+Apple+Mobile+Repair+Halasuru+Bengaluru",
   },

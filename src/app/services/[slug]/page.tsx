@@ -9,9 +9,32 @@ import Concierge from "@/components/Concierge";
 import GlassRestoration from "@/components/GlassRestoration";
 import StickyCta from "@/components/StickyCta";
 import { SERVICE_PAGES, SITE, wa, baseUrl } from "@/lib/site";
+import { buildServiceJsonLd } from "@/lib/seo/serviceSchema";
+import { PRICES } from "@/lib/pricing";
+import { GLASS_PRICE_MIN } from "@/lib/glass-pricing";
 
 export function generateStaticParams() {
   return SERVICE_PAGES.map((s) => ({ slug: s.slug }));
+}
+
+/**
+ * Published starting price, always derived from the single-source pricing
+ * modules — never hand-typed here. Display = cheapest published front-display
+ * price; glass restoration = the published glass list minimum. Services that
+ * are quoted after inspection return null so no Offer (and no fake price) is
+ * emitted for them.
+ */
+function startingPriceFor(slug: string): number | null {
+  if (slug === "front-glass-restoration") return GLASS_PRICE_MIN;
+  if (slug === "iphone-display-repair") {
+    const starts: number[] = [];
+    for (const row of Object.values(PRICES)) {
+      const price = row["Front Display Replacement"];
+      if (Array.isArray(price) && typeof price[0] === "number") starts.push(price[0]);
+    }
+    return starts.length ? Math.min(...starts) : null;
+  }
+  return null;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -22,7 +45,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: page.title,
     description: page.desc,
     keywords: page.keywords,
-    alternates: { canonical: `${baseUrl}/services/${slug}` },
+    /* Next 16 replaces the whole `alternates` object from the nearest metadata
+       export, so en-IN must be restated here or the root hreflang is lost. */
+    alternates: {
+      canonical: `${baseUrl}/services/${slug}`,
+      languages: { "en-IN": `${baseUrl}/services/${slug}` },
+    },
     openGraph: { title: `${page.title} — Halasuru, Bengaluru`, description: page.desc, url: `${baseUrl}/services/${slug}`, type: "website", images: [`${baseUrl}/og-image.png`] },
   };
 }
@@ -34,21 +62,18 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   const related = SERVICE_PAGES.filter((s) => s.slug !== slug).slice(0, 4);
 
-  const serviceSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: page.title,
-    description: page.desc,
-    provider: { "@type": "LocalBusiness", name: SITE.legalName, telephone: SITE.phone, address: SITE.address },
-    areaServed: "Bengaluru",
-    url: `${baseUrl}/services/${slug}`,
-  };
+  /* v17: one SSR JSON-LD payload (BreadcrumbList + Service + optional Offer).
+     No aggregateRating / FAQPage nodes here — layout.tsx owns those once. */
+  const serviceJsonLd = buildServiceJsonLd(slug, page.title, page.desc, startingPriceFor(slug));
 
   return (
     <main className="min-h-screen bg-white">
       <ScrollProgress />
       <Navbar />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd).replace(/</g, "\\u003c") }}
+      />
 
       <section className="section-apple bg-[#f5f5f7]">
         <div className="mx-auto max-w-[1000px] px-6 pt-24 text-center lg:px-8">

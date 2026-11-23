@@ -917,21 +917,20 @@
           'canvas-internals':     { fill: 0.95, fov: 34 },
           'canvas-airpods':       { fill: 0.86, fov: 34 },
           'canvas-watch':         { fill: 0.95, fov: 34 },
-          'canvas-macbook':       { fill: 0.96, fov: 34 },
+          'canvas-macbook':       { fill: 0.90, fov: 34 }, // FROZEN at 0.90 (no device override)
         };
-        // FAISU's HARD DEVICE-LOCKED 3D RULEBOOK (v16). ONLY these models are
+        // FAISU's HARD DEVICE-LOCKED 3D RULEBOOK (v17). ONLY these models are
         // device-aware; every OTHER model + ALL mobile views are FROZEN untouched.
-        // Desktop/tablet/PC (>=768px): 3 TBK machines slightly smaller (0.82),
-        //   AirPods medium reduction (0.78), MacBook slight reduction (0.90),
-        //   internals held at 0.86.
+        // Desktop/tablet/PC (>=768px): 3 TBK machines slightly smaller (0.75),
+        //   AirPods medium reduction (0.66), internals held at 0.86.
         // Mobile (<768px): ONLY internals slightly smaller (0.88); all else frozen.
+        // MacBook is FROZEN at 0.90 — no device override.
         const V13_DEVICE_FILL = {
-          'canvas-tbk-oca':   { desktopFill: 0.82 }, // mobile frozen
-          'canvas-tbk-90l':   { desktopFill: 0.82 }, // mobile frozen
-          'canvas-tbk-958':   { desktopFill: 0.82 }, // mobile frozen
+          'canvas-tbk-oca':   { desktopFill: 0.75 }, // mobile frozen
+          'canvas-tbk-90l':   { desktopFill: 0.75 }, // mobile frozen
+          'canvas-tbk-958':   { desktopFill: 0.75 }, // mobile frozen
           'canvas-internals': { desktopFill: 0.86, mobileFill: 0.88 },
-          'canvas-airpods':   { desktopFill: 0.78 }, // medium reduction, mobile frozen
-          'canvas-macbook':   { desktopFill: 0.90 }, // slight reduction, mobile frozen
+          'canvas-airpods':   { desktopFill: 0.66 }, // medium reduction, mobile frozen
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and

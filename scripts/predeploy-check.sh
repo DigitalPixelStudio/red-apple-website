@@ -85,14 +85,14 @@ python3 scripts/audit/smoothness_guard.py >/tmp/smoothness.txt 2>&1 || {
 echo "--- v16 smoothness/ZLE source gate --- PASS"
 
 # --- v13 DEVICE-LOCK source gate (blocking — NEVER skippable) ----------------
-# Static, read-only guard for Faisu's hard 3D device-lock rules (v16 desktop
-# fills: TBK 0.80-0.83, AirPods 0.76-0.80, MacBook 0.88-0.92, internals 0.86
-# desktop / 0.88 mobile; frozen models untouched and MOBILE otherwise frozen,
-# 768 fill selection, one-time normalization, shared renderer). Filename kept
-# as v13_lock_guard.py so the gate command stays stable.
-echo "--- v13 device-lock source gate (v16 spec, blocking)"
+# Static, read-only guard for Faisu's hard 3D device-lock rules (v17 desktop
+# fills: TBK 0.74-0.76, AirPods 0.65-0.67, internals 0.86 desktop / 0.88 mobile;
+# MacBook FROZEN at 0.90 with NO device override; all other models frozen and
+# MOBILE otherwise frozen, 768 fill selection, one-time normalization, shared
+# renderer). Filename kept as v13_lock_guard.py so the gate command stays stable.
+echo "--- v13 device-lock source gate (v17 spec, blocking)"
 python3 scripts/audit/v13_lock_guard.py >/tmp/v13-lock.txt 2>&1 || {
-  echo "FAIL: v13_lock_guard.py (v16 device-locked 3D fill drift)"
+  echo "FAIL: v13_lock_guard.py (v17 device-locked 3D fill drift)"
   tail -40 /tmp/v13-lock.txt
   exit 1
 }

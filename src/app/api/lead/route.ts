@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 /**
  * POST /api/lead
@@ -16,27 +17,31 @@ import { NextResponse } from "next/server";
  * log so a leaked log file does not expose customer contact details.
  */
 
-type Lead = {
-  name?: string;
-  phone?: string;
-  email?: string;
-  device?: string;
-  issue?: string;
-  message?: string;
-  source?: string;
-  page?: string;
-};
+// Zod validation: every field is a bounded optional string. This rejects
+// malformed/garbage payloads with a clean 400 instead of a 500 (e.g. a numeric
+// `phone` used to throw in .replace) and caps payload sizes before the log/webhook.
+const LeadSchema = z.object({
+  name: z.string().trim().max(80).optional(),
+  phone: z.string().trim().max(32).optional(),
+  email: z.string().trim().max(160).optional(),
+  device: z.string().trim().max(80).optional(),
+  issue: z.string().trim().max(500).optional(),
+  message: z.string().trim().max(2000).optional(),
+  source: z.string().trim().max(40).optional(),
+  page: z.string().trim().max(200).optional(),
+});
+type Lead = z.infer<typeof LeadSchema>;
 
 const mask = (v?: string) =>
   !v ? "" : v.length <= 4 ? "***" : v.slice(0, 2) + "*".repeat(Math.max(0, v.length - 4)) + v.slice(-2);
 
 export async function POST(req: Request) {
-  let body: Lead;
-  try {
-    body = (await req.json()) as Lead;
-  } catch {
-    return NextResponse.json({ ok: false, error: "invalid json" }, { status: 400 });
+  const payload: unknown = await req.json().catch(() => null);
+  const parsed = LeadSchema.safeParse(payload);
+  if (!parsed.success) {
+    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
   }
+  const body: Lead = parsed.data;
 
   const phone = (body.phone || "").replace(/[^\d]/g, "");
   const hasContact = phone.length >= 10 || Boolean(body.email);

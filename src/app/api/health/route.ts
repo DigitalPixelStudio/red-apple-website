@@ -14,7 +14,11 @@ export async function GET() {
     status: "ok",
     ts: new Date().toISOString(),
     service: SITE.shortName,
+    // Commit is already env-sourced and truncated to a short SHA. There is no
+    // reliable build-time env var in Vercel/Next, so we do NOT fabricate one —
+    // instead we expose the runtime region (a non-secret platform signal).
     build: { commit: (process.env.VERCEL_GIT_COMMIT_SHA ?? "").slice(0, 7) || null },
+    runtime: { region: process.env.VERCEL_REGION ?? null },
     services: {
       concierge: hasGemini,
       leadWebhook: Boolean(process.env.LEAD_WEBHOOK_URL),

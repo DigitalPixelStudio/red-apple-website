@@ -66,7 +66,7 @@
       background-image:
         radial-gradient(circle at 12% 18%, rgba(220, 38, 38, 0.075), transparent 52%),
         radial-gradient(circle at 88% 82%, rgba(234, 88, 12, 0.095), transparent 52%),
-        radial-gradient(rgba(194, 65, 12, 0.24) 1px, transparent 1px);
+        radial-gradient(rgba(194, 65, 12, 0.22) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 24px 24px;
     }
     .ambient-clean {
@@ -76,7 +76,7 @@
       background-image:
         radial-gradient(circle at 82% 15%, rgba(234, 88, 12, 0.06), transparent 50%),
         radial-gradient(circle at 18% 85%, rgba(220, 38, 38, 0.045), transparent 50%),
-        radial-gradient(rgba(194, 65, 12, 0.24) 1px, transparent 1px);
+        radial-gradient(rgba(194, 65, 12, 0.22) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 24px 24px;
     }
     /* Static warm hairline sheen — paint-only, no animation, never blocks pointer input. */
@@ -746,10 +746,11 @@
       color: #1E293B !important;
       border-top: 1px solid rgba(214,211,209,.85) !important;
       padding-top: 2.5rem !important;
-      padding-bottom: 66px !important; /* mobile floating-dock clearance — disclaimer sits tight to bottom edge */
+      padding-bottom: 62px !important; /* V17-FX — mobile: credits flush to bottom edge (dock clearance) */
+      margin-bottom: 0 !important; /* V17-FX — no trailing gap under footer */
     }
-    @media (min-width:1024px) {
-      .footer-light-modern { padding-bottom: 16px !important; }
+    @media (min-width:768px) {
+      .footer-light-modern { padding-bottom: 12px !important; } /* V17-FX — tablet/desktop: 12px bottom */
     }
     .footer-light-modern::before { background: none !important; }
     .footer-light-heading {
@@ -783,6 +784,7 @@
       border-top: 1px solid rgba(214,211,209,.85) !important;
       padding-top: 1.25rem;
       padding-bottom: 0; /* anchored tight to bottom edge */
+      margin-bottom: 0 !important; /* V17-FX — credit container sits on the footer's bottom edge */
     }
     @media (prefers-reduced-motion: reduce){
       .footer-light-modern a.footer-light-link,
@@ -927,3 +929,65 @@
     /* EFFECT-V16 9/10 — card lift translateY hover: .card-sheen:hover, transform-only */
     /* EFFECT-V16 10/10 — pulse ring opacity-only: .pulse-ring pulseOpacityV16 (opacity only, no scale/translate/blur) */
     .text-brand-grad { animation: none !important; } /* EFFECT-V16 — static gradient text (background-clip, no animation) */
+
+    /* ============================================================
+       V17-FX — SUBTLE COMPOSITOR-ONLY POLISH (Faisu request)
+       Law: opacity / scaleX transform / static paint ONLY.
+       NO blur, NO box-shadow animation, NO transform on large text blocks,
+       NO continuous loops on ticker / capability / glass-band static labels.
+       ============================================================ */
+
+    /* V17-FX — MAIN section head topics + all h1/h2/h3 display headings: weight 900, tight tracking preserved */
+    h1, h2, h3 { font-weight: 900 !important; }
+
+    /* V17-FX — subtle opacity-only breathing on key accent pills + ₹1,00,000 span (.85 -> 1, 3.2s, GPU opacity only) */
+    @keyframes v17AccentBreath {
+      0%, 100% { opacity: .85; }
+      50%      { opacity: 1; }
+    }
+    .badge-breathe,
+    .fast-breathe-badge,
+    .price-breathe,
+    .quote-color-shift {
+      animation: v17AccentBreath 3.2s ease-in-out infinite !important;
+      will-change: opacity !important;
+    }
+
+    /* V17-FX — gentle one-shot scaleX nav underline entrance (compositor-only, NOT a loop) */
+    @keyframes v17UnderlineIn {
+      from { transform: scaleX(0) translateZ(0); }
+      to   { transform: scaleX(1) translateZ(0); }
+    }
+    .top-nav-item.is-active::after {
+      transform-origin: left center;
+      animation: v17UnderlineIn 360ms cubic-bezier(.22,1,.36,1) both !important;
+    }
+
+    /* V17-FX — crisp scaleX hover underline on footer links (transform-only, no layout) */
+    .footer-light-modern .footer-light-link { position: relative; }
+    .footer-light-modern .footer-light-link::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1.5px;
+      border-radius: 2px; background: linear-gradient(90deg, #dc2626 0%, #ea580c 100%);
+      transform: scaleX(0) translateZ(0); transform-origin: left center;
+      opacity: 0; pointer-events: none;
+      transition: transform 320ms cubic-bezier(.22,1,.36,1), opacity 240ms ease;
+    }
+    @media (hover: hover) {
+      .footer-light-modern .footer-light-link:hover::after { transform: scaleX(1) translateZ(0); opacity: 1; }
+    }
+
+    /* V17-FX — dark-orange micro-dot texture is paint-once static: rgba(194,65,12,.22), 0ms, zero animation */
+    .ambient-warm, .ambient-clean { background-size: 100% 100%, 100% 100%, 24px 24px; animation: none !important; }
+
+    /* V17-FX — retained zero-FPS primitives: 2px scroll-progress hairline (animation-timeline:scroll + scaleX fallback),
+       active:scale-[0.98] CTA press, all 6 jitter sections static, capability ticker + glass-band labels static,
+       orange-glass sweep OFF, zero blur filters added. */
+
+    /* V17-FX — reduced-motion kill for every V17 effect (declared last to win same-specificity !important rules) */
+    @media (prefers-reduced-motion: reduce) {
+      .badge-breathe, .fast-breathe-badge, .price-breathe, .quote-color-shift {
+        animation: none !important; opacity: 1 !important; will-change: auto !important;
+      }
+      .top-nav-item.is-active::after { animation: none !important; transform: scaleX(1) translateZ(0) !important; }
+      .footer-light-modern .footer-light-link::after { transition: none !important; }
+    }

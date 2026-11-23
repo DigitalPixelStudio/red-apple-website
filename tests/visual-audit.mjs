@@ -8,7 +8,7 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (86 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13 + 2 v16 SOURCE + 3 v16 DOM):
+ * GATES (93 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13 + 5 v16 + 7 v17 SOURCE):
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -98,6 +98,22 @@
  *    NOTE: the v10 ticker/band gates (25, 30, S4, D2) were RETARGETED to v16
  *    classes (.studio-cap-row/.studio-cap-item, .studio-glass-band/.studio-tag)
  *    with byte-identical TEXT checks preserved (texts derived from source).
+ *   v17 NEW (7 global SOURCE gates — all run in --source-only, no WebGL):
+ *    V17-A CSS >=8 V17-FX markers + v17AccentBreath opacity-only keyframe applied
+ *          + a prefers-reduced-motion guardian that kills the V17 breathing.
+ *    V17-B CSS footer padding-bottom 62px mobile / 12px @min-width:768px (flush).
+ *    V17-C heavier head fonts: CSS `h1,h2,h3{font-weight:900!important}` + the
+ *          `font-black` utility present on headings in the HTML source.
+ *    V17-D HTML verbatim: the ₹1,00,000 "Four Reasons" heading + all 4 reason
+ *          titles present byte-for-byte (never a loose substring stub).
+ *    V17-E SOURCE services/[slug]/page.tsx calls buildServiceJsonLd(...) AND
+ *          injects it via an application/ld+json <script dangerouslySetInnerHTML>.
+ *    V17-F SOURCE layout.tsx declares en-IN hreflang (alternates.languages or
+ *          an explicit hreflang key) — Next 16 replaces alternates wholesale.
+ *    V17-G SOURCE device lock: TBK desktopFill 0.74-0.76 (target 0.75) and
+ *          AirPods desktopFill 0.65-0.67 (target 0.66). Structural only (no WebGL).
+ *    NOTE: v13 S5 + R2 footer gates were RETARGETED to accept v17 62/12 as well
+ *    as legacy 66/16 so all 86 pre-existing gates stay green on the v17 build.
  *
  * Gift: `node tests/visual-audit.mjs --source-only` runs ONLY the SOURCE gates —
  * no browser, no local build. Use it to verify a final-site.js edit in seconds
@@ -118,6 +134,10 @@ const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
 const BASE_URL = (process.env.BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const SHOTS = process.argv.includes('--shots');
 const SOURCE_ONLY = process.argv.includes('--source-only'); // gift: source gates only, no browser/build
+// Gift (v17): --self-test proves the strict V17-G 3D gate DISCRIMINATES — it must
+// FAIL on the current (pre-change) source and PASS when the target 0.75/0.66
+// values are simulated IN MEMORY. No file is edited; headless has no WebGL.
+const SELF_TEST = process.argv.includes('--self-test');
 const SHOTS_FULL = process.env.SHOTS_FULL === '1';
 const SHOTS_DIR = process.env.SHOTS_DIR || path.join(SCRIPT_DIR, 'shots');
 const OVERLAP_TOLERANCE_PX = 1; // ignore sub-pixel/rounding-only intersections
@@ -145,6 +165,9 @@ const INDEXNOW_PATH = path.join(REPO_ROOT, 'public', 'indexnow-key.txt');
 const PREDEPLOY_PATH = path.join(REPO_ROOT, 'scripts', 'predeploy-check.sh');
 // v13 source anchors (all verified from disk — headless has no WebGL, so 3D stays source-only).
 const OG_CARD_PATH = path.join(REPO_ROOT, 'public', 'og-card.jpg');
+// v17 source anchors (RES-1 JSON-LD + geo hreflang). Structural only.
+const SERVICES_SLUG_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'services', '[slug]', 'page.tsx');
+const LAYOUT_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'layout.tsx');
 
 // Slice a function body out of a source string using two adjacent markers.
 // Scopes the 3D framing assertions to centerAndFitResponsive ONLY — the shared
@@ -233,6 +256,39 @@ function keyframeBlocks(css) {
   return blocks;
 }
 
+// v17: body of one named @keyframes rule ('' when absent). Brace-matched so an
+// opacity-only keyframe can be proven structural — never a whole-file guess.
+function namedKeyframeBody(css, name) {
+  const re = new RegExp(`@keyframes\\s+${name}\\s*\\{`);
+  const m = re.exec(css);
+  if (!m) return '';
+  let depth = 1, i = m.index + m[0].length;
+  for (; i < css.length && depth > 0; i++) {
+    if (css[i] === '{') depth++;
+    else if (css[i] === '}') depth--;
+  }
+  return css.slice(m.index + m[0].length, i - 1);
+}
+
+// v17: bodies of all @media blocks whose prelude matches conditionRe. Used to
+// prove the reduced-motion guardian and the 768px footer padding live in the
+// right @media context (brace-matched, not a proximity string heuristic).
+function mediaBlocks(css, conditionRe) {
+  const out = [];
+  const re = /@media\s+([^{]+)\{/g;
+  let m;
+  while ((m = re.exec(css)) !== null) {
+    if (!conditionRe.test(m[1])) continue;
+    let depth = 1, i = m.index + m[0].length;
+    for (; i < css.length && depth > 0; i++) {
+      if (css[i] === '{') depth++;
+      else if (css[i] === '}') depth--;
+    }
+    out.push(css.slice(m.index + m[0].length, i - 1));
+  }
+  return out;
+}
+
 // v16: parse a `const <Name>DEVICE_FILL = { 'canvas-id': { desktopFill: 0.86,
 // mobileFill: 0.88 }, ... };` map into a plain object (no eval, values numeric).
 function parseDeviceFillMap(js) {
@@ -250,6 +306,20 @@ function parseDeviceFillMap(js) {
     };
   }
   return { name: m[1], entries };
+}
+
+// v17 gift: shared evaluator for the strict desktop-3D gate. Returns the parsed
+// TBK/AirPods desktopFill values plus the in-band verdict. Used by BOTH gate
+// V17-G and the --self-test discrimination proof so they can never drift apart.
+function v17DeviceLockProbe(js) {
+  const map = parseDeviceFillMap(js);
+  const inBand = (v, lo, hi) => v !== null && v !== undefined && v >= lo && v <= hi;
+  const tbk = ['canvas-tbk-oca', 'canvas-tbk-90l', 'canvas-tbk-958'];
+  const tbkFills = tbk.map((id) => map.entries[id] ? map.entries[id].desktopFill : null);
+  const airpods = map.entries['canvas-airpods'] ? map.entries['canvas-airpods'].desktopFill : null;
+  const tbkOk = tbkFills.every((v) => inBand(v, 0.74, 0.76));
+  const airpodsOk = inBand(airpods, 0.65, 0.67);
+  return { name: map.name, tbkFills, airpods, tbkOk, airpodsOk, ok: tbkOk && airpodsOk };
 }
 
 const VIEWPORTS = [
@@ -366,6 +436,28 @@ function gridColumns(value) {
  * Main
  * ------------------------------------------------------------------ */
 async function main() {
+  // Gift (v17) --self-test: prove gate V17-G DISCRIMINATES — fails on out-of-band
+  // values, passes on the 0.75/0.66 target. Forces values BY CANVAS ID in memory,
+  // so it works before OR after FaiCodex's change lands. Edits nothing on disk;
+  // no browser/build; 3D stays structural (headless has no WebGL).
+  if (SELF_TEST) {
+    const js = readSource(JS_SOURCE_PATH);
+    const force = (src, tbkV, airV) => src
+      .replace(/('canvas-tbk-(?:oca|90l|958)':\s*\{\s*desktopFill:\s*)(?:0?\.\d+|1(?:\.0+)?)/g, `$1${tbkV}`)
+      .replace(/('canvas-airpods':\s*\{\s*desktopFill:\s*)(?:0?\.\d+|1(?:\.0+)?)/g, `$1${airV}`);
+    const bad = v17DeviceLockProbe(force(js, '0.82', '0.78'));   // out of band -> FAIL
+    const good = v17DeviceLockProbe(force(js, '0.75', '0.66'));  // target      -> PASS
+    const correct = !bad.ok && good.ok;
+    console.log('visual-audit --self-test: V17-G strict 3D gate discrimination proof');
+    console.log(`  OUT-OF-BAND (0.82/0.78) -> ${bad.ok ? 'PASS' : 'FAIL'} (expected FAIL) ` +
+      `tbk=${JSON.stringify(bad.tbkFills)} airpods=${bad.airpods}`);
+    console.log(`  TARGET      (0.75/0.66) -> ${good.ok ? 'PASS' : 'FAIL'} (expected PASS) ` +
+      `tbk=${JSON.stringify(good.tbkFills)} airpods=${good.airpods}`);
+    console.log(`  RESULT: ${correct ? 'V17_GATE_DISCRIMINATION_OK' : 'V17_GATE_DISCRIMINATION_BROKEN'}`);
+    if (!correct) process.exitCode = 1;
+    return;
+  }
+
   // v8 source snapshots (global gates + fullscreen fallback).
   const jsSource = readSource(JS_SOURCE_PATH);
   const cssSource = readSource(CSS_SOURCE_PATH);
@@ -458,7 +550,8 @@ async function main() {
     // guard below; the strict raised-value assertion is the new v14 gate 33.
     const hasDefaultFill = /fill:\s*0\.9[2-9]\b/.test(framingBlock);
     const hasAirpodsTier = /['"]canvas-airpods['"]\s*:\s*\{\s*fill:\s*0\.(?:8[6-9]|9[0-9])\b/.test(framingBlock);
-    const hasMacbookTier = /['"]canvas-macbook['"]\s*:\s*\{\s*fill:\s*0\.9[4-9]\b/.test(framingBlock);
+    // v17: MacBook base fill is FROZEN at 0.90 (was 0.96) — accept 0.90-0.99.
+    const hasMacbookTier = /['"]canvas-macbook['"]\s*:\s*\{\s*fill:\s*0\.9[0-9]\b/.test(framingBlock);
     // regression guards: no per-slot renderer.setSize inside the fit, and no
     // inflated setFromObject(root, true) in the fit path. (The legacy
     // centerAndFitEdgeToEdge fallback may still use setFromObject(root, true);
@@ -586,8 +679,9 @@ async function main() {
     const maxFill = fillEntries.length ? Math.max(...fillEntries.map(([, v]) => v)) : 0;
     const macbookFill = fills['canvas-macbook'];
     const airpodsFill = fills['canvas-airpods'];
-    const macbookHighest = macbookFill !== undefined &&
-      macbookFill >= maxFill - 1e-9 && airpodsFill !== undefined && macbookFill > airpodsFill;
+    // v17: MacBook is FROZEN at 0.90 (no device override). Its desktop effective
+    // value = 0.90 (base). "macbookHighest" is obsolete; assert frozen 0.88-0.92.
+    const macbookFrozen = macbookFill !== undefined && macbookFill >= 0.88 && macbookFill <= 0.92;
     const airpodsEased = airpodsFill !== undefined && airpodsFill < maxFill &&
       airpodsFill < Math.max(...nonAirpods.map(([, v]) => v));
     const tabletToken = /\b(?:isTablet|tabletFill|wideFill|widerFill|fillWide|landscapeFill)\b/
@@ -597,10 +691,10 @@ async function main() {
     const capMatch = /Math\.min\(\s*([01](?:\.\d+)?)\s*,\s*cfg\.fill/.exec(fitFn);
     const capVal = capMatch ? Number(capMatch[1]) : 1; // no cap = fully open
     const capOk = capVal >= 0.95;
-    record(mostRaised && macbookHighest && airpodsEased && tabletWider && capOk && fillEntries.length >= 8,
-      'v15 SOURCE final-site.js: hero>=0.96, machines eased 0.84-0.90, tablet wider, MacBook highest, AirPods eased, cap raised',
+    record(mostRaised && macbookFrozen && airpodsEased && tabletWider && capOk && fillEntries.length >= 8,
+      'v17 SOURCE final-site.js: hero>=0.96, machines eased 0.84-0.90, tablet wider, MacBook frozen 0.88-0.92, AirPods eased, cap raised',
       `slots=${fillEntries.length} raised=${raisedCount}/${nonAirpods.length} ` +
-      `fills=${JSON.stringify(fills)} macbookHighest=${macbookHighest} airpodsEased=${airpodsEased} ` +
+      `fills=${JSON.stringify(fills)} macbookFrozen=${macbookFrozen} airpodsEased=${airpodsEased} ` +
       `tabletWider=${tabletWider} (token=${tabletToken} idCond=${tabletIdCond}) ` +
       `fillCap=${capVal} (expected >=0.95)`, 'SOURCE-CHECK');
 
@@ -609,13 +703,16 @@ async function main() {
      * 3D framing stays SOURCE-only — headless Chromium has no WebGL. */
 
     /* S1: dark-orange static dot grid replaced the red/grey dots. */
-    const dotRgba = /rgba\(\s*194\s*,\s*65\s*,\s*12\s*,\s*0?\.24\s*\)/.test(cssSource);
+    // v17 retarget: FE-1 eased the dark-orange dot from .24 to .22. Accept both
+    // so the gate stays green across the transition; the legacy red/grey dot
+    // must still be gone (unchanged intent).
+    const dotRgba = /rgba\(\s*194\s*,\s*65\s*,\s*12\s*,\s*0?\.(?:24|22)\s*\)/.test(cssSource);
     const dotGrid24 = (cssSource.match(/100%\s+100%\s*,\s*100%\s+100%\s*,\s*24px\s+24px/g) || []).length;
     const legacyDotAbsent = !/rgba\(\s*220\s*,\s*38\s*,\s*38\s*,\s*0?\.07\s*\)\s+1px/.test(cssSource) &&
       !/rgba\(\s*24\s*,\s*24\s*,\s*27\s*,\s*0?\.05\s*\)\s+1px/.test(cssSource);
     record(dotRgba && dotGrid24 >= 2 && legacyDotAbsent,
-      'v13 SOURCE final-site.css: dark-orange dot rgba(194,65,12,.24) + 24px grid, legacy dot gone',
-      `darkOrangeRgba=${dotRgba} grid24px=${dotGrid24} (expected >=2) legacyDotAbsent=${legacyDotAbsent}`,
+      'v13 SOURCE final-site.css (v17-tolerant): dark-orange dot rgba(194,65,12,.22|.24) + 24px grid, legacy dot gone',
+      `darkOrangeRgba=${dotRgba} (.22 v17 or .24 legacy) grid24px=${dotGrid24} (expected >=2) legacyDotAbsent=${legacyDotAbsent}`,
       'SOURCE-CHECK');
 
     /* S2: header logo enlarged and its brand block centred. */
@@ -652,13 +749,21 @@ async function main() {
       `capRow=${capGridSrc} capabilities=${capCountSrc}/9 static=${staticCountSrc}/6 tagRow=${hashRowSrc} ` +
       `ctaRow=${ctaRowSrc} hoursLine=${hoursLineSrc} visMin290=${visMinSrc} visSmH80=${visSmSrc}`, 'SOURCE-CHECK');
 
-    /* S5: footer dock-clearance padding in BOTH CSS and utility classes. */
-    const pad66 = /\.footer-light-modern\s*\{[^}]*padding-bottom:\s*66px\s*!important/.test(cssSource);
-    const pad16 = /@media\s*\(min-width:\s*1024px\)\s*\{\s*\.footer-light-modern\s*\{\s*padding-bottom:\s*16px\s*!important/.test(cssSource);
-    const htmlPad = /id="footer-contact"[^>]*\bpb-\[66px\][^>]*\blg:pb-4\b/.test(htmlSource);
-    record(pad66 && pad16 && htmlPad,
-      'v13 SOURCE footer: padding-bottom 66px mobile / 16px @min-width:1024px + pb-[66px] lg:pb-4',
-      `css66=${pad66} css16=${pad16} htmlClasses=${htmlPad}`, 'SOURCE-CHECK');
+    /* S5: footer dock-clearance padding in BOTH CSS and utility classes.
+     * v17 retarget: FE-1 flushed the footer to 62px mobile / 12px @>=768px.
+     * Accept v17 (62/12) OR legacy (66/16) so this gate stays green across the
+     * transition; the STRICT v17 assertion is gate V17-B below. */
+    const mobilePadM = /\.footer-light-modern\s*\{[^}]*padding-bottom:\s*(\d+)px\s*!important/.exec(cssSource);
+    const deskPadM = /@media\s*\(min-width:\s*(?:1024|768)px\)\s*\{\s*\.footer-light-modern\s*\{\s*padding-bottom:\s*(\d+)px\s*!important/.exec(cssSource);
+    const mobilePad = mobilePadM ? mobilePadM[1] : '';
+    const deskPad = deskPadM ? deskPadM[1] : '';
+    const padMobileOk = mobilePad === '62' || mobilePad === '66';
+    const padDeskOk = deskPad === '12' || deskPad === '16';
+    const htmlPad = /id="footer-contact"[^>]*\bpb-\[(?:66|62)px\][^>]*\blg:pb-[34]\b/.test(htmlSource);
+    record(padMobileOk && padDeskOk && htmlPad,
+      'v13 SOURCE footer (v17-tolerant): padding-bottom 62/66px mobile / 12/16px desktop + footer utility classes',
+      `cssMobile=${mobilePad || 'missing'} cssDesktop=${deskPad || 'missing'} (accepted 62|66 / 12|16) ` +
+      `htmlClasses=${htmlPad}`, 'SOURCE-CHECK');
 
     /* S6: og-card.jpg is a genuine JPEG with the declared OG dimensions. */
     const og = jpegSize(OG_CARD_PATH);
@@ -764,6 +869,103 @@ async function main() {
       `mobileUnchanged=${mobileUnchanged} macbookFramingFill=${macFramingFill} ` +
       `macbookDev=${macDev ? JSON.stringify(macDev) : 'not-in-map(frozen)'} macbookOk=${macbookOk} ` +
       `hardLockLogic=${hardLockLogic}`, 'SOURCE-CHECK');
+
+    /* ================= v17 GLOBAL SOURCE GATES (V17-A..G) =================
+     * FE-1 effect polish, footer flush, verbatim copy; RES-1 service JSON-LD +
+     * geo hreflang; FaiCodex desktop-only 3D tightening. ALL source/structural
+     * checks — headless Chromium has no WebGL, so 3D is NEVER judged from pixels.
+     * All seven run before the SOURCE_ONLY return so --source-only covers them. */
+
+    /* V17-A: >=8 V17-FX markers + v17AccentBreath opacity-only keyframe actually
+     * applied to the accent pills + a prefers-reduced-motion guardian that kills
+     * that breathing. The keyframe body is brace-extracted and proven to contain
+     * ONLY opacity declarations (no transform/filter/box-shadow/layout props). */
+    const v17MarkerCount = (cssSource.match(/V17-FX/g) || []).length;
+    const breathBody = namedKeyframeBody(cssSource, 'v17AccentBreath');
+    const breathOpacityOnly = !!breathBody && /opacity\s*:/.test(breathBody) &&
+      !/\b(?:transform|translate|scale|rotate|filter|backdrop-filter|box-shadow|width|height|margin|padding|top|left|right|bottom)\s*:/.test(breathBody);
+    const breathApplied = /animation:\s*v17AccentBreath\b/.test(cssSource) &&
+      /will-change:\s*opacity\s*!important/.test(cssSource);
+    const rmBlocks = mediaBlocks(cssSource, /prefers-reduced-motion:\s*reduce/);
+    const rmGuard = rmBlocks.some((b) => /\.badge-breathe/.test(b) && /animation:\s*none\s*!important/.test(b));
+    record(v17MarkerCount >= 8 && breathOpacityOnly && breathApplied && rmGuard,
+      'v17 SOURCE final-site.css: >=8 V17-FX markers + v17AccentBreath opacity-only keyframe applied + reduced-motion guardian',
+      `v17Markers=${v17MarkerCount} (expected >=8) breathKeyframe=${!!breathBody} opacityOnly=${breathOpacityOnly} ` +
+      `breathApplied=${breathApplied} reducedMotionBlocks=${rmBlocks.length} guardianKillsBreath=${rmGuard}`,
+      'SOURCE-CHECK');
+
+    /* V17-B: STRICT footer flush — 62px mobile in .footer-light-modern and 12px
+     * under @media (min-width:768px). Complemented by the retargeted R2 DOM gate
+     * which measures the real computed padding-bottom on the local build. */
+    const footerRule = (cssSource.match(/\.footer-light-modern\s*\{[^}]*\}/) || [''])[0];
+    const footerPad62 = /padding-bottom:\s*62px\s*!important/.test(footerRule);
+    const pad12Blocks = mediaBlocks(cssSource, /min-width:\s*768px/);
+    const footerPad12 = pad12Blocks.some((b) => /\.footer-light-modern\s*\{[^}]*padding-bottom:\s*12px\s*!important/.test(b));
+    record(footerPad62 && footerPad12,
+      'v17 SOURCE final-site.css: footer padding-bottom 62px mobile / 12px @min-width:768px (flush)',
+      `mobile62px=${footerPad62} tablet12px=${footerPad12} (768px blocks=${pad12Blocks.length})`,
+      'SOURCE-CHECK');
+
+    /* V17-C: heavier head fonts — the CSS rule forcing all display headings to
+     * weight 900, plus the `font-black` utility actually present on headings in
+     * the HTML source. Both required (a CSS-only change would miss the markup). */
+    const headWeight900 = /h1\s*,\s*h2\s*,\s*h3\s*\{[^}]*font-weight:\s*900\s*!important/.test(cssSource);
+    const fontBlackCount = (htmlSource.match(/\bfont-black\b/g) || []).length;
+    record(headWeight900 && fontBlackCount >= 8,
+      'v17 SOURCE head fonts: h1/h2/h3 font-weight:900 !important + font-black utility on headings',
+      `cssHeadWeight900=${headWeight900} htmlFontBlackCount=${fontBlackCount} (expected >=8)`,
+      'SOURCE-CHECK');
+
+    /* V17-D: the ₹1,00,000 "Four Reasons" section + all four reason titles must
+     * be present VERBATIM (byte-for-byte), derived from the shipped source text. */
+    const LAKH_HEADING = 'Four Reasons People Hand Us a Phone Worth';
+    const V17_REASONS = [
+      'Board-Level, Not Part-Swapping',
+      'One Price, Quoted Before Opening',
+      'Same-Day, Because You Need It',
+      'You Watch the Whole Repair',
+    ];
+    const lakhSectionOk = htmlSource.includes(LAKH_HEADING) && htmlSource.includes('₹1,00,000');
+    const reasonsFound = V17_REASONS.filter((r) => htmlSource.includes(r));
+    const reasonsOk = reasonsFound.length === V17_REASONS.length;
+    record(lakhSectionOk && reasonsOk,
+      'v17 SOURCE final-site-html.ts: ₹1,00,000 "Four Reasons" section + all 4 reasons verbatim',
+      `lakhHeading=${htmlSource.includes(LAKH_HEADING)} lakhToken=${htmlSource.includes('₹1,00,000')} ` +
+      `reasons=${reasonsFound.length}/${V17_REASONS.length} missing=${JSON.stringify(V17_REASONS.filter((r) => !htmlSource.includes(r)))}`,
+      'SOURCE-CHECK');
+
+    /* V17-E: services/[slug] page calls buildServiceJsonLd(...) and injects the
+     * payload via an application/ld+json <script dangerouslySetInnerHTML>. */
+    const svc = readSource(SERVICES_SLUG_SOURCE_PATH);
+    const builderCalled = /buildServiceJsonLd\s*\(/.test(svc);
+    const ldScriptInjected = /<script[^>]*type=["']application\/ld\+json["'][^>]*dangerouslySetInnerHTML/.test(svc);
+    record(builderCalled && ldScriptInjected,
+      'v17 SOURCE services/[slug]/page.tsx: buildServiceJsonLd(...) call + ld+json script injection',
+      `builderCalled=${builderCalled} ldJsonScriptInjected=${ldScriptInjected} sourceBytes=${svc.length}`,
+      'SOURCE-CHECK');
+
+    /* V17-F: layout declares the en-IN hreflang. Next 16 replaces the whole
+     * `alternates` object from the nearest metadata export, so accept either an
+     * explicit hreflang key or alternates.languages['en-IN'] in layout.tsx. */
+    const layout = readSource(LAYOUT_SOURCE_PATH);
+    const layoutEnIn = /["']en-IN["']/.test(layout);
+    const layoutHreflangKey = /hreflang/i.test(layout);
+    const layoutLanguages = /languages\s*:\s*\{[^}]*["']en-IN["']/s.test(layout);
+    record(layoutEnIn && (layoutHreflangKey || layoutLanguages),
+      'v17 SOURCE layout.tsx: en-IN hreflang declared (alternates.languages or hreflang key)',
+      `enIN=${layoutEnIn} hreflangKey=${layoutHreflangKey} languagesMap=${layoutLanguages} sourceBytes=${layout.length}`,
+      'SOURCE-CHECK');
+
+    /* V17-G: HARD desktop 3D tightening — TBK machines desktopFill 0.74-0.76
+     * (target 0.75) and AirPods desktopFill 0.65-0.67 (target 0.66). Uses the
+     * SAME shared evaluator as --self-test so gate + proof can never drift.
+     * Structural only (headless Chromium has no WebGL). */
+    const v17Lock = v17DeviceLockProbe(jsSource);
+    record(v17Lock.ok,
+      'v17 SOURCE final-site.js: desktop 3D lock — TBK 0.74-0.76 (0.75) + AirPods 0.65-0.67 (0.66)',
+      `map=${v17Lock.name || 'MISSING'} tbkDesktop=${JSON.stringify(v17Lock.tbkFills)} (band 0.74-0.76) ` +
+      `airpodsDesktop=${v17Lock.airpods === null ? 'MISSING' : v17Lock.airpods} (band 0.65-0.67)`,
+      'SOURCE-CHECK');
 
     if (SOURCE_ONLY) {
       const failedEarly = results.filter((r) => r.status === 'FAIL');
@@ -1194,9 +1396,14 @@ async function main() {
     const padM = await readFooterPad();
     await setRespWidth(1440);
     const padD = await readFooterPad();
-    record(padM.ok && padD.ok && padM.v === '66px' && padD.v === '16px',
-      'v13 responsive: footer padding-bottom 66px @390 / 16px @1440 (computed)',
-      `mobile=${padM.v} desktop=${padD.v} (expected 66px / 16px)`, 'DOM-CHECK');
+    // v17 retarget: FE-1 flushed the footer to 62px/12px. Accept v17 OR legacy
+    // 66px/16px so all 86 pre-existing gates stay green; V17-B asserts 62/12 at
+    // source level and this gate supplies the real computed-style evidence.
+    const padMOkV17 = padM.v === '62px' || padM.v === '66px';
+    const padDOkV17 = padD.v === '12px' || padD.v === '16px';
+    record(padM.ok && padD.ok && padMOkV17 && padDOkV17,
+      'v13 responsive: footer padding-bottom 62/66px @390 / 12/16px @1440 (computed, v17-tolerant)',
+      `mobile=${padM.v} desktop=${padD.v} (accepted 62px/12px v17 or 66px/16px legacy)`, 'DOM-CHECK');
 
     // R3: header logo 40px (h-10) mobile, 44px (sm:h-11) desktop, centred column.
     const readLogo = () => respPage.evaluate(() => {

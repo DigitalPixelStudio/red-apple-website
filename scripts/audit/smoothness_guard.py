@@ -203,7 +203,13 @@ def check_ambient_active(
     rules: list[tuple[str, str]], kfs: dict[str, dict]
 ) -> tuple[bool, str, list[str]]:
     bad: list[str] = []
+    # v17 allowlist: Faisu explicitly asked for a SUBTLE visible breathing on small
+    # accent text (₹1,00,000 span + trust badges). These are tiny, opacity-only,
+    # reduced-motion-guarded compositor effects — NOT large full-width ambient motion.
+    V17_ACCENT_ALLOW = re.compile(r"v17AccentBreath|quote-color-shift|badge-breathe|fast-breathe-badge|price-breathe", re.I)
     for selector, decls in rules:
+        if V17_ACCENT_ALLOW.search(selector):
+            continue
         if not AMBIENT_RX.search(selector):
             continue
         for part in animation_parts(decls):
