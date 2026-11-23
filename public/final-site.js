@@ -64,7 +64,7 @@
           if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
         }
         function schedule() {
-          if (rafId || timerId || document.hidden || motionQuery.matches) return;
+          if (rafId || timerId || document.hidden || (motionQuery.matches && document.documentElement.dataset.motion !== 'on')) return;
           // One 30 FPS timeout followed by exactly one animation frame.
           timerId = window.setTimeout(() => {
             timerId = 0;
@@ -73,7 +73,7 @@
         }
         function frame(now) {
           rafId = 0;
-          if (document.hidden || motionQuery.matches) return;
+          if (document.hidden || (motionQuery.matches && document.documentElement.dataset.motion !== 'on')) return;
           if (now - last >= 32) {
             last = now;
             ctx.clearRect(0, 0, W, H);
@@ -96,10 +96,11 @@
           schedule();
         }, { passive: true });
         document.addEventListener('visibilitychange', () => document.hidden ? pause() : schedule());
-        const onMotionChange = () => motionQuery.matches ? pause() : schedule();
+        const onMotionChange = () => (motionQuery.matches && document.documentElement.dataset.motion !== 'on') ? pause() : schedule();
+        document.addEventListener('ra-motion-change', onMotionChange);
         if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
         else if (typeof motionQuery.addListener === 'function') motionQuery.addListener(onMotionChange);
-        if (!motionQuery.matches && !document.hidden) schedule();
+        if ((!motionQuery.matches || document.documentElement.dataset.motion === 'on') && !document.hidden) schedule();
         host.appendChild(cv);
       })();
 
@@ -716,43 +717,101 @@
       const pagePlanLinks = document.getElementById('page-plan-links');
       const PLAN = [
         { id: '#hero', label: 'Hero' },
-        { id: '#real-shop', label: 'Shop' },
-        { id: '#tbk-machines', label: 'TBK' },
-        { id: '#glass-lab', label: 'Glass' },
+        { id: '#real-shop', label: 'Our Shop' },
+        { id: '#estimate', label: 'Estimate' },
+        { id: '#paired-crm', label: 'Repair Status' },
+        { id: '#pickup', label: 'Pickup' },
+        { id: '#glass-lab', label: 'Glass Lab' },
+        { id: '#tbk-machines', label: 'TBK Machines' },
         { id: '#ecosystem-3d', label: 'Devices' },
-        { id: '#paired-crm', label: 'Status' },
-        { id: '#comparison', label: 'Compare' },
+        { id: '#qc-grid', label: 'Quality Check' },
+        { id: '#services-grid', label: 'Services' },
+        { id: '#triage-symptoms', label: 'Repair Guide' },
+        { id: '#comparison', label: 'Comparison' },
+        { id: '#holo-warranty', label: 'Warranty' },
         { id: '#reviews', label: 'Reviews' },
-        { id: '#halasuru-map', label: 'Visit' },
+        { id: '#faq', label: 'FAQ' },
+        { id: '#halasuru-map', label: 'Visit Store' },
+        { id: 'footer', label: 'Contact' },
       ];
       if (pagePlanLinks) {
         pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="shrink-0 rounded-[6px] bg-red-600 px-2.5 py-1 text-[10px] font-extrabold tracking-tight text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-[4px] bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
-        pagePlanLinks.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', (e) => {
-          e.preventDefault();
-          const el = document.querySelector(b.dataset.go);
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }));
+        pagePlanLinks.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', (e) => e.preventDefault()));
       }
       let tourTimeout = null;
-      const startTour = () => {
-        if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; return; }
-        let i = 0;
-        (function next() {
-          if (i >= PLAN.length) return;
-          const el = document.querySelector(PLAN[i].id);
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          i++;
-          tourTimeout = setTimeout(next, 2400);
-        })();
+      let tourActive = false;
+      let tourIndex = 0;
+      let tourFocusTimeout = null;
+      const tourButton = document.getElementById('tour-start');
+      const motionButton = document.getElementById('motion-toggle');
+      const systemPrefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+      let savedMotionPreference = null;
+      try { savedMotionPreference = localStorage.getItem('ra-motion-enabled'); } catch {}
+      let motionEnabled = savedMotionPreference === '1' || (savedMotionPreference !== '0' && !systemPrefersReducedMotion);
+      const applyMotionPreference = (enabled, persist = false) => {
+        motionEnabled = enabled;
+        document.documentElement.setAttribute('data-motion', enabled ? 'on' : 'off');
+        document.dispatchEvent(new Event('ra-motion-change'));
+        if (persist) {
+          try { localStorage.setItem('ra-motion-enabled', enabled ? '1' : '0'); } catch {}
+        }
+        if (motionButton) {
+          motionButton.textContent = enabled ? 'Motion On' : 'Motion Off';
+          motionButton.setAttribute('aria-pressed', String(enabled));
+          motionButton.setAttribute('aria-label', enabled ? 'Turn visual motion off' : 'Enable visual motion');
+          motionButton.classList.toggle('motion-enabled', enabled);
+        }
       };
-      document.getElementById('tour-start')?.addEventListener('click', () => {
-        const btn = document.getElementById('tour-start');
-        const done = document.getElementById('tour-done');
-        if (btn && done) { btn.classList.add('active'); done.textContent = ''; }
-        startTour();
-      });
-      const _sd = () => { const b = document.getElementById('tour-start'); if (b) b.classList.remove('active'); const d=document.getElementById('tour-done'); if (d) d.textContent=''; };
-      document.querySelectorAll('#page-plan-links [data-go]').forEach(b=>b.addEventListener('click',()=>setTimeout(_sd,300)));
+      applyMotionPreference(motionEnabled);
+      motionButton?.addEventListener('click', () => applyMotionPreference(!motionEnabled, true));
+      const stopTour = () => {
+        tourActive = false;
+        if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; }
+        if (tourFocusTimeout) { clearTimeout(tourFocusTimeout); tourFocusTimeout = null; }
+        document.querySelectorAll('.tour-focus').forEach((el) => el.classList.remove('tour-focus'));
+        if (tourButton) {
+          tourButton.classList.remove('tour-running');
+          tourButton.setAttribute('aria-pressed', 'false');
+          tourButton.setAttribute('aria-label', 'Start Web Tour');
+        }
+      };
+      const scrollTourTo = (selector) => {
+        const target = document.querySelector(selector);
+        if (!target) return false;
+        document.querySelectorAll('.tour-focus').forEach((el) => el.classList.remove('tour-focus'));
+        const header = document.querySelector('.site-header-120fps');
+        const offset = (header?.getBoundingClientRect().height || 76) + 14;
+        const top = window.scrollY + target.getBoundingClientRect().top - offset;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        target.classList.add('tour-focus');
+        if (tourFocusTimeout) clearTimeout(tourFocusTimeout);
+        tourFocusTimeout = setTimeout(() => target.classList.remove('tour-focus'), 2600);
+        return true;
+      };
+      const runTourStep = () => {
+        if (!tourActive) return;
+        if (tourIndex >= PLAN.length) { stopTour(); return; }
+        const step = PLAN[tourIndex++];
+        scrollTourTo(step.id);
+        tourTimeout = setTimeout(runTourStep, 3200);
+      };
+      const startTour = () => {
+        if (tourActive) { stopTour(); return; }
+        tourActive = true;
+        tourIndex = 0;
+        if (tourButton) {
+          tourButton.classList.add('tour-running');
+          tourButton.setAttribute('aria-pressed', 'true');
+          tourButton.setAttribute('aria-label', 'Stop Web Tour');
+        }
+        runTourStep();
+      };
+      tourButton?.addEventListener('click', startTour);
+      document.querySelectorAll('#page-plan-links [data-go]').forEach((b) => b.addEventListener('click', (e) => {
+        e.preventDefault();
+        stopTour();
+        scrollTourTo(b.dataset.go);
+      }));
 
       // Phase A2b: Global scroll pause (kills CSS animations in text zones — 120fps answer).
 // Smoothness: no per-frame scroll JS. CSS content-visibility + compositor-only
@@ -1077,17 +1136,18 @@
         // Mobile keeps the prior model-specific baseline so the already-approved mobile models stay unchanged.
         // The aspect-aware camera fit below keeps every assembly fully in frame at all rotations.
         const V13_DEVICE_FILL = {
-          // Tablet/PWA/Chrome desktop framing: moderate camera pull-back, aspect-aware and uncropped.
-          'canvas-hero':          { desktopFill: 0.98 },
-          'canvas-estimate-ipad': { desktopFill: 0.84 },
-          'canvas-pickup-iphone': { desktopFill: 0.86 },
-          'canvas-tbk-oca':       { desktopFill: 0.66 },
-          'canvas-tbk-90l':       { desktopFill: 0.66 },
-          'canvas-tbk-958':       { desktopFill: 0.66 },
-          'canvas-internals':     { desktopFill: 0.82, mobileFill: 0.88 },
-          'canvas-airpods':       { desktopFill: 0.56 },
-          'canvas-watch':         { desktopFill: 0.84 },
-          'canvas-macbook':       { desktopFill: 0.82 },
+          // Hero phone is slightly more prominent on every viewport; supporting models step back.
+          'canvas-hero':          { desktopFill: 1.03, mobileFill: 1.02 },
+          // Tablet/PWA/desktop: supporting machines are framed a little smaller for cleaner breathing room.
+          'canvas-estimate-ipad': { desktopFill: 0.78 },
+          'canvas-pickup-iphone': { desktopFill: 0.80 },
+          'canvas-tbk-oca':       { desktopFill: 0.60 },
+          'canvas-tbk-90l':       { desktopFill: 0.60 },
+          'canvas-tbk-958':       { desktopFill: 0.60 },
+          'canvas-internals':     { desktopFill: 0.76, mobileFill: 0.88 },
+          'canvas-airpods':       { desktopFill: 0.50 },
+          'canvas-watch':         { desktopFill: 0.78 },
+          'canvas-macbook':       { desktopFill: 0.76 },
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -1149,7 +1209,7 @@
             const chosen = isMobileView
               ? (dev?.mobileFill ?? cfg.fill)
               : (dev?.desktopFill ?? cfg.fill);
-            const fill = Math.min(0.96, chosen ?? 0.95);
+            const fill = Math.min(1.04, chosen ?? 0.95);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
             // so animated pose changes can never drift the framing after idle wake.
@@ -1197,7 +1257,6 @@
         const slateMat = new THREE.MeshStandardMaterial({ color: 0x52525b, metalness: 0.76, roughness: 0.22 });
         const screenMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x2563eb, emissiveIntensity: 0.46, roughness: 0.1, metalness: 0.35 });
         const redGlow = new THREE.MeshStandardMaterial({ color: 0xdc2626, emissive: 0xdc2626, emissiveIntensity: 0.75 });
-        const uvGlow = new THREE.MeshStandardMaterial({ color: 0xa855f7, emissive: 0xa855f7, emissiveIntensity: 1.0, transparent: true, opacity: 0.9 });
         const copperMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.88, roughness: 0.18 });
         const pcbMat = new THREE.MeshStandardMaterial({ color: 0x15803d, metalness: 0.35, roughness: 0.4 });
         const glassClear = new THREE.MeshStandardMaterial({ color: 0x93c5fd, transparent: true, opacity: 0.32, roughness: 0.08 });
@@ -1469,15 +1528,29 @@
           const ph = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.06, 1.25), orangeTit); ph.position.set(0, -0.75, 0.2);
           const tower = new THREE.Mesh(new THREE.BoxGeometry(0.6, 2.15, 0.54), silverMat); tower.position.set(0, 0.18, -0.75);
           const arm = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.45, 1.35), silverMat); arm.position.set(0, 1.05, -0.15);
-          const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.032, 1.5, 14), uvGlow); beam.position.set(0, -0.02, 0.2);
-          const spot = new THREE.Mesh(new THREE.RingGeometry(0.04, 0.11, 20), uvGlow); spot.rotation.x = -Math.PI / 2; spot.position.set(0, -0.71, 0.2);
-          root.add(base, bed, ph, tower, arm, beam, spot);
+          const laserCore = new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x9333ea, emissiveIntensity: 1.8, transparent: true, opacity: 0.98, roughness: 0.18 });
+          const laserAura = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.22, depthWrite: false });
+          const beamAura = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.074, 1.5, 14), laserAura);
+          beamAura.position.set(0, -0.02, 0.2);
+          const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.032, 1.5, 14), laserCore); beam.position.set(0, -0.02, 0.2);
+          const spot = new THREE.Mesh(new THREE.RingGeometry(0.04, 0.11, 24), new THREE.MeshBasicMaterial({ color: 0xc084fc, transparent: true, opacity: 0.95, side: THREE.DoubleSide }));
+          spot.rotation.x = -Math.PI / 2; spot.position.set(0, -0.71, 0.2);
+          const spark = new THREE.Mesh(new THREE.SphereGeometry(0.055, 14, 14), new THREE.MeshBasicMaterial({ color: 0xf3e8ff }));
+          spark.position.set(0, -0.69, 0.2);
+          root.add(base, bed, ph, tower, arm, beamAura, beam, spot, spark);
           return (t) => {
             const sx = Math.sin(t * 3.8) * 0.24;
             const sz = 0.2 + Math.cos(t * 1.8) * 0.42;
+            const pulse = 0.72 + (Math.sin(t * 5.2) + 1) * 0.14;
             spot.position.set(sx, -0.71, sz);
+            spot.scale.setScalar(0.82 + pulse * 0.24);
+            spark.position.set(sx, -0.69, sz);
             beam.position.set(sx * 0.5, -0.02, 0.2 + (sz - 0.2) * 0.5);
+            beamAura.position.copy(beam.position);
             beam.rotation.z = sx * 0.3;
+            beamAura.rotation.copy(beam.rotation);
+            laserCore.emissiveIntensity = 1.25 + pulse * 0.9;
+            laserAura.opacity = 0.12 + pulse * 0.14;
           };
         }, -0.4, 0.2) });;
 

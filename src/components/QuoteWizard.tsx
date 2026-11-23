@@ -148,7 +148,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
   };
 
   return (
-    <div className={`mx-auto ${compact ? "max-w-[560px]" : "max-w-[720px]"}`}>
+    <div className={`quote-wizard mx-auto ${compact ? "max-w-[560px]" : "max-w-[720px]"}`}>
       {/* Step indicator */}
       <div className="mb-8 flex items-center justify-center gap-2 flex-wrap">
         {STEPS.map((s, i) => {

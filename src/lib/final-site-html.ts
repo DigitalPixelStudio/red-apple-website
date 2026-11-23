@@ -1453,10 +1453,11 @@ export const finalSiteHtml = `
   </button>
 
   <!-- Web Tour — the only retained floating utility -->
-  <div id="tour-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
-    <div class="flex flex-col gap-0.5">
-      <button type="button" id="tour-start" aria-label="Start Web Tour" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition-colors">Web Tour</button>
-      <span id="tour-done" class="tour-done"></span>
+  <div id="tour-dock" class="fixed left-3 bottom-4 z-40 flex items-center gap-2">
+    <div class="flex items-center gap-2">
+      <button type="button" id="tour-start" aria-label="Start Web Tour" aria-pressed="false" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 shadow-lg shadow-red-950/10 hover:bg-red-100 active:scale-95 transition-all">Web Tour</button>
+      <button type="button" id="motion-toggle" aria-label="Enable visual motion" aria-pressed="false" class="rounded-full border border-violet-200 bg-white/95 px-3 py-2 text-[10px] font-extrabold text-violet-700 shadow-lg shadow-violet-950/10 hover:bg-violet-50 active:scale-95 transition-all">Motion Off</button>
+
     </div>
   </div>
   </div>`;
