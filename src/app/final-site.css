@@ -390,10 +390,6 @@
     }
 
     /* ===== JITTER LOCK — physics-muted animations stop the moment it is needed ===== */
-    html.reduce-motion body *:not(#rm-toggle,#rm-dock) { animation:none !important; transition:none !important; will-change:auto !important; }
-    html.reduce-motion .pulse-ring, html.reduce-motion .aurora-spin, html.reduce-motion .orb-float, html.reduce-motion .notch-led, html.reduce-motion .convex-dot { animation:none !important; }
-    #rm-toggle { padding: 6px 10px; text-wrap: nowrap; }
-    #rm-toggle.active { background: rgba(220,38,38,.25); }
     .tour-done { color: #16a34a; text-decoration: underline; font-size: 11px; }
     @media (hover: hover) and (pointer: fine) {
       .spotlight-card:hover, .price-pill:hover, .price-row:hover, .glass-card:hover {
@@ -1104,3 +1100,6 @@
       .footer-light-modern button.footer-light-link:active,
       .footer-light-modern div.flex.flex-nowrap.flex-wrap > a:active { transform: none !important; }
     }
+/* Permanent OLED-vivid contrast polish; original orange theme/backgrounds remain untouched. */
+body :is(h1,h2,h3,h4,h5,h6,p,a,button,label,small,strong,em,li,summary,svg) { filter: saturate(1.14) contrast(1.06); }
+body canvas, body img, body video, body picture { filter: none !important; }

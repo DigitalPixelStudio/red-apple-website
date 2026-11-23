@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -794,13 +794,6 @@
       });
       // initial: reveal the correct theme icon
       document.querySelectorAll('#theme-toggle [data-icon]').forEach(el => el.classList.toggle('hidden', document.documentElement.dataset.theme === 'dark' ? false : true));
-
-      // Reduced-motion toggle
-      const rmToggle = document.getElementById('rm-toggle');
-      const rmLabel = document.getElementById('rm-label');
-      const updateRmLabel = () => { const on = document.documentElement.classList.contains('reduce-motion'); if (rmLabel) rmLabel.textContent = on ? 'Reduced' : 'Auto'; const t = rmToggle; if (t) t.classList.toggle('active', on); };
-      rmToggle?.addEventListener('click', () => { document.documentElement.classList.toggle('reduce-motion'); updateRmLabel(); });
-      updateRmLabel();
       // green check after tour
       const escHtml = (t) => String(t).replace(/</g, '&lt;').replace(/>/g, '&gt;');
 

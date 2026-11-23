@@ -1,4 +1,4 @@
-﻿// Generated from the owner-approved final HTML. Do not hand-edit.
+// Generated from the owner-approved final HTML. Do not hand-edit.
 export const finalSiteHtml = `
   <!-- Left-Side Dark Breathing Page Indicator (Desktop) -->
   <aside class="fixed left-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-2 rounded-full bg-zinc-950 px-2 py-3 text-[10px] font-bold text-zinc-300 shadow-xl xl:flex">
@@ -1452,13 +1452,10 @@ export const finalSiteHtml = `
     <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
   </button>
 
-  <!-- Reduced Motion + Tour Controls -->
-  <div id="rm-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
-    <div class="absolute bottom-full mb-2 hidden xl:block font-mono-num text-[9px] font-bold text-zinc-400">NN</div>
-    <button id="rm-toggle" type="button" aria-label="Toggle Reduced Motion" class="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-[10px] font-semibold text-zinc-700 hover:border-red-500">Motion: <span id="rm-label">Auto</span></button>
-    <div class="h-6 w-[1.5px] bg-zinc-200 rounded-full"></div>
+  <!-- Web Tour — the only retained floating utility -->
+  <div id="tour-dock" class="fixed right-3 bottom-4 z-40 flex items-end gap-1.5 sm:flex">
     <div class="flex flex-col gap-0.5">
-      <button type="button" id="tour-start" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition-colors">Scroll Tour</button>
+      <button type="button" id="tour-start" aria-label="Start Web Tour" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 hover:bg-red-100 active:scale-95 transition-colors">Web Tour</button>
       <span id="tour-done" class="tour-done"></span>
     </div>
   </div>
