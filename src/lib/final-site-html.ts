@@ -416,12 +416,13 @@ export const finalSiteHtml = `
           </div>
           <div class="rounded-2xl border border-orange-200 bg-orange-50/50 p-4 lg:col-span-5">
             <div class="text-xs font-extrabold text-zinc-900">In-House CRM · Red Apple Repair Backend &amp; Maintenance</div>
-            <div class="mt-2 flex gap-2">
-              <input id="crm-job-id" type="text" value="RA-2048" placeholder="e.g. RA-2048" class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 font-mono-num text-xs font-bold uppercase outline-none focus:border-red-600">
+            <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto]">
+              <input id="crm-job-id" type="text" placeholder="Ticket / invoice number" aria-label="Repair ticket or invoice number" class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 font-mono-num text-xs font-bold uppercase outline-none focus:border-red-600">
+              <input id="crm-phone" type="tel" inputmode="tel" placeholder="Registered phone" aria-label="Registered phone number" class="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs outline-none focus:border-red-600">
               <button type="button" id="btn-crm-lookup" class="dock-quote-btn shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-white">Track</button>
             </div>
-            <div id="crm-lookup-res" class="mt-2.5 rounded-xl border border-zinc-200 bg-white p-3 text-xs text-zinc-700">
-              <strong>RA-2048</strong> · iPhone 16 Pro Max Display · <span class="font-bold text-emerald-700">32-Point QC Passed</span> · Ready for Halasuru pickup. (Try RA-2051 or RA-2055)
+            <div id="crm-lookup-res" class="mt-2.5 rounded-xl border border-zinc-200 bg-white p-3 text-xs text-zinc-700" aria-live="polite">
+              Enter your repair ticket or invoice number and registered phone number to check the live status.
             </div>
           </div>
         </div>

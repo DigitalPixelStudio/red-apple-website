@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { apiMeta } from "@/config/apiMeta";
 import { SITE, wa } from "@/lib/site";
+import { rateLimit } from "@/lib/security/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -19,6 +20,8 @@ const mask = (v: string) => v.replace(/\d(?=\d{4})/g, "X");
 
 /** POST /api/pickup-booking — validated 24/7 pickup request, desk webhook + WhatsApp. */
 export async function POST(req: Request) {
+  const limited = rateLimit(req, "pickup-booking", 12, 60_000);
+  if (limited) return limited;
   const meta = apiMeta(); // one correlation id for this whole response
   const parsed = Schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {

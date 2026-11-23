@@ -15,6 +15,7 @@ export function apiMeta(): { headers: Record<string, string> } {
     headers: {
       "Cache-Control": "no-store",
       "X-Request-Id": randomUUID(),
+      "X-Robots-Tag": "noindex, nofollow",
     },
   };
 }

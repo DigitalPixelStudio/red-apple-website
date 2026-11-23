@@ -219,3 +219,31 @@ Real bugs found via Playwright (not string checks) and fixed:
 - Document contains: title, exec summary, BEFORE/AFTER 5-row table, deep analysis (architecture/shared renderer/single-source/7 APIs, performance, SEO+strike, Meta-only ads, footer+10 FX, source map), smoothness verdict, 14-gift work log, 35-pos/55-neg keyword appendix + qualifyInquiry strategy, backend 100/100 checklist, Faisu 2-min manual list, copy-paste OpenCode golden rules, risk/rollback register, final verdict.
 - Gates for the eventual deploy: predeploy-check.sh + visual-audit.mjs + health-report.mjs + seo_strike_scanner + health-monitor --quiet; verify .next/BUILD_ID (exit 139 benign); deploy vercel --prod --scope digital-pixel-studio --project redmobile-repair.in; verify live URL not exit code.
 - STATUS: DEPLOY PENDING until FaiCodex confirms. QA for the v18 code state NOT claimed here (doc subagent did not run gates). Manual (Faisu only): GSC 6 URLs, delete 2 Vercel clones, hand ads doc (META ONLY), optional Apple Business Connect. CRM bridge DEFERRED. SAFE TO RESTART — use /catch-up. Live: https://www.redmobilerepair.in
+
+
+## 19. ONE-GO WEBSITE EXECUTION — 23 NOV 2026
+
+**Working baseline:** `DigitalPixelStudio/red-apple-website`, branch `fix/disable-orange-glass-sweep`, source baseline `3a3a2a11f6143db4cc92064e2c06bcfa528b604a`. The original repository and all original photo/3D assets remain preserved; no `.faicodex` memory file other than this append was changed.
+
+### Implemented in the isolated execution checkout
+- Ambient particle canvas now ignores height-only viewport resize events, pauses on hidden tabs and reduced-motion preference, and uses a single 30 FPS timeout-to-rAF schedule.
+- Shared WebGL loop is demand-driven from the existing IntersectionObserver. It stops scheduling frames when no slot is visible; the single renderer and model scale/size code were not changed.
+- Removed `translateZ(0)` from capability pills; removed shadow transitions from reveal/card-sheen; anchor smooth scrolling is explicit, native scroll remains default.
+- Applied OLED-vivid light tokens, tabular number styling, scrollable-table overscroll containment, hover-only card lifts, and 520 ms reveal timing.
+- Added per-instance sliding-window IP throttles to every POST API path, including the active `/api/concierge` route. This is intentionally documented as per-instance, not a globally shared edge quota.
+- Homepage estimate and quote wizard now send non-blocking lead/conversion beacons before WhatsApp handoff. UTM/click IDs persist in session storage and append a `Ref:` tag.
+- Homepage's demo CRM examples were replaced by a ticket + registered-phone lookup. `/api/crm-status` performs GET-only PostgREST projections and returns masked/sanitized fields. The database has no explicit warranty-months or updated-at columns, so those response fields are null rather than fabricated.
+- Added Zod-validated lead storage, score 0–100 with threshold 65, `QualifiedAppleLead` / `SoftEngage`, SHA-256 conversion PII hashes, and persistent conversion-event deduplication.
+- Added `/api/ads-diagnostics`, `adidxbot`, a 15 km Halasuru GeoCircle, 301 redirects, Node 22.x pin, health commit provenance, and removed the custom `/_next/static` cache override.
+- Added database migrations for the new isolated `public.website_leads` table only. RLS is enabled; no anon/authenticated policies exist; service_role is restricted to SELECT + INSERT on this new table.
+
+### Database safety and remaining account configuration
+- The Red Apple CRM Vercel project and website project both point to Supabase project `qzwodosempvvxjrksicz`. Existing customer, repair, invoice, payment, employee, attendance, expense, lead and visit records were not read or modified by this build.
+- Metadata inspection found RLS disabled and broad anon/authenticated grants on `attendances`, `employees`, `expenses`, `invoices`, `leads`, `payments`, `repairs` and `visits`. The CRM repository contains an advisory `supabase/rls-remediation.sql` marked NOT applied. It was not run because it changes active-table access policies and requires a separate reviewed approval.
+- Meta and Bing CAPI delivery is code-gated on dedicated endpoint/token environment variables. The existing CRM `META_LEAD_ACCESS_TOKEN` was not reused as a CAPI token. Until verified CAPI credentials are configured, event storage/dedup/hash works but external Meta/Bing delivery remains disabled.
+- Google paid consumer hardware-repair ads remain excluded per the previously verified Google policy; organic search, Maps, Meta and Bing strategy only.
+
+### Local verification
+- Node `v22.23.5`; `node --check public/final-site.js`, `npx tsc --noEmit`, `npm run build`, v13 lock guard, smoothness guard and `scripts/predeploy-check.sh` passed.
+- Full `npm run lint` still reports pre-existing lint errors in Concierge, DeviceTriage, MotionToggle and Reveal components, plus existing warnings in layout/final-site scripts. No build/type/predeploy gate failed.
+- Deployment status: pending release commit and Vercel production verification. Final commit SHA and deployment ID to be recorded in the release report.

@@ -4,6 +4,7 @@ import { apiMeta } from "@/config/apiMeta";
 import { qualifyOptional, withLeadQuality } from "@/lib/analytics/leadQuality";
 import { getPrice, priceLabel, TURNAROUND } from "@/lib/pricing";
 import { REPAIR_TYPES, wa } from "@/lib/site";
+import { rateLimit } from "@/lib/security/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -14,6 +15,8 @@ const Schema = z.object({
 
 /** POST /api/estimate — transparent price lookup from the single pricing sheet. */
 export async function POST(req: Request) {
+  const limited = rateLimit(req, "estimate", 30, 60_000);
+  if (limited) return limited;
   const meta = apiMeta(); // one correlation id for this whole response
   const parsed = Schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {

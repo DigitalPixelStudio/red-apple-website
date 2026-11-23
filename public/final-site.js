@@ -38,6 +38,7 @@
         const ctx = cv.getContext('2d');
         if (!ctx) return;
         let W = 0, H = 0;
+        let lastViewportW = Math.max(1, window.innerWidth);
         const motes = Array.from({ length: 18 }, () => ({
           x: Math.random(), y: Math.random(),
           r: 1.2 + Math.random() * 2.2,
@@ -45,26 +46,60 @@
           vy: -0.00006 - Math.random() * 0.00008,
           a: 0.06 + Math.random() * 0.10
         }));
-        function size() { W = cv.width = Math.max(1, window.innerWidth); H = cv.height = Math.max(1, window.innerHeight); }
-        size();
-        window.addEventListener('resize', size, { passive: true });
-        let last = 0;
-        function frame(now) {
-          requestAnimationFrame(frame);
-          if (document.hidden || now - last < 33) return;
-          last = now;
-          ctx.clearRect(0, 0, W, H);
-          for (const m of motes) {
-            m.x += m.vx; m.y += m.vy;
-            if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
-            if (m.x < -0.02) m.x = 1.02; else if (m.x > 1.02) m.x = -0.02;
-            ctx.beginPath();
-            ctx.fillStyle = `rgba(220,38,38,${m.a})`;
-            ctx.arc(m.x * W, m.y * H, m.r, 0, Math.PI * 2);
-            ctx.fill();
-          }
+        function size(force = false) {
+          const w = Math.max(1, window.innerWidth);
+          // Mobile URL-bar collapse changes height without changing layout width.
+          // Ignore those height-only resize events so the canvas bitmap is not reset mid-scroll.
+          if (!force && Math.abs(w - lastViewportW) < 2) return;
+          lastViewportW = w;
+          W = cv.width = w;
+          H = cv.height = Math.max(1, window.innerHeight);
         }
-        requestAnimationFrame(frame);
+        size(true);
+
+        const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let rafId = 0, timerId = 0, last = 0;
+        function pause() {
+          if (timerId) { clearTimeout(timerId); timerId = 0; }
+          if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+        }
+        function schedule() {
+          if (rafId || timerId || document.hidden || motionQuery.matches) return;
+          // One 30 FPS timeout followed by exactly one animation frame.
+          timerId = window.setTimeout(() => {
+            timerId = 0;
+            rafId = requestAnimationFrame(frame);
+          }, 33);
+        }
+        function frame(now) {
+          rafId = 0;
+          if (document.hidden || motionQuery.matches) return;
+          if (now - last >= 32) {
+            last = now;
+            ctx.clearRect(0, 0, W, H);
+            for (const m of motes) {
+              m.x += m.vx; m.y += m.vy;
+              if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
+              if (m.x < -0.02) m.x = 1.02; else if (m.x > 1.02) m.x = -0.02;
+              ctx.beginPath();
+              ctx.fillStyle = `rgba(220,38,38,${m.a})`;
+              ctx.arc(m.x * W, m.y * H, m.r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          schedule();
+        }
+        window.addEventListener('resize', () => {
+          const w = Math.max(1, window.innerWidth);
+          if (Math.abs(w - lastViewportW) < 2) return;
+          size();
+          schedule();
+        }, { passive: true });
+        document.addEventListener('visibilitychange', () => document.hidden ? pause() : schedule());
+        const onMotionChange = () => motionQuery.matches ? pause() : schedule();
+        if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
+        else if (typeof motionQuery.addListener === 'function') motionQuery.addListener(onMotionChange);
+        if (!motionQuery.matches && !document.hidden) schedule();
         host.appendChild(cv);
       })();
 
@@ -107,6 +142,58 @@
       estRepair?.addEventListener('change', syncEstimateSummary);
       renderEstimateModels();
 
+      const attributionStorageKey = 'red-apple:utm-session:v1';
+      const attributionKeys = ['gclid', 'fbclid', 'msclkid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+      function captureAttribution() {
+        let saved = {};
+        try { saved = JSON.parse(sessionStorage.getItem(attributionStorageKey) || '{}'); } catch (_) {}
+        const params = new URLSearchParams(window.location.search);
+        attributionKeys.forEach((key) => {
+          const value = params.get(key);
+          if (value) saved[key] = value.slice(0, 512);
+        });
+        try { sessionStorage.setItem(attributionStorageKey, JSON.stringify(saved)); } catch (_) {}
+        return saved;
+      }
+      function getAttributionRef() {
+        const a = captureAttribution();
+        const refs = ['gclid', 'fbclid', 'msclkid'].filter((key) => a[key]).map((key) => key + '=' + a[key]);
+        return refs.length ? ('Ref: ' + refs.join(' | ')).slice(0, 700) : '';
+      }
+      function dispatchSameOriginBeacon(path, payload) {
+        const body = JSON.stringify(payload);
+        try {
+          const blob = new Blob([body], { type: 'application/json' });
+          if (navigator.sendBeacon && navigator.sendBeacon(path, blob)) return;
+        } catch (_) {}
+        void fetch(path, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body, keepalive: true, credentials: 'same-origin'
+        }).catch(() => {});
+      }
+      function captureEstimateLeadBeforeWhatsApp() {
+        const name = (document.getElementById('est-name')?.value || '').trim();
+        const phone = (document.getElementById('est-phone')?.value || '').trim();
+        const digits = phone.replace(/\D/g, '');
+        if (name.length < 2 || digits.length < 10) return;
+        const a = captureAttribution();
+        const eventId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ra-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+        const issue = (document.getElementById('est-wrong')?.value || 'Need bench inspection').trim();
+        const email = (document.getElementById('est-email')?.value || '').trim();
+        const device = selectedDev + ' — ' + selectedModel;
+        const common = {
+          name, phone, email, device, issue, source: 'homepage_estimate',
+          page: window.location.pathname, campaign: a.utm_campaign || '',
+          utm: JSON.stringify(a).slice(0, 1500), clickId: a.gclid || a.fbclid || a.msclkid || '',
+          eventId
+        };
+        dispatchSameOriginBeacon('/api/lead', common);
+        dispatchSameOriginBeacon('/api/track-conversion', {
+          eventId, name, email, phone, device, issue, page: window.location.pathname,
+          sourceUrl: window.location.href, clickId: common.clickId
+        });
+      }
+
       function buildExactWhatsAppTicket() {
         const repair = estRepair ? estRepair.value : 'Front Display Replacement';
         // v13: the separate 'Cracked glass / working display' field was removed —
@@ -143,6 +230,7 @@
           `- Name :  ${name}`,
           `- Phone :  ${phone}`,
           `- Email :  ${email}`,
+          ...(getAttributionRef() ? [getAttributionRef()] : []),
           '',
           '━━━━━━━━━━━━━━━━━━━━',
           'Please confirm the exact price and the earliest slot. Thank you.'
@@ -150,6 +238,7 @@
       }
 
       document.getElementById('btn-send-wa')?.addEventListener('click', () => {
+        captureEstimateLeadBeforeWhatsApp();
         window.open('https://wa.me/918660663776?text=' + encodeURIComponent(buildExactWhatsAppTicket()), '_blank', 'noopener,noreferrer');
       });
 
@@ -170,20 +259,58 @@
       // ============================================================
       // 3. CRM TRACKER, PICKUP ETA, GLASS VISUALISER, 32-MODEL PRICING, SERVICES, TRIAGE & QC
       // ============================================================
-      const crmSample = {
-        'RA-2048': '<strong>RA-2048</strong> · iPhone 16 Pro Max Display · <span class="font-bold text-emerald-700">32-Point QC Passed</span> · Ready for Halasuru pickup.',
-        'RA-2051': '<strong>RA-2051</strong> · iPhone 15 Pro Back Glass · <span class="font-bold text-orange-700">TBK-958 Cold UV Laser Bench</span> · Est. ready in 35 min.',
-        'RA-2055': '<strong>RA-2055</strong> · MacBook Pro M3 Logic Board · <span class="font-bold text-red-700">Micro-Soldering Diagnostics</span> · Fixed quote approved.'
-      };
-      document.getElementById('btn-crm-lookup')?.addEventListener('click', () => {
-        const id = (document.getElementById('crm-job-id')?.value || '').trim().toUpperCase();
-        const out = document.getElementById('crm-lookup-res');
-        if (out) {
-          out.innerHTML = crmSample[id] || `<strong>${id || 'RA-XXXX'}</strong> · Live Supabase lookup ready via <code>/api/repair-status</code> (Try RA-2048, RA-2051, or RA-2055).`;
+      const crmLookupButton = document.getElementById("btn-crm-lookup");
+      if (crmLookupButton) crmLookupButton.addEventListener("click", async () => {
+        const ticket = (document.getElementById("crm-job-id")?.value || "").trim().toUpperCase();
+        const phone = (document.getElementById("crm-phone")?.value || "").trim();
+        const out = document.getElementById("crm-lookup-res");
+        if (!out) return;
+        if (ticket.length < 3 || phone.replace(/\D/g, "").length < 10) {
+          out.textContent = "Enter a valid ticket number and the registered phone number.";
+          return;
+        }
+        const oldLabel = crmLookupButton.textContent;
+        crmLookupButton.disabled = true;
+        crmLookupButton.textContent = "Checking…";
+        out.textContent = "Checking the live repair record…";
+        try {
+          const response = await fetch("/api/crm-status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ticket, phone }),
+            cache: "no-store"
+          });
+          const data = await response.json();
+          if (!response.ok || !data.ok || !data.jobNumber) {
+            out.textContent = data.message || "No matching live repair record was found.";
+          } else {
+            const details = [
+              "Job " + data.jobNumber,
+              data.invoiceNumber ? "Invoice " + data.invoiceNumber : "",
+              data.deviceModel || "",
+              data.serviceType || "",
+              data.stageLabel ? "Stage: " + data.stageLabel : "Stage awaiting confirmation"
+            ].filter(Boolean);
+            out.textContent = details.join(" · ");
+          }
+          if (data.whatsapp) {
+            const link = document.createElement("a");
+            link.href = data.whatsapp;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "ml-2 font-bold text-red-600 underline";
+            link.textContent = "Ask on WhatsApp";
+            out.appendChild(link);
+          }
+        } catch (_) {
+          out.textContent = "Live status is temporarily unavailable. Please contact the team on WhatsApp.";
+        } finally {
+          crmLookupButton.disabled = false;
+          crmLookupButton.textContent = oldLabel || "Track";
         }
       });
 
-      let pickupDev = 'iPhone';
+            let pickupDev = 'iPhone';
       document.querySelectorAll('.p-dev-btn').forEach((b) => {
         b.addEventListener('click', () => {
           pickupDev = b.dataset.pdev;
@@ -803,12 +930,34 @@
         const glCanvas = renderer.domElement;
 
         const slots = [];
+        const visibleSlots = new Set();
+        let webglRafId = 0;
+
+        // Demand-driven shared renderer: one RAF loop exists only while at least
+        // one 3D canvas intersects the viewport. The single renderer stays shared.
+        function wakeWebGLLoop() {
+          if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
+          const tick = (now) => {
+            if (document.hidden || visibleSlots.size === 0) {
+              webglRafId = 0;
+              return;
+            }
+            renderFrame();
+            webglRafId = requestAnimationFrame(tick);
+          };
+          webglRafId = requestAnimationFrame(tick);
+        }
+
         const io = typeof IntersectionObserver !== 'undefined'
           ? new IntersectionObserver((entries) => {
               entries.forEach((en) => {
                 const s = slots.find((x) => x.canvas === en.target);
-                if (s) s.visible = en.isIntersecting;
+                if (!s) return;
+                s.visible = en.isIntersecting;
+                if (en.isIntersecting) visibleSlots.add(s);
+                else visibleSlots.delete(s);
               });
+              wakeWebGLLoop();
             }, { threshold: 0.04 })
           : null;
 
@@ -1024,11 +1173,12 @@
           scene.add(root);
           const onTick = buildFn(root);
           const orbit = addOrbit(canvas, root, initY, initX);
-          const slot = { canvas, ctx, scene, camera, root, orbit, onTick, visible: true };
+          const slot = { canvas, ctx, scene, camera, root, orbit, onTick, visible: false };
           canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); slot.contextLost = true; }, false);
           canvas.addEventListener('webglcontextrestored', () => { slot.contextLost = false; slot.autoFramed = false; slot.autoWake = true; try { renderer.resetState(); } catch (_) {} }, false);
           slots.push(slot);
           if (io) io.observe(canvas);
+          else { slot.visible = true; visibleSlots.add(slot); }
           return slot;
         }
 
@@ -1476,15 +1626,15 @@
         const wakeAll = () => {
           if (document.visibilityState !== 'visible') return;
           slots.forEach((x) => { x.autoFramed = false; x.autoWake = true; });
+          wakeWebGLLoop();
         };
         document.addEventListener('visibilitychange', wakeAll);
         window.addEventListener('pageshow', wakeAll);
         window.addEventListener('focus', wakeAll);
 
         let t = 0;
-        function animate() {
-          requestAnimationFrame(animate);
-          if (document.hidden) return;
+        function renderFrame() {
+          if (document.hidden || visibleSlots.size === 0) return;
           t += 0.018;
           const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
@@ -1566,7 +1716,7 @@
           const slot = slots.find((x) => x.canvas === canvas);
           if (slot) { resizeSlot(slot); requestAnimationFrame(() => resizeSlot(slot)); }
         });
-        animate();
+        wakeWebGLLoop();
       } catch (err) {
         console.warn('3D fallback active:', err);
       }

@@ -179,6 +179,11 @@ const localBusinessSchema = {
     { "@type": "Place", name: "Halasuru" },
     { "@type": "Place", name: "Indiranagar" },
     { "@type": "Place", name: "MG Road" },
+    {
+      "@type": "GeoCircle",
+      geoMidpoint: { "@type": "GeoCoordinates", latitude: 12.9767, longitude: 77.6245 },
+      geoRadius: 15000,
+    },
   ],
   hasMap: SITE.mapsUrl,
   sameAs: SOCIAL_LINKS.map((s) => s.href).filter(Boolean),
@@ -249,12 +254,15 @@ const serviceListSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <body className={`${inter.variable} ${space.variable} ${mono.variable} bg-white text-[var(--text)] antialiased`}>
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
           strategy="beforeInteractive"
         />
+        <Script id="anchor-smooth-scroll" strategy="afterInteractive">
+          {`document.addEventListener("click",function(e){const a=e.target.closest("a[href^=\"#\"]");if(!a)return;const id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id)return;const target=document.getElementById(id);if(!target)return;e.preventDefault();target.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});history.replaceState(null,"",a.getAttribute("href"));});`}
+        </Script>
         {/* Apply a saved "motion off" choice before the page paints. */}
         <script
           dangerouslySetInnerHTML={{

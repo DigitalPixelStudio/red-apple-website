@@ -3,6 +3,7 @@ import { SITE, FAQS, SERVICES, DEVICE_FAMILIES } from "@/lib/site";
 import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 import { PRICES, TURNAROUND, inr } from "@/lib/pricing";
 import { GLASS_PRICE_ROWS, GLASS_PRICE_MIN, GLASS_PRICE_MAX, GLASS_WARRANTY_MONTHS } from "@/lib/glass-pricing";
+import { rateLimit } from "@/lib/security/rateLimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -441,6 +442,8 @@ function buildPayload(message: string, history: Turn[], model: string, minimal =
 }
 
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, "concierge", 18, 60_000);
+  if (limited) return limited;
   const keys = resolveKeys();
   // No configured key is a normal local-answer path, not a server error.
   if (!keys.length) {

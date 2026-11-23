@@ -14,19 +14,19 @@ export async function GET() {
     status: "ok",
     ts: new Date().toISOString(),
     service: SITE.shortName,
-    // Commit is already env-sourced and truncated to a short SHA. There is no
-    // reliable build-time env var in Vercel/Next, so we do NOT fabricate one —
-    // instead we expose the runtime region (a non-secret platform signal).
-    build: { commit: (process.env.VERCEL_GIT_COMMIT_SHA ?? "").slice(0, 7) || null },
+    // Vercel Git deployments expose VERCEL_GIT_COMMIT_SHA; CLI builds can
+    // inject NEXT_PUBLIC_GIT_SHA at build time for the same verifiable result.
+    build: { commit: (process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_GIT_SHA || "").slice(0, 7) || null },
     runtime: { region: process.env.VERCEL_REGION ?? null },
     services: {
       concierge: hasGemini,
       leadWebhook: Boolean(process.env.LEAD_WEBHOOK_URL),
-      crm: Boolean(process.env.CRM_STATUS_URL),
+      leadStorage: Boolean((process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL) && (process.env.CRM_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)),
+      crm: Boolean((process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL) && (process.env.CRM_SUPABASE_READONLY_KEY || process.env.CRM_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)),
     },
     catalog: { models: Object.keys(PRICES).length },
   };
   return NextResponse.json(body, {
-    headers: { "Cache-Control": "no-store", "X-Request-Id": randomUUID() },
+    headers: { "Cache-Control": "no-store", "X-Request-Id": randomUUID(), "X-Robots-Tag": "noindex, nofollow" },
   });
 }

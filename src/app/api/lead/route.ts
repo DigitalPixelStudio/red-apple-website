@@ -1,102 +1,106 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { apiMeta } from "@/config/apiMeta";
-import { qualifyOptional, withLeadQuality } from "@/lib/analytics/leadQuality";
+import { qualifyOptional } from "@/lib/analytics/leadQuality";
+import { rateLimit } from "@/lib/security/rateLimit";
 
-/**
- * POST /api/lead
- *
- * Safety net for the quote form and the assistant. WhatsApp deep-links only work
- * if the visitor actually presses send — if they close the tab first the enquiry
- * is gone. This endpoint keeps a copy.
- *
- * Storage: server logs by default (zero cost, zero setup). To persist properly,
- * set LEAD_WEBHOOK_URL to any endpoint that accepts JSON — a Google Apps Script
- * web app, a Supabase edge function, Zapier, or a Discord webhook — and every
- * lead is forwarded there too.
- *
- * No PII is ever logged in full: the phone number is masked before it hits the
- * log so a leaked log file does not expose customer contact details.
- */
+export const runtime = "nodejs";
+export const maxDuration = 5;
 
-// Zod validation: every field is a bounded optional string. This rejects
-// malformed/garbage payloads with a clean 400 instead of a 500 (e.g. a numeric
-// `phone` used to throw in .replace) and caps payload sizes before the log/webhook.
-const LeadSchema = z.object({
-  name: z.string().trim().max(80).optional(),
-  phone: z.string().trim().max(32).optional(),
-  email: z.string().trim().max(160).optional(),
-  device: z.string().trim().max(80).optional(),
-  issue: z.string().trim().max(500).optional(),
-  message: z.string().trim().max(2000).optional(),
-  source: z.string().trim().max(40).optional(),
-  page: z.string().trim().max(200).optional(),
-});
-type Lead = z.infer<typeof LeadSchema>;
+const Schema = z.object({
+  name: z.string().trim().min(2).max(80),
+  phone: z.string().trim().regex(/^\+?[0-9\s()-]{10,18}$/),
+  email: z.string().trim().email().max(160).optional().or(z.literal("")),
+  device: z.string().trim().max(100).optional(),
+  issue: z.string().trim().max(700).optional(),
+  source: z.string().trim().max(80).optional(),
+  page: z.string().trim().max(240).optional(),
+  campaign: z.string().trim().max(160).optional(),
+  utm: z.string().trim().max(1600).optional(),
+  clickId: z.string().trim().max(512).optional(),
+  eventId: z.string().trim().max(100).optional(),
+}).refine((value) => value.phone.replace(/\D/g, "").length >= 10, { path: ["phone"], message: "invalid_phone" });
 
-const mask = (v?: string) =>
-  !v ? "" : v.length <= 4 ? "***" : v.slice(0, 2) + "*".repeat(Math.max(0, v.length - 4)) + v.slice(-2);
+const maskPhone = (value: string) => value.replace(/\d(?=\d{4})/g, "X");
 
-export async function POST(req: Request) {
-  const meta = apiMeta(); // one correlation id for this whole response
-  const payload: unknown = await req.json().catch(() => null);
-  const parsed = LeadSchema.safeParse(payload);
+/** POST /api/lead — durable, isolated website lead capture; fail-open for WhatsApp. */
+export async function POST(request: Request) {
+  const limited = rateLimit(request, "lead", 24, 60_000);
+  if (limited) return limited;
+  const meta = apiMeta();
+  const parsed = Schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400, headers: meta.headers });
   }
-  const body: Lead = parsed.data;
 
-  const phone = (body.phone || "").replace(/[^\d]/g, "");
-  const hasContact = phone.length >= 10 || Boolean(body.email);
-  if (!hasContact && !body.message) {
-    return NextResponse.json({ ok: false, error: "no contact detail" }, { status: 422, headers: meta.headers });
-  }
+  const input = parsed.data;
+  const eventId = input.eventId || randomUUID();
+  const inquiry = [input.device, input.issue].filter(Boolean).join(" — ");
+  const quality = await qualifyOptional(inquiry);
+  const supabaseUrl = (process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+  const serviceKey = process.env.CRM_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
-  const lead = {
-    ...body,
-    phone: phone || undefined,
-    receivedAt: new Date().toISOString(),
-    source: body.source || "site",
-  };
-
-  // 1. always keep a masked trace in the server log
-  console.log(
-    "[lead]",
-    JSON.stringify({
-      ...lead,
-      phone: mask(lead.phone),
-      email: mask(lead.email),
-      message: lead.message ? `${lead.message.slice(0, 80)}…` : undefined,
-    })
-  );
-
-  // 2. forward to a webhook when one is configured. The timeout guarantees a slow
-  // upstream can never hang the request or consume a serverless slot under load.
-  const hook = process.env.LEAD_WEBHOOK_URL;
-  if (hook) {
+  let persisted = false;
+  if (supabaseUrl && serviceKey) {
+    const row = {
+      event_id: eventId,
+      name: input.name,
+      phone: input.phone.replace(/[\s()-]/g, ""),
+      email: input.email || null,
+      device: input.device || null,
+      issue: input.issue || null,
+      source: input.source || "website",
+      page: input.page || null,
+      campaign: input.campaign || null,
+      utm: input.utm || null,
+      click_id: input.clickId || null,
+      quality_score: quality?.score ?? null,
+      quality_verdict: quality?.verdict ?? "unknown",
+      event_name: quality?.eventName ?? "SoftEngage",
+      event_value: quality?.value ?? 0,
+      currency: "INR",
+    };
     try {
-      await fetch(hook, {
+      const response = await fetch(`${supabaseUrl}/rest/v1/website_leads?on_conflict=event_id`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(lead),
-        signal: AbortSignal.timeout(5000),
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          "Content-Type": "application/json",
+          Prefer: "resolution=ignore-duplicates,return=minimal",
+        },
+        body: JSON.stringify(row),
+        signal: AbortSignal.timeout(2500),
+        cache: "no-store",
       });
-    } catch (e) {
-      console.error("[lead] webhook failed", e);
+      persisted = response.ok;
+      if (!response.ok) console.warn("[lead] storage unavailable", { status: response.status });
+    } catch {
+      console.warn("[lead] storage timeout or network failure");
     }
+  } else {
+    console.warn("[lead] storage is not configured");
   }
 
-  // 3. OPTIONAL, non-blocking ad-qualification (RES-1 hook). Computed only after the
-  // lead is safely logged/forwarded. Never touches the WhatsApp ticket, never stores
-  // the text, and fails open — see src/lib/analytics/leadQuality.ts.
-  const quality = await qualifyOptional(body.issue || body.message);
+  console.info("[lead] accepted", {
+    eventId,
+    phone: maskPhone(input.phone),
+    source: input.source || "website",
+    qualityScore: quality?.score ?? null,
+    persisted,
+  });
 
-  return NextResponse.json(
-    withLeadQuality({ ok: true }, quality),
-    { headers: meta.headers }
-  );
+  // Fail-open: a storage outage must never prevent the WhatsApp handoff.
+  return NextResponse.json({
+    ok: true,
+    accepted: true,
+    persisted,
+    eventId,
+    leadQuality: quality ?? null,
+  }, { status: 202, headers: { ...meta.headers, "Cache-Control": "no-store" } });
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: false, error: "POST only" }, { status: 405, headers: apiMeta().headers });
+  return NextResponse.json({ ok: false, error: "method_not_allowed" }, { status: 405, headers: apiMeta().headers });
 }

@@ -2,24 +2,24 @@
 @import "./final-site.css";
 
 :root {
-  --bg: #ffffff;
-  --bg-alt: #f5f5f7;
-  --text: #1d1d1f;
-  --text-muted: #86868b;
-  --text-light: #6e6e73;
-  --accent: #ff2d55;
+  --bg: #FCF9F5;
+  --bg-alt: #F6F1EA;
+  --text: #0A0D14;
+  --text-muted: #334155;
+  --text-light: #475569;
+  --accent: #E11D48;
   /* iPhone 17 Pro Max "Cosmic Orange" family */
   --orange: #ff6b00;
   --orange-deep: #e85d04;
   --orange-light: #ff8a1f;
   --orange-glow: rgba(255, 107, 0, 0.28);
-  --accent2: #ff9500;
-  --green: #30d158;
-  --border: rgba(0, 0, 0, 0.08);
-  --glass: rgba(255, 255, 255, 0.65);
-  --glass-strong: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.55);
-  --cta-dark: #1d1d1f;
+  --accent2: #E11D48;
+  --green: #10B981;
+  --border: rgba(15, 23, 42, 0.08);
+  --glass: rgba(255, 255, 255, 0.80);
+  --glass-strong: rgba(255, 255, 255, 0.96);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --cta-dark: #0A0D14;
   --cta-radius: 14px;
 }
 
@@ -41,11 +41,11 @@ html[data-motion="off"] *::after {
 }
 
 body {
-  background-color: #fbf7f2;
+  background-color: #FCF9F5;
   background-image:
     radial-gradient(circle at 10% 8%, rgba(220,38,38,.05), transparent 46%),
     radial-gradient(circle at 92% 22%, rgba(234,88,12,.055), transparent 48%),
-    radial-gradient(rgba(120,72,48,.055) .6px, transparent .6px);
+    radial-gradient(rgba(194,65,12,.22) .6px, transparent .6px);
   background-size: 100% 100%, 100% 100%, 6px 6px;
   color: var(--text);
   overflow-x: hidden;
@@ -168,7 +168,7 @@ body {
   background: var(--cta-dark); color: #fff; font-weight: 600; font-size: 0.95rem;
   padding: 0.95rem 1.9rem; border-radius: var(--cta-radius);
   box-shadow: 0 4px 20px rgba(0,0,0,0.18);
-  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s;
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.25s;
   will-change: auto;
 }
 .cta-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
@@ -177,7 +177,7 @@ body {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   border: 1px solid rgba(0,0,0,0.12); color: var(--text); font-weight: 600; font-size: 0.95rem;
   padding: 0.95rem 1.9rem; border-radius: var(--cta-radius); background: rgba(255,255,255,0.7);
-  transition: transform .25s cubic-bezier(0.16,1,0.3,1), box-shadow .25s;
+  transition: transform .25s cubic-bezier(0.16,1,0.3,1), opacity .25s;
 }
 .cta-outline:hover { background: #fff; border-color: rgba(0,0,0,0.22); transform: translateY(-2px); }
 
@@ -185,7 +185,7 @@ body {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   background: var(--cta-dark); color: #fff; font-weight: 600; font-size: 0.95rem;
   padding: 0.95rem 1.9rem; border-radius: var(--cta-radius);
-  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.25s;
 }
 .cta-dark:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
@@ -1271,7 +1271,7 @@ html[data-motion="off"] {
    ========================================================================== */
 html {
   scroll-padding-top: 92px;
-  scroll-behavior: smooth; /* GPU-friendly native smooth scroll (site-wide) */
+  scroll-behavior: auto; /* native momentum scroll; anchor clicks are handled explicitly */
 }
 
 /* ==========================================================================

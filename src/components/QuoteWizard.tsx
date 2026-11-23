@@ -4,6 +4,8 @@ import { z } from "zod";
 import { QUOTE_DEVICES, REPAIR_TYPES, wa } from "@/lib/site";
 import { getPrice, priceLabel, TURNAROUND, priceNote } from "@/lib/pricing";
 import { track } from "@/lib/analytics";
+import { getAttributionRef } from "@/lib/analytics/utmSessionVault";
+import { sendLeadBeacon, sendConversionBeacon } from "@/lib/analytics/leadBeacon";
 import { LineIcon } from "./Icons";
 
 const customerSchema = z.object({
@@ -92,6 +94,22 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
     setErrors({});
     track("quote_completed", { device, model, repair });
     track("lead_created", { device, model, repair, source: "quote_wizard" });
+    const leadIssue = [repair, condition, description, urgency, pickup].filter(Boolean).join(" — ");
+    const eventId = sendLeadBeacon({
+      name, phone, email,
+      device: `${deviceDef?.label ?? device} — ${model}`,
+      issue: leadIssue,
+      source: "quote_wizard",
+      page: window.location.pathname,
+    });
+    sendConversionBeacon({
+      name, phone, email,
+      device: `${deviceDef?.label ?? device} — ${model}`,
+      issue: leadIssue,
+      source: "quote_wizard",
+      page: window.location.pathname,
+    }, eventId);
+    const attributionRef = getAttributionRef();
     const msg =
       `*RED APPLE MOBILE REPAIR*\n` +
       `_Where Repair Meets Connectivity_\n` +
@@ -117,6 +135,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
       `• Name :  ${name}\n` +
       `• Phone :  ${phone}\n` +
       `• Email :  ${email || "—"}\n` +
+      (attributionRef ? `${attributionRef}\n` : "") +
       `\n` +
       `━━━━━━━━━━━━━━━━━━━━\n` +
       `Please confirm the exact price and the earliest slot. Thank you.`;

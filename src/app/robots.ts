@@ -28,6 +28,7 @@ export default function robots(): MetadataRoute.Robots {
           "facebookexternalhit",
           "WhatsApp",
           "AdsBot-Google",
+          "adidxbot",
           "CCBot",
           "meta-externalagent",
         ],
