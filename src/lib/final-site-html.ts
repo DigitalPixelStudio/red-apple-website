@@ -40,9 +40,6 @@ export const finalSiteHtml = `
       </nav>
 
       <div class="flex items-center gap-1">
-        <button type="button" id="btn-pwa-open" class="inline-flex items-center gap-1 whitespace-nowrap rounded-[6px] bg-gradient-to-r from-red-600 to-orange-600 px-2 py-2 text-[10px] font-bold text-white transition hover:from-red-700 hover:to-orange-700">
-          <span>⬇</span><span>Install App</span>
-        </button>
         <a href="#estimate" class="dock-quote-btn whitespace-nowrap rounded-[6px] px-2 py-2 text-[10px] font-bold text-white transition hover:opacity-95">
           Get Quote
         </a>
@@ -1450,19 +1447,6 @@ export const finalSiteHtml = `
     </div>
   </div>
 
-  <!-- PWA INSTALL MODAL -->
-  <div id="pwa-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4">
-    <div class="w-full max-w-sm rounded-3xl border border-zinc-200 bg-white p-6 text-center shadow-2xl">
-      <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple App Icon" class="mx-auto h-16 w-16 rounded-2xl border border-red-200 shadow-md" onerror="this.src='/icon-512.png'">
-      <h3 class="mt-3 font-display text-lg font-extrabold text-zinc-950">Install Red Apple App</h3>
-      <p class="mt-1 text-xs text-zinc-600">Add Red Apple Mobile Repair to your home screen for 1-tap 30-second estimates, live CRM tracking, and 24/7 Halasuru WhatsApp access.</p>
-      <div class="mt-5 flex gap-2">
-        <button type="button" id="btn-pwa-close" class="flex-1 rounded-xl border border-zinc-300 py-2.5 text-xs font-bold text-zinc-700">Not Now</button>
-        <button type="button" id="btn-pwa-confirm" class="dock-quote-btn flex-1 rounded-xl py-2.5 text-xs font-extrabold text-white">Install Now</button>
-      </div>
-      <p id="pwa-status" class="mt-2.5 hidden text-[11px] font-bold text-emerald-700">✓ Ready! Use Chrome menu → "Install App" or "Add to Home Screen".</p>
-    </div>
-
   <!-- Gift: floating back-to-top with smooth scroll -->
   <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white shadow-xl transition-transform duration-200 ease-out hover:scale-105 hover:-translate-y-1 focus:outline-none">
     <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
@@ -1479,3 +1463,5 @@ export const finalSiteHtml = `
     </div>
   </div>
   </div>`;
+
+[executed on device: ForgeBeast (e038fbbc-063f-49d1-9164-37e8bf8ab528)]
