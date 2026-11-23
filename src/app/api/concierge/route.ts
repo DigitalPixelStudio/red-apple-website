@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 40;
 
 // Current stable Flash family, ordered for reliable low-latency fallback.
-const MODELS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"] as const;
+const MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 // GEMINI_API_KEY is canonical; the others are accepted aliases for older deployments.
 const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_STUDIO_API_KEY", "GOOGLE_GEMINI_API_KEY", "GEMINI_KEY"] as const;
@@ -417,7 +417,8 @@ function textStream(upstream: Response): ReadableStream<Uint8Array> {
 function generationConfigFor(model: string, minimal = false): Record<string, unknown> {
   if (minimal) return { maxOutputTokens: 800 };
   const config: Record<string, unknown> = { maxOutputTokens: 800 };
-  if (/gemini-3\./.test(model)) config.thinkingConfig = { thinkingLevel: "low" };
+  if (/gemini-(?:3\.6-flash|3\.5-flash-lite)/.test(model)) config.thinkingConfig = { thinkingLevel: "minimal" };
+  else if (/gemini-3\./.test(model)) config.thinkingConfig = { thinkingLevel: "low" };
   else if (/gemini-2\.5/.test(model)) config.thinkingConfig = { thinkingBudget: 256 };
   return config;
 }
