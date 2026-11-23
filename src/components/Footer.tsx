@@ -1,6 +1,5 @@
 "use client";
 import BrandMark from "@/components/BrandMark";
-import MotionToggle from "@/components/MotionToggle";
 import SmartImg from "@/components/SmartImg";
 import Link from "next/link";
 import { SITE, SOCIAL_LINKS, wa, SERVICE_PAGES } from "@/lib/site";
@@ -130,7 +129,6 @@ export default function Footer() {
         <div className="mt-14 border-t border-white/[0.08] pt-7">
           <div className="flex flex-col items-center justify-between gap-4 text-[12px] text-white/60 sm:flex-row">
             <div>&copy; {new Date().getFullYear()} Red Apple Mobile Repair Store &middot; Halasuru, Bengaluru 560008</div>
-            <MotionToggle />
           </div>
           <div className="mt-4 text-center text-[11.5px] leading-relaxed text-white/45">Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</div>
           <div className="dev-line mt-3 text-center font-semibold text-white/75">

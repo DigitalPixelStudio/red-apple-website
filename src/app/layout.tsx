@@ -252,12 +252,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="anchor-smooth-scroll" strategy="afterInteractive">
           {`document.addEventListener("click",function(e){const a=e.target.closest("a[href^=\"#\"]");if(!a)return;const id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id)return;const target=document.getElementById(id);if(!target)return;e.preventDefault();target.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});history.replaceState(null,"",a.getAttribute("href"));});`}
         </Script>
-        {/* Apply a saved "motion off" choice before the page paints. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "try{if(localStorage.getItem('ramr-motion')==='off'){document.documentElement.setAttribute('data-motion','off');}}catch(e){}",
-          }}
-        />
         {children}
         <PWAInstallPrompt />
         {/* Single JSON-LD array: existing entities are preserved and the local
