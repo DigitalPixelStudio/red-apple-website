@@ -743,27 +743,9 @@
       let tourIndex = 0;
       let tourFocusTimeout = null;
       const tourButton = document.getElementById('tour-start');
-      const motionButton = document.getElementById('motion-toggle');
-      const systemPrefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-      let savedMotionPreference = null;
-      try { savedMotionPreference = localStorage.getItem('ra-motion-enabled'); } catch {}
-      let motionEnabled = savedMotionPreference === '1' || (savedMotionPreference !== '0' && !systemPrefersReducedMotion);
-      const applyMotionPreference = (enabled, persist = false) => {
-        motionEnabled = enabled;
-        document.documentElement.setAttribute('data-motion', enabled ? 'on' : 'off');
-        document.dispatchEvent(new Event('ra-motion-change'));
-        if (persist) {
-          try { localStorage.setItem('ra-motion-enabled', enabled ? '1' : '0'); } catch {}
-        }
-        if (motionButton) {
-          motionButton.textContent = enabled ? 'Motion On' : 'Motion Off';
-          motionButton.setAttribute('aria-pressed', String(enabled));
-          motionButton.setAttribute('aria-label', enabled ? 'Turn visual motion off' : 'Enable visual motion');
-          motionButton.classList.toggle('motion-enabled', enabled);
-        }
-      };
-      applyMotionPreference(motionEnabled);
-      motionButton?.addEventListener('click', () => applyMotionPreference(!motionEnabled, true));
+      // Motion stays enabled by default; the effects are transform/opacity based.
+      document.documentElement.setAttribute('data-motion', 'on');
+      document.dispatchEvent(new Event('ra-motion-change'));
       const stopTour = () => {
         tourActive = false;
         if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; }
@@ -817,12 +799,7 @@
 // Smoothness: no per-frame scroll JS. CSS content-visibility + compositor-only
 // animations handle text-heavy sections; WebGL pauses only when off-screen.
 
-// Gift: floating back-to-top (smooth transition, discovers for free)
-      const backTop = document.getElementById('back-to-top');
-      if (backTop) {
-        backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-        const ioBack = new IntersectionObserver((es) => { es.forEach((e) => backTop.classList.toggle('hidden', e.isIntersecting)); }, { rootMargin: '0px -20px 0px 0px' });
-        ioBack.observe(document.getElementById('footer-contact') || document.body);
+// The floating back-to-top control is intentionally removed to keep the action dock clear.
 
       // Phase A2: 1px top sentinel toggles header shadow ONCE (no per-frame scroll JS)
       const hdrSentinel = document.createElement('div');
@@ -834,7 +811,6 @@
       document.body.prepend(hdrSentinel);
       const hdr = document.querySelector('.site-header-120fps');
       if (hdr) new IntersectionObserver((es) => es.forEach((e) => hdr.classList.toggle('is-scrolled', !e.isIntersecting)), { rootMargin: '0px 0px -1px 0px' }).observe(hdrSentinel);
-      }
 
       // Gift: dark/light theme toggle
       const themeToggle = document.getElementById('theme-toggle');
@@ -1137,15 +1113,15 @@
         // The aspect-aware camera fit below keeps every assembly fully in frame at all rotations.
         const V13_DEVICE_FILL = {
           // Hero phone is slightly more prominent on every viewport; supporting models step back.
-          'canvas-hero':          { desktopFill: 1.03, mobileFill: 1.02 },
+          'canvas-hero':          { desktopFill: 0.98, mobileFill: 0.98 },
           // Tablet/PWA/desktop: supporting machines are framed a little smaller for cleaner breathing room.
           'canvas-estimate-ipad': { desktopFill: 0.78 },
           'canvas-pickup-iphone': { desktopFill: 0.80 },
-          'canvas-tbk-oca':       { desktopFill: 0.60 },
-          'canvas-tbk-90l':       { desktopFill: 0.60 },
-          'canvas-tbk-958':       { desktopFill: 0.60 },
+          'canvas-tbk-oca':       { desktopFill: 0.54 },
+          'canvas-tbk-90l':       { desktopFill: 0.54 },
+          'canvas-tbk-958':       { desktopFill: 0.54 },
           'canvas-internals':     { desktopFill: 0.76, mobileFill: 0.88 },
-          'canvas-airpods':       { desktopFill: 0.50 },
+          'canvas-airpods':       { desktopFill: 0.39, mobileFill: 0.42 },
           'canvas-watch':         { desktopFill: 0.78 },
           'canvas-macbook':       { desktopFill: 0.76 },
         };
@@ -1216,7 +1192,11 @@
             const distV = (size.y * 0.5) / (Math.tan(vFov / 2) * fill);
             const distH = (Math.hypot(size.x, size.z) * 0.5) / (Math.tan(hFov / 2) * fill);
             const dist = Math.max(distV, distH);
-            camera.position.set(dist * 0.16, dist * 0.10, dist * 0.982);
+            const isTbkMachine = id === 'canvas-tbk-oca' || id === 'canvas-tbk-90l' || id === 'canvas-tbk-958';
+            const cameraX = isTbkMachine ? 0.22 : 0.16;
+            const cameraY = isTbkMachine ? 0.14 : 0.10;
+            const cameraZ = isTbkMachine ? 0.965 : 0.982;
+            camera.position.set(dist * cameraX, dist * cameraY, dist * cameraZ);
             camera.near = Math.max(0.05, dist - maxDim * 2.5);
             camera.far = dist + maxDim * 4;
             camera.lookAt(0, 0, 0);
@@ -1453,13 +1433,7 @@
           };
         }, -0.35, 0.06);
 
-        document.getElementById('btn-hero-orbit')?.addEventListener('click', (e) => {
-          heroAmbient = !heroAmbient;
-          if (heroSlot) heroSlot.orbit.setEnabled(!heroAmbient);
-          e.target.textContent = heroAmbient ? 'Enable 360° Drag Orbit' : 'Switch to Scroll-Safe BG';
-          const hud = document.getElementById('hero-hud');
-          if (hud) hud.textContent = heroAmbient ? 'Scroll-Safe Hero BG · Touch passes through' : 'Drag to orbit 360° · HD Keynote Animation';
-        });
+
         document.getElementById('btn-hero-reset')?.addEventListener('click', () => {
           if (heroSlot) heroSlot.orbit.reset();
         });

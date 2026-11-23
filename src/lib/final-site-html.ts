@@ -67,8 +67,8 @@ export const finalSiteHtml = `
       <div class="ambient-orb -left-20 -top-20 h-72 w-72 bg-red-500"></div>
       <div class="ambient-orb -bottom-24 right-10 h-80 w-80 bg-orange-400" style="animation-delay: -4s;"></div>
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-          <div class="flex flex-col gap-4 lg:col-span-6">
+        <div class="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
+          <div class="flex min-w-0 flex-col gap-3.5 lg:col-span-6">
             <div class="fast-breathe-badge inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
               <span class="relative flex h-2 w-2"><span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-emerald-500"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>
               <span id="live-ist-clock">Open now · 10 AM – 12 AM · Halasuru, Bengaluru</span>
@@ -82,22 +82,22 @@ export const finalSiteHtml = `
               Independent Apple repair studio on MG Road, Halasuru — component-level micro-soldering, OEM-grade displays &amp; front-glass restoration on specialised TBK machinery. 30-minute turnarounds, backed by our written 6 Months repair warranty.
             </p>
 
-            <!-- 6 Trust Pills  -->
-            <div class="flex flex-wrap gap-2 text-[11px] font-bold">
-              <span class="badge-breathe rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-900">★ 4.9/5 · 1,103 Google Reviews</span>
-              <span class="badge-breathe rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-orange-800" style="animation-delay: 0.8s;">CRM Invoice</span>
-              <span class="badge-breathe rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-700" style="animation-delay: 1.2s;">6 Months Warranty</span>
-              <span class="badge-breathe rounded-full border border-zinc-200 bg-white px-3 py-1 text-zinc-800" style="animation-delay: 1.6s;">Zero-Password Privacy</span>
-              <span class="badge-breathe rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-emerald-800" style="animation-delay: 2s;">Free 24/7 Pickup</span>
+            <!-- 4 Trust Pills -->
+            <div class="hero-trust-row grid grid-cols-2 gap-1.5 text-[10px] font-bold sm:flex sm:flex-nowrap sm:gap-2 sm:text-[11px]">
+              <span class="badge-breathe whitespace-nowrap rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-center text-amber-900">★ 4.9/5 · 1,103 Google Reviews</span>
+              <span class="badge-breathe whitespace-nowrap rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1.5 text-center text-orange-800" style="animation-delay: 0.8s;">CRM Invoice</span>
+              <span class="badge-breathe whitespace-nowrap rounded-full border border-zinc-200 bg-white px-2.5 py-1.5 text-center text-zinc-800" style="animation-delay: 1.6s;">Zero-Password Privacy</span>
+              <span class="badge-breathe whitespace-nowrap rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-center text-emerald-800" style="animation-delay: 2s;">Free 24/7 Pickup</span>
             </div>
 
             <!-- Hero CTAs including Visit Us -->
-            <div class="flex flex-wrap items-center gap-2.5 pt-1">
+            <div class="hero-actions flex flex-wrap items-center gap-2.5 pt-1">
               <a href="#estimate" class="dock-quote-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">Get 30-Second Estimate</a>
               <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-wa-btn rounded-full px-5 py-3 text-xs font-extrabold text-white transition active:scale-95">WhatsApp Bench 24/7</a>
               <a href="#halasuru-map" class="rounded-full border border-zinc-300 bg-white px-4 py-3 text-xs font-bold text-zinc-900 shadow-sm transition hover:border-red-500 hover:text-red-600">📍 Visit Us</a>
-              <button type="button" id="btn-hero-orbit" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">4D Scroll</button>
-              <button type="button" id="btn-hero-reset" class="rounded-full border border-zinc-200 bg-white px-3 py-2.5 text-[11px] font-semibold text-zinc-700 hover:border-red-400">Reset 4D Angle</button>
+              <button type="button" id="btn-hero-reset" aria-label="Reset 4D Angle" title="Reset 4D Angle" class="flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:border-red-400 hover:text-red-600" >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36L3 8"/><path d="M3 3v5h5"/></svg>
+              </button>
             </div>
           </div>
 
@@ -1367,15 +1367,14 @@ export const finalSiteHtml = `
       <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <span>WhatsApp</span>
     </a>
-    <a href="tel:+918660663776" aria-label="Call Red Apple Lab" class="dock-dark-btn inline-flex h-10 w-10 items-center justify-center rounded-xl active:scale-95">
+    <a href="tel:+918660663776" aria-label="Call Red Apple Lab" class="dock-dark-btn inline-flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-extrabold active:scale-95">
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Call Now</span>
     </a>
+    <button type="button" id="btn-open-ai" aria-label="Open Red Apple AI Bench Chat" title="Red Apple AI Bench" class="ai-launcher dock-dark-btn inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-red-500/50 shadow-lg active:scale-95">
+      <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="4"/><path d="M12 8V4H8"/><circle cx="9" cy="14" r="1.2" fill="currentColor"/><circle cx="15" cy="14" r="1.2" fill="currentColor"/></svg>
+    </button>
   </div>
-
-  <!-- SLEEK MATTE CHARCOAL AI BENCH LAUNCHER (Bottom Right, Matching Screenshot) -->
-  <button type="button" id="btn-open-ai" aria-label="Open Red Apple AI Bench Chat" class="dock-dark-btn fixed bottom-[88px] right-4 z-40 flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-700/60 shadow-2xl active:scale-95">
-    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="4"/><path d="M12 8V4H8"/><circle cx="9" cy="14" r="1.2" fill="currentColor"/><circle cx="15" cy="14" r="1.2" fill="currentColor"/></svg>
-  </button>
 
   <!-- Surprise: Non-Annoying 10-Second Auto-Dismiss AI Concierge Toast (Triggers after 3 mins active browsing or manual preview) -->
   <div id="ai-auto-toast" class="fixed bottom-[96px] right-4 z-40 hidden w-72 rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-2xl">
@@ -1447,16 +1446,15 @@ export const finalSiteHtml = `
     </div>
   </div>
 
-  <!-- Gift: floating back-to-top with smooth scroll -->
-  <button type="button" id="back-to-top" class="fixed bottom-6 left-6 z-40 hidden h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 bg-white shadow-xl transition-transform duration-200 ease-out hover:scale-105 hover:-translate-y-1 focus:outline-none">
-    <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15l4-4 4 4"/></svg>
-  </button>
+
 
   <!-- Web Tour — the only retained floating utility -->
-  <div id="tour-dock" class="fixed left-3 bottom-4 z-40 flex items-center gap-2">
+  <div id="tour-dock" class="fixed bottom-3 left-2 z-40 flex items-center">
     <div class="flex items-center gap-2">
-      <button type="button" id="tour-start" aria-label="Start Web Tour" aria-pressed="false" class="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-extrabold text-red-700 shadow-lg shadow-red-950/10 hover:bg-red-100 active:scale-95 transition-all">Web Tour</button>
-      <button type="button" id="motion-toggle" aria-label="Enable visual motion" aria-pressed="false" class="rounded-full border border-violet-200 bg-white/95 px-3 py-2 text-[10px] font-extrabold text-violet-700 shadow-lg shadow-violet-950/10 hover:bg-violet-50 active:scale-95 transition-all">Motion Off</button>
+      <button type="button" id="tour-start" aria-label="Start Web Tour" title="Web Tour" aria-pressed="false" class="flex h-9 w-9 items-center justify-center rounded-full border border-red-200 bg-white text-red-700 shadow-lg shadow-red-950/10 transition-transform active:scale-95 hover:border-red-400 hover:bg-red-50">
+        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15M8 7h8M8 10h6"/></svg>
+      </button>
+
 
     </div>
   </div>

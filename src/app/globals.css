@@ -5223,3 +5223,162 @@ html[data-motion="on"] .reveal-up {
 html[data-motion="on"] .reveal-up.is-in { opacity: 1 !important; transform: translate3d(0,0,0) !important; }
 html[data-motion="on"] #tour-start.tour-running { animation: raTourPulse 2.2s ease-in-out infinite !important; }
 html[data-motion="on"] .tour-focus { animation: raTourFocus 2.4s ease-out 1 !important; }
+
+/* FINAL POLISH — clean hero, consistent 3D framing and non-overlapping action dock */
+#hero {
+  padding-top: clamp(1rem, 2vw, 1.5rem) !important;
+  padding-bottom: 2rem !important;
+}
+#hero .grid.grid-cols-1 { gap: clamp(1.25rem, 2.5vw, 2rem) !important; }
+#hero .flex.min-w-0.flex-col { gap: .85rem !important; }
+#hero .hero-trust-row { width: 100%; align-items: center; }
+#hero .hero-trust-row > span { min-width: 0; }
+#hero .hero-actions { gap: .6rem !important; align-items: center; }
+#hero .hero-actions a { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+#hero .stage-3d-box {
+  height: 500px !important;
+  min-height: 500px !important;
+  width: 100% !important;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+#hero .stage-3d-box canvas { display: block; width: 100% !important; height: 100% !important; }
+@media (min-width: 640px) {
+  #hero .hero-trust-row { display: flex !important; flex-wrap: nowrap !important; gap: .45rem !important; }
+  #hero .hero-trust-row > span { padding-inline: .55rem !important; font-size: 10px !important; }
+}
+@media (min-width: 768px) {
+  #hero .stage-3d-box { height: 550px !important; min-height: 550px !important; }
+}
+@media (min-width: 1024px) {
+  #hero .stage-3d-box { height: 600px !important; min-height: 600px !important; }
+}
+@media (min-width: 1367px) {
+  #hero .stage-3d-box { height: 620px !important; min-height: 620px !important; }
+}
+@media (max-width: 639px) {
+  #hero .hero-trust-row { display: grid !important; grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important; }
+  #hero .hero-trust-row > span { overflow: hidden; text-overflow: ellipsis; }
+  #hero .stage-3d-box { height: 470px !important; min-height: 470px !important; }
+  #hero .hero-actions a { padding-inline: 13px !important; font-size: 11px !important; }
+}
+
+/* The three machinery canvases share one centered 3/4 camera preset and matched stages. */
+#tbk-machines .stage-3d-box,
+#glass-lab .stage-3d-box {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+#tbk-machines .stage-3d-box canvas,
+#glass-lab .stage-3d-box canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  margin-inline: auto;
+}
+@media (min-width: 768px) {
+  #tbk-machines .stage-3d-box,
+  #glass-lab .stage-3d-box { height: 470px !important; min-height: 450px !important; }
+}
+
+/* Larger touch targets, no collision: tour at left, estimate dock centered, AI beside call. */
+.floating-dock {
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  gap: 7px !important;
+  padding: 6px !important;
+  max-width: calc(100vw - 76px) !important;
+  border-radius: 18px !important;
+}
+.floating-dock a {
+  min-height: 46px !important;
+  padding: 11px clamp(12px, 1.4vw, 20px) !important;
+  font-size: 11px !important;
+}
+.floating-dock a[aria-label="Call Red Apple Lab"] {
+  min-width: 84px !important;
+  height: 46px !important;
+  gap: 6px !important;
+}
+#tour-dock {
+  position: fixed !important;
+  left: 8px !important;
+  right: auto !important;
+  bottom: max(13px, env(safe-area-inset-bottom)) !important;
+  z-index: 45 !important;
+}
+#tour-start {
+  width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 0 !important;
+  box-shadow: 0 5px 16px rgba(24,24,27,.12) !important;
+}
+#btn-open-ai.ai-launcher {
+  position: fixed !important;
+  right: 12px !important;
+  bottom: max(72px, calc(env(safe-area-inset-bottom) + 68px)) !important;
+  width: 50px !important;
+  height: 50px !important;
+  border: 1px solid rgba(248, 70, 70, .85) !important;
+  border-radius: 17px !important;
+  background: linear-gradient(145deg, #27272a, #09090b) !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12), 0 0 18px rgba(239,68,68,.42), 0 8px 24px rgba(0,0,0,.22) !important;
+}
+#ai-auto-toast { bottom: 132px !important; right: 12px !important; }
+#ai-drawer { bottom: 132px !important; right: 12px !important; max-height: calc(100dvh - 152px) !important; }
+@media (max-width: 480px) {
+  .floating-dock { max-width: calc(100vw - 62px) !important; gap: 4px !important; }
+  .floating-dock a { padding-inline: 9px !important; font-size: 10px !important; }
+  .floating-dock a[aria-label="Call Red Apple Lab"] { min-width: 72px !important; }
+  #tour-dock { left: 7px !important; }
+  #btn-open-ai.ai-launcher { right: 10px !important; bottom: max(68px, calc(env(safe-area-inset-bottom) + 64px)) !important; }
+  #ai-auto-toast, #ai-drawer { right: 10px !important; max-width: calc(100vw - 20px) !important; }
+}
+
+/* Always-on visual motion, limited to compositor-friendly opacity and transforms. */
+html[data-motion="on"] .ambient-orb { animation: raAmbientDrift 22s ease-in-out infinite alternate !important; }
+html[data-motion="on"] .heading-breathe::after { animation: raAccentBreath 5.5s ease-in-out infinite !important; }
+html[data-motion="on"] .badge-breathe { animation: raAccentBreath 6s ease-in-out infinite !important; }
+html[data-motion="on"] .laser-line { animation: raLaserSweep 10s ease-in-out infinite !important; }
+html[data-motion="on"] #hero .stage-3d-box::before { animation: raStageGlow 14s ease-in-out infinite alternate !important; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion="on"] .ambient-orb { animation: raAmbientDrift 22s ease-in-out infinite alternate !important; }
+  html[data-motion="on"] .heading-breathe::after { animation: raAccentBreath 5.5s ease-in-out infinite !important; }
+  html[data-motion="on"] .badge-breathe { animation: raAccentBreath 6s ease-in-out infinite !important; }
+  html[data-motion="on"] .laser-line { animation: raLaserSweep 10s ease-in-out infinite !important; }
+  html[data-motion="on"] #hero .stage-3d-box::before { animation: raStageGlow 14s ease-in-out infinite alternate !important; }
+}
+
+/* Final dock arrangement: AI sits beside Call Now instead of floating over page content. */
+.floating-dock {
+  width: max-content !important;
+  max-width: calc(100vw - 16px) !important;
+  overflow-x: auto !important;
+}
+#btn-open-ai.ai-launcher {
+  position: relative !important;
+  inset: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  flex: 0 0 46px !important;
+  width: 46px !important;
+  height: 46px !important;
+  margin-left: 1px;
+  transform: translateY(1px);
+  border: 1px solid rgba(248,70,70,.9) !important;
+  border-radius: 14px !important;
+  background: linear-gradient(145deg,#27272a,#09090b) !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12), 0 0 18px rgba(239,68,68,.42), 0 8px 22px rgba(0,0,0,.2) !important;
+}
+#tour-dock {
+  bottom: max(76px, calc(env(safe-area-inset-bottom) + 70px)) !important;
+}
+@media (max-width: 480px) {
+  .floating-dock { max-width: calc(100vw - 16px) !important; gap: 4px !important; padding: 5px !important; }
+  .floating-dock a { padding-inline: 8px !important; font-size: 10px !important; }
+  .floating-dock a[aria-label="Call Red Apple Lab"] { min-width: 70px !important; }
+  #btn-open-ai.ai-launcher { flex-basis: 42px !important; width: 42px !important; height: 42px !important; }
+  #tour-dock { left: 8px !important; bottom: max(76px, calc(env(safe-area-inset-bottom) + 70px)) !important; }
+}
