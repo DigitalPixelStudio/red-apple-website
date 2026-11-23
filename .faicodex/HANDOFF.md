@@ -207,3 +207,15 @@ Real bugs found via Playwright (not string checks) and fixed:
 - **48h follow-up (approved)**: after GSC Request Indexing on /, /privacy, /terms, /refund-policy, /services/iphone-display-repair, confirm cached 1.3/5 & 90-day snippets replaced by 4.9/5 & 6 Months.
 - **Manual (Faisu only)**: GSC Request Indexing 5 URLs; delete old Vercel projects `redappplemobilerepair` + `red-apple-repair`; optionally claim Apple Business Connect.
 - Next action: FaiCodex runs predeploy + QA v10 gates → commit → deploy from `fix/disable-orange-glass-sweep` → verify live. Live: https://www.redmobilerepair.in
+
+
+---
+
+## 18. v18 PLATINUM FINAL ANALYSIS — DOC COMPLETE, DEPLOY PENDING (2026-11-23, HEAD c055731)
+- Owner request: "Give a word document with your current website analyze" + "lengthy document explaining all and clear instructions and Codes" + "final platinum tier build advise to opencode in word document".
+- DELIVERABLE: /root/workspace/RedApple_Platinum_Final_Analysis.docx — 53,250 bytes, python-docx 1.2.0, 8 tables, 11 H1 sections, 11 page breaks, opens/verified OK, opened in file panel. Commit at analysis (pre-deploy HEAD): c055731 (v17 PRECISION FINISH, last deployed).
+- DOC-1 subagent ownership was STRICT: .faicodex/HANDOFF.md, .faicodex/MEMORY.md, brain events-log.md, brain projects/redmobilerepair.md + generate the docx. NO src/public/scripts/tests/CRM edits. All v18 code already present in working tree; this pass = documentation + memory only.
+- 7 agents + 2 gifts each (14 gifts): FE-1 gate-safe 96px flush + zero-JS polish/reduced-motion; RES-1 Google hardware-repolicy redirect (Meta-only) + false-negative qualifier fix; BE-1 X-Request-Id correlation + fail-open qualifier/zod hardening; PY-1 retrying monitor + sanitized audit trail; QA-1 culprit scanner + variance harness; DevOps cache-layer headers + predeploy integration; DOC-1 platinum docx + handoff/memory continuity. FaiCodex integrated, held frozen 3D lock (TBK 0.75 / AirPods 0.66 / MacBook 0.90, mobile FROZEN) + preservation law.
+- Document contains: title, exec summary, BEFORE/AFTER 5-row table, deep analysis (architecture/shared renderer/single-source/7 APIs, performance, SEO+strike, Meta-only ads, footer+10 FX, source map), smoothness verdict, 14-gift work log, 35-pos/55-neg keyword appendix + qualifyInquiry strategy, backend 100/100 checklist, Faisu 2-min manual list, copy-paste OpenCode golden rules, risk/rollback register, final verdict.
+- Gates for the eventual deploy: predeploy-check.sh + visual-audit.mjs + health-report.mjs + seo_strike_scanner + health-monitor --quiet; verify .next/BUILD_ID (exit 139 benign); deploy vercel --prod --scope digital-pixel-studio --project redmobile-repair.in; verify live URL not exit code.
+- STATUS: DEPLOY PENDING until FaiCodex confirms. QA for the v18 code state NOT claimed here (doc subagent did not run gates). Manual (Faisu only): GSC 6 URLs, delete 2 Vercel clones, hand ads doc (META ONLY), optional Apple Business Connect. CRM bridge DEFERRED. SAFE TO RESTART — use /catch-up. Live: https://www.redmobilerepair.in

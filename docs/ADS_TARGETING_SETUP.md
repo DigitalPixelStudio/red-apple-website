@@ -1,125 +1,159 @@
-# Apple / iPhone Display Repair — Google Ads + Meta Ads Setup
+# Apple / iPhone Display Repair — Ads Setup (strike-free)
 
-Owner: Faisu · Prepared by @research · 2026-11-23 · For handoff to the ads manager.
+Owner: Faisu · Prepared by @research · 2026-11-23 (v18) · For handoff to the ads manager.
 
-**Config source:** `src/lib/seo/adsTargeting.ts` (keywords, 17 zones, AREA_SERVED,
-conversion events, disclaimer, negative-keyword guard-list).
-**Companion audit:** `docs/GOOGLE_STRIKE_RESEARCH.md`.
+**Config source:** `src/lib/seo/adsTargeting.ts` (35 primary keywords, 55 negatives, 17 zones,
+AREA_SERVED, conversion events, disclaimer, counts) and `src/lib/seo/adQualify.ts` (site-side
+lead pre-qualifier). **Companion audit:** `docs/GOOGLE_STRIKE_RESEARCH.md`.
 
-## 0. Non-negotiables (read first)
+## 0. Read this first — the channel decision (2026 policy)
+- **Google Ads does not allow ads for third-party hardware repair.** The official
+  [Third-party consumer technical support policy](https://support.google.com/adspolicy/answer/13527027)
+  lists "hardware repair services" as not allowed. Google's only carve-outs are
+  *selling* consumer technology and support offered **exclusively to businesses** —
+  neither fits an independent walk-in repair studio. Do **not** run Google Search
+  repair ads; do **not** disguise a repair ad as an accessory/device ad (that is
+  circumvention → account suspension, no prior warning).
+- **Local Services Ads are not an India fallback.** The "Cell phone and laptop
+  repair" LSA category exists only in 11 countries (Austria, Belgium, Canada,
+  France, Germany, Ireland, Italy, Spain, Switzerland, UK, US). India is absent.
+  "Google Verified" replaced Google Guaranteed in Oct 2025 — never claim the badge
+  before screening actually passes.
+- **Therefore:** paid demand is run on **Meta (Facebook + Instagram)**; Google
+  demand is won free through the **Google Business Profile / Map Pack** and
+  organic SEO. The keyword lists below fuel organic relevance, GBP services copy
+  and Meta targeting — *not* Google Search repair ads.
 - We are an **independent** studio. Never use "Authorized", "Apple Authorized",
-  "genuine Apple parts", "official", "Google Guaranteed", GST or affiliation claims.
-  (Google replaced Google Guaranteed with a single **Google Verified** badge in
-  Oct 2025 — do not resurrect retired badges in copy.)
-- Ad copy must carry the disclaimer exported as `ADS_DISCLAIMER`:
+  "genuine Apple parts", "official", "Google Verified/Guaranteed", GST or
+  affiliation claims. Ad copy must carry `ADS_DISCLAIMER` verbatim:
   *"Independent repair studio. Not affiliated with or endorsed by Apple Inc. Apple is a trademark of Apple Inc."*
-- Quote only published price ranges. Never promise a diagnosis outcome before assessment.
-- NAP is fixed: Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. Bhadra
-  Landmark, Halasuru, Bengaluru 560008 · +91 86606 63776 · 10 AM–12 AM, all 7 days.
-- Content category: **Apple Display Repair** · City: **Bengaluru** · State: Karnataka.
+- Quote only published price ranges; never promise a diagnosis outcome before
+  assessment. NAP is fixed: Metro Pillar No 125, No.38, next to Vignesh Dresses,
+  opp. Bhadra Landmark, Halasuru, Bengaluru 560008 · +91 86606 63776 · 10 AM–12 AM, all 7 days.
 
 ## 1. Targeting constants (copy from the config, don't retype)
-- `PRIMARY_KEYWORDS` — 10 display-led, high-intent terms (Apple display repair
-  Bengaluru; iPhone display replacement; iPhone OLED screen repair; front-glass
-  restoration; iPad/MacBook/Apple Watch display repair).
-- `SERVICE_AREAS` / `AREA_SERVED` — the same **17 Bengaluru zones** used in schema:
-  Halasuru, Indiranagar, MG Road, Koramangala, Lavelle Road, Richmond Town,
-  Benson Town, Sadashivanagar, HSR Layout, Whitefield, Bellandur, Sarjapur Road,
-  Jayanagar, JP Nagar, Domlur, Hebbal, Bengaluru.
-- Treat zones as a **coverage area from one store**, not 17 offices. Do not claim
-  a local address or a separate Google Business Profile per zone.
+- `PRIMARY_KEYWORDS` — **35 terms**: 10 seeds + **25 NEW strategic positives**
+  (`NEW_POSITIVE_KEYWORD_COUNT`). The 25 = 19 hand-written + 6 zone-derived
+  (`ZONE_KEYWORDS`) generated from `SERVICE_AREAS`, the same single source as
+  schema and llms.txt. Themes: whole display, back glass, front glass, OLED,
+  True Tone, same-day, pickup/doorstep, model+fault (iPhone 15 Pro Max / iPhone 14),
+  and iPad/MacBook/Watch displays. All describe work we really perform.
+- `NEGATIVE_KEYWORDS` — **55 terms** (27 original + **28 NEW**,
+  `NEW_NEGATIVE_KEYWORD_COUNT`): jobs/training, DIY/parts-only, trade-in/resale,
+  competitor brands (Samsung, Android, OnePlus, Xiaomi), fake authority
+  (official Apple store, Apple retail store, AppleCare, Apple Care, warranty
+  claim), and remote/free intent.
+- `SERVICE_AREAS` / `AREA_SERVED` — the same **17 Bengaluru zones** used in schema.
+  Treat zones as a **coverage area from one store**, not 17 offices. Do not claim
+  a local address or GBP per zone (Google representation guidelines / doorway risk).
 
-## 2. Google Ads
-### 2a. Product choice
-- **Search campaigns are primary.** Electronics/mobile repair is not a standard
-  Local Services Ads job category in most markets; if " electronics repair" LSA
-  eligibility is offered in the account, run it too (pay-per-lead, Google Verified
-  badge, service type + area, no keywords). Do not claim Google Verified until
-  screening actually passes.
-- If LSA is unavailable, set up a Search campaign first; add Performance Max later
-  **only after** call/form conversion tracking works (PMax needs conversion goals).
+## 2. Meta Ads — the paid channel (primary)
+### 2a. Product / objective
+- **Leads → Click-to-WhatsApp** (recommended first — WhatsApp ticketing already exists):
+  Messaging destination → WhatsApp → performance goal **Maximize number of leads**.
+  Eligibility: share ≥1 lead/purchase event via WhatsApp or Conversions API for
+  Business Messaging within 7 days, and label chats with Meta's predefined
+  `Lead` / `Booked` labels (other labels may not attribute).
+- **Instant Forms** alternative: enable **Higher Intent** (`is_optimized_for_quality:
+  true` in the Lead Ads API) to add a review-and-confirm step. Add 2–3
+  multiple-choice qualifiers: *Device? · What's wrong (display/glass/other)? · How soon?*
+  Avoid prohibited question categories. Keep ≤6 questions.
+- **CAPI alongside the Pixel.** From April 2026 the "qualified leads" goal is
+  unavailable for new campaigns without CAPI; Meta reports ~21% lower cost per
+  quality lead with CAPI for CRM. Do not send bare "conversation started" as Lead.
+- The `adQualify.ts` result (§7) is the honest quality signal to attach to those
+  Lead events — send `high-intent` events back via CAPI so delivery learns
+  *booked repair demand*, not chatter.
 
-### 2b. Campaign / ad group structure (one intent per ad group)
-| Ad group | Landing page | Match keywords (seed) |
-|---|---|---|
-| iPhone display | `/services/iphone-display-repair` | iPhone display replacement Bengaluru, iPhone OLED screen repair, iPhone screen replacement Halasuru |
-| Front glass restoration | `/services/iphone-display-repair` (glass section) | iPhone front glass restoration Bengaluru, front glass repair original OLED |
-| Other displays | `/services` | iPad display repair Bengaluru, MacBook display repair Bengaluru, Apple Watch screen repair Bengaluru |
-| Generic local intent | `/` or `/quote` | Apple display repair near me, iPhone repair MG Road |
+### 2b. Audience / creative / operations
+- Advantage+ audience + Advantage+ placements; avoid over-stacking detailed
+  targeting. Use a service-area radius around Bengaluru (17 zones), not a tiny pin.
+  Retarget site visitors and page engagers from day one.
+- Learning phase: run ≥7 days; budget for ~50 leads/ad-set/week; don't churn budgets daily.
+  3–4 creatives — real store, TBK machinery, before/after glass work, real faces —
+  never stock "Apple store" imagery.
+- **Speed to lead:** follow up within minutes during 10 AM–12 AM. Leads are only
+  exportable for 90 days — connect the CRM/Leads Centre so none expire.
 
-Use **phrase + exact** match at launch; broad only with a mature negative list.
-Add call assets and location assets; point the location asset at the canonical GBP.
+## 3. Google — free surfaces only
+- **GBP is the product that sends repair customers to the counter.** Keep the
+  primary category accurate and genuinely matching (do not stuff the business
+  name — that breaks GBP guidelines and risks suspension). Complete NAP, 10 AM–12 AM
+  hours, photos, services list, and steady genuine reviews all feed local-pack
+  relevance/prominence. HTML NAP already matches GBP NAP site-wide (Whitespark #15).
+- **Organic SEO:** the 35 `PRIMARY_KEYWORDS` feed `layout.tsx` metadata keywords
+  automatically (deduped) and mirror the display-focused copy already SSR'd on
+  `/` and `/services/iphone-display-repair`. Do not build 17 zone landing pages.
+- Never attempt to buy or trick local-pack placement; Google states there is no
+  way to request or pay for a better local ranking.
 
-### 2c. Negative keywords — paste `NEGATIVE_KEYWORDS` verbatim
-Job seekers (`jobs`, `career`, `salary`, `hiring`), DIY/tutorial/free, used/
-wholesale, and — critically — `authorized service center`, `apple authorized`,
-`genuine apple parts`. These prevent paying for traffic we must not claim to serve.
+## 4. Conversion events (names from `CONVERSION_EVENTS`)
+`lead_submit`, `estimate_request`, `whatsapp_click`, `phone_call`, `pickup_booking`,
+`directions_click`, `repair_status_check` (engagement, secondary). Mark only
+qualified lead events as primary; import offline "booked job" outcomes later so
+bidding optimises to booked work, not raw clicks. Judge campaigns by **cost per
+booked job**.
 
-### 2d. Geo, schedule, budget
-- Location targeting: **Presence** (not presence-or-interest) on Bengaluru + the
-  17 zones. Add zone names in ad copy where genuinely relevant; never invent local proof.
-- Schedule: align to live answering hours, 10 AM–12 AM IST. Use ad scheduling to
-  bid down when nobody can pick up.
-- Bid strategy: start Manual CPC / Maximize Clicks with a cap, move to
-  Maximize Conversions once `lead_submit` / `phone_call` have ~30–50 conversions.
-
-### 2e. Conversion actions to create (names from `CONVERSION_EVENTS`)
-`lead_submit` (quote form), `estimate_request`, `whatsapp_click`, `phone_call`
-(call asset + click-to-call), `pickup_booking`, `directions_click`,
-`repair_status_check` (engagement, secondary). Mark revenue/primary only for
-qualified lead events; import offline "booked job" outcomes later via an
-enhanced-conversions-style import so the manager optimises to booked work, not raw clicks.
-
-## 3. Meta Ads (Facebook + Instagram)
-- Objective: **Leads / Advantage+ Leads**. Two conversion locations worth testing:
-  1. **Click-to-WhatsApp** (recommended first — the business already runs WhatsApp
-     ticketing): Leads → Messaging destination → WhatsApp → Maximize number of leads.
-     To optimise for leads, share at least one lead/purchase event via WhatsApp or
-     Conversions API for Business Messaging, and label chats with Meta's predefined
-     `Lead` / `Booked` labels.
-  2. **Instant Forms** with the **Higher intent** review screen. Add 2–3 qualifying
-     questions: *Device model? · What's wrong (display/glass/other)? · How soon?*
-     Avoid prohibited question categories (financial, criminal, account data).
-- **Conversions API (CAPI) alongside the Pixel.** Note: from April 2026 the
-  "qualified leads" goal is unavailable for new campaigns without CAPI; Meta
-  reports ~21% lower cost per quality lead when CAPI for CRM is used with it.
-  Do not send bare "conversation started" events as Leads — add the qualifying step.
-- Audience: Advantage+ audience + Advantage+ placements; **avoid over-stacking**
-  detailed-targeting filters. Use a service-area radius around Bengaluru rather
-  than a tiny pin. Build a small retargeting set (site visitors, page engagers)
-  from day one.
-- Learning phase: run ≥7 days; budget for ~50 leads/ad-set/week; don't churn
-  budgets daily. Prepare 3–4 creatives — real store, TBK machinery, before/after
-  glass work, real faces — never stock "Apple store" imagery.
-- **Speed to lead:** follow up within minutes during 10 AM–12 AM; slow follow-up
-  is the largest cause of "cheap leads that never book". Leads are only exportable
-  for 90 days — connect the CRM / Leads Centre so none expire.
-
-## 4. Measurement map
-| Event | Google Ads | Meta (Pixel/CAPI) | Owner |
+## 5. Measurement map
+| Event | Meta (Pixel/CAPI) | Google (GA4 only) | Owner |
 |---|---|---|---|
-| `lead_submit` | primary conversion | `Lead` via website/CAPI | form API |
-| `estimate_request` | primary conversion | `Lead` | `/api/estimate` |
-| `whatsapp_click` | secondary | `Contact` / WhatsApp lead | front-end |
-| `phone_call` | call asset conversion | `Contact` | front-end |
-| `pickup_booking` | primary conversion | `Schedule` | `/api/pickup-booking` |
-| `repair_status_check` | engagement only | custom engagement | status page |
+| `lead_submit` | `Lead` via website/CAPI | event | form API |
+| `estimate_request` | `Lead` | event | `/api/estimate` |
+| `whatsapp_click` | `Contact` | event | front-end |
+| `phone_call` | `Contact` | event | front-end |
+| `pickup_booking` | `Schedule` | event | `/api/pickup-booking` |
+| `repair_status_check` | custom engagement | event | status page |
 
-Judge every campaign by **cost per booked job**, not cost per click or per chat.
-Keep a source field in the CRM per lead.
-
-## 5. Compliance do / don't
+## 6. Compliance do / don't
 **Do:** keep NAP, hours, 6 Months warranty and 4.9/1103 consistent; say "independent";
-quote published ranges; disclose the disclaimer; use real store photography.
-**Don't:** buy "authorized"/"genuine Apple" keywords; use retired Google Guaranteed
-badges; create 17 near-duplicate zone landing pages (doorway-abuse risk — one
-coverage list + a few genuinely distinct service pages is correct); run fake urgency;
-run ads when nobody can answer.
+quote published ranges; disclose `ADS_DISCLAIMER`; use real store photography.
+**Don't:** run Google Search/LSA repair ads; buy "authorized"/"genuine Apple" keywords;
+use retired Google Guaranteed badges; create 17 near-duplicate zone pages; run fake
+urgency; run ads when nobody can answer; edit `src/lib/site.ts`, pricing files,
+images or 3D assets to chase ad performance.
 
-## 6. Handoff checklist for the ads manager
-1. Confirm tracking: GA4 events named exactly as `CONVERSION_EVENTS`; Meta Pixel + CAPI verified.
-2. Paste `PRIMARY_KEYWORDS` and `NEGATIVE_KEYWORDS`; set geo to Bengaluru + the 17 zones.
-3. Create ad groups in §2b; attach disclaimer to every ad and creative.
-4. Launch Search first (or LSA if genuinely eligible); add Meta click-to-WhatsApp in parallel.
-5. Wait 7 days, review by qualified lead and booked job, then scale.
-6. Never edit `src/lib/site.ts`, pricing files, images or 3D assets to chase ad performance.
+## 7. Site-side lead pre-qualification — `src/lib/seo/adQualify.ts` (NEW)
+This is the "background code that targets only potential customers / kills false
+inquiries". It is **pure and SSR-safe** and reads the single-source keyword lists —
+no secrets, no API wiring here.
+
+```ts
+import { qualifyInquiry, type QualifyResult } from "@/lib/seo/adQualify";
+
+const result: QualifyResult = qualifyInquiry(noteFromEstimateForm);
+// result.intent          -> "high-intent" | "low-intent"
+// result.verdict         -> "high" | "low" (BE-1 adapter's canonical field)
+// result.score           -> honest bounded number (-100..100)
+// result.matchedPositive -> exact repair-intent phrases found
+// result.matchedNegative -> disqualifying terms found (jobs/DIY/fake authority…)
+// result.reason          -> plain-English explanation for CRM notes
+```
+
+**BE-1 integration recipe (backend owns the APIs; RES did NOT wire them):**
+1. In `/api/estimate` (and optionally the concierge/lead note handler), call
+   `qualifyInquiry(text)` on the free-text field. Do **not** reject a human solely
+   on this signal — attach a non-blocking `quality` flag to the stored lead.
+2. Feed the flag into the Meta `Lead` event via CAPI as a custom property, e.g.
+   `lead_quality: result.intent`, plus `lead_score: result.score`. Use predefined
+   `Lead`/`Booked` WhatsApp labels in parallel.
+3. Optionally store `reason` in the CRM lead note so the counter team sees why a
+   lead was flagged. Review `low-intent` samples weekly; add recurring junk terms
+   to `NEGATIVE_KEYWORDS` (single source) rather than hard-coding filters in APIs.
+4. Never log or transmit secrets; the helper itself needs none.
+
+**Verified behaviour (transpile smoke test, 2026-11-23):**
+- `"Hi, my iPhone 15 Pro Max screen cracked today, need same day display replacement in Indiranagar, pickup possible?"` → `high-intent` (score 4)
+- `"iPhone display repair Bengaluru"` → `high-intent` (score 5)
+- `"…job vacancy salary / course"` → `low-intent` (score −25, blocked)
+- `"DIY screen replacement kit … digitizer spare parts how to fix"` → `low-intent` (score −20, blocked)
+- `"Samsung galaxy screen repair"` → `low-intent` (score −10, blocked)
+- `"genuine apple parts authorized service center warranty claim"` → `low-intent` (score −15, blocked)
+
+## 8. Handoff checklist for the ads manager
+1. Confirm tracking: Meta Pixel + CAPI verified; GA4 events named exactly as `CONVERSION_EVENTS`.
+2. Paste `PRIMARY_KEYWORDS` (organic/GBP/Meta) and `NEGATIVE_KEYWORDS` (55) into allowed platforms; geo = Bengaluru + 17 zones.
+3. Build Meta click-to-WhatsApp + Higher-Intent Instant Forms; attach `ADS_DISCLAIMER` to every creative.
+4. Launch Meta first; run GBP/organic in parallel. **Do not launch Google repair ads.**
+5. Wire `adQualify.ts` per §7 so Meta receives honest `high-intent` quality signals.
+6. Wait 7 days, review by qualified lead and booked job, then scale.
+7. Never edit `src/lib/site.ts`, pricing files, images or 3D assets to chase ad performance.

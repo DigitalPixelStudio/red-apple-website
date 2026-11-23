@@ -8,7 +8,10 @@
  *
  * Viewports: tablet 1024x768@2x, mobile 390x844@3x, desktop 1440x900@1x.
  *
- * GATES (93 total = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13 + 5 v16 + 7 v17 SOURCE):
+ * GATES (99 total = 93 existing + 6 FE-1 integration gates SOURCE-CHECK):
+ *   93 existing = 34 legacy/v8 + 16 v9 + 12 v10 + 2 v14 + 17 v13 + 5 v16 + 7 v17.
+ *   FE-1 (6 SOURCE): footer 96px-gap closure, 10 PLATINUM-FX markers, keywords
+ *   config, qualify helper, promoSignals, health-monitor.py + refresh-site.py.
  *   LEGACY (2 global, 7 per viewport):
  *    1. SSR rating 4.9/5 present and 1.3/5 absent
  *    2. SSR HTML has no .orange-glass-showcase
@@ -168,6 +171,15 @@ const OG_CARD_PATH = path.join(REPO_ROOT, 'public', 'og-card.jpg');
 // v17 source anchors (RES-1 JSON-LD + geo hreflang). Structural only.
 const SERVICES_SLUG_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'services', '[slug]', 'page.tsx');
 const LAYOUT_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'layout.tsx');
+// FE-1 integration source anchors (all SOURCE-CHECK — no browser/build, no WebGL).
+const ADS_TARGETING_PATH = path.join(REPO_ROOT, 'src', 'lib', 'seo', 'adsTargeting.ts');
+const AD_QUALIFY_PATH = path.join(REPO_ROOT, 'src', 'lib', 'seo', 'adQualify.ts');
+const LEAD_QUALITY_PATH = path.join(REPO_ROOT, 'src', 'lib', 'analytics', 'leadQuality.ts');
+const PROMO_SIGNALS_PATH = path.join(REPO_ROOT, 'src', 'lib', 'analytics', 'promoSignals.ts');
+const LEAD_ROUTE_PATH = path.join(REPO_ROOT, 'src', 'app', 'api', 'lead', 'route.ts');
+const CONFIG_DIR = path.join(REPO_ROOT, 'src', 'config');
+const HEALTH_MONITOR_PATH = path.join(REPO_ROOT, 'scripts', 'health-monitor.py');
+const REFRESH_SITE_PATH = path.join(REPO_ROOT, 'scripts', 'refresh-site.py');
 
 // Slice a function body out of a source string using two adjacent markers.
 // Scopes the 3D framing assertions to centerAndFitResponsive ONLY — the shared
@@ -966,6 +978,94 @@ async function main() {
       `map=${v17Lock.name || 'MISSING'} tbkDesktop=${JSON.stringify(v17Lock.tbkFills)} (band 0.74-0.76) ` +
       `airpodsDesktop=${v17Lock.airpods === null ? 'MISSING' : v17Lock.airpods} (band 0.65-0.67)`,
       'SOURCE-CHECK');
+
+    /* ================= FE-1 INTEGRATION GATES (6 SOURCE-CHECK) =================
+     * FE-1's coordinated-pass changes. All STRUCTURAL/source checks — no browser,
+     * no build, no WebGL. FE-1 deliberately left the footer's OWN 62/12 padding
+     * intact (S5/V17-B/R2 stay green); the "96px gap" is the Tailwind pb-24 (96px)
+     * PARENT wrapper that was closed to 0. These gates lock that in along with the
+     * other five FE-1 deliverables. */
+
+    /* FE1-A: the 96px (pb-24 = 6rem) parent gap under the footer is closed, while
+     * the footer's own dock-clearance padding is preserved. pb-24 neutralisation
+     * is proven per @media context (brace-matched), not a loose substring. */
+    const gapCloseRe = /div\.pb-24:has\(\s*>\s*footer#footer-contact\s*\)\s*\{[^}]*padding-bottom:\s*0\s*!important[^}]*\}/;
+    const gapClosedMobile = gapCloseRe.test(cssSource);
+    const pad768Blocks = mediaBlocks(cssSource, /min-width:\s*768px/);
+    const gapClosedDesktop = pad768Blocks.some((b) => gapCloseRe.test(b)) ||
+      pad768Blocks.some((b) => /div\.pb-24:has\([^)]*footer#footer-contact[^)]*\)[^}]*padding-bottom:\s*50px\s*!important/.test(b));
+    const footerOwnPadPreserved = footerPad62 && footerPad12; // reused from V17-B
+    record(gapClosedMobile && gapClosedDesktop && footerOwnPadPreserved,
+      'FE1 SOURCE final-site.css: 96px pb-24 parent gap closed (0px mobile / 50px @768) + footer own 62/12 padding preserved',
+      `gapCloseMobile=${gapClosedMobile} gapCloseTablet=${gapClosedDesktop} ` +
+      `footerOwnPad62_12=${footerOwnPadPreserved} (FE-1 must not regress S5/V17-B/R2)`, 'SOURCE-CHECK');
+
+    /* FE1-B: >=10 PLATINUM-FX markers, the one-shot credit-reveal keyframe is
+     * compositor-only (opacity + translate3d, no filter/blur/layout props), and a
+     * reduced-motion guardian collapses it. Structural, not a string count alone. */
+    const ptCount = (cssSource.match(/PLATINUM-FX/g) || []).length;
+    const creditBody = namedKeyframeBody(cssSource, 'platinumCreditReveal');
+    const creditCompositorOnly = !!creditBody && /opacity\s*:/.test(creditBody) &&
+      /transform\s*:/.test(creditBody) &&
+      !/\b(?:filter|backdrop-filter|box-shadow|width|height|margin|padding|top|left|right|bottom)\s*:/.test(creditBody) &&
+      !/blur\s*\(/.test(creditBody);
+    const ptRmGuard = rmBlocks.some((b) => /footer-bottom-edge-bar/.test(b) &&
+      /animation:\s*none\s*!important/.test(b));
+    record(ptCount >= 10 && creditCompositorOnly && ptRmGuard,
+      'FE1 SOURCE final-site.css: >=10 PLATINUM-FX markers + compositor-only platinumCreditReveal + reduced-motion guardian',
+      `markers=${ptCount} (expected >=10) creditKeyframe=${!!creditBody} compositorOnly=${creditCompositorOnly} ` +
+      `reducedMotionGuard=${ptRmGuard}`, 'SOURCE-CHECK');
+
+    /* FE1-C: keyword config is real (single-source lists with entries), plus the
+     * new shared src/config response-metadata module exists. */
+    const adsCfg = readSource(ADS_TARGETING_PATH);
+    const kwPrimary = /export\s+const\s+PRIMARY_KEYWORDS\b/.test(adsCfg);
+    const kwNegative = /export\s+const\s+NEGATIVE_KEYWORDS\b/.test(adsCfg);
+    const kwZone = /export\s+const\s+ZONE_KEYWORDS\b/.test(adsCfg);
+    const seedEntries = (() => {
+      const m = /const\s+SEED_KEYWORDS[^=]*=\s*\[([\s\S]*?)\]/.exec(adsCfg);
+      return m ? (m[1].match(/["'][^"']+["']/g) || []).length : 0;
+    })();
+    const configMetaExists = fs.existsSync(path.join(CONFIG_DIR, 'apiMeta.ts')) &&
+      fs.statSync(path.join(CONFIG_DIR, 'apiMeta.ts')).size > 80;
+    record(kwPrimary && kwNegative && kwZone && seedEntries >= 5 && configMetaExists,
+      'FE1 SOURCE keywords config: PRIMARY/NEGATIVE/ZONE keyword lists (single source) + src/config/apiMeta.ts',
+      `primary=${kwPrimary} negative=${kwNegative} zone=${kwZone} seedEntries=${seedEntries} (expected >=5) ` +
+      `apiMetaModule=${configMetaExists}`, 'SOURCE-CHECK');
+
+    /* FE1-D: the pre-qualifier helper is present end-to-end — pure classifier in
+     * adQualify.ts, fail-open adapter in leadQuality.ts, WIRED into /api/lead. */
+    const adQualify = readSource(AD_QUALIFY_PATH);
+    const leadQuality = readSource(LEAD_QUALITY_PATH);
+    const leadRoute = readSource(LEAD_ROUTE_PATH);
+    const classifyFn = /export\s+function\s+qualifyInquiry\s*\(/.test(adQualify);
+    const adapterFn = /export\s+async\s+function\s+qualifyOptional\s*\(/.test(leadQuality);
+    const wired = /qualifyOptional\s*\(/.test(leadRoute) && /@\/lib\/analytics\/leadQuality/.test(leadRoute);
+    record(classifyFn && adapterFn && wired,
+      'FE1 SOURCE qualify helper: qualifyInquiry classifier + qualifyOptional adapter wired into /api/lead',
+      `qualifyInquiry=${classifyFn} qualifyOptional=${adapterFn} leadRouteWired=${wired} ` +
+      `(presence + integration, not just a loose name)`, 'SOURCE-CHECK');
+
+    /* FE1-E: promoSignals module is a real, SSR-safe, single-source helper. */
+    const promo = readSource(PROMO_SIGNALS_PATH);
+    const shareFn = /export\s+function\s+buildShareLinks\s*\(/.test(promo);
+    const trackFn = /export\s+function\s+buildTrackedUrl\s*\(/.test(promo);
+    const singleSource = /baseUrl/.test(promo) && /@\/lib\/site/.test(promo);
+    const noWindow = !/\bwindow\./.test(promo) && !/\bdocument\./.test(promo);
+    record(shareFn && trackFn && singleSource && noWindow,
+      'FE1 SOURCE promoSignals: buildShareLinks + buildTrackedUrl, single-source baseUrl, SSR-safe (no window/document)',
+      `buildShareLinks=${shareFn} buildTrackedUrl=${trackFn} singleSource=${singleSource} ssrSafe=${noWindow}`,
+      'SOURCE-CHECK');
+
+    /* FE1-F: both new stdlib-only ops scripts exist and are non-trivial, with the
+     * documented machine-readable / commit surfaces. No secrets are read/printed. */
+    const hm = readSource(HEALTH_MONITOR_PATH);
+    const rs2 = readSource(REFRESH_SITE_PATH);
+    const hmOk = hm.length > 300 && /--json/.test(hm) && /--quiet/.test(hm) && /urllib/.test(hm);
+    const rsOk = rs2.length > 300 && /--commit/.test(rs2) && /health-monitor\.py/.test(rs2);
+    record(hmOk && rsOk,
+      'FE1 SOURCE ops scripts: health-monitor.py (--json/--quiet, urllib) + refresh-site.py (--commit, dry-run default) exist',
+      `healthMonitor=${hmOk} (${hm.length}B) refreshSite=${rsOk} (${rs2.length}B)`, 'SOURCE-CHECK');
 
     if (SOURCE_ONLY) {
       const failedEarly = results.filter((r) => r.status === 'FAIL');

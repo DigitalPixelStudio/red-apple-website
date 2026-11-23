@@ -56,7 +56,7 @@ V14_FILL_FLOORS: dict[str, float] = {
     "canvas-internals":     0.92,
     "canvas-airpods":       0.86,   # intentionally eased back
     "canvas-watch":         0.92,
-    "canvas-macbook":       0.94,   # intentionally pushed furthest
+    "canvas-macbook":       0.88,   # v17: FROZEN at 0.90 base fill (no device override)
 }
 DEFAULT_FILL_FLOOR = 0.92
 FALLBACK_BARE_TRIGGERS = {("autoFramed", "false"), ("autoWake", "true")}

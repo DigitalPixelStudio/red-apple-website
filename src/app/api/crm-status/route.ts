@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { apiMeta } from "@/config/apiMeta";
 import { REPAIR_STATUS_FLOW, SITE } from "@/lib/site";
 
 export const runtime = "nodejs";
@@ -13,9 +14,10 @@ const mask = (v: string) => v.replace(/\d(?=\d{4})/g, "X");
 
 /** POST /api/crm-status — privacy-masked repair status lookup. Never fabricates a stage. */
 export async function POST(req: Request) {
+  const meta = apiMeta(); // one correlation id for this whole response
   const parsed = Schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400, headers: meta.headers });
   }
   const { ticket, phone } = parsed.data;
   const endpoint = process.env.CRM_STATUS_URL;
@@ -32,7 +34,7 @@ export async function POST(req: Request) {
         message: "Live CRM not connected — we'll confirm your exact stage on WhatsApp.",
         whatsapp: SITE.phoneHref,
       },
-      { headers: { "Cache-Control": "no-store" } }
+      { headers: meta.headers }
     );
   }
 
@@ -55,7 +57,7 @@ export async function POST(req: Request) {
         currentStage: stage,
         message: data?.message ?? "Live status from our Halasuru bench.",
       },
-      { headers: { "Cache-Control": "no-store" } }
+      { headers: meta.headers }
     );
   } catch {
     return NextResponse.json(
@@ -68,11 +70,11 @@ export async function POST(req: Request) {
         currentStage: null,
         message: "CRM temporarily unavailable — confirm on WhatsApp.",
       },
-      { headers: { "Cache-Control": "no-store" } }
+      { headers: meta.headers }
     );
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: false, error: "method_not_allowed" }, { status: 405 });
+  return NextResponse.json({ ok: false, error: "method_not_allowed" }, { status: 405, headers: apiMeta().headers });
 }

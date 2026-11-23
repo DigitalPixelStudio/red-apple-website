@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { apiMeta } from "@/config/apiMeta";
+import { qualifyOptional, withLeadQuality } from "@/lib/analytics/leadQuality";
 
 /**
  * POST /api/lead
@@ -36,17 +38,18 @@ const mask = (v?: string) =>
   !v ? "" : v.length <= 4 ? "***" : v.slice(0, 2) + "*".repeat(Math.max(0, v.length - 4)) + v.slice(-2);
 
 export async function POST(req: Request) {
+  const meta = apiMeta(); // one correlation id for this whole response
   const payload: unknown = await req.json().catch(() => null);
   const parsed = LeadSchema.safeParse(payload);
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400, headers: meta.headers });
   }
   const body: Lead = parsed.data;
 
   const phone = (body.phone || "").replace(/[^\d]/g, "");
   const hasContact = phone.length >= 10 || Boolean(body.email);
   if (!hasContact && !body.message) {
-    return NextResponse.json({ ok: false, error: "no contact detail" }, { status: 422 });
+    return NextResponse.json({ ok: false, error: "no contact detail" }, { status: 422, headers: meta.headers });
   }
 
   const lead = {
@@ -67,7 +70,8 @@ export async function POST(req: Request) {
     })
   );
 
-  // 2. forward to a webhook when one is configured
+  // 2. forward to a webhook when one is configured. The timeout guarantees a slow
+  // upstream can never hang the request or consume a serverless slot under load.
   const hook = process.env.LEAD_WEBHOOK_URL;
   if (hook) {
     try {
@@ -75,15 +79,24 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(lead),
+        signal: AbortSignal.timeout(5000),
       });
     } catch (e) {
       console.error("[lead] webhook failed", e);
     }
   }
 
-  return NextResponse.json({ ok: true });
+  // 3. OPTIONAL, non-blocking ad-qualification (RES-1 hook). Computed only after the
+  // lead is safely logged/forwarded. Never touches the WhatsApp ticket, never stores
+  // the text, and fails open — see src/lib/analytics/leadQuality.ts.
+  const quality = await qualifyOptional(body.issue || body.message);
+
+  return NextResponse.json(
+    withLeadQuality({ ok: true }, quality),
+    { headers: meta.headers }
+  );
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: false, error: "POST only" }, { status: 405 });
+  return NextResponse.json({ ok: false, error: "POST only" }, { status: 405, headers: apiMeta().headers });
 }

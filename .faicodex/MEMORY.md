@@ -41,3 +41,10 @@
 - FaiCodex 3D fix: `computeTightDeviceBounds()` (device meshes only, 0.88–0.90 near-edge fill) replaces inflating `Box3.setFromObject(root)`; `/_next/` re-allowed in robots.ts. Shared renderer intact.
 - Preservation: store/machine images, aspect ratios, quotations, WhatsApp flows, v9 gap/noindex fixes untouched.
 - 48h follow-up: after GSC indexing 5 URLs, confirm cached 1.3/5 & 90-day → 4.9/5 & 6 Months. Faisu-only: GSC 5 URLs, delete 2 old Vercel projects (`redappplemobilerepair`, `red-apple-repair`), optional Apple Business Connect.
+
+
+## v18 status (2026-11-23, DOC COMPLETE, deploy PENDING, HEAD c055731)
+- Generated /root/workspace/RedApple_Platinum_Final_Analysis.docx (platinum analysis + OpenCode advisory, 53 KB, 11 sections, verified opens OK).
+- This pass DOCUMENTATION/MEMORY ONLY — DOC-1 did not touch src/public/scripts/tests/CRM.
+- 7 agents × 2 gifts (14): FE-1 flush+polish; RES-1 Meta-only repolicy+false-negative fix; BE-1 X-Request-Id+fail-open; PY-1 retrying monitor+sanitized audit; QA-1 culprit scanner+variance harness; DevOps cache headers+predeploy; DOC-1 docx+handoff.
+- Deploy PENDING until FaiCodex confirms. GSC 6 URLs, delete 2 Vercel clones, hand ads doc (META ONLY). CRM bridge DEFERRED.

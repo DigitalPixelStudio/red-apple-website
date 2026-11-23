@@ -37,6 +37,15 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
 const BASE_URL = (process.env.BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const OUT_PATH = process.env.HEALTH_OUT || '/tmp/opencode/health-v16.json';
+// GIFT (QA): `--repeat N` runs the full measurement N times and prints a per-metric
+// variance table — STABLE signals (CLS/DOM/will-change/app-errors) vs NOISY ones
+// (long-task count/timing) separate cleanly on this headless, shared sandbox.
+const repeatArg = process.argv.indexOf('--repeat');
+const REPEAT = repeatArg >= 0 && Number(process.argv[repeatArg + 1]) > 0
+  ? Math.min(5, Number(process.argv[repeatArg + 1])) : 1;
+// Read-only source paths for the 120fps culprit scanner (never edits these files).
+const CSS_SOURCE_PATH = path.join(REPO_ROOT, 'src', 'app', 'final-site.css');
+const JS_SOURCE_PATH = path.join(REPO_ROOT, 'public', 'final-site.js');
 
 const THRESHOLDS = { longTaskCount: 2, longTaskMaxMs: 80, cls: 0.05, consoleErrors: 0 };
 const VIEWPORTS = [
@@ -135,7 +144,82 @@ function evaluate(thresholds, metrics) {
   };
 }
 
-async function main() {
+/* ------------------------------------------------------------------ *
+ * GIFT (QA): read-only 120fps culprit scanner.
+ * Emits EXACT file:line evidence for every source construct that can affect
+ * smooth scrolling — active/infinite animations, scroll/view timelines, blur
+ * filters, JS scroll listeners, continuous rAF drivers. Structural evidence,
+ * never a string-only "looks fine" claim. This function NEVER writes to src.
+ * ------------------------------------------------------------------ */
+function culpritScan() {
+  const culprits = [];
+  const css = fs.existsSync(CSS_SOURCE_PATH) ? fs.readFileSync(CSS_SOURCE_PATH, 'utf8') : '';
+  const js = fs.existsSync(JS_SOURCE_PATH) ? fs.readFileSync(JS_SOURCE_PATH, 'utf8') : '';
+  const lineAt = (src, idx) => src.slice(0, idx).split('\n').length;
+  let m;
+
+  // 1. Infinite animations — classify compositor-only (opacity/transform) as LOW.
+  const infRe = /animation\s*:\s*([^;]*\binfinite\b[^;]*)/g;
+  while ((m = infRe.exec(css)) !== null) {
+    const decl = m[1].trim();
+    const compositor = !/\b(?:filter|backdrop-filter|box-shadow|width|height|margin|padding|top|left|right|bottom)\b/.test(decl);
+    culprits.push({
+      severity: compositor ? 'LOW' : 'REVIEW', kind: 'infinite-animation',
+      file: 'src/app/final-site.css', line: lineAt(css, m.index), evidence: decl,
+      note: compositor
+        ? 'opacity/transform only — GPU-compositor friendly; still runs continuously, incl. during scroll'
+        : 'animates a non-compositor property in an infinite loop — inspect on real GPU hardware',
+    });
+  }
+  // 2. Scroll-/view-timeline effects — declarative, but update on every scroll frame.
+  const tlRe = /animation-timeline\s*:\s*(?:scroll|view)\s*\([^)]*\)/g;
+  while ((m = tlRe.exec(css)) !== null) {
+    culprits.push({
+      severity: 'LOW', kind: 'scroll-timeline', file: 'src/app/final-site.css',
+      line: lineAt(css, m.index), evidence: m[0],
+      note: 'declarative scroll-linked compositor effect; no JS listener but active on every scroll frame',
+    });
+  }
+  // 3. Real blur filters — a blur on a scrolling/animated layer is the classic jank source.
+  const blurRe = /(?:backdrop-filter|filter)\s*:\s*blur\s*\([^)]*\)/g;
+  while ((m = blurRe.exec(css)) !== null) {
+    culprits.push({
+      severity: 'REVIEW', kind: 'active-blur', file: 'src/app/final-site.css',
+      line: lineAt(css, m.index), evidence: m[0],
+      note: 'blur is a costly paint — confirm it is not on a scrolled/animated layer',
+    });
+  }
+  // 4. JS scroll listeners — the direct "animation stopping smooth scroll" suspect.
+  const scrollRe = /addEventListener\(\s*['"]scroll['"]/g;
+  while ((m = scrollRe.exec(js)) !== null) {
+    culprits.push({
+      severity: 'REVIEW', kind: 'js-scroll-listener', file: 'public/final-site.js',
+      line: lineAt(js, m.index), evidence: m[0],
+      note: 'JS scroll listener — verify {passive:true} + rAF throttling',
+    });
+  }
+  // 5. Continuous rAF drivers — one entry per driver function (deduped).
+  const rafRe = /requestAnimationFrame\(\s*(\w+)\s*\)/g;
+  const rafFns = new Set();
+  while ((m = rafRe.exec(js)) !== null) {
+    if (rafFns.has(m[1])) continue;
+    rafFns.add(m[1]);
+    culprits.push({
+      severity: 'INFO', kind: 'raf-driver', file: 'public/final-site.js',
+      line: lineAt(js, m.index), evidence: `requestAnimationFrame(${m[1]})`,
+      note: 'continuous rAF loop — low risk if work is throttled; 3D driver is the primary GPU consumer on real hardware',
+    });
+  }
+  return {
+    count: culprits.length,
+    jsScrollListeners: culprits.filter((c) => c.kind === 'js-scroll-listener').length,
+    activeBlurs: culprits.filter((c) => c.kind === 'active-blur').length,
+    infiniteAnimations: culprits.filter((c) => c.kind === 'infinite-animation').length,
+    items: culprits,
+  };
+}
+
+async function main(outPath = OUT_PATH, label = '') {
   const report = {
     kind: 'health-report', version: 'v16', generatedAt: new Date().toISOString(),
     baseUrl: BASE_URL, gitHead: gitHead(), thresholds: THRESHOLDS,
@@ -147,6 +231,7 @@ async function main() {
       caveat: 'Long-task counts/timings are noisy and inflated here: headless Chromium has no WebGL, so 11 three.js canvases repeatedly fail context creation, and this sandbox runs other agents\' build/next-server processes concurrently. Load-phase tasks (300-700ms) are dominated by that init, not by the ZLE-V16 effects. STABLE signals: CLS, DOM node count, will-change count, and genuine app console errors. Re-run on a dedicated GPU-enabled runner for production-grade INP numbers.',
     },
     viewports: [], errors: [],
+    culprits: culpritScan(),
   };
 
   let browser = null;
@@ -267,17 +352,66 @@ async function main() {
   report.allThresholdsMet = report.viewports.length === VIEWPORTS.length &&
     report.viewports.every((x) => Object.values(x.thresholds).every((t) => t.pass));
 
-  try { fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true }); } catch { /* ignore */ }
-  fs.writeFileSync(OUT_PATH, JSON.stringify(report, null, 2));
-  console.log(`\n[health] report written -> ${OUT_PATH}`);
-  console.log(`[health] aggregate: longTasks=${agg.longTaskCount} max=${agg.longTaskMaxMs}ms ` +
+  try { fs.mkdirSync(path.dirname(outPath), { recursive: true }); } catch { /* ignore */ }
+  fs.writeFileSync(outPath, JSON.stringify(report, null, 2));
+  console.log(`\n[health ${label}] report written -> ${outPath}`);
+  console.log(`[health ${label}] aggregate: longTasks=${agg.longTaskCount} max=${agg.longTaskMaxMs}ms ` +
     `CLS=${agg.cls} domNodes=${agg.domNodes} willChange=${agg.willChange} consoleErrors=${agg.consoleErrors}`);
-  console.log(`[health] allThresholdsMet=${report.allThresholdsMet} (REPORT ONLY — exit 0)`);
+  console.log(`[health ${label}] allThresholdsMet=${report.allThresholdsMet} (REPORT ONLY — exit 0)`);
+  if (label === '') {
+    const c = report.culprits;
+    console.log(`[health] culprit scan: ${c.count} construct(s) — jsScrollListeners=${c.jsScrollListeners} ` +
+      `activeBlurs=${c.activeBlurs} infiniteAnimations=${c.infiniteAnimations}`);
+    for (const item of c.items) {
+      console.log(`   [${item.severity}] ${item.kind} ${item.file}:${item.line} — ${item.evidence}`);
+    }
+  }
   // REPORT, not a gate: never fail the caller.
   process.exitCode = 0;
+  return report;
 }
 
-main().catch((e) => {
+/* GIFT (QA): repeatability harness. Runs the full measurement REPEAT times and
+ * reports per-metric variance so noisy headless signals are never mistaken for
+ * real regressions (or vice versa). Writes a combined variance JSON. */
+async function runAll() {
+  if (REPEAT === 1) { await main(); return; }
+  const runs = [];
+  for (let i = 1; i <= REPEAT; i++) {
+    const p = OUT_PATH.replace(/\.json$/, '') + `-run${i}.json`;
+    const r = await main(p, `run${i}/${REPEAT} `);
+    if (r) runs.push(r);
+  }
+  const metrics = ['longTaskCount', 'longTaskMaxMs', 'cls', 'domNodes', 'willChange', 'consoleErrors'];
+  const viewports = ['tablet', 'mobile', 'desktop'];
+  const variance = { kind: 'health-variance', generatedAt: new Date().toISOString(), runs: runs.length, byViewport: {} };
+  console.log('\n===== health repeatability / variance =====');
+  for (const vp of viewports) {
+    variance.byViewport[vp] = {};
+    for (const k of metrics) {
+      const vals = runs.map((r) => {
+        const v = r.viewports.find((x) => x.name === vp);
+        return v ? v.metrics[k] : null;
+      }).filter((v) => v !== null);
+      const min = Math.min(...vals), max = Math.max(...vals);
+      const spread = Number((max - min).toFixed(4));
+      // A metric is STABLE if it does not vary across runs on this headless sandbox.
+      const stable = spread === 0;
+      variance.byViewport[vp][k] = { values: vals, min, max, spread, stable };
+      console.log(`  ${vp.padEnd(7)} ${k.padEnd(15)} values=${JSON.stringify(vals)} spread=${spread} ${stable ? 'STABLE' : 'NOISY'}`);
+    }
+  }
+  const stableCount = Object.values(variance.byViewport).reduce(
+    (s, m) => s + Object.values(m).filter((x) => x.stable).length, 0);
+  variance.summary = `${stableCount}/${viewports.length * metrics.length} per-viewport metrics STABLE across ${runs.length} runs`;
+  console.log(`  SUMMARY: ${variance.summary}`);
+  const vPath = OUT_PATH.replace(/\.json$/, '') + '-variance.json';
+  try { fs.mkdirSync(path.dirname(vPath), { recursive: true }); } catch { /* ignore */ }
+  fs.writeFileSync(vPath, JSON.stringify(variance, null, 2));
+  console.log(`  variance report written -> ${vPath}`);
+}
+
+runAll().catch((e) => {
   console.error('[health-report FATAL]', e && e.stack ? e.stack : e);
   process.exitCode = 0; // report-only
 });

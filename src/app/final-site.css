@@ -991,3 +991,108 @@
       .top-nav-item.is-active::after { animation: none !important; transform: scaleX(1) translateZ(0) !important; }
       .footer-light-modern .footer-light-link::after { transition: none !important; }
     }
+
+    /* ============================================================
+       FE-1 FOOTER-FLUSH — remove the ~96px trailing gap left by the homepage
+       wrapper in src/app/page.tsx (utility `pb-24` = 6rem = 96px). That file is
+       NOT FE-1-owned, so the fix is scoped here with :has() and touches no other
+       page. The footer's own !important padding (62px mobile / 12px desktop) is
+       deliberately UNCHANGED so visual-audit S5 / V17-B / R2 gates stay green.
+       Result: total clearance under the 3 credit lines = 62px at 390/768/1440 —
+       above the fixed dock's top edge, so no overlap; mb-0 kept; all icons intact.
+       ============================================================ */
+    div.pb-24:has(> footer#footer-contact) { padding-bottom: 0 !important; }
+    @media (min-width: 768px) {
+      div.pb-24:has(> footer#footer-contact) { padding-bottom: 50px !important; }
+    }
+
+    /* ============================================================
+       PLATINUM-FX — 10 tasteful, zero-load refinements (FE-1 request)
+       Law: transform / opacity / static paint ONLY. No blur, no box-shadow
+       animation, no width/height animation, no JS listeners, no continuous
+       keyframes on ticker / capability / glass-band / large text.
+       ============================================================ */
+    /* PLATINUM-FX 1/10 — footer credit one-shot reveal (view-timeline, opacity + translateY, one-shot) */
+    @keyframes platinumCreditReveal {
+      from { opacity: 0; transform: translate3d(0, 10px, 0); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    @supports (animation-timeline: view()) {
+      .footer-light-modern .footer-bottom-edge-bar {
+        animation: platinumCreditReveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 22%;
+      }
+    }
+    @supports not (animation-timeline: view()) {
+      .footer-light-modern .footer-bottom-edge-bar { opacity: 1 !important; }
+    }
+
+    /* PLATINUM-FX 2/10 — social pill hover micro-lift (transform-only, no layout) */
+    @media (hover: hover) {
+      .footer-light-modern div.flex.flex-nowrap.flex-wrap > a { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
+      .footer-light-modern div.flex.flex-nowrap.flex-wrap > a:hover { transform: translate3d(0,-2px,0); }
+    }
+
+    /* PLATINUM-FX 3/10 — floating dock icon hover nudge (transform-only, compositor) */
+    @media (hover: hover) {
+      .floating-dock a svg { transition: transform 200ms cubic-bezier(.22,1,.36,1); }
+      .floating-dock a:hover svg { transform: scale(1.1) translateZ(0); }
+    }
+
+    /* PLATINUM-FX 4/10 — static gradient hairline on credit box (paint-once, no animation) */
+    .footer-light-modern .footer-bottom-edge-bar > div { position: relative; }
+    .footer-light-modern .footer-bottom-edge-bar > div::before {
+      content: ""; position: absolute; left: 14px; right: 14px; top: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #dc2626 50%, transparent 100%);
+      opacity: .55; pointer-events: none;
+    }
+
+    /* PLATINUM-FX 5/10 — static micro-grid texture on credit box (paint-once, zero animation) */
+    .footer-light-modern .footer-bottom-edge-bar > div::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      background-image: radial-gradient(rgba(120,72,48,.10) .6px, transparent .6px);
+      background-size: 12px 12px; opacity: .5; pointer-events: none;
+    }
+
+    /* PLATINUM-FX 6/10 — store photo hover zoom (transform-only, clipped by overflow-hidden frame) */
+    @media (hover: hover) {
+      .studio-photo-frame img { transition: transform 560ms cubic-bezier(.22,1,.36,1); }
+      .studio-photo-frame:hover img { transform: scale(1.035) translateZ(0); }
+    }
+
+    /* PLATINUM-FX 7/10 — dock / rail / FAB focus-visible rings (paint-only, WCAG 2.4.7) */
+    .floating-dock a:focus-visible, .page-rail-dot:focus-visible,
+    #btn-open-ai:focus-visible, #back-to-top:focus-visible {
+      outline: 2px solid #ea580c; outline-offset: 3px;
+    }
+
+    /* PLATINUM-FX 8/10 — back-to-top hover icon fade (opacity-only) */
+    #back-to-top svg { transition: opacity 200ms ease; }
+    @media (hover: hover) {
+      #back-to-top:hover svg { opacity: .72; }
+    }
+
+    /* PLATINUM-FX 9/10 — footer link active press (transform-only) */
+    .footer-light-modern a.footer-light-link:active,
+    .footer-light-modern button.footer-light-link:active {
+      transform: scale(.98) translateZ(0) !important;
+    }
+
+    /* PLATINUM-FX 10/10 — social pill active press (transform-only) */
+    .footer-light-modern div.flex.flex-nowrap.flex-wrap > a:active {
+      transform: scale(.96) translateZ(0) !important;
+    }
+
+    /* PLATINUM-FX — reduced-motion guardian: all 10 collapse to static, credits fully visible */
+    @media (prefers-reduced-motion: reduce) {
+      .footer-light-modern .footer-bottom-edge-bar { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .footer-light-modern div.flex.flex-nowrap.flex-wrap > a,
+      .footer-light-modern div.flex.flex-nowrap.flex-wrap > a:hover,
+      .floating-dock a svg, .floating-dock a:hover svg,
+      .studio-photo-frame img, .studio-photo-frame:hover img,
+      #back-to-top svg, #back-to-top:hover svg { transition: none !important; transform: none !important; }
+      .footer-light-modern a.footer-light-link:active,
+      .footer-light-modern button.footer-light-link:active,
+      .footer-light-modern div.flex.flex-nowrap.flex-wrap > a:active { transform: none !important; }
+    }

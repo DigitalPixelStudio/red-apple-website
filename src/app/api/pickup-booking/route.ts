@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
+import { apiMeta } from "@/config/apiMeta";
 import { SITE, wa } from "@/lib/site";
 
 export const runtime = "nodejs";
@@ -18,9 +19,10 @@ const mask = (v: string) => v.replace(/\d(?=\d{4})/g, "X");
 
 /** POST /api/pickup-booking — validated 24/7 pickup request, desk webhook + WhatsApp. */
 export async function POST(req: Request) {
+  const meta = apiMeta(); // one correlation id for this whole response
   const parsed = Schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400, headers: meta.headers });
   }
   const b = parsed.data;
   const reference = `PU-${randomUUID().slice(0, 8).toUpperCase()}`;
@@ -54,10 +56,10 @@ export async function POST(req: Request) {
       note: "Team confirms your slot on WhatsApp — no slot is auto-booked.",
       webhookConfigured: Boolean(endpoint),
     },
-    { headers: { "Cache-Control": "no-store" } }
+    { headers: meta.headers }
   );
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: false, error: "method_not_allowed" }, { status: 405 });
+  return NextResponse.json({ ok: false, error: "method_not_allowed" }, { status: 405, headers: apiMeta().headers });
 }

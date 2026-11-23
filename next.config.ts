@@ -6,6 +6,24 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  // Let the browser warm DNS for outbound links early — a zero-risk latency win
+  // for WhatsApp / Maps / review links, with no rendering or crawl impact.
+  { key: "X-DNS-Prefetch-Control", value: "on" },
+];
+
+// Content-hashed build assets can be cached permanently and immutably. Next already
+// emits an equivalent header for /_next/static; restating it makes the load policy
+// explicit and guarantees it survives config changes. Scoped to static paths ONLY —
+// never to HTML/API routes — so dynamic/noindex behaviour is untouched.
+const immutableAssetCacheHeaders = [
+  { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+];
+
+// Long-lived brand/media files under /public/images. A conservative 1-day freshness
+// plus a 7-day stale-while-revalidate window cuts repeat-origin load without ever
+// serving stale HTML or crawler metadata.
+const mediaCacheHeaders = [
+  { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
 ];
 
 // Crawler metadata is stable (single-source from src/lib/site.ts) and carries no
@@ -37,6 +55,9 @@ const nextConfig: NextConfig = {
       // while production robots/sitemap become edge-cache friendly.
       { source: "/robots.txt", headers: crawlerCacheHeaders },
       { source: "/sitemap.xml", headers: crawlerCacheHeaders },
+      // Static-only cache rules. These match assets, never documents or APIs.
+      { source: "/_next/static/:path*", headers: immutableAssetCacheHeaders },
+      { source: "/images/:path*", headers: mediaCacheHeaders },
       // CRITICAL: do NOT add an x-vercel-deployment-url rule here. Vercel injects a
       // *.vercel.app value into that header even on the production domain, which made
       // www.redmobilerepair.in serve `noindex, nofollow` and deindex itself (v8 regression).
