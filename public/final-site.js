@@ -1023,7 +1023,6 @@
       // ============================================================
       if (typeof THREE === 'undefined') return;
       try {
-        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
         // Six explicit device/orientation profiles. UA + touch capability prevents
         // Chrome Desktop Site on Android tablets from being mistaken for a PC.
         function getDeviceProfile() {
