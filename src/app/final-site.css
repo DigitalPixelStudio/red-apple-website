@@ -1103,3 +1103,12 @@
 /* Permanent OLED-vivid contrast polish; original orange theme/backgrounds remain untouched. */
 body :is(h1,h2,h3,h4,h5,h6,p,a,button,label,small,strong,em,li,summary,svg) { filter: saturate(1.14) contrast(1.06); }
 body canvas, body img, body video, body picture { filter: none !important; }
+
+
+/* Floating dock neutral button treatment: grey surfaces, black icons and labels. */
+.floating-dock .dock-estimate-action,
+.floating-dock .dock-whatsapp-action,
+.floating-dock .dock-call-action { background:#e5e7eb !important; color:#111827 !important; box-shadow:0 4px 14px rgba(17,24,39,.10) !important; }
+.floating-dock .dock-estimate-action:hover,
+.floating-dock .dock-whatsapp-action:hover,
+.floating-dock .dock-call-action:hover { background:#d1d5db !important; }
