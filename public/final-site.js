@@ -16,7 +16,7 @@
       const titleCaseTextNode = (node) => {
         if (!node || node.nodeType !== Node.TEXT_NODE || !node.nodeValue || !node.nodeValue.trim()) return;
         const raw = node.nodeValue;
-        if (/@|https?:\/\/|\b(?:tel:|mailto:)\b/i.test(raw)) return;
+        if (/^\s*#/.test(raw) || /@|https?:\/\/|\b(?:tel:|mailto:)\b/i.test(raw)) return;
         node.nodeValue = raw.replace(/\b[\p{L}][\p{L}’'’-]*\b/gu, (word) => {
           const known = titleCaseExceptions.get(word.toLowerCase());
           return known || (word.charAt(0).toLocaleUpperCase('en') + word.slice(1).toLocaleLowerCase('en'));
