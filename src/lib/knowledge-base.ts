@@ -120,6 +120,12 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     content: "Enquiries for five or more devices should be handed to the owner or a technician for a written custom quote. The workshop can provide an itemised CRM tracked invoice and a written damage report for an insurance claim, but it does not file the claim on the customer's behalf."
   },
   {
+    id: "photo-based-repair-assessment",
+    title: "Customer photo assessment, visible damage and quote limits",
+    tags: ["photo", "photos", "image", "images", "picture", "pictures", "visual inspection", "damage", "cracked", "screen", "repair estimate", "quote"],
+    content: "Customers may share up to three photos for an initial visual assessment. The assistant may describe visible cracks, broken glass, display lines, dents, liquid indicators visible externally, missing parts or other observable symptoms. Photos cannot confirm hidden motherboard faults, internal liquid damage, Face ID component failure, OLED health beneath glass or repairability. Ask for the exact device model and a short description of the symptoms. Quote only an exact matching entry from the approved price matrix; otherwise say a free technician diagnosis is required. Never promise a repair outcome, invent a price, or request passcodes, Apple ID credentials or OTPs. Escalate unclear, safety-sensitive or severe damage to a technician. For swollen batteries, advise the customer to stop using or charging the device and arrange safe assessment. For liquid exposure, advise not to charge or apply heat.",
+  },
+  {
     id: "human-escalation",
     title: "Human technician escalation and complaints",
     tags: ["human", "technician", "agent", "complaint", "refund", "damage", "repeat repair", "legal", "staff"],
