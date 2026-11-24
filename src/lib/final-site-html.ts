@@ -79,7 +79,7 @@ export const finalSiteHtml = `
             </h1>
 
             <p class="text-sm leading-relaxed text-zinc-600 sm:text-base">
-              Independent Apple Repair Studio on MG Road, Halasuru - Component-Level Micro-Soldering, OEM-Grade Displays &amp; Front-Glass Restoration on Specialised TBK Machinery. 30-Minute Turnarounds, Backed by Our Written 6 Months Repair Warranty
+              Independent Apple Repair Studio On MG Road, Halasuru - Component-level Micro-soldering, Oem-grade Displays &amp; Front-glass Restoration On Specialised TBK Machinery. 30-Minute Turnarounds, Backed By 6 Months Repair Warranty.
             </p>
 
             <!-- 4 Trust Pills -->
@@ -928,7 +928,7 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 13. EVERY REPAIR. ONE EXPERT TEAM (ALL 11 SERVICES) + ONLY THE BEST PARTS -->
+    <!-- 13. EVERY REPAIR. ONE EXPERT TEAM (ALL 12 SERVICES) + ONLY THE BEST PARTS -->
     <section class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
