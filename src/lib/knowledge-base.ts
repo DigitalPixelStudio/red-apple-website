@@ -21,7 +21,7 @@ export const KNOWLEDGE_BASE: KnowledgeDocument[] = [
     id: "shop-profile",
     title: "Shop profile, location and opening hours",
     tags: ["shop", "address", "location", "hours", "timing", "Halasuru", "MG Road", "metro", "Bengaluru", "Bangalore", "verified address", "Google My Business", "GMB", "Google reviews", "rating"],
-    content: "Red Apple Mobile Repair Store is an independent Apple-device repair workshop at Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008. This is the Google My Business & Maps Verified Address (https://share.google/EinJlCF6U63xVQhgI). It is about one minute from Halasuru Metro. Rated 4.9 from 1,103 Google reviews. Opening hours are 10:00 AM to 12:00 AM, all seven days. Walk-ins are welcome. The workshop is independent and is not an Apple Authorised Service Provider."
+    content: "Red Apple Mobile Repair Store is an independent Apple-device repair workshop at Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008. This is the Google My Business & Maps Verified Address (https://share.google/EinJlCF6U63xVQhgI). It is about one minute from Halasuru Metro. Rated 4.9 from 1,103 Google reviews. Opening hours are 10:00 AM to 12:00 AM, all seven days. Walk-ins are welcome. The workshop is independent and is not an Apple Authorised Service Provider."
   },
   {
     id: "device-coverage",
