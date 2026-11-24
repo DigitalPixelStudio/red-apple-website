@@ -1289,32 +1289,32 @@
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
             'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.95,
-            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
-            'canvas-internals': 0.95, 'canvas-airpods': 0.68, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
+            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.98, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
+            'canvas-internals': 0.95, 'canvas-airpods': 0.78, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
             'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
-            'canvas-internals': 0.92, 'canvas-airpods': 0.70, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
+            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.96, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
+            'canvas-internals': 0.92, 'canvas-airpods': 0.80, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
             'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.94,
-            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.66, 'canvas-tbk-90l': 0.66, 'canvas-tbk-958': 0.66,
+            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.71, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
             'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
             'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.64, 'canvas-tbk-90l': 0.64, 'canvas-tbk-958': 0.64,
+            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.69, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
             'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
             'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.62, 'canvas-tbk-90l': 0.62, 'canvas-tbk-958': 0.62,
+            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.67, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
             'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
             'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.90,
-            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.60, 'canvas-tbk-90l': 0.60, 'canvas-tbk-958': 0.60,
+            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.65, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
             'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
         };
