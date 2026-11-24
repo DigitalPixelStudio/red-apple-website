@@ -614,8 +614,8 @@
         if (!r.width || !r.height) return;
         const px = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
         const py = Math.max(0, Math.min(100, ((e.clientY - r.top) / r.height) * 100));
-        const rx = (0.5 - py / 100) * 14;
-        const ry = (px / 100 - 0.5) * 14;
+        const rx = (0.5 - py / 100) * 18;
+        const ry = (px / 100 - 0.5) * 18;
         holo.style.setProperty('--gx', px + '%');
         holo.style.setProperty('--gy', py + '%');
         holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px) scale(1.018)`;
@@ -1851,10 +1851,18 @@
               const slot = slots.find((x) => x.canvas === target);
               if (!slot) return;
               const cs = en.contentRect;
-              const previousAspect = slot.cw && slot.ch ? slot.cw / slot.ch : 0;
+              const previousWidth = slot.cw || 0;
+              const previousHeight = slot.ch || 0;
+              const previousAspect = previousWidth && previousHeight ? previousWidth / previousHeight : 0;
               slot.cw = Math.round(cs.width); slot.ch = Math.round(cs.height);
               const nextAspect = slot.cw && slot.ch ? slot.cw / slot.ch : 0;
-              if (previousAspect && nextAspect && Math.abs(previousAspect - nextAspect) > 0.015) {
+              // Refit when the stage's real dimensions settle, not only when its
+              // aspect changes. During first paint/fonts/layout hydration, a canvas
+              // can be measured before its final CSS height is applied; keeping the
+              // first camera distance then leaves every model temporarily undersized.
+              const sizeSettled = Math.abs(slot.cw - previousWidth) > 2 || Math.abs(slot.ch - previousHeight) > 2;
+              const aspectChanged = previousAspect && nextAspect && Math.abs(previousAspect - nextAspect) > 0.015;
+              if (sizeSettled || aspectChanged) {
                 slot.autoFramed = false;
                 slot.autoWake = true;
               }
