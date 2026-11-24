@@ -69,10 +69,7 @@ export const finalSiteHtml = `
       <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
         <div class="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
           <div class="flex min-w-0 flex-col gap-3.5 lg:col-span-6">
-            <div class="fast-breathe-badge inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
-              <span class="relative flex h-2 w-2"><span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-emerald-500"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>
-              <span id="live-ist-clock">Open now · 10 AM – 12 AM · Halasuru, Bengaluru</span>
-            </div>
+
 
             <h1 class="heading-breathe font-display text-4xl font-black leading-[1.06] tracking-tight text-zinc-950 sm:text-5xl">
               Apple Device Repairs, <span class="text-brand-grad">Mastered.</span>
@@ -81,6 +78,11 @@ export const finalSiteHtml = `
             <p class="text-sm leading-relaxed text-zinc-600 sm:text-base">
               Independent Apple Repair Studio on MG Road, Halasuru - Component-Level Micro-Soldering, OEM-Grade Displays &amp; Front-Glass Restoration on Specialised TBK Machinery. 30-Minute Turnarounds, Backed by Our Written 6 Months Repair Warranty
             </p>
+
+            <div class="fast-breathe-badge inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
+              <span class="relative flex h-2 w-2"><span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-emerald-500"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>
+              <span id="live-ist-clock">Open now · 10 AM – 12 AM · Halasuru, Bengaluru</span>
+            </div>
 
             <!-- 4 Trust Pills -->
             <div class="hero-trust-row grid grid-cols-2 gap-1.5 text-[10px] font-bold sm:flex sm:flex-nowrap sm:gap-2 sm:text-[11px]">
@@ -529,15 +531,15 @@ export const finalSiteHtml = `
         </div>
 
         <!-- Wide Interactive Glass Restoration Visualiser (Honest UI Illustration) -->
-        <div class="mt-7 rounded-3xl border border-zinc-200 bg-zinc-950 p-3 sm:p-5 text-white shadow-lg">
-          <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div class="glass-visualiser-static mt-6 rounded-3xl border border-zinc-200 bg-zinc-950 p-3 sm:p-4 text-white shadow-lg">
+          <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
             <div>
               <div class="text-[11px] font-bold uppercase tracking-wider text-orange-400">Interactive Glass Restoration Visualiser</div>
-              <div class="text-xs text-zinc-400">Drag the slider sideways to compare — vertical page scrolling stays smooth on touch devices. Illustrative UI of our outer-glass OCA restoration.</div>
+              <div class="text-xs text-zinc-400">Drag to compare. Page scrolling stays smooth on touch devices. Illustrative OCA glass restoration.</div>
             </div>
             <span id="ba-pct-lbl" class="rounded-full bg-zinc-800 px-3 py-1 font-mono-num text-xs font-bold text-orange-300">50% Restored</span>
           </div>
-          <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative min-h-[290px] w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-80" style="touch-action: pan-y;">
+          <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative min-h-[250px] w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-72" style="touch-action: pan-y;">
             <!-- Restored side: label lives ONLY in the right half so it never overlaps the cracked label -->
             <div class="absolute inset-y-0 right-0 flex w-1/2 items-center justify-end px-3 text-right sm:px-8">
               <div>
@@ -1189,10 +1191,10 @@ export const finalSiteHtml = `
     <section id="reviews" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="flex flex-col items-center text-center">
-          <div class="logo-laser relative mb-6 flex h-48 w-48 items-center justify-center rounded-3xl border border-red-200 bg-white p-3 shadow-xl">
+          <div class="logo-laser relative mb-5 flex h-56 w-56 sm:h-64 sm:w-64 items-center justify-center rounded-3xl border border-red-200 bg-white p-3 shadow-xl">
             <span class="aura-ring"></span>
             <span class="aura-ring aura-ring-2"></span>
-            <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-40 w-40 object-contain" onerror="this.src='/logo.png'">
+            <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-48 w-48 sm:h-56 sm:w-56 object-contain" onerror="this.src='/logo.png'">
           </div>
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Reviews · Apple Device Repairs, Perfected.</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
@@ -1235,32 +1237,44 @@ export const finalSiteHtml = `
         <div class="mx-auto max-w-3xl text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">A Closer Look</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Inside Our <span class="text-brand-grad">Halasuru Repair Studio</span></h2>
-          <p class="mt-2 text-sm text-zinc-600">See our repair studio and the work happening inside our Halasuru centre.</p>
+          <p class="mt-2 text-sm text-zinc-600">Real studio footage, precision machinery and customer repair work from our Halasuru centre.</p>
         </div>
-        <div class="mt-8 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:gap-7">
+        <div class="mt-6 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:grid-cols-4 lg:gap-4">
           <article class="min-w-0">
-            <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
-              <div class="relative aspect-[9/16] w-full">
-                <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/Fee4eqqNhPA?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — Halasuru studio video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              </div>
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="Fee4eqqNhPA" data-video-title="Red Apple Mobile Repair — Halasuru Studio" data-thumbnail="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg" alt="Red Apple Mobile Repair Halasuru studio video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="Fee4eqqNhPA" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play Halasuru repair studio video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
             </div>
             <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">HALASURU REPAIR STUDIO</p>
           </article>
           <article class="min-w-0">
-            <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
-              <div class="relative aspect-[9/16] w-full">
-                <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/YF0oRI1yapU?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — TBK machinery laser Short" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              </div>
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="GIkJEVruhdU" data-video-title="Red Apple Mobile Repair — Studio and Machinery" data-thumbnail="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg" alt="Red Apple Mobile Repair studio and machinery video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="GIkJEVruhdU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play studio and machinery video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
             </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">REPAIR PROCESS</p>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">STUDIO &amp; MACHINERY</p>
           </article>
           <article class="min-w-0">
-            <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
-              <div class="relative aspect-[9/16] w-full">
-                <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/wGs8VbOBrfI?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — workshop Short" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              </div>
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="YF0oRI1yapU" data-video-title="Red Apple Mobile Repair — iPhone Battery Repair" data-thumbnail="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg" alt="iPhone battery repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="YF0oRI1yapU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone battery repair video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
             </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">REPAIR WORKSHOP</p>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">iPHONE REPAIR WORK</p>
+          </article>
+          <article class="min-w-0">
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="wGs8VbOBrfI" data-video-title="Red Apple Mobile Repair — iPhone 14 Pro Max Before and After" data-thumbnail="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg" alt="iPhone 14 Pro Max before and after repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="wGs8VbOBrfI" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone 14 Pro Max before and after video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">BEFORE &amp; AFTER</p>
           </article>
         </div>
       </div>
@@ -1272,7 +1286,7 @@ export const finalSiteHtml = `
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Visit Us</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Easy to Reach. <span class="text-brand-grad">Right in Halasuru.</span></h2>
-          <p class="mt-2 text-sm text-zinc-600">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008.</p>
+          <p class="mx-auto mt-2 max-w-2xl p-0 text-center text-sm text-zinc-600" style="text-indent:0;">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008.</p>
         </div>
 
         <div class="mt-8 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
@@ -1376,7 +1390,7 @@ export const finalSiteHtml = `
         <div>
           <div class="footer-light-heading font-display text-xs font-extrabold uppercase text-zinc-950">Contact</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><button id="copy-address" type="button" class="footer-light-link hover:underline hover:text-red-600">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
+            <li><button id="copy-address" type="button" class="footer-light-link m-0 p-0 text-left hover:underline hover:text-red-600" style="text-indent:0;">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
             <li class="footer-light-hours font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
             <li><a href="tel:+918660663776" class="footer-light-link font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
             <li><a href="https://youtube.com/@redmobilerepairinginstitute340" target="_blank" rel="noopener noreferrer" class="footer-light-link">YouTube Channel</a></li>
