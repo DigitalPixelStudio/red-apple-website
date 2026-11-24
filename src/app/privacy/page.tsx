@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${baseUrl}/privacy` },
 };
 
-const UPDATED = "21 November 2026";
+const UPDATED = "24 November 2026";
 
 export default function PrivacyPage() {
   return (
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
 
           <h2>Cookies</h2>
           <p>
-            This website does not currently load non-essential advertising or analytics tags by default. It uses browser session storage for the current Forge AI chat and limited local storage to remember app-install dismissal or installation state. If non-essential analytics or advertising tags are enabled in future, they should be presented with a consent choice before they run.
+            This website does not currently load non-essential advertising or analytics tags by default. It uses local storage for the limited Forge AI chat transcript and to remember app-install dismissal or installation state. Attached device photos are kept only in the active chat view and are not written into the saved transcript. If non-essential analytics or advertising tags are enabled in future, they should be presented with a consent choice before they run.
           </p>
 
           <h2>Security</h2>
