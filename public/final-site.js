@@ -472,7 +472,7 @@
         });
       });
 
-      // All 11 Repair Services Grid
+      // All 12 Repair Services Grid
       const servicesList = [
         ['Front Display Replacement', '~45 min', 'OEM-grade OLED panels with True Tone calibrated while you wait.', '6 Months Warranty'],
         ['Front Glass Restoration', 'Same day', 'Keep your original OLED panel using TBK OCA vacuum lamination.', '6 Months Warranty'],
@@ -484,7 +484,8 @@
         ['Motherboard / IC Repair', '1–2 days', 'Micro-soldering, PMIC, NAND & baseband diagnosis under microscope.', 'Excluded from standard cover'],
         ['Speaker / Mic / Haptics', '~40 min', 'Earpiece, loudspeaker, microphones, and Taptic Engine replacement.', '6 Months Warranty'],
         ['System Diagnostics & Signed Restore', '30–120 min', 'Signed iOS/iPadOS/macOS restore workflows & boot-loop diagnosis.', 'Zero-Passcode Workflow'],
-        ['Board-Level Storage IC Repair', '1–3 days', 'Confidential hardware diagnosis when photos/files are inaccessible.', 'Assessed first']
+        ['Board-Level Storage IC Repair', '1–3 days', 'Confidential hardware diagnosis when photos/files are inaccessible.', 'Assessed first'],
+        ['Face ID & Sensor Repair', 'Free diagnosis', 'Face ID, proximity, ambient-light and front-sensor fault assessment; repairability confirmed after model-specific testing.', 'Quote before repair']
       ];
       const servicesGrid = document.getElementById('services-grid');
       if (servicesGrid) {
@@ -1164,12 +1165,12 @@
           'mobile-portrait': {
             'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
-            'canvas-internals': 0.95, 'canvas-airpods': 0.60, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
+            'canvas-internals': 0.95, 'canvas-airpods': 0.68, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
             'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
-            'canvas-internals': 0.92, 'canvas-airpods': 0.62, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
+            'canvas-internals': 0.92, 'canvas-airpods': 0.70, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
             'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.94,
