@@ -20,6 +20,7 @@ export async function GET() {
     runtime: { region: process.env.VERCEL_REGION ?? null },
     services: {
       concierge: hasGemini,
+      imageUnderstanding: process.env.GEMINI_IMAGE_INPUT_ENABLED === "true",
       leadWebhook: Boolean(process.env.LEAD_WEBHOOK_URL),
       leadStorage: Boolean((process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL) && (process.env.CRM_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)),
       crm: Boolean((process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL) && (process.env.CRM_SUPABASE_READONLY_KEY || process.env.CRM_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)),
