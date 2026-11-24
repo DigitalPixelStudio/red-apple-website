@@ -46,7 +46,7 @@ export const RED_APPLE_JSON_LD = {
   address: {
     "@type": "PostalAddress",
     streetAddress:
-      "Metro Pillar No 125, No. 38, opp. Bhadra Landmark, Halasuru, MG Road",
+      "Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru",
     addressLocality: "Bengaluru",
     addressRegion: "Karnataka",
     postalCode: "560008",
