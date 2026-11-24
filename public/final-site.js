@@ -35,11 +35,6 @@
         nodes.forEach(titleCaseTextNode);
       };
       titleCaseTree(document.body);
-      const titleCaseObserver = new MutationObserver((records) => records.forEach((record) => {
-        record.addedNodes.forEach((node) => node.nodeType === Node.TEXT_NODE ? titleCaseTextNode(node) : titleCaseTree(node));
-      }));
-      titleCaseObserver.observe(document.body, { childList: true, subtree: true });
-
       // ============================================================
       // 1. LIVE BENGALURU IST BENCH CLOCK
       // ============================================================
