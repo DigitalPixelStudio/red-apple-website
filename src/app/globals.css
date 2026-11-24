@@ -5444,3 +5444,14 @@ main > section:not(#hero):not(#page-plan) .gap-5 { gap: 1rem !important; }
 /* Keep address text flush with surrounding copy and prevent browser button indentation. */
 #copy-address { margin: 0 !important; padding: 0 !important; text-indent: 0 !important; text-align: left !important; }
 #halasuru-map > div > p { padding-left: 0 !important; text-indent: 0 !important; }
+
+/* Forge AI launcher: restrained crimson halo; chat panel and AI runtime are unchanged. */
+#concierge-open { position: fixed; isolation: isolate; overflow: visible; background: linear-gradient(145deg, #7f1018, #b91c1c 58%, #450a0a) !important; box-shadow: 0 8px 24px rgba(127, 16, 24, .32) !important; }
+#concierge-open::before { content: ""; position: absolute; inset: -5px; z-index: -1; border-radius: 17px; background: radial-gradient(ellipse at center, rgba(239, 68, 68, .56), rgba(185, 28, 28, .18) 62%, transparent 76%); opacity: .58; transform: scale(.96); animation: conciergeCrimsonHalo 2.8s ease-in-out infinite; pointer-events: none; }
+#concierge-open > * { position: relative; z-index: 1; }
+@keyframes conciergeCrimsonHalo { 0%, 100% { opacity: .42; transform: scale(.96); } 50% { opacity: .9; transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { #concierge-open::before { animation: none !important; opacity: .68; } }
+
+/* Brand logo scales with the content frame without overflowing narrow phones. */
+.logo-laser { width: min(clamp(18rem, 30vw, 24rem), calc(100vw - 2rem)) !important; height: min(clamp(18rem, 30vw, 24rem), calc(100vw - 2rem)) !important; }
+.logo-laser img { width: 94% !important; height: 94% !important; object-fit: contain; }
