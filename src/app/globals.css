@@ -5427,7 +5427,7 @@ main > section:not(#hero):not(#page-plan) .gap-5 { gap: 1rem !important; }
   #holo-warranty:hover { box-shadow: 0 18px 42px rgba(24,24,27,.22); }
 }
 @media (hover: none) and (pointer: coarse) {
-  #holo-warranty:active { transform: perspective(760px) rotateX(4.5deg) rotateY(-4.5deg) translateY(-3px) scale(1.014); }
+  #holo-warranty:active { transform: perspective(760px) rotateX(6.5deg) rotateY(-6.5deg) translateY(-3px) scale(1.014); }
 }
 .logo-laser { width: clamp(14rem, 22vw, 16rem) !important; height: clamp(14rem, 22vw, 16rem) !important; transition: transform 240ms ease-out, box-shadow 240ms ease-out; }
 .logo-laser img { width: 86% !important; height: 86% !important; object-fit: contain; }
