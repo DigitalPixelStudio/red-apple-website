@@ -945,8 +945,9 @@ export default function Concierge() {
           {imageError && <p role="status" className="bg-white px-3 pt-1 text-[10px] text-red-600">{imageError}</p>}
           <form onSubmit={submit} className="flex items-center gap-2 border-t border-black/[0.07] bg-white px-3 py-2.5">
             <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleImageSelection} aria-label="Choose repair photos" />
-            <button type="button" onClick={() => fileInputRef.current?.click()} disabled={typing || streaming || imageProcessing || images.length >= 3} aria-label="Attach repair photos" title="Attach up to 3 photos" className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-black/10 bg-white text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-35">
-              <LineIcon name="paperclip" size={17} />
+            <button type="button" onClick={() => fileInputRef.current?.click()} disabled={typing || streaming || imageProcessing || images.length >= 3} aria-label="Add repair photos" title="Add up to 3 repair photos" className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 text-[12px] font-bold text-zinc-900 shadow-sm transition hover:border-red-300 hover:bg-red-100 disabled:opacity-40">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-white text-zinc-900 shadow-sm"><LineIcon name="paperclip" size={15} /></span>
+              <span>Add photo</span>
             </button>
             <input
               value={draft}
