@@ -1229,7 +1229,54 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 18. LARGE HALASURU GOOGLE MAPS EMBED (#halasuru-map) -->
+    <!-- HALASURU STUDIO VIDEO GALLERY — original YouTube aspect ratios, side-by-side -->
+    <section id="studio-video" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">A Closer Look</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Inside Our <span class="text-brand-grad">Halasuru Repair Studio</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">See our repair studio and the work happening inside our Halasuru centre.</p>
+        </div>
+
+        <div class="mt-8 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:gap-7">
+          <article class="min-w-0">
+            <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-lg sm:rounded-3xl">
+              <div class="relative aspect-video w-full">
+                <iframe
+                  class="absolute inset-0 h-full w-full"
+                  src="https://www.youtube-nocookie.com/embed/Fee4eqqNhPA?rel=0&modestbranding=1&playsinline=1"
+                  title="Red Apple Mobile Repair — Halasuru studio video"
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">HALASURU REPAIR STUDIO</p>
+          </article>
+
+          <article class="min-w-0">
+            <div class="mx-auto w-full max-w-[420px] overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-lg sm:rounded-3xl">
+              <div class="relative aspect-[9/16] w-full">
+                <iframe
+                  class="absolute inset-0 h-full w-full"
+                  src="https://www.youtube-nocookie.com/embed/YF0oRI1yapU?rel=0&modestbranding=1&playsinline=1"
+                  title="Red Apple Mobile Repair — Halasuru studio Short"
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">INSIDE THE REPAIR STUDIO</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 19. LARGE HALASURU GOOGLE MAPS EMBED (#halasuru-map) -->
     <section id="halasuru-map" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
