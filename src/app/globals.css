@@ -5462,3 +5462,25 @@ main > section:not(#hero):not(#page-plan) .gap-5 { gap: 1rem !important; }
 /* Matte neutral action backgrounds; preserve black icon and text colour. */
 .floating-dock .dock-estimate-action,.floating-dock .dock-whatsapp-action,.floating-dock .dock-call-action { background:#e5e7eb !important; color:#111827 !important; box-shadow:0 4px 14px rgba(17,24,39,.10); }
 .floating-dock .dock-estimate-action:hover,.floating-dock .dock-whatsapp-action:hover,.floating-dock .dock-call-action:hover { background:#d1d5db !important; }
+
+
+
+/* Floating dock action icon halos: coloured light sits behind each black icon. */
+.floating-dock a.dock-estimate-action,
+.floating-dock a.dock-whatsapp-action,
+.floating-dock a.dock-call-action {
+  background: #d4d4d8 !important;
+  color: #09090b !important;
+  box-shadow: 0 4px 14px rgba(24,24,27,.10) !important;
+}
+.floating-dock a.dock-estimate-action svg,
+.floating-dock a.dock-whatsapp-action svg,
+.floating-dock a.dock-call-action svg { color:#09090b !important; stroke:#09090b !important; }
+.dock-icon-glow { position:relative; isolation:isolate; display:inline-grid; place-items:center; width:28px; height:28px; flex:0 0 28px; border-radius:10px; color:#09090b !important; }
+.dock-icon-glow::before { content:""; position:absolute; inset:-5px; z-index:-1; border-radius:50%; opacity:.9; pointer-events:none; }
+.dock-icon-glow svg { position:relative; z-index:1; color:#09090b !important; stroke:#09090b !important; }
+.dock-icon-glow-estimate::before { background:radial-gradient(circle,rgba(239,68,68,.48) 0%,rgba(249,115,22,.24) 44%,transparent 76%); }
+.dock-icon-glow-whatsapp::before { background:radial-gradient(circle,rgba(34,197,94,.48) 0%,rgba(16,185,129,.24) 44%,transparent 76%); }
+.dock-icon-glow-call::before { background:radial-gradient(circle,rgba(59,130,246,.46) 0%,rgba(14,165,233,.22) 44%,transparent 76%); }
+#ai-photo-button { cursor:pointer; }
+#ai-photo-button:disabled { cursor:not-allowed; opacity:.45; }
