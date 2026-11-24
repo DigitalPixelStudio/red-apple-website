@@ -1252,7 +1252,7 @@ export const finalSiteHtml = `
                 <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/YF0oRI1yapU?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — TBK machinery laser Short" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
               </div>
             </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">TBK MACHINERY LASER</p>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">REPAIR PROCESS</p>
           </article>
           <article class="min-w-0">
             <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
