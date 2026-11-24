@@ -1,4 +1,5 @@
 "use client";
+import NextImage from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { SITE, wa } from "@/lib/site";
 import { track } from "@/lib/analytics";
@@ -7,7 +8,8 @@ import { PRICES, getPrice, priceLabel } from "@/lib/pricing";
 import { GLASS_PRICE_ROWS, GLASS_PRICE_MIN, GLASS_PRICE_MAX } from "@/lib/glass-pricing";
 import { KNOWLEDGE_BASE } from "@/lib/knowledge-base";
 
-type Msg = { from: "user" | "bot"; text: string; chips?: string[] };
+type Msg = { from: "user" | "bot"; text: string; chips?: string[]; images?: string[] };
+type ChatImage = { name: string; mimeType: "image/jpeg"; data: string; preview: string };
 const CHAT_MEMORY_KEY = "redapple-forge-ai-history-v3";
 const LEARN_KEY = "redapple-forge-ai-learn-v1";
 
@@ -74,6 +76,39 @@ function writeLearn(next: Learned) {
     window.localStorage.setItem(LEARN_KEY, JSON.stringify(next));
   } catch {
     // Private browsing / quota — learning is a bonus, never a blocker.
+  }
+}
+
+/** Resize customer photos locally before upload: max 1280px and about 900 KB each. */
+async function prepareChatImage(file: File): Promise<ChatImage> {
+  if (!file.type.startsWith("image/")) throw new Error("Please choose a valid image file.");
+  if (file.size > 12 * 1024 * 1024) throw new Error("Each original photo must be under 12 MB.");
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const element = new Image();
+      element.onload = () => resolve(element);
+      element.onerror = () => reject(new Error("This photo could not be opened. Please choose another image."));
+      element.src = objectUrl;
+    });
+    let scale = Math.min(1, 1280 / Math.max(image.naturalWidth, image.naturalHeight));
+    let dataUrl = "";
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+      canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+      const context = canvas.getContext("2d", { alpha: false });
+      if (!context) throw new Error("Photo processing is unavailable on this device.");
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      dataUrl = canvas.toDataURL("image/jpeg", attempt < 2 ? 0.76 : 0.64);
+      if (dataUrl.length <= 1_250_000) break;
+      scale *= 0.78;
+    }
+    const data = dataUrl.split(",")[1] || "";
+    if (!data || data.length > 1_250_000) throw new Error("This photo is too large to send. Please choose a smaller image.");
+    return { name: file.name.slice(0, 80), mimeType: "image/jpeg", data, preview: dataUrl };
+  } finally {
+    URL.revokeObjectURL(objectUrl);
   }
 }
 
@@ -466,12 +501,16 @@ export default function Concierge() {
   const [failedTurns, setFailedTurns] = useState(0);
   const [memoryReady, setMemoryReady] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [images, setImages] = useState<ChatImage[]>([]);
+  const [imageError, setImageError] = useState("");
+  const [imageProcessing, setImageProcessing] = useState(false);
 
   useEffect(() => {
     if (!memoryReady) return;
     const timer = window.setTimeout(() => {
       try {
-        window.localStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify({ savedAt: Date.now(), messages: msgs.slice(-30) }));
+        window.localStorage.setItem(CHAT_MEMORY_KEY, JSON.stringify({ savedAt: Date.now(), messages: msgs.slice(-30).map((m) => ({ from: m.from, text: m.text, chips: m.chips })) }));
       } catch {
         // Storage quotas and private browsing are non-fatal.
       }
@@ -483,12 +522,34 @@ export default function Concierge() {
 
   const [draft, setDraft] = useState("");
 
+  const handleImageSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (!selected.length) return;
+    const remaining = Math.max(0, 3 - images.length);
+    if (!remaining) { setImageError("You can attach up to 3 photos."); return; }
+    if (selected.length > remaining) setImageError("Only the first " + remaining + " photo(s) were added; the limit is 3.");
+    else setImageError("");
+    const next: ChatImage[] = [];
+    setImageProcessing(true);
+    try {
+      for (const file of selected.slice(0, remaining)) {
+        try { next.push(await prepareChatImage(file)); }
+        catch (error) { setImageError(error instanceof Error ? error.message : "This photo could not be added."); }
+      }
+      if (next.length) setImages((current) => [...current, ...next].slice(0, 3));
+    } finally { setImageProcessing(false); }
+  };
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const t = draft.trim();
-    if (!t || typing || streaming) return;
+    if ((!t && !images.length) || typing || streaming || imageProcessing) return;
+    const attached = images;
     setDraft("");
-    send(t);
+    setImages([]);
+    setImageError("");
+    send(t || "Please inspect the attached photos. Describe the visible damage, likely repair options and what details are needed for an accurate quote.", attached);
   };
 
   /**
@@ -504,9 +565,9 @@ export default function Concierge() {
    * call because they are instant and 100% accurate — no point spending a
    * round trip on a fact we already know.
    */
-  const send = async (text: string) => {
+  const send = async (text: string, attachments: ChatImage[] = []) => {
     if (stopped || typing || streaming) return;
-    setMsgs((m) => [...m, { from: "user", text }]);
+    setMsgs((m) => [...m, { from: "user", text, images: attachments.map((image) => image.preview) }]);
     setTyping(true);
 
     const push = (reply: string, chips: string[] = []) => {
@@ -557,16 +618,16 @@ export default function Concierge() {
       handoffNow("Customer requested a human technician");
       return;
     }
-    if (/(water|liquid|paani|geela)/i.test(text)) {
+    if (!attachments.length && /(water|liquid|paani|geela)/i.test(text)) {
       push("Please do not charge the device or use heat to dry it. Water damage needs a free assessment first; recovery cannot be promised. Would you prefer a walk-in assessment or doorstep pickup?", ["Book doorstep pickup", "Talk to a technician"]);
       return;
     }
 
     // instant, deterministic answers first
-    const built = builderAnswer(text);
+    const built = attachments.length ? null : builderAnswer(text);
     if (built) { setTimeout(() => push(built), 160); return; }
 
-    const priced = priceAnswer(text);
+    const priced = attachments.length ? null : priceAnswer(text);
     if (priced) {
       setTimeout(() => push(priced, ["Book doorstep pickup", "Talk to a technician"]), 160);
       return;
@@ -578,13 +639,13 @@ export default function Concierge() {
     try {
       const history = msgs
         .filter((m) => m.text)
-        .slice(-8)
+        .slice(-6)
         .map((m) => ({ role: m.from === "user" ? ("user" as const) : ("model" as const), text: m.text }));
 
       const res = await fetch("/api/concierge", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history }),
+        body: JSON.stringify({ message: text, history, images: attachments.map(({ mimeType, data }) => ({ mimeType, data })) }),
         signal: AbortSignal.timeout(42000),
         cache: "no-store",
       });
@@ -657,6 +718,11 @@ export default function Concierge() {
         return;
       }
       providerUnavailable = true;
+    }
+
+    if (attachments.length) {
+      push("I couldn't complete the photo assessment just now. Please try again shortly, or send the photos to our technician on WhatsApp for a manual check. I won't guess at a diagnosis or price from an image I couldn't inspect.", ["Talk to a technician"]);
+      return;
     }
 
     // ---- fallback: curated topic, then local knowledge, then the menu ----
@@ -848,6 +914,11 @@ export default function Concierge() {
                   m.from === "user" ? "bg-[var(--cta-dark)] text-white" : "bg-white text-[var(--text)] shadow-sm"
                 }`}>
                   {m.text}
+                  {m.images && m.images.length > 0 && (
+                    <div className="mt-2 grid grid-cols-3 gap-1.5">
+                      {m.images.map((src, imageIndex) => <NextImage key={imageIndex} src={src} alt="Customer repair photo" width={64} height={64} unoptimized className="h-16 w-16 rounded-lg border border-white/30 object-cover" />)}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -859,8 +930,24 @@ export default function Concierge() {
             <div ref={endRef} />
           </div>
 
-          {/* Typed input — the visitor can ask anything, not just tap chips */}
+          {/* Optional photo attachments — processed locally and never stored in chat history. */}
+          {images.length > 0 && (
+            <div className="flex items-center gap-2 border-t border-black/[0.05] bg-white px-3 pt-2">
+              {images.map((image, index) => (
+                <div key={image.name + index} className="relative">
+                  <NextImage src={image.preview} alt="Selected repair photo" width={48} height={48} unoptimized className="h-12 w-12 rounded-lg border border-black/10 object-cover" />
+                  <button type="button" onClick={() => setImages((current) => current.filter((_, i) => i !== index))} aria-label="Remove photo" className="absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-zinc-900 text-xs text-white">×</button>
+                </div>
+              ))}
+              <span className="text-[10px] text-zinc-500">{images.length}/3</span>
+            </div>
+          )}
+          {imageError && <p role="status" className="bg-white px-3 pt-1 text-[10px] text-red-600">{imageError}</p>}
           <form onSubmit={submit} className="flex items-center gap-2 border-t border-black/[0.07] bg-white px-3 py-2.5">
+            <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleImageSelection} aria-label="Choose repair photos" />
+            <button type="button" onClick={() => fileInputRef.current?.click()} disabled={typing || streaming || imageProcessing || images.length >= 3} aria-label="Attach repair photos" title="Attach up to 3 photos" className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-black/10 bg-white text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-35">
+              <LineIcon name="paperclip" size={17} />
+            </button>
             <input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
@@ -871,7 +958,7 @@ export default function Concierge() {
             <button
               type="submit"
               aria-label="Send message"
-              disabled={!draft.trim() || typing || streaming}
+              disabled={(!draft.trim() && !images.length) || typing || streaming || imageProcessing}
               className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--orange)] text-white transition-transform hover:scale-105 disabled:opacity-35"
             >
               <LineIcon name="arrow-right" size={16} color="#fff" />
