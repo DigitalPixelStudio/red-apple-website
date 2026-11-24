@@ -1244,7 +1244,7 @@ export const finalSiteHtml = `
             <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="Fee4eqqNhPA" data-video-title="Red Apple Mobile Repair — Halasuru Studio" data-thumbnail="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg">
               <img src="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg" alt="Red Apple Mobile Repair Halasuru studio video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
               <button type="button" data-video-play="Fee4eqqNhPA" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play Halasuru repair studio video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
               </button>
             </div>
             <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">HALASURU REPAIR STUDIO</p>
@@ -1253,7 +1253,7 @@ export const finalSiteHtml = `
             <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="GIkJEVruhdU" data-video-title="Red Apple Mobile Repair — Studio and Machinery" data-thumbnail="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg">
               <img src="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg" alt="Red Apple Mobile Repair studio and machinery video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
               <button type="button" data-video-play="GIkJEVruhdU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play studio and machinery video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
               </button>
             </div>
             <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">STUDIO &amp; MACHINERY</p>
@@ -1262,7 +1262,7 @@ export const finalSiteHtml = `
             <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="YF0oRI1yapU" data-video-title="Red Apple Mobile Repair — iPhone Battery Repair" data-thumbnail="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg">
               <img src="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg" alt="iPhone battery repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
               <button type="button" data-video-play="YF0oRI1yapU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone battery repair video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
               </button>
             </div>
             <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">iPHONE REPAIR WORK</p>
@@ -1271,7 +1271,7 @@ export const finalSiteHtml = `
             <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="wGs8VbOBrfI" data-video-title="Red Apple Mobile Repair — iPhone 14 Pro Max Before and After" data-thumbnail="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg">
               <img src="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg" alt="iPhone 14 Pro Max before and after repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
               <button type="button" data-video-play="wGs8VbOBrfI" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone 14 Pro Max before and after video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
               </button>
             </div>
             <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">BEFORE &amp; AFTER</p>
@@ -1414,15 +1414,15 @@ export const finalSiteHtml = `
 
   <!-- SLEEK MATTE CHARCOAL FLOATING ACTION DOCK (Get Estimate · WhatsApp · Call) + RIGHT AI BENCH BUTTON -->
   <div class="floating-dock fixed bottom-4 left-1/2 z-40 flex items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white p-1.5 shadow-2xl">
-    <a href="#estimate" class="dock-dark-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
+    <a href="#estimate" class="dock-dark-btn dock-estimate-action inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
       <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
       <span>Get Estimate</span>
     </a>
-    <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-dark-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
+    <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-dark-btn dock-whatsapp-action inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
       <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <span>WhatsApp</span>
     </a>
-    <a href="tel:+918660663776" aria-label="Call Red Apple Lab" class="dock-dark-btn inline-flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-extrabold active:scale-95">
+    <a href="tel:+918660663776" aria-label="Call Red Apple Lab" class="dock-dark-btn dock-call-action inline-flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-extrabold active:scale-95">
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <span>Call Now</span>
     </a>
