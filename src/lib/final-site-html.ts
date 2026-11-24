@@ -75,8 +75,8 @@ export const finalSiteHtml = `
               Apple Device Repairs, <span class="text-brand-grad">Mastered.</span>
             </h1>
 
-            <p class="text-sm leading-relaxed text-zinc-600 sm:text-base">
-              Independent Apple Repair Studio on MG Road, Halasuru - Component-Level Micro-Soldering, OEM-Grade Displays &amp; Front-Glass Restoration on Specialised TBK Machinery. 30-Minute Turnarounds, Backed by Our Written 6 Months Repair Warranty
+            <p data-preserve-case class="text-sm leading-relaxed text-zinc-600 sm:text-base">
+              Independent Apple Repair Studio On MG Road, Halasuru - Component-level Micro-soldering, Oem-grade Displays &amp; Front-glass Restoration On Specialised TBK Machinery. 30-Minute Turnarounds, Backed By 6 Months Repair Warranty.
             </p>
 
             <div class="fast-breathe-badge inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono-num text-[11px] font-bold text-emerald-800">
@@ -539,7 +539,7 @@ export const finalSiteHtml = `
             </div>
             <span id="ba-pct-lbl" class="rounded-full bg-zinc-800 px-3 py-1 font-mono-num text-xs font-bold text-orange-300">50% Restored</span>
           </div>
-          <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative min-h-[250px] w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-72" style="touch-action: pan-y;">
+          <div id="ba-slider-box" role="slider" tabindex="0" aria-label="Before and after glass restoration comparison" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" class="relative min-h-[190px] w-full cursor-ew-resize select-none overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-r from-indigo-950 via-blue-900 to-zinc-900 sm:h-56" style="touch-action: pan-y;">
             <!-- Restored side: label lives ONLY in the right half so it never overlaps the cracked label -->
             <div class="absolute inset-y-0 right-0 flex w-1/2 items-center justify-end px-3 text-right sm:px-8">
               <div>
@@ -930,7 +930,7 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 13. EVERY REPAIR. ONE EXPERT TEAM (ALL 11 SERVICES) + ONLY THE BEST PARTS -->
+    <!-- 13. EVERY REPAIR. ONE EXPERT TEAM (ALL 12 SERVICES) + ONLY THE BEST PARTS -->
     <section class="ambient-clean border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
@@ -1191,10 +1191,10 @@ export const finalSiteHtml = `
     <section id="reviews" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="flex flex-col items-center text-center">
-          <div class="logo-laser relative mb-5 flex h-56 w-56 sm:h-64 sm:w-64 items-center justify-center rounded-3xl border border-red-200 bg-white p-3 shadow-xl">
+          <div class="logo-laser relative mb-5 flex h-72 w-72 sm:h-80 sm:w-80 lg:h-96 lg:w-96 items-center justify-center rounded-3xl border border-red-200 bg-white p-2 shadow-xl">
             <span class="aura-ring"></span>
             <span class="aura-ring aura-ring-2"></span>
-            <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-48 w-48 sm:h-56 sm:w-56 object-contain" onerror="this.src='/logo.png'">
+            <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-[94%] w-[94%] object-contain" onerror="this.src='/logo.png'">
           </div>
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Reviews · Apple Device Repairs, Perfected.</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
