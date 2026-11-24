@@ -21,6 +21,7 @@ import QuoteSection from "@/components/QuoteSection";
 import ServicePromise from "@/components/ServicePromise";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqSection from "@/components/FaqSection";
+import StudioVideo from "@/components/StudioVideo";
 import LocationSection from "@/components/LocationSection";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
@@ -77,6 +78,7 @@ export default function Home() {
         <ServicePromise />
         <ReviewsSection />
         <FaqSection />
+        <StudioVideo />
         <LocationSection />
         <FinalCta />
       </div>
