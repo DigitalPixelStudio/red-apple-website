@@ -263,7 +263,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   store: {
     reply:
-      "We are at " + SITE.address + " — " + SITE.addressVerified + ". That's next to Vignesh Dresses, opposite Bhadra Landmark, about a minute from Halasuru Metro. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". The workshop has glass walls so you can watch your repair. Open 10 AM – 12 AM midnight, every day, with WhatsApp assistance 24/7. Walk-ins welcome, no appointment needed.",
+      "We are at " + SITE.address + " — " + SITE.addressVerified + ". Opposite Bhadra Landmark, about a minute from Halasuru Metro. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". The workshop has glass walls so you can watch your repair. Open 10 AM – 12 AM midnight, every day, with WhatsApp assistance 24/7. Walk-ins welcome, no appointment needed.",
     chips: ["Open in Maps", "Google reviews", "Book doorstep pickup", "Talk to a technician"],
   },
   timing: {
@@ -363,7 +363,7 @@ const MENU: Record<string, { reply: string; chips: string[] }> = {
   },
   location: {
     reply:
-      SITE.address + " — " + SITE.addressVerified + ". About a minute from Halasuru Metro, next to Vignesh Dresses. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". Open 10 AM to 12 AM midnight, all seven days. WhatsApp assistance runs 24/7. Walk-ins welcome, no appointment needed.",
+      SITE.address + " — " + SITE.addressVerified + ". Opposite Bhadra Landmark, about a minute from Halasuru Metro. Rated 4.9 from " + SITE.ratingCount + " Google reviews: " + SITE.gmbUrl + ". Open 10 AM to 12 AM midnight, all seven days. WhatsApp assistance runs 24/7. Walk-ins welcome, no appointment needed.",
     chips: ["Open in Maps", "Google reviews", "Call the store", "Book doorstep pickup"],
   },
   pickup: {
