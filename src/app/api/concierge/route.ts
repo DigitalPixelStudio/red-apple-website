@@ -12,9 +12,12 @@ export const maxDuration = 40;
 // Current stable Flash family, ordered for reliable low-latency fallback.
 const MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+// Image forwarding is opt-in at deployment level; enable only after confirming active Google Cloud billing for this API project.
+const IMAGE_INPUT_ENABLED = process.env.GEMINI_IMAGE_INPUT_ENABLED === "true";
 // GEMINI_API_KEY is canonical; the others are accepted aliases for older deployments.
 const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_STUDIO_API_KEY", "GOOGLE_GEMINI_API_KEY", "GEMINI_KEY"] as const;
 type Turn = { role: "user" | "model"; text: string };
+type ImagePart = { mimeType: "image/jpeg" | "image/png" | "image/webp"; data: string };
 type GeminiResult =
   | { ok: true; response: Response; model: string }
   | { ok: false; status: number; code: string; detail: string };
@@ -166,8 +169,8 @@ function retrieveKnowledge(query: string): string {
     /* Deduplicate near-identical titles so one repeated FAQ cannot crowd out
        the policy chunk that actually answers the question. */
     .filter((doc, index, list) => list.findIndex((other) => other.title === doc.title) === index)
-    .slice(0, 8)
-    .map((doc) => doc.title + ": " + doc.body.slice(0, 760))
+    .slice(0, 6)
+    .map((doc) => doc.title + ": " + doc.body.slice(0, 600))
     .join("\n");
 }
 
@@ -201,6 +204,7 @@ function systemPrompt(query: string): string {
     "- Answer ONLY from the verified shop facts and the retrieved knowledge base / price matrix supplied below. Never use a remembered fact, never invent a detail, and never guess.",
     "- If the answer is not in the supplied material, say it needs a free diagnosis or a technician. Do not fill the gap with general knowledge.",
     "- Keep it short and friendly: two to four sentences, one question at most.",
+    "- When photos are attached, inspect only visible evidence. Describe likely damage with uncertainty, never claim to see hidden board faults or guarantee repairability. Ask for the exact model if missing. Quote only an exact matching approved price-matrix row; a photo alone is not a fixed quote. For swollen batteries, liquid exposure or heat, give safe handling advice and request technician assessment.",
     "- NEVER quote any shorter warranty period. The warranty is 6 Months on every repair, display, battery and glass job; motherboard repairs are the only exclusion. The invoice is the warranty record and the customer can claim diagnosis and a covered repair on that same invoice within 6 Months.",
     "- NEVER give the old address (No. 1 Mahatma Gandhi Road or 'opposite Bhadra Landmark' by itself). The verified address is " + SITE.address + " — " + SITE.addressVerified + ".",
     "- Rating is 4.9 from " + SITE.ratingCount + " Google reviews. Verified listing: " + SITE.gmbUrl + ".",
@@ -423,15 +427,15 @@ function generationConfigFor(model: string, minimal = false): Record<string, unk
   return config;
 }
 
-function buildPayload(message: string, history: Turn[], model: string, minimal = false) {
+function buildPayload(message: string, history: Turn[], model: string, images: ImagePart[] = [], minimal = false) {
   const contents = [
-    ...history.slice(-8)
+    ...history.slice(-6)
       .filter((turn) => turn && typeof turn.text === "string" && turn.text.trim())
       .map((turn) => ({
         role: turn.role === "model" ? "model" : "user",
-        parts: [{ text: turn.text.slice(0, 600) }]
+        parts: [{ text: turn.text.slice(0, 420) }]
       })),
-    { role: "user", parts: [{ text: message }] }
+    { role: "user", parts: [{ text: message }, ...images.map((image) => ({ inlineData: { mimeType: image.mimeType, data: image.data } }))] }
   ];
   return {
     systemInstruction: { parts: [{ text: systemPrompt(
@@ -445,14 +449,8 @@ function buildPayload(message: string, history: Turn[], model: string, minimal =
 export async function POST(request: NextRequest) {
   const limited = rateLimit(request, "concierge", 18, 60_000);
   if (limited) return limited;
-  const keys = resolveKeys();
-  // No configured key is a normal local-answer path, not a server error.
-  if (!keys.length) {
-    const fallbackMessage = await request.json().then((b: { message?: unknown }) => String(b.message || "")).catch(() => "");
-    return localResponse(fallbackMessage, "no_api_key");
-  }
 
-  let body: { message?: unknown; history?: unknown };
+  let body: { message?: unknown; history?: unknown; images?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -462,14 +460,42 @@ export async function POST(request: NextRequest) {
   const message = typeof body.message === "string" ? body.message.trim().slice(0, 800) : "";
   if (!message) return NextResponse.json({ ok: false, reason: "empty_message" }, { status: 400, headers: { "X-Concierge-Source": "unavailable" } });
 
+  const rawImages = Array.isArray(body.images) ? body.images : [];
+  if (rawImages.length > 3) return NextResponse.json({ ok: false, reason: "too_many_images" }, { status: 413, headers: { "X-Concierge-Source": "unavailable" } });
+  const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+  const images: ImagePart[] = [];
+  let totalImageChars = 0;
+  for (const raw of rawImages) {
+    if (!raw || typeof raw !== "object") return NextResponse.json({ ok: false, reason: "invalid_image" }, { status: 400 });
+    const item = raw as { mimeType?: unknown; data?: unknown };
+    if (typeof item.mimeType !== "string" || !allowedTypes.has(item.mimeType) || typeof item.data !== "string" || !/^[A-Za-z0-9+/]+={0,2}$/.test(item.data)) {
+      return NextResponse.json({ ok: false, reason: "invalid_image" }, { status: 400 });
+    }
+    if (item.data.length > 1_250_000) return NextResponse.json({ ok: false, reason: "image_too_large" }, { status: 413 });
+    totalImageChars += item.data.length;
+    if (totalImageChars > 3_750_000) return NextResponse.json({ ok: false, reason: "image_payload_too_large" }, { status: 413 });
+    images.push({ mimeType: item.mimeType as ImagePart["mimeType"], data: item.data });
+  }
+
+  if (images.length && !IMAGE_INPUT_ENABLED) {
+    return new Response("Photo review isn't available right now. Please contact our technician for a manual assessment.", { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Concierge-Source": "image-review-disabled" } });
+  }
+
   const history: Turn[] = Array.isArray(body.history)
-    ? body.history.slice(-8).filter((item): item is Turn =>
+    ? body.history.slice(-6).filter((item): item is Turn =>
         Boolean(item) &&
         typeof item === "object" &&
         ((item as Turn).role === "user" || (item as Turn).role === "model") &&
         typeof (item as Turn).text === "string"
       )
     : [];
+
+  const keys = resolveKeys();
+  // A photo is never falsely described as analysed when the live vision model is unavailable.
+  if (!keys.length) {
+    if (images.length) return new Response("I couldn't inspect those photos just now because the live visual assistant is unavailable. Please try again shortly or send the photos to our technician on WhatsApp for a manual assessment.", { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Concierge-Source": "local" } });
+    return localResponse(message, "no_api_key");
+  }
 
   const attempts: Array<{ model: string; status: number; code: string }> = [];
   let selected: { response: Response; model: string } | null = null;
@@ -478,10 +504,12 @@ export async function POST(request: NextRequest) {
   // fallback model. A 404 (unknown model) always moves to the next model.
   // A 400 caused by an optional generationConfig field is retried once with a
   // minimal config; a still-malformed request stops the chain.
-  const plan = MODELS.flatMap((model, index) => [
-    { model, key: keys[0] },
-    ...(keys[1] && index === 0 ? [{ model, key: keys[1] }] : []),
-  ]);
+  const plan = images.length
+    ? [{ model: MODELS[0], key: keys[0] }, ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []), { model: MODELS[1], key: keys[0] }]
+    : MODELS.flatMap((model, index) => [
+        { model, key: keys[0] },
+        ...(keys[1] && index === 0 ? [{ model, key: keys[1] }] : []),
+      ]);
 
   for (const attempt of plan) {
     const previousFailure = attempts[attempts.length - 1];
@@ -489,9 +517,9 @@ export async function POST(request: NextRequest) {
       const backoffMs = Math.min(250 * 2 ** attempts.length, 750);
       await new Promise((resolve) => setTimeout(resolve, backoffMs));
     }
-    let result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model));
+    let result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, images));
     if (!result.ok && result.status === 400) {
-      result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, true));
+      result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, images, true));
     }
     if (result.ok) {
       selected = { response: result.response, model: result.model };
@@ -520,6 +548,9 @@ export async function POST(request: NextRequest) {
     });
   }
 
+  // Never pretend the local text-only fallback has inspected an attached photo.
+  if (images.length) return new Response("The live photo assessment is temporarily unavailable. Please try again shortly or contact our technician for a manual check.", { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Concierge-Source": "local" } });
+
   // A quota outage is not a customer-facing error: answer from the verified
   // local knowledge base with HTTP 200 so the chat never shows "unavailable".
   return localResponse(message, "provider_unavailable");
@@ -537,6 +568,8 @@ export async function GET() {
     primaryModel: MODELS[0],
     fallbackModels: MODELS.slice(1),
     streaming: true,
+    imageUnderstanding: IMAGE_INPUT_ENABLED,
+    maxImagesPerMessage: 3,
     retrieval: "local-keyword-rag",
     knowledgeDocuments: KNOWLEDGE_BASE.length + FAQS.length + SERVICES.length + DEVICE_FAMILIES.length + Object.values(PRICES).reduce((total, row) => total + Object.keys(row).length, 0),
     models: MODELS
