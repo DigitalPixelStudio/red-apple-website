@@ -1238,7 +1238,7 @@ export const finalSiteHtml = `
           <p class="mt-2 text-sm text-zinc-600">See our repair studio and the work happening inside our Halasuru centre.</p>
         </div>
 
-        <div class="mt-8 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:gap-7">
+        <div class="mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-[3.16fr_1fr] md:items-stretch md:gap-6 lg:gap-7">
           <article class="min-w-0">
             <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-lg sm:rounded-3xl">
               <div class="relative aspect-video w-full">
