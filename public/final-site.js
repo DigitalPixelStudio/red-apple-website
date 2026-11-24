@@ -909,9 +909,83 @@
       // Smooth dedicated chat entry: type a first message -> asks the bot directly
       const typingIn = document.getElementById('ai-typing-input');
       const typingSend = document.getElementById('ai-typing-send');
+      const aiPhotoInput = document.getElementById('ai-photo-input');
+      const aiPhotoButton = document.getElementById('ai-photo-button');
+      const aiPhotoCount = document.getElementById('ai-photo-count');
+      const aiPhotoPreview = document.getElementById('ai-photo-preview');
+      let aiAttachedImages = [];
+      function renderAiPhotoPreviews() {
+        if (!aiPhotoPreview || !aiPhotoCount) return;
+        aiPhotoPreview.innerHTML = '';
+        aiAttachedImages.forEach((photo, index) => {
+          const item = document.createElement('div');
+          item.className = 'relative flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 p-1.5';
+          const img = document.createElement('img');
+          img.src = photo.preview; img.alt = 'Selected repair photo'; img.className = 'h-10 w-10 rounded-md object-cover';
+          const label = document.createElement('span');
+          label.className = 'max-w-20 truncate text-[9px] font-semibold text-zinc-700'; label.textContent = photo.name;
+          const remove = document.createElement('button');
+          remove.type = 'button'; remove.className = 'ml-1 grid h-5 w-5 place-items-center rounded-full bg-zinc-900 text-xs font-bold text-white'; remove.textContent = '×'; remove.setAttribute('aria-label', 'Remove photo');
+          remove.addEventListener('click', () => { aiAttachedImages.splice(index, 1); renderAiPhotoPreviews(); });
+          item.append(img, label, remove); aiPhotoPreview.append(item);
+        });
+        aiPhotoPreview.classList.toggle('hidden', aiAttachedImages.length === 0);
+        aiPhotoCount.textContent = aiAttachedImages.length ? aiAttachedImages.length + '/3 photos attached' : 'Optional · Up to 3 photos';
+        if (aiPhotoButton) aiPhotoButton.disabled = aiAttachedImages.length >= 3;
+      }
+      async function prepareAiPhoto(file) {
+        if (!file.type.startsWith('image/')) throw new Error('Choose an image file.');
+        if (file.size > 12 * 1024 * 1024) throw new Error('Each photo must be under 12 MB.');
+        const url = URL.createObjectURL(file);
+        try {
+          const image = await new Promise((resolve, reject) => {
+            const el = new Image(); el.onload = () => resolve(el); el.onerror = () => reject(new Error('This photo could not be opened.')); el.src = url;
+          });
+          let scale = Math.min(1, 1280 / Math.max(image.naturalWidth, image.naturalHeight));
+          let dataUrl = '';
+          for (let attempt = 0; attempt < 4; attempt++) {
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+            canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+            const ctx = canvas.getContext('2d', { alpha: false });
+            if (!ctx) throw new Error('Photo processing is unavailable on this device.');
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            dataUrl = canvas.toDataURL('image/jpeg', attempt < 2 ? 0.76 : 0.64);
+            if (dataUrl.length <= 1250000) break;
+            scale *= 0.78;
+          }
+          const data = dataUrl.split(',')[1] || '';
+          if (!data || data.length > 1250000) throw new Error('This photo is too large. Choose a smaller image.');
+          return { name: file.name.slice(0, 60), mimeType: 'image/jpeg', data, preview: dataUrl };
+        } finally { URL.revokeObjectURL(url); }
+      }
+      aiPhotoButton?.addEventListener('click', () => aiPhotoInput?.click());
+      aiPhotoInput?.addEventListener('change', async () => {
+        const selected = Array.from(aiPhotoInput.files || []);
+        aiPhotoInput.value = '';
+        const room = Math.max(0, 3 - aiAttachedImages.length);
+        if (!room || !selected.length) return;
+        aiPhotoButton.disabled = true;
+        if (selected.length > room && aiPhotoCount) aiPhotoCount.textContent = 'Only ' + room + ' more photo(s) can be added.';
+        for (const file of selected.slice(0, room)) {
+          try { aiAttachedImages.push(await prepareAiPhoto(file)); }
+          catch (error) { if (aiPhotoCount) aiPhotoCount.textContent = error.message || 'Photo could not be added.'; }
+        }
+        renderAiPhotoPreviews();
+        if (aiPhotoButton && aiAttachedImages.length < 3) aiPhotoButton.disabled = false;
+      });
+
       if (typingIn && typingSend && !typingIn.dataset.bound) {
         typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
-        typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t) replyToUser(t); });
+        typingSend.addEventListener('click', () => {
+          const t = typingIn.value.trim();
+          if (!t && !aiAttachedImages.length) return;
+          typingIn.value = '';
+          const photos = aiAttachedImages.slice();
+          aiAttachedImages = [];
+          renderAiPhotoPreviews();
+          replyToUser(t, photos);
+        });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && aiDrawer && !aiDrawer.classList.contains('hidden')) { aiDrawer.classList.add('hidden'); aiDrawer.classList.remove('flex'); } });
       const copyBtn = document.getElementById('copy-address');
       if (copyBtn) {
@@ -938,10 +1012,11 @@
       }
 
       let aiHistory = [];
-      async function replyToUser(rawText) {
-        const q = (rawText || '').trim();
+      async function replyToUser(rawText, attachments = []) {
+        const q = (rawText || '').trim() || (attachments.length ? 'Please inspect the attached repair photos. Describe visible damage and likely repair options.' : '');
         if (!q || !aiMsgs) return;
-        aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + '</div>';
+        const photoMarkup = attachments.map((image) => '<img src="data:image/jpeg;base64,' + image.data + '" alt="Customer repair photo" class="mt-2 mr-1 inline-block h-16 w-16 rounded-lg border border-white/20 object-cover" />').join('');
+        aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + photoMarkup + '</div>';
         const bid = 'ai-' + Date.now() + Math.random().toString(36).slice(2, 6);
         aiMsgs.innerHTML += '<div id="' + bid + '" class="max-w-[92%] rounded-2xl rounded-tl-sm border border-zinc-200 bg-white p-3 text-zinc-700 shadow-sm"><span class="text-zinc-400">Checking the bench prices…</span></div>';
         aiMsgs.scrollTop = aiMsgs.scrollHeight;
@@ -951,7 +1026,7 @@
           const res = await fetch('/api/concierge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, history: aiHistory.slice(-6) })
+            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images: attachments.map(({ mimeType, data }) => ({ mimeType, data })) })
           });
           if (!res.ok || !res.body) throw new Error('offline');
           const reader = res.body.getReader();
@@ -969,8 +1044,10 @@
             (src === 'gemini' ? '✦ Forge AI · live answer' : '● Verified local knowledge') + '</div>';
           aiHistory.push({ role: 'user', text: q }, { role: 'model', text: full });
         } catch (err) {
-          full = localBotAnswer(q);
-          if (bubble) bubble.innerHTML = full + '<div class="mt-2 text-[9px] font-bold text-emerald-700">● Verified local knowledge</div>';
+          full = attachments.length
+            ? "I couldn't complete the photo review right now. Please try again shortly or send these photos to our technician on WhatsApp for a manual assessment."
+            : localBotAnswer(q);
+          if (bubble) bubble.innerHTML = escHtml(full) + '<div class="mt-2 text-[9px] font-bold text-emerald-700">● Verified local knowledge</div>';
         }
         const wa = 'https://wa.me/918660663776?text=' + encodeURIComponent('Hi Red Apple Bench, I asked AI Bench: ' + q);
         if (bubble) bubble.innerHTML += '<a href="' + wa + '" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-bold text-white">Continue on WhatsApp →</a>';
