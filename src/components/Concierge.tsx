@@ -465,25 +465,7 @@ export default function Concierge() {
   const [stopped, setStopped] = useState(false);
   const [failedTurns, setFailedTurns] = useState(0);
   const [memoryReady, setMemoryReady] = useState(false);
-  const [teaser, setTeaser] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
-
-  /* Proactive, but polite: one teaser per browser session, only after two
-     minutes on the page, and never on top of an open chat. Dismissal is
-     remembered for the session. */
-  useEffect(() => {
-    if (open) return;
-    let seen = false;
-    try { seen = window.sessionStorage.getItem("ramr-concierge-teaser") === "1"; } catch {}
-    if (seen) return;
-    const timer = window.setTimeout(() => setTeaser(true), 120_000);
-    return () => window.clearTimeout(timer);
-  }, [open]);
-
-  const dismissTeaser = () => {
-    setTeaser(false);
-    try { window.sessionStorage.setItem("ramr-concierge-teaser", "1"); } catch {}
-  };
 
   useEffect(() => {
     if (!memoryReady) return;
@@ -816,42 +798,10 @@ export default function Concierge() {
 
   return (
     <>
-      {/* Proactive teaser — one per session, never covers an open chat */}
-      {teaser && !open && (
-        <div className="fixed bottom-[9.5rem] right-4 z-[69] w-[calc(100vw-2rem)] max-w-[240px] md:bottom-[5.5rem] md:right-8">
-          <div className="concierge-teaser relative rounded-[14px] bg-white p-3 pr-7 shadow-xl ring-1 ring-black/[0.08]">
-            <button
-              type="button"
-              onClick={dismissTeaser}
-              aria-label="Dismiss assistant message"
-              className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full text-[var(--text-muted)] hover:bg-black/[0.05] hover:text-[var(--text)]"
-            >
-              <LineIcon name="close" size={10} />
-            </button>
-            <p className="text-[11.5px] font-semibold leading-snug text-[var(--text)]">
-              Hi — I&rsquo;m Forge AI. Ask for a published price or a technician.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                dismissTeaser();
-                if (!open) restoreMemory();
-                setOpen(true);
-                track("ai_chat_started", { source: "proactive_teaser" });
-              }}
-              className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[var(--orange)] px-2.5 py-1 text-[11px] font-bold text-white"
-            >
-              Check my price
-              <LineIcon name="arrow-right" size={11} color="#fff" />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Floating launcher */}
       <button
         id="concierge-open"
-        onClick={() => { if (!open) restoreMemory(); setTeaser(false); setOpen(!open); }}
+        onClick={() => { if (!open) restoreMemory(); setOpen(!open); }}
         aria-label="Open Forge AI chat"
         className="fixed bottom-24 right-5 z-[70] grid h-12 w-12 place-items-center rounded-[13px] bg-[var(--cta-dark)] text-white shadow-xl transition-transform hover:scale-105 md:bottom-8 md:right-8"
       >
