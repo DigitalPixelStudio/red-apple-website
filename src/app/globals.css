@@ -5382,3 +5382,65 @@ html[data-motion="on"] #hero .stage-3d-box::before { animation: raStageGlow 14s 
   #btn-open-ai.ai-launcher { flex-basis: 42px !important; width: 42px !important; height: 42px !important; }
   #tour-dock { left: 8px !important; bottom: max(76px, calc(env(safe-area-inset-bottom) + 70px)) !important; }
 }
+
+
+/* NOV-25 PERFORMANCE PROFILE — keep first paint and touch scrolling calm. */
+html:not([data-motion="on"]) .ambient-orb,
+html:not([data-motion="on"]) .heading-breathe::after,
+html:not([data-motion="on"]) .badge-breathe,
+html:not([data-motion="on"]) .pulse-ring,
+html:not([data-motion="on"]) .laser-line,
+html:not([data-motion="on"]) #hero .stage-3d-box::before,
+html:not([data-motion="on"]) .marquee-track,
+html:not([data-motion="on"]) #tour-start.tour-running,
+html:not([data-motion="on"]) .tour-focus {
+  animation: none !important;
+  will-change: auto !important;
+}
+html:not([data-motion="on"]) .ambient-orb { opacity: .12 !important; }
+html:not([data-motion="on"]) .reveal-up { transition: opacity 300ms ease-out, transform 300ms cubic-bezier(.2,.75,.25,1) !important; }
+html:not([data-motion="on"]) .card-sheen { transition: transform 180ms ease-out !important; }
+
+/* Consistent editorial rhythm: less empty vertical space, same content and order. */
+main > section:not(#hero):not(#page-plan) {
+  padding-top: clamp(1.75rem, 3vw, 2.6rem) !important;
+  padding-bottom: clamp(1.75rem, 3vw, 2.6rem) !important;
+}
+main > section:not(#hero):not(#page-plan) .mt-8 { margin-top: 1.4rem !important; }
+main > section:not(#hero):not(#page-plan) .mt-9 { margin-top: 1.55rem !important; }
+main > section:not(#hero):not(#page-plan) .mt-7 { margin-top: 1.2rem !important; }
+main > section:not(#hero):not(#page-plan) .gap-6 { gap: 1.15rem !important; }
+main > section:not(#hero):not(#page-plan) .gap-5 { gap: 1rem !important; }
+#real-shop .studio-glass-band { margin-top: 1.25rem !important; padding: .85rem !important; }
+#real-shop .studio-cta-row { margin-top: .75rem !important; gap: .55rem !important; }
+#real-shop .studio-hours-line { margin-top: .55rem !important; line-height: 1.45; }
+
+/* The visualiser is intentionally still; only the visitor-operated divider moves. */
+.glass-visualiser-static, .glass-visualiser-static * { animation: none !important; }
+#ba-slider-box { contain: layout paint; transition: none !important; }
+#ba-overlay, #ba-line, #ba-knob { transition: none !important; }
+
+/* Interactive warranty card: transform-only tilt on pointer/touch, no idle RAF loop. */
+#holo-warranty { transform-style: preserve-3d; transform: perspective(760px) rotateX(0deg) rotateY(0deg); transition: transform 220ms cubic-bezier(.2,.75,.25,1); }
+#holo-warranty.is-active { will-change: transform; }
+@media (hover: hover) and (pointer: fine) {
+  #holo-warranty:hover { box-shadow: 0 18px 42px rgba(24,24,27,.22); }
+}
+@media (hover: none) and (pointer: coarse) {
+  #holo-warranty:active { transform: perspective(760px) rotateX(1.5deg) rotateY(-1.5deg) translateY(-2px) scale(1.006); }
+}
+.logo-laser { width: clamp(14rem, 22vw, 16rem) !important; height: clamp(14rem, 22vw, 16rem) !important; transition: transform 240ms ease-out, box-shadow 240ms ease-out; }
+.logo-laser img { width: 86% !important; height: 86% !important; object-fit: contain; }
+@media (hover: hover) { .logo-laser:hover { transform: translateY(-3px) scale(1.012); } }
+
+/* Four vertical Shorts: no player scripts/network until a visitor presses Play. */
+.video-player-shell { contain: layout paint; isolation: isolate; }
+.video-player-shell img { pointer-events: none; }
+.video-player-shell button { cursor: pointer; transition: background-color 180ms ease, transform 180ms ease; }
+@media (hover: hover) { .video-player-shell button:hover span:first-child { transform: scale(1.06); } }
+.video-player-shell iframe { border: 0; }
+#studio-video .video-player-shell { aspect-ratio: 9 / 16; }
+
+/* Keep address text flush with surrounding copy and prevent browser button indentation. */
+#copy-address { margin: 0 !important; padding: 0 !important; text-indent: 0 !important; text-align: left !important; }
+#halasuru-map > div > p { padding-left: 0 !important; text-indent: 0 !important; }
