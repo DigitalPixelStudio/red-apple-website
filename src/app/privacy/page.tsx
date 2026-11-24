@@ -37,11 +37,21 @@ export default function PrivacyPage() {
           <p>
             If you use Forge AI on this website, the messages you type and a limited
             amount of recent chat context are sent securely to Google Gemini to generate
-            a reply. The chat history is kept in session storage in your current browser
-            tab so the conversation can continue while the tab remains open; this website
-            does not save that chat transcript to Red Apple&apos;s repair records or CRM.
-            Please do not enter device passcodes, Apple ID passwords, OTPs, payment PINs
-            or other account credentials in the chat. If you choose the WhatsApp handoff, a summary is prefilled in a WhatsApp draft for you to review and send; this website does not send it automatically.
+            a reply. The text transcript is stored in local storage on your device and is
+            restored only while it is less than seven days old; expired history is removed
+            the next time the chat is opened. It is not saved to Red Apple&apos;s repair
+            records or CRM. Optional visual review is deployment-controlled and remains
+            disabled unless the Gemini API project is confirmed to use an active paid
+            Google Cloud billing account. If enabled, compressed device photos you choose
+            to attach are sent to Google Gemini for visual processing and are not written
+            into this website&apos;s saved chat transcript or Red Apple&apos;s CRM. Under
+            Google&apos;s paid Gemini API terms, prompts and uploaded images are not used to
+            improve Google products, though Google may retain them for a limited period
+            for security and legal compliance. Please photograph the device only and avoid
+            people, identity documents, private messages, serial numbers, passcodes, Apple
+            ID passwords, OTPs, payment PINs or other sensitive information. If you choose
+            the WhatsApp handoff, a summary is prefilled in a WhatsApp draft for you to
+            review and send; this website does not send it automatically.
           </p>
 
           <h2>Why we collect it</h2>
