@@ -27,7 +27,7 @@
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
           acceptNode(node) {
             const parent = node.parentElement;
-            if (!parent || parent.closest('script,style,textarea,input,select,option,pre,code,svg,iframe,noscript')) return NodeFilter.FILTER_REJECT;
+            if (!parent || parent.closest('script,style,textarea,input,select,option,pre,code,svg,iframe,noscript,[data-preserve-case]')) return NodeFilter.FILTER_REJECT;
             return NodeFilter.FILTER_ACCEPT;
           }
         });
@@ -472,7 +472,7 @@
         });
       });
 
-      // All 11 Repair Services Grid
+      // All 12 Repair Services Grid
       const servicesList = [
         ['Front Display Replacement', '~45 min', 'OEM-grade OLED panels with True Tone calibrated while you wait.', '6 Months Warranty'],
         ['Front Glass Restoration', 'Same day', 'Keep your original OLED panel using TBK OCA vacuum lamination.', '6 Months Warranty'],
@@ -484,7 +484,8 @@
         ['Motherboard / IC Repair', '1–2 days', 'Micro-soldering, PMIC, NAND & baseband diagnosis under microscope.', 'Excluded from standard cover'],
         ['Speaker / Mic / Haptics', '~40 min', 'Earpiece, loudspeaker, microphones, and Taptic Engine replacement.', '6 Months Warranty'],
         ['System Diagnostics & Signed Restore', '30–120 min', 'Signed iOS/iPadOS/macOS restore workflows & boot-loop diagnosis.', 'Zero-Passcode Workflow'],
-        ['Board-Level Storage IC Repair', '1–3 days', 'Confidential hardware diagnosis when photos/files are inaccessible.', 'Assessed first']
+        ['Board-Level Storage IC Repair', '1–3 days', 'Confidential hardware diagnosis when photos/files are inaccessible.', 'Assessed first'],
+        ['Face ID & Sensor Repair', 'Free diagnosis', 'Face ID, proximity, ambient-light and front-sensor fault assessment; repairability confirmed after model-specific testing.', 'Quote before repair']
       ];
       const servicesGrid = document.getElementById('services-grid');
       if (servicesGrid) {
@@ -1210,32 +1211,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
-            'canvas-internals': 0.95, 'canvas-airpods': 0.60, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
+            'canvas-internals': 0.95, 'canvas-airpods': 0.68, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
-            'canvas-internals': 0.92, 'canvas-airpods': 0.62, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
+            'canvas-internals': 0.92, 'canvas-airpods': 0.70, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.66, 'canvas-tbk-90l': 0.66, 'canvas-tbk-958': 0.66,
             'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.64, 'canvas-tbk-90l': 0.64, 'canvas-tbk-958': 0.64,
             'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.62, 'canvas-tbk-90l': 0.62, 'canvas-tbk-958': 0.62,
             'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.60, 'canvas-tbk-90l': 0.60, 'canvas-tbk-958': 0.60,
             'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
@@ -1296,7 +1297,7 @@
             // switch to their own model values without misclassifying tablet desktop mode.
             const profile = getDeviceProfile();
             const chosen = MODEL_PROFILE_FILL[profile]?.[id] ?? cfg.fill;
-            const fill = Math.min(1.18, chosen ?? 0.95);
+            const fill = Math.min(1.48, chosen ?? 0.95);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
             // so animated pose changes can never drift the framing after idle wake.
