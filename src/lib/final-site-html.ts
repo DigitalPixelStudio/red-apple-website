@@ -1241,7 +1241,7 @@ export const finalSiteHtml = `
         <div class="mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-[3.16fr_1fr] md:items-stretch md:gap-6 lg:gap-7">
           <article class="min-w-0">
             <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-lg sm:rounded-3xl">
-              <div class="relative aspect-video w-full">
+              <div class="relative aspect-[9/16] w-full">
                 <iframe
                   class="absolute inset-0 h-full w-full"
                   src="https://www.youtube-nocookie.com/embed/Fee4eqqNhPA?rel=0&modestbranding=1&playsinline=1"
