@@ -47,8 +47,8 @@
           const hr = parseInt(now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', hour12: false }), 10);
           const isOpen = hr >= 10;
           el.textContent = isOpen
-            ? `Open now · ${ist} IST · 10 AM – 12 AM · Halasuru`
-            : `Bench opens 10 AM · ${ist} IST · 24/7 Pickup Active`;
+            ? `Open Now · ${ist} IST · 10 AM – 12 AM · Halasuru`
+            : `Bench Opens 10 AM · ${ist} IST · 24/7 Pickup Active`;
         } catch (_e) {}
       }
       updateISTClock();
@@ -93,7 +93,7 @@
           if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
         }
         function schedule() {
-          if (rafId || timerId || document.hidden || (motionQuery.matches && document.documentElement.dataset.motion !== 'on')) return;
+          if (rafId || timerId || document.hidden || document.documentElement.dataset.motion !== 'on') return;
           // One 30 FPS timeout followed by exactly one animation frame.
           timerId = window.setTimeout(() => {
             timerId = 0;
@@ -102,7 +102,7 @@
         }
         function frame(now) {
           rafId = 0;
-          if (document.hidden || (motionQuery.matches && document.documentElement.dataset.motion !== 'on')) return;
+          if (document.hidden || document.documentElement.dataset.motion !== 'on') return;
           if (now - last >= 32) {
             last = now;
             ctx.clearRect(0, 0, W, H);
@@ -125,11 +125,11 @@
           schedule();
         }, { passive: true });
         document.addEventListener('visibilitychange', () => document.hidden ? pause() : schedule());
-        const onMotionChange = () => (motionQuery.matches && document.documentElement.dataset.motion !== 'on') ? pause() : schedule();
+        const onMotionChange = () => document.documentElement.dataset.motion === 'on' ? schedule() : pause();
         document.addEventListener('ra-motion-change', onMotionChange);
         if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
         else if (typeof motionQuery.addListener === 'function') motionQuery.addListener(onMotionChange);
-        if ((!motionQuery.matches || document.documentElement.dataset.motion === 'on') && !document.hidden) schedule();
+        if (document.documentElement.dataset.motion === 'on' && !document.hidden) schedule();
         host.appendChild(cv);
       })();
 
@@ -563,23 +563,67 @@
         updateTriageOutput();
       }
 
+      // Four YouTube facades: thumbnails are lazy, the heavy player is created only on Play.
+      const videoGallery = document.getElementById('studio-video');
+      let activeVideoShell = null;
+      const restoreVideoFacade = (shell) => {
+        if (!shell) return;
+        const id = shell.dataset.videoId || '';
+        const title = shell.dataset.videoTitle || 'Red Apple Mobile Repair video';
+        const thumbnail = shell.dataset.thumbnail || '';
+        const img = document.createElement('img');
+        img.src = thumbnail; img.alt = title + ' thumbnail'; img.loading = 'lazy'; img.decoding = 'async';
+        img.width = 480; img.height = 360; img.className = 'absolute inset-0 h-full w-full object-cover opacity-90';
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.dataset.videoPlay = id; btn.className = 'absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white';
+        btn.setAttribute('aria-label', 'Play ' + title);
+        btn.innerHTML = '<span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>';
+        shell.replaceChildren(img, btn);
+      };
+      videoGallery?.addEventListener('click', (event) => {
+        const play = event.target.closest('[data-video-play]');
+        if (!play) return;
+        const shell = play.closest('.video-player-shell');
+        const id = play.dataset.videoPlay;
+        if (!shell || !id) return;
+        if (activeVideoShell && activeVideoShell !== shell) restoreVideoFacade(activeVideoShell);
+        const frame = document.createElement('iframe');
+        frame.className = 'absolute inset-0 block h-full w-full';
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        frame.title = shell.dataset.videoTitle || 'Red Apple Mobile Repair video';
+        frame.loading = 'lazy'; frame.referrerPolicy = 'strict-origin-when-cross-origin';
+        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        frame.allowFullscreen = true;
+        shell.replaceChildren(frame);
+        activeVideoShell = shell;
+      });
+
       // 3D-Tilt Holographic Warranty Card + Live Mouse Glare + Card Switcher
       const holo = document.getElementById('holo-warranty');
-      holo?.addEventListener('pointermove', (e) => {
-        const r = holo.getBoundingClientRect();
-        const px = ((e.clientX - r.left) / r.width) * 100;
-        const py = ((e.clientY - r.top) / r.height) * 100;
-        const rx = (py / 100 - 0.5) * -16;
-        const ry = (px / 100 - 0.5) * 16;
-        holo.style.setProperty('--gx', px + '%');
-        holo.style.setProperty('--gy', py + '%');
-        holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-      });
-      holo?.addEventListener('pointerleave', () => {
+      const resetWarrantyTilt = () => {
+        if (!holo) return;
+        holo.classList.remove('is-active');
         holo.style.setProperty('--gx', '50%');
         holo.style.setProperty('--gy', '50%');
-        holo.style.transform = 'perspective(760px) rotateX(0) rotateY(0)';
-      });
+        holo.style.transform = 'perspective(760px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+      };
+      const moveWarrantyCard = (e) => {
+        if (!holo) return;
+        const r = holo.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const px = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+        const py = Math.max(0, Math.min(100, ((e.clientY - r.top) / r.height) * 100));
+        const rx = (0.5 - py / 100) * 8;
+        const ry = (px / 100 - 0.5) * 8;
+        holo.style.setProperty('--gx', px + '%');
+        holo.style.setProperty('--gy', py + '%');
+        holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px) scale(1.008)`;
+      };
+      holo?.addEventListener('pointerdown', (e) => { holo.classList.add('is-active'); moveWarrantyCard(e); });
+      holo?.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.buttons > 0) moveWarrantyCard(e); });
+      holo?.addEventListener('pointerup', () => { window.setTimeout(resetWarrantyTilt, 180); });
+      holo?.addEventListener('pointercancel', resetWarrantyTilt);
+      holo?.addEventListener('pointerleave', resetWarrantyTilt);
       document.querySelectorAll('.wcard-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
           const [jid, desc] = (btn.dataset.wcard || '').split('|');
@@ -745,22 +789,23 @@
       // Page Plan — chapter links + "Start Tour" auto-scroll through the sections.
       const pagePlanLinks = document.getElementById('page-plan-links');
       const PLAN = [
-        { id: '#hero', label: 'Hero' },
-        { id: '#real-shop', label: 'Our Shop' },
-        { id: '#estimate', label: 'Estimate' },
-        { id: '#paired-crm', label: 'Repair Status' },
-        { id: '#pickup', label: 'Pickup' },
-        { id: '#glass-lab', label: 'Glass Lab' },
-        { id: '#tbk-machines', label: 'TBK Machines' },
-        { id: '#ecosystem-3d', label: 'Devices' },
-        { id: '#qc-grid', label: 'Quality Check' },
-        { id: '#services-grid', label: 'Services' },
+        { id: '#hero', label: 'Start Here' },
+        { id: '#real-shop', label: 'The Studio' },
+        { id: '#estimate', label: 'Smart Estimate' },
+        { id: '#paired-crm', label: 'Repair Tracking' },
+        { id: '#pickup', label: 'Doorstep Pickup' },
+        { id: '#glass-lab', label: 'Glass Restoration' },
+        { id: '#tbk-machines', label: 'TBK Machinery' },
+        { id: '#ecosystem-3d', label: 'Apple Devices' },
+        { id: '#qc-grid', label: 'Quality & QC' },
+        { id: '#services-grid', label: 'Repair Services' },
         { id: '#triage-symptoms', label: 'Repair Guide' },
-        { id: '#comparison', label: 'Comparison' },
-        { id: '#holo-warranty', label: 'Warranty' },
-        { id: '#reviews', label: 'Reviews' },
-        { id: '#faq', label: 'FAQ' },
-        { id: '#halasuru-map', label: 'Visit Store' },
+        { id: '#comparison', label: 'Our Difference' },
+        { id: '#holo-warranty', label: '6-Month Warranty' },
+        { id: '#reviews', label: 'Customer Reviews' },
+        { id: '#faq', label: 'FAQs' },
+        { id: '#studio-video', label: 'Video Gallery' },
+        { id: '#halasuru-map', label: 'Find The Store' },
         { id: 'footer', label: 'Contact' },
       ];
       if (pagePlanLinks) {
@@ -773,8 +818,7 @@
       let tourFocusTimeout = null;
       const tourButton = document.getElementById('tour-start');
       // Motion stays enabled by default; the effects are transform/opacity based.
-      document.documentElement.setAttribute('data-motion', 'on');
-      document.dispatchEvent(new Event('ra-motion-change'));
+      // Lightweight motion is the default. One-shot reveal and user-triggered motion remain enabled.
       const stopTour = () => {
         tourActive = false;
         if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; }
@@ -998,7 +1042,8 @@
           return device + '-' + (w >= h ? 'landscape' : 'portrait');
         }
         const initialProfile = getDeviceProfile();
-        const dprCap = initialProfile.startsWith('mobile-') ? 1.35 : (initialProfile.startsWith('tablet-') ? 1.6 : (viewportWidth <= 1366 ? 1.6 : 2));
+        const dprCap = initialProfile.startsWith('mobile-') ? 1.12 : (initialProfile.startsWith('tablet-') ? 1.32 : 1.5);
+        const webglFrameInterval = initialProfile.startsWith('mobile-') ? (1000 / 30) : (initialProfile.startsWith('tablet-') ? (1000 / 40) : (1000 / 45));
         const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
         // Fixed per-device render scale: no adaptive governor that can resize
         // backing canvases mid-session and unexpectedly refit/zoom the models.
@@ -1020,18 +1065,22 @@
         const slots = [];
         const visibleSlots = new Set();
         let webglRafId = 0;
+        let webglTimerId = 0;
 
         // Demand-driven shared renderer: one RAF loop exists only while at least
         // one 3D canvas intersects the viewport. The single renderer stays shared.
         function wakeWebGLLoop() {
-          if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
+          if (webglRafId || webglTimerId || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
-            if (document.hidden || visibleSlots.size === 0) {
-              webglRafId = 0;
-              return;
-            }
+            webglRafId = 0;
+            if (document.hidden || visibleSlots.size === 0) return;
             renderFrame(now);
-            webglRafId = requestAnimationFrame(tick);
+            // Render at a stable device-class cadence instead of competing with
+            // every display refresh while multiple 3D stages are in view.
+            webglTimerId = window.setTimeout(() => {
+              webglTimerId = 0;
+              if (!document.hidden && visibleSlots.size > 0) webglRafId = requestAnimationFrame(tick);
+            }, webglFrameInterval);
           };
           webglRafId = requestAnimationFrame(tick);
         }
@@ -1162,32 +1211,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
             'canvas-internals': 0.95, 'canvas-airpods': 0.60, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
             'canvas-internals': 0.92, 'canvas-airpods': 0.62, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.66, 'canvas-tbk-90l': 0.66, 'canvas-tbk-958': 0.66,
             'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.64, 'canvas-tbk-90l': 0.64, 'canvas-tbk-958': 0.64,
             'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.62, 'canvas-tbk-90l': 0.62, 'canvas-tbk-958': 0.62,
             'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 1.16, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.60, 'canvas-tbk-90l': 0.60, 'canvas-tbk-958': 0.60,
             'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
@@ -1248,7 +1297,7 @@
             // switch to their own model values without misclassifying tablet desktop mode.
             const profile = getDeviceProfile();
             const chosen = MODEL_PROFILE_FILL[profile]?.[id] ?? cfg.fill;
-            const fill = Math.min(1.04, chosen ?? 0.95);
+            const fill = Math.min(1.18, chosen ?? 0.95);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
             // so animated pose changes can never drift the framing after idle wake.
