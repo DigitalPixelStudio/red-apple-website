@@ -10,7 +10,7 @@
       // spellings, acronyms, contact details, URLs and technical identifiers.
       const titleCaseExceptions = new Map(Object.entries({
         iphone:'iPhone', ipad:'iPad', imac:'iMac', ios:'iOS', macos:'macOS', macbook:'MacBook', airpods:'AirPods', airtag:'AirTag',
-        tbk:'TBK', oem:'OEM', oled:'OLED', lcd:'LCD', ic:'IC', crm:'CRM', faq:'FAQ', ai:'AI', mg:'MG', gps:'GPS', usb:'USB', sim:'SIM',
+        tbk:'TBK', oem:'OEM', oca:'OCA', oled:'OLED', lcd:'LCD', ic:'IC', qc:'QC', uv:'UV', crm:'CRM', faq:'FAQ', ai:'AI', mg:'MG', gps:'GPS', usb:'USB', sim:'SIM',
         wifi:'Wi-Fi', google:'Google', whatsapp:'WhatsApp', bengaluru:'Bengaluru', halasuru:'Halasuru', apple:'Apple', pixel:'Pixel', forge:'Forge', justdial:'JustDial', magicpin:'magicpin', namma:'Namma', linkedin:'LinkedIn', youtube:'YouTube'
       }));
       const titleCaseTextNode = (node) => {
