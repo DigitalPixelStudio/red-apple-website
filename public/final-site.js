@@ -578,7 +578,7 @@
         const btn = document.createElement('button');
         btn.type = 'button'; btn.dataset.videoPlay = id; btn.className = 'absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white';
         btn.setAttribute('aria-label', 'Play ' + title);
-        btn.innerHTML = '<span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-red-600/95 text-xl shadow-lg">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>';
+        btn.innerHTML = '<span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>';
         shell.replaceChildren(img, btn);
       };
       videoGallery?.addEventListener('click', (event) => {
@@ -1211,32 +1211,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 0.95, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
             'canvas-internals': 0.95, 'canvas-airpods': 0.68, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
             'canvas-internals': 0.92, 'canvas-airpods': 0.70, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 0.94, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.66, 'canvas-tbk-90l': 0.66, 'canvas-tbk-958': 0.66,
             'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.64, 'canvas-tbk-90l': 0.64, 'canvas-tbk-958': 0.64,
             'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.62, 'canvas-tbk-90l': 0.62, 'canvas-tbk-958': 0.62,
             'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.38, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 0.90, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.60, 'canvas-tbk-90l': 0.60, 'canvas-tbk-958': 0.60,
             'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
