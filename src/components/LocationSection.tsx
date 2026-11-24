@@ -26,8 +26,7 @@ export default function LocationSection() {
             Easy to Reach. <span className="topic-gradient">Right in Halasuru.</span>
           </h2>
           <p className="location-subtitle section-subtitle mx-auto mt-5">
-            Metro Pillar No 125, No.38 — next to Vignesh Dresses, opposite Bhadra
-            Landmark, Halasuru, Bengaluru 560008. One minute from Halasuru Metro.
+            Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008. One minute from Halasuru Metro.
             Walk in, or book a free pickup.
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
