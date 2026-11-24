@@ -947,18 +947,34 @@
       if (typeof THREE === 'undefined') return;
       try {
         const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
-        // Preserve the live animation loop while avoiding needless HiDPI overdraw on touch devices.
-        const dprCap = viewportWidth < 768 ? 1.35 : (viewportWidth <= 1366 ? 1.6 : 2);
+        // Six explicit device/orientation profiles. UA + touch capability prevents
+        // Chrome Desktop Site on Android tablets from being mistaken for a PC.
+        function getDeviceProfile() {
+          const w = window.innerWidth || document.documentElement.clientWidth || 1280;
+          const h = window.innerHeight || document.documentElement.clientHeight || 800;
+          const minSide = Math.min(w, h), maxSide = Math.max(w, h);
+          const ua = navigator.userAgent || '';
+          const touchPoints = Number(navigator.maxTouchPoints || 0);
+          const hasTouch = touchPoints > 1 || ('ontouchstart' in window);
+          const ipad = /iPad/i.test(ua) || (/Macintosh/i.test(ua) && hasTouch);
+          const androidTablet = /Android/i.test(ua) && minSide >= 600;
+          const touchTablet = hasTouch && minSide >= 600 && maxSide <= 3000 && !/Windows NT|Macintosh|Mac OS X/i.test(ua);
+          const isTablet = ipad || androidTablet || touchTablet;
+          const isPhone = !isTablet && (/iPhone|iPod|Android.*Mobile|Windows Phone/i.test(ua) || minSide < 600);
+          const device = isPhone ? 'mobile' : (isTablet ? 'tablet' : 'desktop');
+          return device + '-' + (w >= h ? 'landscape' : 'portrait');
+        }
+        const initialProfile = getDeviceProfile();
+        const dprCap = initialProfile.startsWith('mobile-') ? 1.35 : (initialProfile.startsWith('tablet-') ? 1.6 : (viewportWidth <= 1366 ? 1.6 : 2));
         const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
-        // Gift: adaptive resolution governor — lowers DPR only if real frame
-        // times regress, then restores it when the device has headroom again.
-        let adaptiveDpr = dpr, perfAcc = 0, perfFrames = 0;
+        // Fixed per-device render scale: no adaptive governor that can resize
+        // backing canvases mid-session and unexpectedly refit/zoom the models.
         const MAX_W = 1280, MAX_H = 960;
         // Fit a slot's render target inside the shared GL canvas while PRESERVING aspect ratio.
         // Clamping width and height independently distorted camera.aspect on 2x-DPI tablets
         // (models looked stretched / pushed off-centre). Never resize the shared renderer per slot.
         function fitDims(cw, ch) {
-          const scale = Math.max(0.1, Math.min(adaptiveDpr, MAX_W / Math.max(1, cw), MAX_H / Math.max(1, ch)));
+          const scale = Math.max(0.1, Math.min(dpr, MAX_W / Math.max(1, cw), MAX_H / Math.max(1, ch)));
           return [Math.max(1, Math.round(cw * scale)), Math.max(1, Math.round(ch * scale))];
         }
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
@@ -1108,22 +1124,40 @@
           'canvas-watch':         { fill: 0.95, fov: 34 },
           'canvas-macbook':       { fill: 0.90, fov: 34 }, // FROZEN at 0.90 (no device override)
         };
-        // Responsive model framing: desktop/tablet/PWA use per-model medium pull-back values.
-        // Mobile keeps the prior model-specific baseline so the already-approved mobile models stay unchanged.
-        // The aspect-aware camera fit below keeps every assembly fully in frame at all rotations.
-        const V13_DEVICE_FILL = {
-          // Hero phone is slightly more prominent on every viewport; supporting models step back.
-          'canvas-hero':          { desktopFill: 0.98, mobileFill: 0.98 },
-          // Tablet/PWA/desktop: supporting machines are framed a little smaller for cleaner breathing room.
-          'canvas-estimate-ipad': { desktopFill: 0.78 },
-          'canvas-pickup-iphone': { desktopFill: 0.80 },
-          'canvas-tbk-oca':       { desktopFill: 0.54 },
-          'canvas-tbk-90l':       { desktopFill: 0.54 },
-          'canvas-tbk-958':       { desktopFill: 0.54 },
-          'canvas-internals':     { desktopFill: 0.76, mobileFill: 0.88 },
-          'canvas-airpods':       { desktopFill: 0.39, mobileFill: 0.42 },
-          'canvas-watch':         { desktopFill: 0.78 },
-          'canvas-macbook':       { desktopFill: 0.76 },
+        // Independent fill targets for all six device/orientation profiles.
+        // Hero and Free Pickup iPhones deliberately share identical values in every profile.
+        // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
+        const MODEL_PROFILE_FILL = {
+          'mobile-portrait': {
+            'canvas-hero': 0.95, 'canvas-pickup-iphone': 0.95,
+            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
+            'canvas-internals': 0.95, 'canvas-airpods': 0.56, 'canvas-watch': 0.95, 'canvas-macbook': 0.98,
+          },
+          'mobile-landscape': {
+            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
+            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
+            'canvas-internals': 0.92, 'canvas-airpods': 0.58, 'canvas-watch': 0.92, 'canvas-macbook': 0.96,
+          },
+          'tablet-portrait': {
+            'canvas-hero': 0.94, 'canvas-pickup-iphone': 0.94,
+            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.66, 'canvas-tbk-90l': 0.66, 'canvas-tbk-958': 0.66,
+            'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
+          },
+          'tablet-landscape': {
+            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
+            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.64, 'canvas-tbk-90l': 0.64, 'canvas-tbk-958': 0.64,
+            'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
+          },
+          'desktop-portrait': {
+            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
+            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.62, 'canvas-tbk-90l': 0.62, 'canvas-tbk-958': 0.62,
+            'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
+          },
+          'desktop-landscape': {
+            'canvas-hero': 0.90, 'canvas-pickup-iphone': 0.90,
+            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.60, 'canvas-tbk-90l': 0.60, 'canvas-tbk-958': 0.60,
+            'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
+          },
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
         // setFromObject(root) which INCLUDED the decorative Torus orbit halos and
@@ -1177,14 +1211,10 @@
             camera.fov = 34;
             const vFov = THREE.MathUtils.degToRad(camera.fov);
             const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-            // FAISU HARD LOCK: only V13_DEVICE_FILL models vary by viewport.
-            // <768px mobile uses mobileFill; >=768px uses desktopFill; everyone
-            // else falls back to their frozen baseline `fill`.
-            const dev = V13_DEVICE_FILL[id];
-            const isMobileView = window.innerWidth < 768;
-            const chosen = isMobileView
-              ? (dev?.mobileFill ?? cfg.fill)
-              : (dev?.desktopFill ?? cfg.fill);
+            // Re-evaluate profile at each intentional reframe so orientation changes
+            // switch to their own model values without misclassifying tablet desktop mode.
+            const profile = getDeviceProfile();
+            const chosen = MODEL_PROFILE_FILL[profile]?.[id] ?? cfg.fill;
             const fill = Math.min(1.04, chosen ?? 0.95);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
@@ -1683,16 +1713,22 @@
           });
           slots.forEach((x) => ro.observe(x.canvas));
         }
-        // Wake handler: on app-switch return, re-fit + redraw all canvases (no manual refresh)
+        // Wake only resumes rendering. It must not refit the camera on tab focus/app return.
         const wakeAll = () => {
           if (document.visibilityState !== 'visible') return;
-          slots.forEach((x) => { x.autoFramed = false; x.autoWake = true; });
           wakeWebGLLoop();
         };
         document.addEventListener('visibilitychange', wakeAll);
         window.addEventListener('pageshow', wakeAll);
         window.addEventListener('focus', wakeAll);
-        window.addEventListener('orientationchange', wakeAll, { passive: true });
+        // Orientation is the one intentional global reframe; ResizeObserver also
+        // catches the changed canvas aspect and keeps the selected six-way profile in sync.
+        window.addEventListener('orientationchange', () => {
+          requestAnimationFrame(() => {
+            slots.forEach((x) => { x.autoFramed = false; x.autoWake = true; });
+            wakeWebGLLoop();
+          });
+        }, { passive: true });
 
         let t = 0, lastFrameTime = 0;
         function renderFrame(now = performance.now()) {
@@ -1700,7 +1736,6 @@
           const frameScale = lastFrameTime ? Math.min(2, Math.max(0.5, (now - lastFrameTime) / 16.667)) : 1;
           lastFrameTime = now;
           t += 0.018 * frameScale;
-          const frameStart = performance.now();
           for (let i = 0; i < slots.length; i++) {
             const s = slots[i];
             if (!s.visible || s.contextLost) continue;
@@ -1731,31 +1766,6 @@
             renderer.render(s.scene, s.camera);
             s.ctx.clearRect(0, 0, rw, rh);
             s.ctx.drawImage(glCanvas, 0, MAX_H - rh, rw, rh, 0, 0, rw, rh);
-          }
-          perfAcc += performance.now() - frameStart;
-          perfFrames++;
-          if (perfFrames >= 45) {
-            const avg = perfAcc / perfFrames;
-            const nextDpr = avg > 8.5 && adaptiveDpr > 1
-              ? Math.max(1, adaptiveDpr - 0.25)
-              : avg < 6.2 && adaptiveDpr < dpr
-                ? Math.min(dpr, adaptiveDpr + 0.25)
-                : adaptiveDpr;
-            if (nextDpr !== adaptiveDpr) {
-              adaptiveDpr = nextDpr;
-              // Apply adaptive resolution immediately when the frame budget tightens.
-              slots.forEach((slot) => {
-                if (!slot.cw || !slot.ch) return;
-                const [rw, rh] = fitDims(slot.cw, slot.ch);
-                slot.rw = rw; slot.rh = rh;
-                if (slot.canvas.width !== rw || slot.canvas.height !== rh) {
-                  slot.canvas.width = rw; slot.canvas.height = rh;
-                }
-                slot.autoFramed = false;
-                slot.autoWake = true;
-              });
-            }
-            perfAcc = 0; perfFrames = 0;
           }
         }
         // Phase C2: Fullscreen Toggle on every 3D stage (GPU-only, viewport-driven)
