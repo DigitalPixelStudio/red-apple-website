@@ -40,14 +40,12 @@ export default function PrivacyPage() {
             a reply. The text transcript is stored in local storage on your device and is
             restored only while it is less than seven days old; expired history is removed
             the next time the chat is opened. It is not saved to Red Apple&apos;s repair
-            records or CRM. Optional visual review is deployment-controlled and remains
-            disabled unless the Gemini API project is confirmed to use an active paid
-            Google Cloud billing account. If enabled, compressed device photos you choose
-            to attach are sent to Google Gemini for visual processing and are not written
-            into this website&apos;s saved chat transcript or Red Apple&apos;s CRM. Under
-            Google&apos;s paid Gemini API terms, prompts and uploaded images are not used to
-            improve Google products, though Google may retain them for a limited period
-            for security and legal compliance. Please photograph the device only and avoid
+            records or CRM. Optional visual review is enabled in this Preview deployment using Google Gemini API
+            on its free tier. Compressed device photos you choose to attach are sent to
+            Google Gemini for visual processing and are not written into this website&apos;s
+            saved chat transcript or Red Apple&apos;s CRM. Under Google&apos;s free-tier terms,
+            prompts and uploaded images may be used to improve Google products and may be
+            reviewed by human reviewers. Google may retain data under its applicable terms. Please photograph the device only and avoid
             people, identity documents, private messages, serial numbers, passcodes, Apple
             ID passwords, OTPs, payment PINs or other sensitive information. If you choose
             the WhatsApp handoff, a summary is prefilled in a WhatsApp draft for you to

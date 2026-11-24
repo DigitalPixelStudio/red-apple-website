@@ -614,11 +614,11 @@
         if (!r.width || !r.height) return;
         const px = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
         const py = Math.max(0, Math.min(100, ((e.clientY - r.top) / r.height) * 100));
-        const rx = (0.5 - py / 100) * 8;
-        const ry = (px / 100 - 0.5) * 8;
+        const rx = (0.5 - py / 100) * 14;
+        const ry = (px / 100 - 0.5) * 14;
         holo.style.setProperty('--gx', px + '%');
         holo.style.setProperty('--gy', py + '%');
-        holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px) scale(1.008)`;
+        holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px) scale(1.018)`;
       };
       holo?.addEventListener('pointerdown', (e) => { holo.classList.add('is-active'); moveWarrantyCard(e); });
       holo?.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.buttons > 0) moveWarrantyCard(e); });
@@ -1194,7 +1194,7 @@
         // and resizing it per slot reintroduces the old bottom-right shift bug.
         // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 0.96, fov: 34 },
+          'canvas-hero':          { fill: 1.18, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
@@ -1211,32 +1211,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 0.95, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.92, 'canvas-tbk-90l': 0.92, 'canvas-tbk-958': 0.92,
             'canvas-internals': 0.95, 'canvas-airpods': 0.68, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
-            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.90, 'canvas-tbk-90l': 0.90, 'canvas-tbk-958': 0.90,
             'canvas-internals': 0.92, 'canvas-airpods': 0.70, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
-            'canvas-hero': 0.94, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.66, 'canvas-tbk-90l': 0.66, 'canvas-tbk-958': 0.66,
             'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.64, 'canvas-tbk-90l': 0.64, 'canvas-tbk-958': 0.64,
             'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 0.92, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.62, 'canvas-tbk-90l': 0.62, 'canvas-tbk-958': 0.62,
             'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 0.90, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.60, 'canvas-tbk-90l': 0.60, 'canvas-tbk-958': 0.60,
             'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },

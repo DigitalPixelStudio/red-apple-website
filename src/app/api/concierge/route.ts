@@ -12,7 +12,7 @@ export const maxDuration = 40;
 // Current stable Flash family, ordered for reliable low-latency fallback.
 const MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-// Image forwarding is opt-in at deployment level; enable only after confirming active Google Cloud billing for this API project.
+// Image forwarding is controlled per deployment; preview uses the free Gemini tier with the privacy disclosure shown on-site.
 const IMAGE_INPUT_ENABLED = process.env.GEMINI_IMAGE_INPUT_ENABLED === "true";
 // GEMINI_API_KEY is canonical; the others are accepted aliases for older deployments.
 const KEY_NAMES = ["GEMINI_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY", "GEMINI_STUDIO_API_KEY", "GOOGLE_GEMINI_API_KEY", "GEMINI_KEY"] as const;
@@ -203,8 +203,10 @@ function systemPrompt(query: string): string {
     "GROUNDING RULES — STRICT:",
     "- Answer ONLY from the verified shop facts and the retrieved knowledge base / price matrix supplied below. Never use a remembered fact, never invent a detail, and never guess.",
     "- If the answer is not in the supplied material, say it needs a free diagnosis or a technician. Do not fill the gap with general knowledge.",
+    "- Use symptom-first iPhone triage: display/touch; power/boot/restart; charging/port; battery/thermal; cameras/flash; Face ID/True Tone/sensors; speaker/microphone; buttons/haptics; Wi-Fi/Bluetooth/cellular; water/impact; data/software. Ask one focused question at a time and distinguish likely causes from confirmed diagnosis.",
+    "- Never instruct customers to open the phone, heat it, short pins, probe a battery, bypass Activation Lock, defeat passcodes or attempt board-level soldering. For data-loss risk, stop before restore/reset and recommend technician review. Never promise Face ID or True Tone preservation before model-specific testing.",
     "- Keep it short and friendly: two to four sentences, one question at most.",
-    "- When photos are attached, inspect only visible evidence. Describe likely damage with uncertainty, never claim to see hidden board faults or guarantee repairability. Ask for the exact model if missing. Quote only an exact matching approved price-matrix row; a photo alone is not a fixed quote. For swollen batteries, liquid exposure or heat, give safe handling advice and request technician assessment.",
+    "- When photos are attached, inspect only visible evidence. Identify visible cracks, black spots, lines, discoloration, lifted glass, bent frames, camera-lens damage and missing parts. State confidence and alternatives; never claim to see hidden board faults, internal liquid damage or Face ID failure. Ask for exact model, symptom onset, impact/liquid history and whether the device powers on when those facts matter. Quote only an exact matching approved price-matrix row; a photo alone is not a fixed quote. For swollen batteries, heat, smoke or liquid exposure, give safe handling advice and request technician assessment.",
     "- NEVER quote any shorter warranty period. The warranty is 6 Months on every repair, display, battery and glass job; motherboard repairs are the only exclusion. The invoice is the warranty record and the customer can claim diagnosis and a covered repair on that same invoice within 6 Months.",
     "- NEVER give the old address (No. 1 Mahatma Gandhi Road or 'opposite Bhadra Landmark' by itself). The verified address is " + SITE.address + " — " + SITE.addressVerified + ".",
     "- Rating is 4.9 from " + SITE.ratingCount + " Google reviews. Verified listing: " + SITE.gmbUrl + ".",
