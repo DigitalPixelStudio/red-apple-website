@@ -219,6 +219,12 @@ export const SERVICES: {
     time: "1–3 days", devices: "iPhone · iPad · Mac",
     img: "/images/v5/data-recovery-bench.jpg",
     points: ["Board-Level Diagnosis", "Confidential Handling", "6 Months Warranty"],
+  },  {
+    id: "faceid", title: "Face ID & Sensor Repair", icon: "camera",
+    desc: "Diagnosis for Face ID, proximity, ambient-light and front-sensor faults, with repair options confirmed after device-specific testing.",
+    time: "Free diagnosis", devices: "Supported iPhone models",
+    img: "/images/v5/triple-camera.jpg",
+    points: ["Sensor-path diagnostics", "Compatibility checked first", "Quote before repair"],
   },
 ];
 
