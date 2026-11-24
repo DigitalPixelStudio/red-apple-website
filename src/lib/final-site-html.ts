@@ -79,7 +79,7 @@ export const finalSiteHtml = `
             </h1>
 
             <p class="text-sm leading-relaxed text-zinc-600 sm:text-base">
-              Independent Apple repair studio on MG Road, Halasuru — component-level micro-soldering, OEM-grade displays &amp; front-glass restoration on specialised TBK machinery. 30-minute turnarounds, backed by our written 6 Months repair warranty.
+              Independent Apple Repair Studio on MG Road, Halasuru - Component-Level Micro-Soldering, OEM-Grade Displays &amp; Front-Glass Restoration on Specialised TBK Machinery. 30-Minute Turnarounds, Backed by Our Written 6 Months Repair Warranty
             </p>
 
             <!-- 4 Trust Pills -->
@@ -1229,13 +1229,50 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 18. LARGE HALASURU GOOGLE MAPS EMBED (#halasuru-map) -->
+    <!-- 18. HALASURU STUDIO VIDEO GALLERY — both original YouTube aspect ratios, side by side -->
+    <section id="studio-video" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">A Closer Look</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Inside Our <span class="text-brand-grad">Halasuru Repair Studio</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">See our repair studio and the work happening inside our Halasuru centre.</p>
+        </div>
+        <div class="mt-8 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:gap-7">
+          <article class="min-w-0">
+            <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
+              <div class="relative aspect-[9/16] w-full">
+                <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/Fee4eqqNhPA?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — Halasuru studio video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">HALASURU REPAIR STUDIO</p>
+          </article>
+          <article class="min-w-0">
+            <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
+              <div class="relative aspect-[9/16] w-full">
+                <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/YF0oRI1yapU?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — TBK machinery laser Short" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">TBK MACHINERY LASER</p>
+          </article>
+          <article class="min-w-0">
+            <div class="overflow-hidden rounded-2xl border border-zinc-200 shadow-lg sm:rounded-3xl">
+              <div class="relative aspect-[9/16] w-full">
+                <iframe class="absolute inset-0 block h-full w-full" src="https://www.youtube-nocookie.com/embed/wGs8VbOBrfI?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Red Apple Mobile Repair — workshop Short" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">REPAIR WORKSHOP</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 19. LARGE HALASURU GOOGLE MAPS EMBED (#halasuru-map) -->
     <section id="halasuru-map" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="text-center">
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Visit Us</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Easy to Reach. <span class="text-brand-grad">Right in Halasuru.</span></h2>
-          <p class="mt-2 text-sm text-zinc-600">Metro Pillar No 125, No.38 — next to Vignesh Dresses, opposite Bhadra Landmark, Halasuru, Bengaluru 560008.</p>
+          <p class="mt-2 text-sm text-zinc-600">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008.</p>
         </div>
 
         <div class="mt-8 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
@@ -1251,7 +1288,7 @@ export const finalSiteHtml = `
           <div class="flex flex-col justify-between rounded-3xl border border-zinc-200 bg-white p-6 shadow-md lg:col-span-5">
             <div class="space-y-3 text-xs">
               <span class="inline-block rounded-full bg-emerald-50 px-3 py-1 font-bold text-emerald-800">✓ Google My Business &amp; Maps Verified · 4.9 (1,103)</span>
-              <div class="rounded-xl border p-2.5 border-orange-100 bg-orange-50/70 text-red-700"><strong>Address:</strong><div class="text-zinc-700">Metro Pillar No 125, No.38, next to Vignesh Dresses, opp. to Bhadra Landmark, Halasuru, Bengaluru, Karnataka 560008</div></div>
+              <div class="rounded-xl border p-2.5 border-orange-100 bg-orange-50/70 text-red-700"><strong>Address:</strong><div class="text-zinc-700">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008</div></div>
               <div class="rounded-xl border p-2.5 border-red-100 bg-red-50/60 text-red-700"><strong>Timings:</strong><div class="text-zinc-700">10 AM – 12 AM midnight (Open all 7 days)</div></div>
               <div class="rounded-xl border p-2.5 border-emerald-100 bg-emerald-50/70 text-emerald-700"><strong>Metro:</strong><div class="text-zinc-700">Halasuru Metro — 1 min walk</div></div>
               <div class="rounded-xl border p-2.5 border-amber-100 bg-amber-50/70 text-amber-700"><strong>Pickup &amp; Drop:</strong><div class="text-zinc-700">Free across Bengaluru (24/7)</div></div>
@@ -1292,11 +1329,14 @@ export const finalSiteHtml = `
           <div class="font-display text-lg font-extrabold text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair Store</div>
           <p class="mt-1 leading-relaxed text-zinc-600">Apple repairs, perfected. The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and board-level storage IC repair. MG Road, Halasuru · open 10 AM – 12 AM.</p>
           <div class="mt-3 flex flex-nowrap flex-wrap gap-1 text-[10px] font-bold sm:gap-1.5">
-            <a href="#footer-contact" class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700 hover:bg-blue-100">Facebook</a>
-            <a href="#footer-contact" class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100">Instagram</a>
-            <a href="#footer-contact" class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700 hover:bg-red-100">YouTube</a>
+            <a href="https://www.facebook.com/profile.php?id=100082952451220&amp;sk=reels_tab" target="_blank" rel="noopener noreferrer" class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700 hover:bg-blue-100">Facebook</a>
+            <a href="https://www.instagram.com/red_apple_mobile_repair?fbclid=IwY2xjawVyValleHRuA2FlbQIxMABwZG9mBWJyaWQRMWIwM1dNNzRFaklER3NORTFzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEf7hvC0NYVT0O0grCO5ISQt96O7OB5yq7yHSTfH9zOkKAd7_l53VndCrJhGZI_aem__p2KWZFDyi1TfvqxcG8DRQ" target="_blank" rel="noopener noreferrer" class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100">Instagram</a>
+            <a href="https://youtube.com/@redmobilerepairinginstitute340" target="_blank" rel="noopener noreferrer" class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700 hover:bg-red-100">YouTube</a>
             <a href="#halasuru-map" class="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">Google Maps</a>
-            <a href="#footer-contact" class="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-amber-800">JustDial</a>
+            <a href="https://share.google/Md28q8mNSzq3tA4bW" target="_blank" rel="noopener noreferrer" class="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-amber-800">JustDial</a>
+            <a href="https://share.google/B6bJqzYHRkMOXYNwz" target="_blank" rel="noopener noreferrer" class="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">Namma Directory</a>
+            <a href="https://share.google/8NXiSWoPN4wJKR5et" target="_blank" rel="noopener noreferrer" class="rounded-full border border-purple-200 bg-purple-50 px-2.5 py-1 text-purple-700">magicpin</a>
+            <a href="https://share.google/B8QdSD7l1QrMrOyfs" target="_blank" rel="noopener noreferrer" class="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-sky-700">LinkedIn</a>
             <a href="#footer-contact" class="rounded-full border border-zinc-300 bg-white px-2.5 py-1 text-zinc-800">Apple Maps</a>
             <a href="#footer-contact" title="Bing Places - add your listing URL later" class="rounded-full border border-zinc-300 bg-white px-2.5 py-1 text-zinc-800">Bing Places</a>
           </div>
@@ -1336,10 +1376,11 @@ export const finalSiteHtml = `
         <div>
           <div class="footer-light-heading font-display text-xs font-extrabold uppercase text-zinc-950">Contact</div>
           <ul class="mt-2.5 space-y-1.5">
-            <li><button id="copy-address" type="button" class="footer-light-link hover:underline hover:text-red-600">Metro Pillar No 125, No.38, opp. Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
+            <li><button id="copy-address" type="button" class="footer-light-link hover:underline hover:text-red-600">Metro Pillar No. 125, No. 38, Opposite Bhadra Landmark, Halasuru, Bengaluru 560008</button><span id="address-copied" class="ml-1.5 hidden text-[9px] font-semibold text-emerald-600">✓ copied</span></li>
             <li class="footer-light-hours font-semibold text-zinc-900">10 AM – 12 AM (All 7 Days)</li>
             <li><a href="tel:+918660663776" class="footer-light-link font-mono-num font-bold text-red-600">+91 86606 63776</a></li>
-            <li><a href="mailto:support@redmobilerepair.in" class="footer-light-link text-xs break-words font-semibold text-red-600">support@redmobilerepair.in</a></li>
+            <li><a href="https://youtube.com/@redmobilerepairinginstitute340" target="_blank" rel="noopener noreferrer" class="footer-light-link">YouTube Channel</a></li>
+            <li><a href="mailto:support@redmobilerepair.in" aria-label="Email Red Apple Mobile Repair" class="footer-light-link text-xs break-words font-semibold text-red-600">support@redmobilerepair.in</a></li>
           </ul>
         </div>
       </div>
@@ -1459,4 +1500,3 @@ export const finalSiteHtml = `
     </div>
   </div>
   </div>`;
-
