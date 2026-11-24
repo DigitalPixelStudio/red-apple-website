@@ -18,10 +18,12 @@ export type IconName =
   | "apple" | "facebook" | "instagram" | "youtube" | "telegram" | "twitter"
   | "linkedin" | "gmb" | "store" | "compare" | "award" | "verified"
   | "team" | "experience" | "price" | "time" | "quality" | "care"
+  | "paperclip"
   | "pill" | "cross" | "info" | "help" | "question";
 
 const paths: Record<IconName, string> = {
   phone: "M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z",
+  paperclip: "M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.82-2.83l8.49-8.48",
   ipad: "M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm4 14h8",
   watch: "M12 2a5 5 0 015 5v6a5 5 0 01-10 0V7a5 5 0 015-5zm-2 18h4m-5 0h6",
   airpods: "M8 18v2m8-2v2M7 8a5 5 0 0110 0v6a3 3 0 11-6 0V8zm0 0v-2m6 2v-2",
