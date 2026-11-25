@@ -1199,3 +1199,56 @@ body canvas, body img, body video, body picture { filter: none !important; }
     will-change:auto !important;
   }
 }
+
+
+/* FAI MOTION RESTORE — explicit opt-out only; no-preference visitors get visible motion. */
+@keyframes faiHeadingBreath {
+  0%, 100% { opacity: .88; transform: translateZ(0) scale(1); }
+  50% { opacity: 1; transform: translateZ(0) scale(1.008); }
+}
+@keyframes faiColorFlow {
+  0%, 100% { background-position: 0% 50%; filter: saturate(1); }
+  50% { background-position: 100% 50%; filter: saturate(1.28); }
+}
+@keyframes faiAccentBreath {
+  0%, 100% { opacity: .78; transform: translateZ(0) scale(1); }
+  50% { opacity: 1; transform: translateZ(0) scale(1.025); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="off"]) .heading-breathe:not(#rail-label) {
+    animation: faiHeadingBreath 5.2s ease-in-out infinite !important;
+    will-change: opacity, transform;
+  }
+  html:not([data-motion="off"]) #rail-label.heading-breathe {
+    animation: faiAccentBreath 5.2s ease-in-out infinite !important;
+  }
+  html:not([data-motion="off"]) .text-brand-grad {
+    background-size: 260% 100% !important;
+    animation: faiColorFlow 4.8s ease-in-out infinite !important;
+    will-change: background-position, filter;
+  }
+  html:not([data-motion="off"]) .badge-breathe,
+  html:not([data-motion="off"]) .fast-breathe-badge,
+  html:not([data-motion="off"]) .price-breathe,
+  html:not([data-motion="off"]) .quote-color-shift,
+  html:not([data-motion="off"]) .kicker-shift {
+    animation: faiAccentBreath 3.8s ease-in-out infinite !important;
+    will-change: opacity, transform;
+  }
+  html:not([data-motion="off"]) .ambient-orb {
+    animation: raAmbientDrift 18s ease-in-out infinite alternate !important;
+    will-change: transform, opacity;
+  }
+  html:not([data-motion="off"]) .heading-breathe::after {
+    animation: raAccentBreath 4.2s ease-in-out infinite !important;
+    opacity: .8;
+  }
+}
+@media (prefers-reduced-motion: reduce), (prefers-reduced-motion: no-preference) and (html[data-motion="off"]) {
+  .heading-breathe, .text-brand-grad, .badge-breathe, .fast-breathe-badge,
+  .price-breathe, .quote-color-shift, .kicker-shift, .ambient-orb,
+  .heading-breathe::after {
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
