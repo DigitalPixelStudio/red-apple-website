@@ -1098,15 +1098,43 @@
         const slots = [];
         const visibleSlots = new Set();
         let webglRafId = 0;
+        let scrollResumeTimer = 0;
+        let pageScrolling = false;
+        let lastRenderAt = 0;
+        const MAX_RENDER_INTERVAL = 1000 / 60;
 
-        // Native requestAnimationFrame cadence: render at the display's available
-        // refresh rate (60/90/120 Hz) while a 3D stage is visible, then sleep.
+        // Keep the 3D scene responsive while idle, but yield the GPU during native
+        // momentum scrolling. This prevents WebGL work competing with page compositing.
+        function pauseWebGLForScroll() {
+          pageScrolling = true;
+          document.documentElement.dataset.scrolling = 'true';
+          if (webglRafId) {
+            cancelAnimationFrame(webglRafId);
+            webglRafId = 0;
+          }
+          if (scrollResumeTimer) clearTimeout(scrollResumeTimer);
+          scrollResumeTimer = setTimeout(() => {
+            pageScrolling = false;
+            scrollResumeTimer = 0;
+            delete document.documentElement.dataset.scrolling;
+            lastFrameTime = 0;
+            lastRenderAt = 0;
+            wakeWebGLLoop();
+          }, 160);
+        }
+        window.addEventListener('scroll', pauseWebGLForScroll, { passive: true });
+
+        // Cap background product rendering at 60fps. 120Hz displays still retain
+        // native 120Hz scrolling; the 3D loop no longer burns a second frame budget.
         function wakeWebGLLoop() {
-          if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
+          if (webglRafId || pageScrolling || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
             webglRafId = 0;
-            if (document.hidden || visibleSlots.size === 0) return;
-            renderFrame(now);
+            if (document.hidden || pageScrolling || visibleSlots.size === 0) return;
+            if (!lastRenderAt || now - lastRenderAt >= MAX_RENDER_INTERVAL) {
+              lastRenderAt = now;
+              renderFrame(now);
+            }
             webglRafId = requestAnimationFrame(tick);
           };
           webglRafId = requestAnimationFrame(tick);
