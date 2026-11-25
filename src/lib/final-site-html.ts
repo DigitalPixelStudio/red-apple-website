@@ -299,6 +299,55 @@ export const finalSiteHtml = `
       </div>
     </section>
 
+    <!-- 18. HALASURU STUDIO VIDEO GALLERY — both original YouTube aspect ratios, side by side -->
+    <section id="studio-video" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">A Closer Look</div>
+          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Inside Our <span class="text-brand-grad">Halasuru Repair Studio</span></h2>
+          <p class="mt-2 text-sm text-zinc-600">Real studio footage, precision machinery and customer repair work from our Halasuru centre.</p>
+        </div>
+        <div class="mt-6 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:grid-cols-4 lg:gap-4">
+          <article class="min-w-0">
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="Fee4eqqNhPA" data-video-title="Red Apple Mobile Repair — Halasuru Studio" data-thumbnail="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg" alt="Red Apple Mobile Repair Halasuru studio video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="Fee4eqqNhPA" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play Halasuru repair studio video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">HALASURU REPAIR STUDIO</p>
+          </article>
+          <article class="min-w-0">
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="GIkJEVruhdU" data-video-title="Red Apple Mobile Repair — Studio and Machinery" data-thumbnail="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg" alt="Red Apple Mobile Repair studio and machinery video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="GIkJEVruhdU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play studio and machinery video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">STUDIO &amp; MACHINERY</p>
+          </article>
+          <article class="min-w-0">
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="YF0oRI1yapU" data-video-title="Red Apple Mobile Repair — iPhone Battery Repair" data-thumbnail="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg" alt="iPhone battery repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="YF0oRI1yapU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone battery repair video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">iPHONE REPAIR WORK</p>
+          </article>
+          <article class="min-w-0">
+            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="wGs8VbOBrfI" data-video-title="Red Apple Mobile Repair — iPhone 14 Pro Max Before and After" data-thumbnail="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg">
+              <img src="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg" alt="iPhone 14 Pro Max before and after repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
+              <button type="button" data-video-play="wGs8VbOBrfI" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone 14 Pro Max before and after video">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
+              </button>
+            </div>
+            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">BEFORE &amp; AFTER</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- 4. GET YOUR ESTIMATE IN 30 SECONDS (ANIMATED 3D iPAD PRO ON LEFT + EXACT OWNER WHATSAPP FORMAT) -->
     <section id="estimate" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -492,6 +541,35 @@ export const finalSiteHtml = `
             <div class="pointer-events-none absolute bottom-3 left-3 right-3 rounded-xl bg-zinc-950/80 px-3 py-2 text-center text-[11px] font-semibold text-orange-200">Your device never travels unaccounted for.</div>
           </div>
         </div>
+
+        <section id="pickup-standard" aria-labelledby="pickup-standard-title" class="mt-8 overflow-hidden rounded-3xl border border-orange-200 bg-white shadow-sm">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <div class="border-b border-orange-100 bg-gradient-to-br from-orange-50 via-amber-50 to-white p-5 sm:p-7 lg:col-span-7 lg:border-b-0 lg:border-r">
+              <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-100/80 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-amber-900">
+                <span aria-hidden="true">⚠</span> Service Standard Warning
+              </div>
+              <h2 id="pickup-standard-title" class="mt-3 font-display text-2xl font-black leading-tight text-zinc-950 sm:text-3xl">Why We Do Not Recommend <span class="text-brand-grad">Doorstep Repairs</span></h2>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-700">Many aggregators offer “doorstep service,” but true micro-electronics repair requires a sterile environment. You simply cannot safely rebuild a modern smartphone on a coffee table.</p>
+              <ul class="mt-5 space-y-3 text-sm leading-relaxed text-zinc-700">
+                <li class="flex gap-3"><span class="mt-0.5 font-black text-red-600" aria-hidden="true">✕</span><span><strong class="text-zinc-950">Dust Contamination:</strong> OCA lamination and internal exposure require cleanroom environments to prevent dust under the screen.</span></li>
+                <li class="flex gap-3"><span class="mt-0.5 font-black text-red-600" aria-hidden="true">✕</span><span><strong class="text-zinc-950">Missing Equipment:</strong> TBK lasers, vacuum laminators, and EEPROM programmers weigh over 40kg and cannot be carried in a backpack.</span></li>
+                <li class="flex gap-3"><span class="mt-0.5 font-black text-red-600" aria-hidden="true">✕</span><span><strong class="text-zinc-950">Rushed Jobs:</strong> Doorstep agents are pressured to finish quickly, often skipping crucial thermal pasting and water-seal adhesives.</span></li>
+              </ul>
+            </div>
+            <div class="flex flex-col justify-center bg-zinc-950 p-5 text-white sm:p-7 lg:col-span-5">
+              <div class="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">Our Solution</div>
+              <h3 class="font-display text-2xl font-black leading-tight sm:text-3xl">Professional Lab Repair <span class="text-orange-400">&amp; Secure Pickup/Drop</span></h3>
+              <p class="mt-3 text-sm leading-relaxed text-zinc-300">We collect your device free of charge, keep it sealed and tracked, complete the repair on our specialist bench, then return it securely.</p>
+              <div class="mt-5 flex flex-wrap gap-2 text-[11px] font-bold">
+                <span class="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-zinc-100">Free 24/7 Collection</span>
+                <span class="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-zinc-100">In-house TBK Equipment</span>
+                <span class="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-zinc-100">Live CRM Tracking</span>
+                <span class="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-zinc-100">Secure Return</span>
+              </div>
+              <a href="#paired-crm" class="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-orange-500 px-4 py-2.5 text-xs font-extrabold text-white transition-colors hover:bg-orange-600">Track Your Repair <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -1231,55 +1309,6 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 18. HALASURU STUDIO VIDEO GALLERY — both original YouTube aspect ratios, side by side -->
-    <section id="studio-video" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="mx-auto max-w-3xl text-center">
-          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">A Closer Look</div>
-          <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Inside Our <span class="text-brand-grad">Halasuru Repair Studio</span></h2>
-          <p class="mt-2 text-sm text-zinc-600">Real studio footage, precision machinery and customer repair work from our Halasuru centre.</p>
-        </div>
-        <div class="mt-6 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:grid-cols-4 lg:gap-4">
-          <article class="min-w-0">
-            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="Fee4eqqNhPA" data-video-title="Red Apple Mobile Repair — Halasuru Studio" data-thumbnail="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg">
-              <img src="https://i.ytimg.com/vi/Fee4eqqNhPA/hqdefault.jpg" alt="Red Apple Mobile Repair Halasuru studio video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
-              <button type="button" data-video-play="Fee4eqqNhPA" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play Halasuru repair studio video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
-              </button>
-            </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">HALASURU REPAIR STUDIO</p>
-          </article>
-          <article class="min-w-0">
-            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="GIkJEVruhdU" data-video-title="Red Apple Mobile Repair — Studio and Machinery" data-thumbnail="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg">
-              <img src="https://i.ytimg.com/vi/GIkJEVruhdU/hqdefault.jpg" alt="Red Apple Mobile Repair studio and machinery video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
-              <button type="button" data-video-play="GIkJEVruhdU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play studio and machinery video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
-              </button>
-            </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">STUDIO &amp; MACHINERY</p>
-          </article>
-          <article class="min-w-0">
-            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="YF0oRI1yapU" data-video-title="Red Apple Mobile Repair — iPhone Battery Repair" data-thumbnail="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg">
-              <img src="https://i.ytimg.com/vi/YF0oRI1yapU/hqdefault.jpg" alt="iPhone battery repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
-              <button type="button" data-video-play="YF0oRI1yapU" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone battery repair video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
-              </button>
-            </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">iPHONE REPAIR WORK</p>
-          </article>
-          <article class="min-w-0">
-            <div class="video-player-shell relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-950 shadow-md sm:rounded-3xl" data-video-id="wGs8VbOBrfI" data-video-title="Red Apple Mobile Repair — iPhone 14 Pro Max Before and After" data-thumbnail="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg">
-              <img src="https://i.ytimg.com/vi/wGs8VbOBrfI/hqdefault.jpg" alt="iPhone 14 Pro Max before and after repair video thumbnail" loading="lazy" decoding="async" width="480" height="360" class="absolute inset-0 h-full w-full object-cover opacity-90">
-              <button type="button" data-video-play="wGs8VbOBrfI" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-950/20 text-white" aria-label="Play iPhone 14 Pro Max before and after video">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-transparent text-xl shadow-none">▶</span><span class="rounded-full bg-zinc-950/65 px-3 py-1 text-[10px] font-extrabold tracking-wider">PLAY VIDEO</span>
-              </button>
-            </div>
-            <p class="mt-2 text-center text-[10px] font-bold text-zinc-600 sm:mt-3 sm:text-xs">BEFORE &amp; AFTER</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
     <!-- 19. LARGE HALASURU GOOGLE MAPS EMBED (#halasuru-map) -->
     <section id="halasuru-map" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -1415,15 +1444,15 @@ export const finalSiteHtml = `
   <!-- SLEEK MATTE CHARCOAL FLOATING ACTION DOCK (Get Estimate · WhatsApp · Call) + RIGHT AI BENCH BUTTON -->
   <div class="floating-dock fixed bottom-4 left-1/2 z-40 flex items-center gap-2 rounded-2xl border border-zinc-200/90 bg-white p-1.5 shadow-2xl">
     <a href="#estimate" class="dock-dark-btn dock-estimate-action inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
-      <span class="dock-icon-glow dock-icon-glow-estimate"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></span>
+      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
       <span>Get Estimate</span>
     </a>
     <a href="https://wa.me/918660663776" target="_blank" rel="noopener noreferrer" class="dock-dark-btn dock-whatsapp-action inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold active:scale-95">
-      <span class="dock-icon-glow dock-icon-glow-whatsapp"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <span>WhatsApp</span>
     </a>
     <a href="tel:+918660663776" aria-label="Call Red Apple Lab" class="dock-dark-btn dock-call-action inline-flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-extrabold active:scale-95">
-      <span class="dock-icon-glow dock-icon-glow-call"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <span>Call Now</span>
     </a>
     <button type="button" id="btn-open-ai" aria-label="Open Red Apple AI Bench Chat" title="Red Apple AI Bench" class="ai-launcher dock-dark-btn inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-red-500/50 shadow-lg active:scale-95">
@@ -1469,7 +1498,12 @@ export const finalSiteHtml = `
     </div>
 
     <div class="border-t border-zinc-200 bg-white px-3 pt-2.5">
-      <div class="mb-2 flex items-center justify-between gap-2"><input id="ai-photo-input" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple class="hidden" aria-label="Choose repair photos" /><button type="button" id="ai-photo-button" class="inline-flex min-h-9 items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[11px] font-extrabold text-zinc-900 shadow-sm transition hover:border-red-300 hover:bg-red-100"><span class="grid h-6 w-6 place-items-center rounded-lg bg-white text-zinc-900 shadow-sm"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.82-2.83l8.49-8.48"/></svg></span>Add photo</button><span id="ai-photo-count" class="text-[10px] font-semibold text-zinc-500">Optional · Up to 3 photos</span></div><div id="ai-photo-preview" class="mb-2 hidden flex-wrap gap-2"></div><div class="mb-2 relative"><input id="ai-typing-input" type="text" data-lpignore="true" autocomplete="off" placeholder="Type your first message…" class="w-full rounded-xl border border-red-300 bg-white px-3.5 py-3 pr-22 text-[11px] font-bold placeholder:text-zinc-400 shadow-sm focus:border-red-600 focus:shadow-[0_0_0_3px_rgba(220,38,38,0.1)]" /><button id="ai-typing-send" class="absolute inset-y-1 right-1 rounded-xl bg-red-600 px-3 text-[10px] font-extrabold text-white shadow-sm transition hover:bg-red-700">Ask AI →</button></div>
+      <div class="mb-2 relative"><input id="ai-typing-input" type="text" data-lpignore="true" autocomplete="off" placeholder="Type your first message…" class="w-full rounded-xl border border-red-300 bg-white px-3.5 py-3 pr-22 text-[11px] font-bold placeholder:text-zinc-400 shadow-sm focus:border-red-600 focus:shadow-[0_0_0_3px_rgba(220,38,38,0.1)]" /><button id="ai-typing-send" type="button" class="absolute inset-y-1 right-1 rounded-xl bg-red-600 px-3 text-[10px] font-extrabold text-white shadow-sm transition hover:bg-red-700">Ask AI →</button></div>
+      <div class="mb-2 flex items-center gap-2">
+        <input id="ai-photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden />
+        <button type="button" id="btn-ai-photo" class="rounded-lg border border-zinc-300 bg-zinc-50 px-3 py-2 text-[10px] font-bold text-zinc-700 hover:border-red-300">＋ Add photo</button>
+        <span id="ai-photo-status" class="min-w-0 text-[10px] text-zinc-500" aria-live="polite">Attach up to 3 repair photos</span>
+      </div>
       <div id="ai-triage" class="grid grid-cols-3 gap-1.5 pb-2">
         <select id="ai-device" aria-label="Device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
           <option value="">Device</option>
