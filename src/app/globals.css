@@ -5484,3 +5484,47 @@ main > section:not(#hero):not(#page-plan) .gap-5 { gap: 1rem !important; }
 .dock-icon-glow-call::before { background:radial-gradient(circle,rgba(59,130,246,.46) 0%,rgba(14,165,233,.22) 44%,transparent 76%); }
 #ai-photo-button { cursor:pointer; }
 #ai-photo-button:disabled { cursor:not-allowed; opacity:.45; }
+
+
+/* NOV-26 FPS profile: disable decorative DOM motion site-wide.
+   Canvas/WebGL 3D model animation is JS-rendered and intentionally unaffected. */
+html[data-motion="off"],
+html[data-motion="off"] body { scroll-behavior: auto !important; }
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html[data-motion="off"] #ambient-particles,
+html[data-motion="off"] .ambient-orb,
+html[data-motion="off"] .laser-line,
+html[data-motion="off"] .pulse-ring,
+html[data-motion="off"] .scroll-progress-css {
+  animation: none !important;
+}
+html[data-motion="off"] #ambient-particles { display: none !important; }
+
+/* Text-only breathing: larger, slow and compositor-friendly.
+   No animated gradient/filter/box-shadow, and no movement on cards, photos or videos. */
+@keyframes faiTextOnlyBreath {
+  0%, 100% { opacity: .94; transform: translateZ(0) scale(1); }
+  50% { opacity: 1; transform: translateZ(0) scale(1.035); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion="off"] .heading-breathe {
+    animation: faiTextOnlyBreath 6.4s ease-in-out infinite !important;
+    transition: none !important;
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion="off"] .heading-breathe {
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
+.pwa-install-header[hidden] { display: none !important; }
+.pwa-install-header:not([hidden]) { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; }
