@@ -1,4 +1,9 @@
 (function () {
+  // Set motion preference as soon as this script executes (not on window.onload),
+  // so the CSS motion layer is active even when Next loads this script late.
+  if (!document.documentElement.hasAttribute('data-motion')) {
+    document.documentElement.dataset.motion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
+  }
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
