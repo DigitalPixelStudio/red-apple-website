@@ -10,8 +10,8 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 40;
 
 // Current stable Flash family, ordered for reliable low-latency fallback.
-const MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"] as const;
-const IMAGE_MODELS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"] as const;
+const MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite"] as const;
+const IMAGE_MODELS = ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 // Image forwarding is controlled per deployment; preview uses the free Gemini tier with the privacy disclosure shown on-site.
 const IMAGE_INPUT_ENABLED = process.env.GEMINI_IMAGE_INPUT_ENABLED === "true";
