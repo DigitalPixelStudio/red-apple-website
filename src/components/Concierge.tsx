@@ -949,7 +949,7 @@ export default function Concierge() {
           {images.length > 0 && (
             <label className="flex items-start gap-2 border-t border-black/[0.05] bg-amber-50 px-3 py-2 text-[10px] leading-relaxed text-zinc-700">
               <input type="checkbox" checked={imageConsent} onChange={(event) => setImageConsent(event.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-red-600" />
-              <span>I agree to send these device photos through FaiCodex AI, powered by Google Gemini, for AI review. This preview uses Google’s free tier; Google may use prompts and images to improve its products. Do not upload personal or sensitive information.</span>
+              <span>I agree to send these device photos through FaiCodex AI, for AI review. FaiCodex AI uses a third-party AI service for image analysis. On free-tier processing, submitted prompts and images may be used by that service to improve its products. Do not upload personal or sensitive information.</span>
             </label>
           )}
           {imageError && <p role="status" className="bg-white px-3 pt-1 text-[10px] text-red-600">{imageError}</p>}
