@@ -792,9 +792,11 @@
       const PLAN = [
         { id: '#hero', label: 'Start Here' },
         { id: '#real-shop', label: 'The Studio' },
+        { id: '#studio-video', label: 'Studio Videos' },
         { id: '#estimate', label: 'Smart Estimate' },
         { id: '#paired-crm', label: 'Repair Tracking' },
         { id: '#pickup', label: 'Doorstep Pickup' },
+        { id: '#pickup-standard', label: 'Professional Lab Standard' },
         { id: '#glass-lab', label: 'Glass Restoration' },
         { id: '#tbk-machines', label: 'TBK Machinery' },
         { id: '#ecosystem-3d', label: 'Apple Devices' },
@@ -805,7 +807,6 @@
         { id: '#holo-warranty', label: '6-Month Warranty' },
         { id: '#reviews', label: 'Customer Reviews' },
         { id: '#faq', label: 'FAQs' },
-        { id: '#studio-video', label: 'Video Gallery' },
         { id: '#halasuru-map', label: 'Find The Store' },
         { id: 'footer', label: 'Contact' },
       ];
@@ -909,83 +910,9 @@
       // Smooth dedicated chat entry: type a first message -> asks the bot directly
       const typingIn = document.getElementById('ai-typing-input');
       const typingSend = document.getElementById('ai-typing-send');
-      const aiPhotoInput = document.getElementById('ai-photo-input');
-      const aiPhotoButton = document.getElementById('ai-photo-button');
-      const aiPhotoCount = document.getElementById('ai-photo-count');
-      const aiPhotoPreview = document.getElementById('ai-photo-preview');
-      let aiAttachedImages = [];
-      function renderAiPhotoPreviews() {
-        if (!aiPhotoPreview || !aiPhotoCount) return;
-        aiPhotoPreview.innerHTML = '';
-        aiAttachedImages.forEach((photo, index) => {
-          const item = document.createElement('div');
-          item.className = 'relative flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 p-1.5';
-          const img = document.createElement('img');
-          img.src = photo.preview; img.alt = 'Selected repair photo'; img.className = 'h-10 w-10 rounded-md object-cover';
-          const label = document.createElement('span');
-          label.className = 'max-w-20 truncate text-[9px] font-semibold text-zinc-700'; label.textContent = photo.name;
-          const remove = document.createElement('button');
-          remove.type = 'button'; remove.className = 'ml-1 grid h-5 w-5 place-items-center rounded-full bg-zinc-900 text-xs font-bold text-white'; remove.textContent = '×'; remove.setAttribute('aria-label', 'Remove photo');
-          remove.addEventListener('click', () => { aiAttachedImages.splice(index, 1); renderAiPhotoPreviews(); });
-          item.append(img, label, remove); aiPhotoPreview.append(item);
-        });
-        aiPhotoPreview.classList.toggle('hidden', aiAttachedImages.length === 0);
-        aiPhotoCount.textContent = aiAttachedImages.length ? aiAttachedImages.length + '/3 photos attached' : 'Optional · Up to 3 photos';
-        if (aiPhotoButton) aiPhotoButton.disabled = aiAttachedImages.length >= 3;
-      }
-      async function prepareAiPhoto(file) {
-        if (!file.type.startsWith('image/')) throw new Error('Choose an image file.');
-        if (file.size > 12 * 1024 * 1024) throw new Error('Each photo must be under 12 MB.');
-        const url = URL.createObjectURL(file);
-        try {
-          const image = await new Promise((resolve, reject) => {
-            const el = new Image(); el.onload = () => resolve(el); el.onerror = () => reject(new Error('This photo could not be opened.')); el.src = url;
-          });
-          let scale = Math.min(1, 1280 / Math.max(image.naturalWidth, image.naturalHeight));
-          let dataUrl = '';
-          for (let attempt = 0; attempt < 4; attempt++) {
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
-            canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
-            const ctx = canvas.getContext('2d', { alpha: false });
-            if (!ctx) throw new Error('Photo processing is unavailable on this device.');
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            dataUrl = canvas.toDataURL('image/jpeg', attempt < 2 ? 0.76 : 0.64);
-            if (dataUrl.length <= 1250000) break;
-            scale *= 0.78;
-          }
-          const data = dataUrl.split(',')[1] || '';
-          if (!data || data.length > 1250000) throw new Error('This photo is too large. Choose a smaller image.');
-          return { name: file.name.slice(0, 60), mimeType: 'image/jpeg', data, preview: dataUrl };
-        } finally { URL.revokeObjectURL(url); }
-      }
-      aiPhotoButton?.addEventListener('click', () => aiPhotoInput?.click());
-      aiPhotoInput?.addEventListener('change', async () => {
-        const selected = Array.from(aiPhotoInput.files || []);
-        aiPhotoInput.value = '';
-        const room = Math.max(0, 3 - aiAttachedImages.length);
-        if (!room || !selected.length) return;
-        aiPhotoButton.disabled = true;
-        if (selected.length > room && aiPhotoCount) aiPhotoCount.textContent = 'Only ' + room + ' more photo(s) can be added.';
-        for (const file of selected.slice(0, room)) {
-          try { aiAttachedImages.push(await prepareAiPhoto(file)); }
-          catch (error) { if (aiPhotoCount) aiPhotoCount.textContent = error.message || 'Photo could not be added.'; }
-        }
-        renderAiPhotoPreviews();
-        if (aiPhotoButton && aiAttachedImages.length < 3) aiPhotoButton.disabled = false;
-      });
-
       if (typingIn && typingSend && !typingIn.dataset.bound) {
         typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
-        typingSend.addEventListener('click', () => {
-          const t = typingIn.value.trim();
-          if (!t && !aiAttachedImages.length) return;
-          typingIn.value = '';
-          const photos = aiAttachedImages.slice();
-          aiAttachedImages = [];
-          renderAiPhotoPreviews();
-          replyToUser(t, photos);
-        });
+        typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t) replyToUser(t); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && aiDrawer && !aiDrawer.classList.contains('hidden')) { aiDrawer.classList.add('hidden'); aiDrawer.classList.remove('flex'); } });
       const copyBtn = document.getElementById('copy-address');
       if (copyBtn) {
@@ -1012,11 +939,58 @@
       }
 
       let aiHistory = [];
-      async function replyToUser(rawText, attachments = []) {
-        const q = (rawText || '').trim() || (attachments.length ? 'Please inspect the attached repair photos. Describe visible damage and likely repair options.' : '');
+      let aiPendingImages = [];
+      const aiPhotoInput = document.getElementById('ai-photo-input');
+      const aiPhotoButton = document.getElementById('btn-ai-photo');
+      const aiPhotoStatus = document.getElementById('ai-photo-status');
+      function readAiPhoto(file) {
+        return new Promise((resolve, reject) => {
+          if (!file || !/^image\/(jpeg|png|webp)$/.test(file.type)) return reject(new Error('Choose a JPG, PNG or WebP image.'));
+          if (file.size > 8 * 1024 * 1024) return reject(new Error('Each photo must be under 8 MB.'));
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error('Could not read that photo.'));
+          reader.onload = () => {
+            const image = new Image();
+            image.onerror = () => reject(new Error('That photo could not be decoded.'));
+            image.onload = () => {
+              const ratio = Math.min(1, 1440 / Math.max(image.naturalWidth, image.naturalHeight));
+              const canvas = document.createElement('canvas');
+              canvas.width = Math.max(1, Math.round(image.naturalWidth * ratio));
+              canvas.height = Math.max(1, Math.round(image.naturalHeight * ratio));
+              const context = canvas.getContext('2d');
+              if (!context) return reject(new Error('Photo processing is unavailable in this browser.'));
+              context.drawImage(image, 0, 0, canvas.width, canvas.height);
+              const encoded = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
+              if (!encoded) return reject(new Error('Could not prepare that photo.'));
+              resolve({ mimeType: 'image/jpeg', data: encoded });
+            };
+            image.src = String(reader.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      aiPhotoButton?.addEventListener('click', () => aiPhotoInput?.click());
+      aiPhotoInput?.addEventListener('change', async () => {
+        const selected = Array.from(aiPhotoInput.files || []).slice(0, 3 - aiPendingImages.length);
+        if (!selected.length) return;
+        if (aiPhotoStatus) aiPhotoStatus.textContent = 'Preparing photo(s)…';
+        try {
+          const prepared = await Promise.all(selected.map(readAiPhoto));
+          aiPendingImages.push(...prepared);
+          if (aiPhotoStatus) aiPhotoStatus.textContent = aiPendingImages.length + ' photo(s) ready';
+        } catch (error) {
+          if (aiPhotoStatus) aiPhotoStatus.textContent = error instanceof Error ? error.message : 'Photo could not be prepared.';
+        } finally {
+          aiPhotoInput.value = '';
+        }
+      });
+      async function replyToUser(rawText) {
+        const q = (rawText || '').trim();
+        const images = aiPendingImages.slice(0, 3);
         if (!q || !aiMsgs) return;
-        const photoMarkup = attachments.map((image) => '<img src="data:image/jpeg;base64,' + image.data + '" alt="Customer repair photo" class="mt-2 mr-1 inline-block h-16 w-16 rounded-lg border border-white/20 object-cover" />').join('');
-        aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + photoMarkup + '</div>';
+        aiPendingImages = [];
+        if (aiPhotoStatus) aiPhotoStatus.textContent = 'Attach up to 3 repair photos';
+        aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + (images.length ? '<div class="mt-1 text-[10px] text-orange-200">📷 ' + images.length + ' photo(s) attached</div>' : '') + '</div>';
         const bid = 'ai-' + Date.now() + Math.random().toString(36).slice(2, 6);
         aiMsgs.innerHTML += '<div id="' + bid + '" class="max-w-[92%] rounded-2xl rounded-tl-sm border border-zinc-200 bg-white p-3 text-zinc-700 shadow-sm"><span class="text-zinc-400">Checking the bench prices…</span></div>';
         aiMsgs.scrollTop = aiMsgs.scrollHeight;
@@ -1026,7 +1000,7 @@
           const res = await fetch('/api/concierge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images: attachments.map(({ mimeType, data }) => ({ mimeType, data })) })
+            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images })
           });
           if (!res.ok || !res.body) throw new Error('offline');
           const reader = res.body.getReader();
@@ -1039,15 +1013,14 @@
             aiMsgs.scrollTop = aiMsgs.scrollHeight;
           }
           const src = res.headers.get('X-Concierge-Source') || 'gemini';
-          if (bubble) bubble.innerHTML = escHtml(full).replace(/\n/g, '<br>') +
-            '<div class="mt-2 text-[9px] font-bold ' + (src === 'gemini' ? 'text-red-600' : 'text-emerald-700') + '">' +
-            (src === 'gemini' ? '✦ Forge AI · live answer' : '● Verified local knowledge') + '</div>';
+          const imageFailed = images.length > 0 && src !== 'gemini';
+          if (bubble) bubble.innerHTML = escHtml(full).replace(/\\n/g, '<br>') +
+            '<div class="mt-2 text-[9px] font-bold ' + (src === 'gemini' ? 'text-red-600' : 'text-amber-700') + '">' +
+            (src === 'gemini' ? '✦ Forge AI · live photo-aware answer' : imageFailed ? '⚠ Photo review unavailable · no image analysis was performed' : '● Verified local knowledge') + '</div>';
           aiHistory.push({ role: 'user', text: q }, { role: 'model', text: full });
-        } catch (err) {
-          full = attachments.length
-            ? "I couldn't complete the photo review right now. Please try again shortly or send these photos to our technician on WhatsApp for a manual assessment."
-            : localBotAnswer(q);
-          if (bubble) bubble.innerHTML = escHtml(full) + '<div class="mt-2 text-[9px] font-bold text-emerald-700">● Verified local knowledge</div>';
+        } catch {
+          full = images.length ? 'The photo could not be sent for live assessment. Please try again or contact our technician for a manual review.' : localBotAnswer(q);
+          if (bubble) bubble.innerHTML = escHtml(full) + '<div class="mt-2 text-[9px] font-bold ' + (images.length ? 'text-amber-700' : 'text-emerald-700') + '">' + (images.length ? '⚠ Photo review unavailable' : '● Verified local knowledge') + '</div>';
         }
         const wa = 'https://wa.me/918660663776?text=' + encodeURIComponent('Hi Red Apple Bench, I asked AI Bench: ' + q);
         if (bubble) bubble.innerHTML += '<a href="' + wa + '" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-bold text-white">Continue on WhatsApp →</a>';
@@ -1271,7 +1244,7 @@
         // and resizing it per slot reintroduces the old bottom-right shift bug.
         // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 0.98, fov: 34 },
+          'canvas-hero':          { fill: 1.18, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
@@ -1288,32 +1261,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.98, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
             'canvas-internals': 0.95, 'canvas-airpods': 0.78, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
-            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.96, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
             'canvas-internals': 0.92, 'canvas-airpods': 0.80, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
-            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.71, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
             'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.69, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
             'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.67, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
             'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.65, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
             'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
@@ -1651,6 +1624,8 @@
           const phone = buildBeveledPhone(slateMat, false);
           const halo = new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.02, 12, 60), new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.5 }));
           halo.rotation.x = Math.PI / 2.3;
+          // Position-only refinement: preserve the phone geometry, scale and camera fill.
+          root.position.set(0.12, -0.12, 0);
           root.add(phone, halo);
           return (t) => {
             phone.position.y = Math.sin(t * 1.4) * 0.1;
