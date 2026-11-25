@@ -5610,3 +5610,12 @@ html[data-motion="off"] #ambient-particles { display: none !important; }
 @media (min-width: 768px) {
   .repair-capabilities-grid li { min-height: 64px; padding: 16px 18px; font-size: 15px; }
 }
+
+
+/* Scroll-time performance: pause decorative CSS animation timelines while the
+   browser is handling touch momentum / wheel scrolling. They resume automatically. */
+html[data-scrolling="true"] *,
+html[data-scrolling="true"] *::before,
+html[data-scrolling="true"] *::after {
+  animation-play-state: paused !important;
+}
