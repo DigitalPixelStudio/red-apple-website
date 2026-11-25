@@ -5528,3 +5528,63 @@ html[data-motion="off"] #ambient-particles { display: none !important; }
 }
 .pwa-install-header[hidden] { display: none !important; }
 .pwa-install-header:not([hidden]) { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; }
+
+
+/* FINAL TEXT RHYTHM — only headings breathe; content blocks remain static. */
+@keyframes faiTextOnlyBreath {
+  0%, 100% { opacity: .92; transform: translateZ(0) scale(1); }
+  50% { opacity: 1; transform: translateZ(0) scale(1.075); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion="off"] .heading-breathe {
+    animation: faiTextOnlyBreath 5.2s ease-in-out infinite !important;
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+}
+
+/* Fresh plain-text layouts: no animation, filters, shadows, or continuously painted effects. */
+.repair-capabilities-plain,
+.repair-contact-plain {
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 150px;
+}
+.repair-capabilities-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 1.1rem;
+  row-gap: .7rem;
+  color: #27272a;
+  font-size: clamp(14px, 1.15vw, 16px);
+  font-weight: 650;
+  line-height: 1.65;
+}
+.repair-capabilities-copy span {
+  display: inline;
+  white-space: normal;
+}
+.repair-capabilities-copy span + span::before {
+  content: "·";
+  color: #dc2626;
+  margin-right: 1.1rem;
+}
+.repair-hashtags-plain {
+  color: #52525b;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.repair-contact-actions-plain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+  margin-top: 1rem;
+}
+@media (max-width: 520px) {
+  .repair-capabilities-copy { column-gap: .75rem; row-gap: .55rem; font-size: 14px; }
+  .repair-capabilities-copy span + span::before { margin-right: .75rem; }
+  .repair-contact-actions-plain > a { width: 100%; }
+}
