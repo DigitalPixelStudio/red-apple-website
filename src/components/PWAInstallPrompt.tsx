@@ -57,7 +57,7 @@ export default function PWAInstallPrompt() {
           if (choice.outcome === "accepted") button.hidden = true;
           else button.textContent = "↓ Install";
         } catch {
-          button.textContent = isIOS ? "Share → Add to Home Screen" : "Browser menu → Install app";
+          button.textContent = isIOS ? "Share → Add Home" : "Menu → Install";
         }
         return;
       }
