@@ -1504,6 +1504,8 @@ export const finalSiteHtml = `
         <button type="button" id="btn-ai-photo" class="rounded-lg border border-zinc-300 bg-zinc-50 px-3 py-2 text-[10px] font-bold text-zinc-700 hover:border-red-300">＋ Add photo</button>
         <span id="ai-photo-status" class="min-w-0 text-[10px] text-zinc-500" aria-live="polite">Attach up to 3 repair photos</span>
       </div>
+      <div id="ai-photo-preview" class="ai-photo-preview hidden" aria-live="polite"></div>
+      <p class="ai-chat-helper">Live repair tracking: type <strong>TRACK JOBID MOBILE</strong> using your repair ID and registered mobile number.</p>
       <div id="ai-triage" class="grid grid-cols-3 gap-1.5 pb-2">
         <select id="ai-device" aria-label="Device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
           <option value="">Device</option>
@@ -1543,8 +1545,7 @@ export const finalSiteHtml = `
       <button type="button" id="tour-start" aria-label="Start Web Tour" title="Web Tour" aria-pressed="false" class="flex h-9 w-9 items-center justify-center rounded-full border border-red-200 bg-white text-red-700 shadow-lg shadow-red-950/10 transition-transform active:scale-95 hover:border-red-400 hover:bg-red-50">
         <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15M8 7h8M8 10h6"/></svg>
       </button>
-
-
+      <span id="web-tour-progress" class="web-tour-progress" aria-live="polite">Explore the website</span>
     </div>
   </div>
   </div>`;
