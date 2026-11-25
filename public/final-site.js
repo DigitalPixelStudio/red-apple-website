@@ -1,9 +1,9 @@
 (function () {
   // Set motion preference as soon as this script executes (not on window.onload),
   // so the CSS motion layer is active even when Next loads this script late.
-  if (!document.documentElement.hasAttribute('data-motion')) {
-    document.documentElement.dataset.motion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
-  }
+  // Website-wide decorative motion is disabled for a calmer, higher-FPS experience.
+  // The 3D model render loop is independent and remains untouched.
+  document.documentElement.dataset.motion = 'off';
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -68,76 +68,9 @@
       // v8: ULTRA-LIGHT AMBIENT PARTICLES — 18 motes, ONE fixed dpr=1 canvas, 30 FPS
       // Replaces the killed shaking background loops. ~0.2ms CPU, GPU-friendly.
       // ============================================================
-      (function mountAmbientParticles() {
-        const host = document.getElementById('ambient-particles');
-        if (!host) return;
-        const cv = document.createElement('canvas');
-        cv.setAttribute('aria-hidden', 'true');
-        cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
-        const ctx = cv.getContext('2d');
-        if (!ctx) return;
-        let W = 0, H = 0;
-        let lastViewportW = Math.max(1, window.innerWidth);
-        const motes = Array.from({ length: 18 }, () => ({
-          x: Math.random(), y: Math.random(),
-          r: 1.2 + Math.random() * 2.2,
-          vx: (Math.random() - 0.5) * 0.00012,
-          vy: -0.00006 - Math.random() * 0.00008,
-          a: 0.06 + Math.random() * 0.10
-        }));
-        function size(force = false) {
-          const w = Math.max(1, window.innerWidth);
-          // Mobile URL-bar collapse changes height without changing layout width.
-          // Ignore those height-only resize events so the canvas bitmap is not reset mid-scroll.
-          if (!force && Math.abs(w - lastViewportW) < 2) return;
-          lastViewportW = w;
-          W = cv.width = w;
-          H = cv.height = Math.max(1, window.innerHeight);
-        }
-        size(true);
-
-        const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        let rafId = 0, last = 0;
-        function pause() {
-          if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
-          last = 0;
-        }
-        function schedule() {
-          if (rafId || document.hidden || document.documentElement.dataset.motion !== 'on' || motionQuery.matches) return;
-          rafId = requestAnimationFrame(frame);
-        }
-        function frame(now) {
-          rafId = 0;
-          if (document.hidden || document.documentElement.dataset.motion !== 'on' || motionQuery.matches) { last = 0; return; }
-          const frameScale = last ? Math.min(2, Math.max(0.25, (now - last) / 33.333)) : 1;
-          last = now;
-          ctx.clearRect(0, 0, W, H);
-          for (const m of motes) {
-            m.x += m.vx * frameScale;
-            m.y += m.vy * frameScale;
-            if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
-            if (m.x < -0.02) m.x = 1.02; else if (m.x > 1.02) m.x = -0.02;
-            ctx.beginPath();
-            ctx.fillStyle = `rgba(220,38,38,${m.a})`;
-            ctx.arc(m.x * W, m.y * H, m.r, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          schedule();
-        }
-        window.addEventListener('resize', () => {
-          const w = Math.max(1, window.innerWidth);
-          if (Math.abs(w - lastViewportW) < 2) return;
-          size();
-          schedule();
-        }, { passive: true });
-        document.addEventListener('visibilitychange', () => document.hidden ? pause() : schedule());
-        const onMotionChange = () => document.documentElement.dataset.motion === 'on' && !motionQuery.matches ? schedule() : pause();
-        document.addEventListener('ra-motion-change', onMotionChange);
-        if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
-        else if (typeof motionQuery.addListener === 'function') motionQuery.addListener(onMotionChange);
-        host.appendChild(cv);
-        if (document.documentElement.dataset.motion === 'on' && !document.hidden && !motionQuery.matches) schedule();
-      })();
+      // Decorative full-screen particle canvas removed: it consumed a continuous RAF
+      // loop during scrolling. 3D product/model rendering is separate and remains enabled.
+      document.getElementById('ambient-particles')?.remove();
 
       // ============================================================
       // 2. 30-SECOND SMART ESTIMATE (EXACT OWNER WHATSAPP FORMAT)
@@ -1291,7 +1224,7 @@
         // and resizing it per slot reintroduces the old bottom-right shift bug.
         // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 1.04, fov: 34 },
+          'canvas-hero':          { fill: 1.06, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
@@ -1308,32 +1241,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 1.06, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 1.10, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
             'canvas-internals': 0.95, 'canvas-airpods': 0.90, 'canvas-watch': 0.95, 'canvas-macbook': 1.08,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.06, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 1.08, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
             'canvas-internals': 0.92, 'canvas-airpods': 0.92, 'canvas-watch': 0.92, 'canvas-macbook': 1.06,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 1.06, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.81, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
             'canvas-internals': 0.90, 'canvas-airpods': 0.63, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.06, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.79, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
             'canvas-internals': 0.88, 'canvas-airpods': 0.65, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.06, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.77, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
             'canvas-internals': 0.86, 'canvas-airpods': 0.61, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 1.06, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.75, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
             'canvas-internals': 0.84, 'canvas-airpods': 0.58, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
