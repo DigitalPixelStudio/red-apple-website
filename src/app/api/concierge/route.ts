@@ -453,7 +453,7 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, "concierge", 18, 60_000);
   if (limited) return limited;
 
-  let body: { message?: unknown; history?: unknown; images?: unknown };
+  let body: { message?: unknown; history?: unknown; images?: unknown; imageConsent?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -465,6 +465,7 @@ export async function POST(request: NextRequest) {
 
   const rawImages = Array.isArray(body.images) ? body.images : [];
   if (rawImages.length > 3) return NextResponse.json({ ok: false, reason: "too_many_images" }, { status: 413, headers: { "X-Concierge-Source": "unavailable" } });
+  if (rawImages.length && body.imageConsent !== true) return NextResponse.json({ ok: false, reason: "image_consent_required" }, { status: 400, headers: { "X-Concierge-Source": "unavailable" } });
   const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
   const images: ImagePart[] = [];
   let totalImageChars = 0;
