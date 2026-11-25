@@ -49,7 +49,7 @@ export const finalSiteHtml = `
   </header>
 
   <main>
-  <div id="ambient-particles" aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10"></div>
+  <div id="ambient-particles" aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 opacity-35"></div>
   <div class="scroll-progress-css" aria-hidden="true"></div>
 
     <section id="page-plan" class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
@@ -1505,8 +1505,8 @@ export const finalSiteHtml = `
         <span id="ai-photo-status" class="min-w-0 text-[10px] text-zinc-500" aria-live="polite">Attach up to 3 repair photos</span>
       </div>
       <div id="ai-photo-preview" class="ai-photo-preview hidden" aria-live="polite"></div>
-      <div id="ai-photo-consent-wrap" class="ai-photo-consent hidden"><label for="ai-photo-consent"><input id="ai-photo-consent" type="checkbox" class="mr-2 h-4 w-4 accent-red-600" />I agree to send this device photo to Google Gemini for AI review. This Preview uses the free tier; Google may use prompts and images to improve its products. Please upload the device only, with no personal or sensitive information.</label></div>
-      <p class="ai-chat-helper">Live repair tracking: type <strong>TRACK JOBID MOBILE</strong> using your repair ID and registered mobile number.</p>
+      <div id="ai-photo-consent-wrap" class="ai-photo-consent hidden"><label for="ai-photo-consent"><input id="ai-photo-consent" type="checkbox" class="mr-2 h-4 w-4 accent-red-600" />I agree to send this device photo through FaiCodex AI, powered by Google Gemini, for AI review. This Preview uses Google’s free tier; Google may use prompts and images to improve its products. Upload device-only photos. Do not include names, phone numbers, passcodes, Apple IDs, or other personal or sensitive information.</label></div>
+      
       <div id="ai-triage" class="grid grid-cols-3 gap-1.5 pb-2">
         <select id="ai-device" aria-label="Device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
           <option value="">Device</option>
@@ -1527,7 +1527,7 @@ export const finalSiteHtml = `
           <option>Battery Replacement</option>
           <option>Motherboard / IC Repair</option>
           <option>Camera / Port / Water Damage</option>
-          <option>Warranty / Track CRM Job</option>
+          <option>Warranty / Policy</option>
         </select>
       </div>
       <div class="flex items-center gap-1.5 pb-3">
@@ -1544,9 +1544,9 @@ export const finalSiteHtml = `
   <div id="tour-dock" class="fixed bottom-3 left-2 z-40 flex items-center">
     <div class="flex items-center gap-2">
       <button type="button" id="tour-start" aria-label="Start Web Tour" title="Web Tour" aria-pressed="false" class="flex h-9 w-9 items-center justify-center rounded-full border border-red-200 bg-white text-red-700 shadow-lg shadow-red-950/10 transition-transform active:scale-95 hover:border-red-400 hover:bg-red-50">
-        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15M8 7h8M8 10h6"/></svg>
+        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.6 5.1-5.1 2.6 2.6-5.1 5.1-2.6Z"/><path d="M12 3v1M21 12h-1M12 21v-1M3 12h1"/></svg>
       </button>
-      <span id="web-tour-progress" class="web-tour-progress" aria-live="polite">Explore the website</span>
+      <span id="web-tour-progress" class="web-tour-progress" aria-live="polite"></span>
     </div>
   </div>
   </div>`;
