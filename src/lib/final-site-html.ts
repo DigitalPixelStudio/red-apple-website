@@ -171,20 +171,23 @@ export const finalSiteHtml = `
 
 
 
-    <!-- 2. TECHNICAL TICKER STRIP — ZLE-V16 rebuild: clean aligned flex-wrap row, shadow-free, zero animation/keyframes -->
-    <div class="border-b border-red-100 bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 py-2">
-      <div class="studio-cap-row">
-        <span class="studio-cap-item">Front glass restoration</span>
-        <span class="studio-cap-item">TBK OCA vacuum lamination</span>
-        <span class="studio-cap-item">90-litre bubble remover</span>
-        <span class="studio-cap-item studio-cap-static">TBK-958 cold UV laser</span>
-        <span class="studio-cap-item studio-cap-static">Original OLED retained</span>
-        <span class="studio-cap-item studio-cap-static">6 Months repair warranty</span>
-        <span class="studio-cap-item studio-cap-static">Zero-password privacy</span>
-        <span class="studio-cap-item studio-cap-static">Apple Diagnostic Mode testing</span>
-        <span class="studio-cap-item studio-cap-static">Halasuru · Bengaluru</span>
+    <!-- Plain static repair capabilities: rebuilt markup, no ticker/motion component -->
+    <section id="repair-capabilities" class="repair-capabilities-plain border-b border-red-100 bg-[#faf8f5] py-6 sm:py-8" aria-label="Repair capabilities">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <p class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Our glass restoration capabilities</p>
+        <div class="repair-capabilities-copy">
+          <span>Front glass restoration</span>
+          <span>TBK OCA vacuum lamination</span>
+          <span>90-litre bubble remover</span>
+          <span>TBK-958 cold UV laser</span>
+          <span>Original OLED retained</span>
+          <span>6 Months repair warranty</span>
+          <span>Zero-password privacy</span>
+          <span>Apple Diagnostic Mode testing</span>
+          <span>Halasuru · Bengaluru</span>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
 
@@ -859,24 +862,17 @@ export const finalSiteHtml = `
           </div>
         </div>
 
-        <!-- ZLE-V16 rebuild: ultra-light static card, shadow-free tags, zero tag animation, content-visibility:auto, compositor-only hover -->
-        <div class="studio-glass-band mt-8 p-5 text-center">
-          <div class="studio-tag-row">
-            <span class="studio-tag">#PremiumMobileRepair</span>
-            <span class="studio-tag">#iPhoneGlassReplacement</span>
-            <span class="studio-tag">#FactoryLevelRepair</span>
-            <span class="studio-tag">#OLEDRepair</span>
-            <span class="studio-tag">#TBK958</span>
-            <span class="studio-tag">#ColdUVLaser</span>
-            <span class="studio-tag">#OCALamination</span>
-            <span class="studio-tag">#Halasuru</span>
-            <span class="studio-tag">#ZeroPasswordPolicy</span>
+        <!-- Plain static glass-lab information: new structure, same customer information and actions -->
+        <div class="repair-contact-plain mt-8 border-t border-zinc-200 pt-6">
+          <p class="mb-3 text-sm font-semibold text-zinc-700">Glass restoration and repair support</p>
+          <p class="repair-hashtags-plain">
+            #PremiumMobileRepair · #iPhoneGlassReplacement · #FactoryLevelRepair · #OLEDRepair · #TBK958 · #ColdUVLaser · #OCALamination · #Halasuru · #ZeroPasswordPolicy
+          </p>
+          <div class="repair-contact-actions-plain">
+            <a href="#estimate" class="dock-quote-btn inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-3 text-sm font-bold text-white">Get a glass-restoration quote</a>
+            <a href="tel:+918660663776" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-900">Call the lab · +91 86606 63776</a>
           </div>
-          <div class="studio-cta-row">
-            <a href="#estimate" class="studio-cta-btn dock-quote-btn cta-tactile rounded-full px-5 py-2.5 text-xs font-extrabold text-white">Get a glass-restoration quote</a>
-            <a href="tel:+918660663776" class="studio-cta-btn cta-tactile rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-xs font-bold text-zinc-900">Call the lab · +91 86606 63776</a>
-          </div>
-          <p class="studio-hours-line">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
+          <p class="mt-4 text-sm leading-relaxed text-zinc-600">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
         </div>
       </div>
     </section>
