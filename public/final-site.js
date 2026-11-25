@@ -819,6 +819,7 @@
       let tourIndex = 0;
       let tourFocusTimeout = null;
       const tourButton = document.getElementById('tour-start');
+      const tourProgress = document.getElementById('web-tour-progress');
       // Motion stays enabled by default; the effects are transform/opacity based.
       // Lightweight motion is the default. One-shot reveal and user-triggered motion remain enabled.
       const stopTour = () => {
@@ -826,6 +827,7 @@
         if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; }
         if (tourFocusTimeout) { clearTimeout(tourFocusTimeout); tourFocusTimeout = null; }
         document.querySelectorAll('.tour-focus').forEach((el) => el.classList.remove('tour-focus'));
+        if (tourProgress) tourProgress.textContent = 'Explore the website';
         if (tourButton) {
           tourButton.classList.remove('tour-running');
           tourButton.setAttribute('aria-pressed', 'false');
@@ -848,9 +850,9 @@
       const runTourStep = () => {
         if (!tourActive) return;
         if (tourIndex >= PLAN.length) { stopTour(); return; }
-        const step = PLAN[tourIndex++];
-        scrollTourTo(step.id);
-        tourTimeout = setTimeout(runTourStep, 3200);
+        const stepNumber = tourIndex + 1; const step = PLAN[tourIndex++];
+        if (tourProgress) tourProgress.textContent = stepNumber + ' / ' + PLAN.length + ' · ' + step.label;
+        scrollTourTo(step.id); tourTimeout = setTimeout(runTourStep, 4400);
       };
       const startTour = () => {
         if (tourActive) { stopTour(); return; }
@@ -864,6 +866,10 @@
         runTourStep();
       };
       tourButton?.addEventListener('click', startTour);
+      const interruptTour = () => { if (tourActive) stopTour(); };
+      window.addEventListener('wheel', interruptTour, { passive: true });
+      window.addEventListener('touchstart', interruptTour, { passive: true });
+      window.addEventListener('keydown', (event) => { if (tourActive && ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) interruptTour(); }, { passive: true });
       document.querySelectorAll('#page-plan-links [data-go]').forEach((b) => b.addEventListener('click', (e) => {
         e.preventDefault();
         stopTour();
@@ -912,7 +918,7 @@
       const typingSend = document.getElementById('ai-typing-send');
       if (typingIn && typingSend && !typingIn.dataset.bound) {
         typingIn.addEventListener('keydown', (e) => { if (e.key === 'Enter') typingSend.click(); });
-        typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t) replyToUser(t); });
+        typingSend.addEventListener('click', () => { const t = typingIn.value.trim(); typingIn.value = ''; if (t || aiPendingImages.length) replyToUser(t); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && aiDrawer && !aiDrawer.classList.contains('hidden')) { aiDrawer.classList.add('hidden'); aiDrawer.classList.remove('flex'); } });
       const copyBtn = document.getElementById('copy-address');
       if (copyBtn) {
@@ -943,6 +949,20 @@
       const aiPhotoInput = document.getElementById('ai-photo-input');
       const aiPhotoButton = document.getElementById('btn-ai-photo');
       const aiPhotoStatus = document.getElementById('ai-photo-status');
+      const aiPhotoPreview = document.getElementById('ai-photo-preview');
+      function renderAiPhotoPreview() {
+        if (!aiPhotoPreview) return;
+        aiPhotoPreview.replaceChildren();
+        aiPendingImages.forEach((photo, index) => {
+          const item = document.createElement('div'); item.className = 'ai-photo-thumb';
+          const image = document.createElement('img'); image.src = photo.previewUrl; image.alt = photo.name || ('Repair photo ' + (index + 1)); image.loading = 'lazy';
+          const meta = document.createElement('span'); meta.textContent = (photo.name || 'Photo') + ' · ' + Math.max(1, Math.round(photo.size / 1024)) + ' KB';
+          const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'ai-photo-remove'; remove.textContent = 'Remove'; remove.setAttribute('aria-label', 'Remove attached photo ' + (index + 1));
+          remove.addEventListener('click', () => { const removed = aiPendingImages.splice(index, 1)[0]; if (removed?.previewUrl) URL.revokeObjectURL(removed.previewUrl); renderAiPhotoPreview(); if (aiPhotoStatus) aiPhotoStatus.textContent = aiPendingImages.length ? aiPendingImages.length + ' photo(s) ready to send' : 'Attach up to 3 repair photos'; });
+          item.append(image, meta, remove); aiPhotoPreview.append(item);
+        });
+        aiPhotoPreview.classList.toggle('hidden', aiPendingImages.length === 0);
+      }
       function readAiPhoto(file) {
         return new Promise((resolve, reject) => {
           if (!file || !/^image\/(jpeg|png|webp)$/.test(file.type)) return reject(new Error('Choose a JPG, PNG or WebP image.'));
@@ -962,7 +982,7 @@
               context.drawImage(image, 0, 0, canvas.width, canvas.height);
               const encoded = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
               if (!encoded) return reject(new Error('Could not prepare that photo.'));
-              resolve({ mimeType: 'image/jpeg', data: encoded });
+              resolve({ mimeType: 'image/jpeg', data: encoded, previewUrl: URL.createObjectURL(file), name: file.name, size: file.size });
             };
             image.src = String(reader.result);
           };
@@ -971,25 +991,22 @@
       }
       aiPhotoButton?.addEventListener('click', () => aiPhotoInput?.click());
       aiPhotoInput?.addEventListener('change', async () => {
-        const selected = Array.from(aiPhotoInput.files || []).slice(0, 3 - aiPendingImages.length);
-        if (!selected.length) return;
-        if (aiPhotoStatus) aiPhotoStatus.textContent = 'Preparing photo(s)…';
-        try {
-          const prepared = await Promise.all(selected.map(readAiPhoto));
-          aiPendingImages.push(...prepared);
-          if (aiPhotoStatus) aiPhotoStatus.textContent = aiPendingImages.length + ' photo(s) ready';
-        } catch (error) {
-          if (aiPhotoStatus) aiPhotoStatus.textContent = error instanceof Error ? error.message : 'Photo could not be prepared.';
-        } finally {
-          aiPhotoInput.value = '';
-        }
+        const chosen = Array.from(aiPhotoInput.files || []);
+        const selected = chosen.slice(0, Math.max(0, 3 - aiPendingImages.length));
+        if (!selected.length) { if (aiPhotoStatus) aiPhotoStatus.textContent = 'You can attach up to 3 photos per message.'; aiPhotoInput.value = ''; return; }
+        if (aiPhotoStatus) aiPhotoStatus.textContent = 'Preparing ' + selected.length + ' photo(s)…';
+        if (aiPhotoButton) aiPhotoButton.disabled = true;
+        try { const prepared = await Promise.all(selected.map(readAiPhoto)); aiPendingImages.push(...prepared); renderAiPhotoPreview(); if (aiPhotoStatus) aiPhotoStatus.textContent = aiPendingImages.length + ' photo(s) ready · press Ask AI to analyse'; }
+        catch (error) { if (aiPhotoStatus) aiPhotoStatus.textContent = error instanceof Error ? error.message : 'Photo could not be prepared.'; }
+        finally { if (aiPhotoButton) aiPhotoButton.disabled = false; aiPhotoInput.value = ''; }
       });
       async function replyToUser(rawText) {
-        const q = (rawText || '').trim();
         const images = aiPendingImages.slice(0, 3);
+        const q = (rawText || '').trim() || (images.length ? 'Please inspect the attached repair photo(s). Describe only what is visibly damaged and what needs technician confirmation.' : '');
         if (!q || !aiMsgs) return;
-        aiPendingImages = [];
-        if (aiPhotoStatus) aiPhotoStatus.textContent = 'Attach up to 3 repair photos';
+        aiPendingImages = []; images.forEach((photo) => { if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl); }); renderAiPhotoPreview();
+        if (aiPhotoStatus) aiPhotoStatus.textContent = images.length ? 'Sending ' + images.length + ' photo(s) securely to Forge AI…' : 'Attach up to 3 repair photos';
+        if (aiPhotoButton) aiPhotoButton.disabled = images.length > 0;
         aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + (images.length ? '<div class="mt-1 text-[10px] text-orange-200">📷 ' + images.length + ' photo(s) attached</div>' : '') + '</div>';
         const bid = 'ai-' + Date.now() + Math.random().toString(36).slice(2, 6);
         aiMsgs.innerHTML += '<div id="' + bid + '" class="max-w-[92%] rounded-2xl rounded-tl-sm border border-zinc-200 bg-white p-3 text-zinc-700 shadow-sm"><span class="text-zinc-400">Checking the bench prices…</span></div>';
@@ -997,10 +1014,18 @@
         const bubble = document.getElementById(bid);
         let full = '';
         try {
+          const crmMatch = !images.length && q.match(/^(?:track|status|repair\s+status)\s+([A-Z0-9_-]{3,80})\s+(\+?[\d\s()-]{10,20})$/i);
+          if (crmMatch) {
+            const crmResponse = await fetch('/api/crm-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket: crmMatch[1], phone: crmMatch[2] }) });
+            const crm = await crmResponse.json(); if (!crmResponse.ok || !crm.ok) throw new Error('CRM lookup unavailable');
+            full = crm.stageLabel ? 'Live repair status for ' + (crm.jobNumber || crm.ticket) + ': ' + crm.stageLabel + '. Device: ' + (crm.deviceModel || 'not listed') + '. Service: ' + (crm.serviceType || 'not listed') + '. This is the latest status currently recorded in the repair system.' : (crm.message || 'No matching repair record was found. Please check the Job ID and registered mobile number.');
+            if (bubble) bubble.innerHTML = escHtml(full) + '<div class="mt-2 text-[9px] font-bold text-emerald-700">● Read-only live CRM lookup · no record changed</div>';
+            aiHistory.push({ role: 'user', text: 'Customer requested a repair status lookup.' }, { role: 'model', text: full });
+          } else {
           const res = await fetch('/api/concierge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images })
+            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images: images.map(({ mimeType, data }) => ({ mimeType, data })) })
           });
           if (!res.ok || !res.body) throw new Error('offline');
           const reader = res.body.getReader();
@@ -1014,11 +1039,16 @@
           }
           const src = res.headers.get('X-Concierge-Source') || 'gemini';
           const imageFailed = images.length > 0 && src !== 'gemini';
+          if (images.length && aiPhotoStatus) aiPhotoStatus.textContent = imageFailed ? 'Photo sent, but live image analysis is unavailable. Please retry or WhatsApp the technician.' : 'Photo analysis complete · ' + images.length + ' image(s) reviewed';
+          if (aiPhotoButton) aiPhotoButton.disabled = false;
           if (bubble) bubble.innerHTML = escHtml(full).replace(/\\n/g, '<br>') +
             '<div class="mt-2 text-[9px] font-bold ' + (src === 'gemini' ? 'text-red-600' : 'text-amber-700') + '">' +
             (src === 'gemini' ? '✦ Forge AI · live photo-aware answer' : imageFailed ? '⚠ Photo review unavailable · no image analysis was performed' : '● Verified local knowledge') + '</div>';
           aiHistory.push({ role: 'user', text: q }, { role: 'model', text: full });
+          }
         } catch {
+          if (images.length && aiPhotoStatus) aiPhotoStatus.textContent = 'Photo upload or analysis failed. Your images were not confirmed as analysed; please retry.';
+          if (aiPhotoButton) aiPhotoButton.disabled = false;
           full = images.length ? 'The photo could not be sent for live assessment. Please try again or contact our technician for a manual review.' : localBotAnswer(q);
           if (bubble) bubble.innerHTML = escHtml(full) + '<div class="mt-2 text-[9px] font-bold ' + (images.length ? 'text-amber-700' : 'text-emerald-700') + '">' + (images.length ? '⚠ Photo review unavailable' : '● Verified local knowledge') + '</div>';
         }
@@ -1034,6 +1064,17 @@
         replyToUser(parts.length ? parts.join(' · ') + ' — fixed price and turnaround please' : 'Show me your repair price list and warranty');
       });
 
+
+      // Motion defaults ON for the premium experience; preserve OS reduced-motion accessibility.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !document.documentElement.dataset.motion) document.documentElement.dataset.motion = 'on';
+      // Premium typography motion: accent colour and subtle breathing only while visible.
+      if (document.documentElement.dataset.motion !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const motionText = document.querySelectorAll('.section-kicker, .quote-color-shift, .text-brand-grad, .badge-breathe, main h2 .text-red-600, main h2 .text-orange-600');
+        if ('IntersectionObserver' in window) {
+          const motionTextObserver = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle('ra-motion-visible', entry.isIntersecting)), { rootMargin: '80px 0px', threshold: 0.01 });
+          motionText.forEach((element) => { element.classList.add('ra-motion-text'); motionTextObserver.observe(element); });
+        } else motionText.forEach((element) => element.classList.add('ra-motion-text', 'ra-motion-visible'));
+      }
 
       // Scroll Reveal + Left Page Rail Active Tracker
       if (typeof IntersectionObserver !== 'undefined') {
@@ -1262,33 +1303,33 @@
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
             'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.95,
-            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 0.98, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
-            'canvas-internals': 0.95, 'canvas-airpods': 0.78, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
+            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 1.04, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
+            'canvas-internals': 0.95, 'canvas-airpods': 0.83, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
           },
           'mobile-landscape': {
             'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 0.96, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
-            'canvas-internals': 0.92, 'canvas-airpods': 0.80, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
+            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 1.02, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
+            'canvas-internals': 0.92, 'canvas-airpods': 0.85, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
           },
           'tablet-portrait': {
             'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.94,
-            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.71, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
-            'canvas-internals': 0.90, 'canvas-airpods': 0.54, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
+            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.75, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
+            'canvas-internals': 0.90, 'canvas-airpods': 0.58, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
             'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.69, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
-            'canvas-internals': 0.88, 'canvas-airpods': 0.56, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
+            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.73, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
+            'canvas-internals': 0.88, 'canvas-airpods': 0.60, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
             'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.67, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
-            'canvas-internals': 0.86, 'canvas-airpods': 0.52, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
+            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.71, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
+            'canvas-internals': 0.86, 'canvas-airpods': 0.56, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
             'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.90,
-            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.65, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
-            'canvas-internals': 0.84, 'canvas-airpods': 0.54, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
+            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.69, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
+            'canvas-internals': 0.84, 'canvas-airpods': 0.58, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
         };
         // v10: measure ONLY the real device/machine meshes. The v9 code measured
