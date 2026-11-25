@@ -1505,7 +1505,7 @@ export const finalSiteHtml = `
         <span id="ai-photo-status" class="min-w-0 text-[10px] text-zinc-500" aria-live="polite">Attach up to 3 repair photos</span>
       </div>
       <div id="ai-photo-preview" class="ai-photo-preview hidden" aria-live="polite"></div>
-      <div id="ai-photo-consent-wrap" class="ai-photo-consent hidden"><label for="ai-photo-consent"><input id="ai-photo-consent" type="checkbox" class="mr-2 h-4 w-4 accent-red-600" />I agree to send this device photo through FaiCodex AI, powered by Google Gemini, for AI review. This Preview uses Google’s free tier; Google may use prompts and images to improve its products. Upload device-only photos. Do not include names, phone numbers, passcodes, Apple IDs, or other personal or sensitive information.</label></div>
+      <div id="ai-photo-consent-wrap" class="ai-photo-consent hidden"><label for="ai-photo-consent"><input id="ai-photo-consent" type="checkbox" class="mr-2 h-4 w-4 accent-red-600" />I agree to send this device photo through FaiCodex AI, for AI review. FaiCodex AI uses a third-party AI service for image analysis. On free-tier processing, submitted prompts and images may be used by that service to improve its products. Upload device-only photos. Do not include names, phone numbers, passcodes, Apple IDs, or other personal or sensitive information.</label></div>
       
       <div id="ai-triage" class="grid grid-cols-3 gap-1.5 pb-2">
         <select id="ai-device" aria-label="Device" class="rounded-xl border border-zinc-300 bg-zinc-50 px-1.5 py-2 text-[10px] font-bold text-zinc-800 outline-none focus:border-red-600">
