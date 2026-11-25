@@ -11,6 +11,7 @@ export const maxDuration = 40;
 
 // Current stable Flash family, ordered for reliable low-latency fallback.
 const MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"] as const;
+const IMAGE_MODELS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"] as const;
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 // Image forwarding is controlled per deployment; preview uses the free Gemini tier with the privacy disclosure shown on-site.
 const IMAGE_INPUT_ENABLED = process.env.GEMINI_IMAGE_INPUT_ENABLED === "true";
@@ -507,7 +508,7 @@ export async function POST(request: NextRequest) {
   // A 400 caused by an optional generationConfig field is retried once with a
   // minimal config; a still-malformed request stops the chain.
   const plan = images.length
-    ? [{ model: MODELS[0], key: keys[0] }, ...(keys[1] ? [{ model: MODELS[0], key: keys[1] }] : []), { model: MODELS[1], key: keys[0] }]
+    ? IMAGE_MODELS.flatMap((model, index) => [{ model, key: keys[0] }, ...(keys[1] && index === 0 ? [{ model, key: keys[1] }] : [])])
     : MODELS.flatMap((model, index) => [
         { model, key: keys[0] },
         ...(keys[1] && index === 0 ? [{ model, key: keys[1] }] : []),
@@ -534,7 +535,7 @@ export async function POST(request: NextRequest) {
       status: result.status,
       code: result.code,
     });
-    if (result.status === 400) break;
+    if (result.status === 400 && !images.length) break;
   }
 
   if (selected) {
