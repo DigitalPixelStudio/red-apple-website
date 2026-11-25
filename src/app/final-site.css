@@ -1244,11 +1244,23 @@ body canvas, body img, body video, body picture { filter: none !important; }
     opacity: .8;
   }
 }
-@media (prefers-reduced-motion: reduce), (prefers-reduced-motion: no-preference) and (html[data-motion="off"]) {
+@media (prefers-reduced-motion: reduce) {
   .heading-breathe, .text-brand-grad, .badge-breathe, .fast-breathe-badge,
   .price-breathe, .quote-color-shift, .kicker-shift, .ambient-orb,
   .heading-breathe::after {
     animation: none !important;
     will-change: auto !important;
   }
+}
+html[data-motion="off"] .heading-breathe,
+html[data-motion="off"] .text-brand-grad,
+html[data-motion="off"] .badge-breathe,
+html[data-motion="off"] .fast-breathe-badge,
+html[data-motion="off"] .price-breathe,
+html[data-motion="off"] .quote-color-shift,
+html[data-motion="off"] .kicker-shift,
+html[data-motion="off"] .ambient-orb,
+html[data-motion="off"] .heading-breathe::after {
+  animation: none !important;
+  will-change: auto !important;
 }
