@@ -5588,3 +5588,25 @@ html[data-motion="off"] #ambient-particles { display: none !important; }
   .repair-capabilities-copy span + span::before { margin-right: .75rem; }
   .repair-contact-actions-plain > a { width: 100%; }
 }
+
+
+/* Editorial glass-restoration capabilities grid — static, low-paint layout. */
+.repair-capabilities-editorial { content-visibility: auto; contain-intrinsic-size: auto 420px; }
+.repair-capabilities-grid { list-style: none; padding: 0; margin-left: auto; margin-right: auto; }
+.repair-capabilities-grid li {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 14px 16px;
+  border: 1px solid #e7e5e4;
+  border-left: 3px solid #dc2626;
+  border-radius: 10px;
+  background: #fff;
+  color: #27272a;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+@media (min-width: 768px) {
+  .repair-capabilities-grid li { min-height: 64px; padding: 16px 18px; font-size: 15px; }
+}
