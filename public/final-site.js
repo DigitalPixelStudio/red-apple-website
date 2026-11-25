@@ -731,23 +731,19 @@
       const PLAN = [
         { id: '#hero', label: 'Start Here' },
         { id: '#real-shop', label: 'The Studio' },
-        { id: '#studio-video', label: 'Studio Videos' },
         { id: '#estimate', label: 'Smart Estimate' },
         { id: '#paired-crm', label: 'Repair Tracking' },
         { id: '#pickup', label: 'Doorstep Pickup' },
-        { id: '#pickup-standard', label: 'Professional Lab Standard' },
         { id: '#glass-lab', label: 'Glass Restoration' },
         { id: '#tbk-machines', label: 'TBK Machinery' },
+        { id: '#repair-capabilities', label: 'Capabilities' },
         { id: '#ecosystem-3d', label: 'Apple Devices' },
         { id: '#qc-grid', label: 'Quality & QC' },
         { id: '#services-grid', label: 'Repair Services' },
         { id: '#triage-symptoms', label: 'Repair Guide' },
         { id: '#comparison', label: 'Our Difference' },
-        { id: '#holo-warranty', label: '6-Month Warranty' },
         { id: '#reviews', label: 'Customer Reviews' },
-        { id: '#faq', label: 'FAQs' },
         { id: '#halasuru-map', label: 'Find The Store' },
-        { id: 'footer', label: 'Contact' },
       ];
       if (pagePlanLinks) {
         pagePlanLinks.innerHTML = PLAN.map((p, i) => `<a href="${p.id}" data-go="${p.id}" class="shrink-0 rounded-[6px] bg-red-600 px-2.5 py-1 text-[10px] font-extrabold tracking-tight text-white hover:bg-red-700 transition-transform hover:scale-105"><span class="inline-block w-4 h-4 rounded-[4px] bg-black/60 text-white text-[9px] text-center leading-4">${i + 1}</span> ${p.label}</a>`).join('');
@@ -790,7 +786,7 @@
         if (!tourActive) return;
         if (tourIndex >= PLAN.length) { stopTour(); return; }
         const stepNumber = tourIndex + 1; const step = PLAN[tourIndex++];
-        if (tourProgress) tourProgress.textContent = stepNumber + ' / ' + PLAN.length + ' · ' + step.label;
+        if (tourProgress) tourProgress.textContent = stepNumber + ' / ' + PLAN.length;
         scrollTourTo(step.id); tourTimeout = setTimeout(runTourStep, 4400);
       };
       const startTour = () => {
@@ -807,7 +803,8 @@
       tourButton?.addEventListener('click', startTour);
       const interruptTour = () => { if (tourActive) stopTour(); };
       window.addEventListener('wheel', interruptTour, { passive: true });
-      window.addEventListener('touchstart', interruptTour, { passive: true });
+      window.addEventListener('pointerdown', (event) => { if (tourActive && event.target !== tourButton && !tourButton?.contains(event.target)) interruptTour(); }, { passive: true });
+      window.addEventListener('touchmove', interruptTour, { passive: true });
       window.addEventListener('keydown', (event) => { if (tourActive && ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) interruptTour(); }, { passive: true });
       document.querySelectorAll('#page-plan-links [data-go]').forEach((b) => b.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1224,7 +1221,7 @@
         // and resizing it per slot reintroduces the old bottom-right shift bug.
         // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero': { fill: 1.00, fov: 34 },
+          'canvas-hero': { fill: 0.98, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
@@ -1241,32 +1238,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.00, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 1.10, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
             'canvas-internals': 0.95, 'canvas-airpods': 0.90, 'canvas-watch': 0.95, 'canvas-macbook': 1.08,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.00, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 1.08, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
             'canvas-internals': 0.92, 'canvas-airpods': 0.92, 'canvas-watch': 0.92, 'canvas-macbook': 1.06,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.00, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.81, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
             'canvas-internals': 0.90, 'canvas-airpods': 0.63, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.00, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.79, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
             'canvas-internals': 0.88, 'canvas-airpods': 0.65, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.00, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.77, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
             'canvas-internals': 0.86, 'canvas-airpods': 0.61, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.00, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 0.98, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.75, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
             'canvas-internals': 0.84, 'canvas-airpods': 0.58, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
