@@ -40,6 +40,7 @@ export const finalSiteHtml = `
       </nav>
 
       <div class="flex items-center gap-1">
+        <button id="pwa-install-button" type="button" aria-label="Install Red Apple app" class="pwa-install-header whitespace-nowrap rounded-[6px] border border-red-200 bg-white px-2 py-2 text-[10px] font-bold text-red-700" hidden>↓ Install</button>
         <a href="#estimate" class="dock-quote-btn whitespace-nowrap rounded-[6px] px-2 py-2 text-[10px] font-bold text-white transition hover:opacity-95">
           Get Quote
         </a>
