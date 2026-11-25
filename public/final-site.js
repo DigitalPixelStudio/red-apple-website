@@ -6,6 +6,11 @@
   }
   if (!document.getElementById('hero')) return;
     window.onload = function () {
+      // Enable the site's ambient typography/motion by default when the visitor
+      // has not explicitly disabled it. Always respect the OS reduced-motion setting.
+      if (!document.documentElement.hasAttribute('data-motion')) {
+        document.documentElement.dataset.motion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
+      }
       // Consistent Title Case for customer-facing copy. Preserve official brand
       // spellings, acronyms, contact details, URLs and technical identifiers.
       const titleCaseExceptions = new Map(Object.entries({
@@ -1148,7 +1153,7 @@
           const scale = Math.max(0.1, Math.min(dpr, MAX_W / Math.max(1, cw), MAX_H / Math.max(1, ch)));
           return [Math.max(1, Math.round(cw * scale)), Math.max(1, Math.round(ch * scale))];
         }
-        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
         renderer.setPixelRatio(1);
         renderer.setSize(MAX_W, MAX_H, false);
         renderer.setClearColor(0x000000, 0);
@@ -1281,7 +1286,7 @@
         // and resizing it per slot reintroduces the old bottom-right shift bug.
         // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 1.10, fov: 34 },
+          'canvas-hero':          { fill: 1.04, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
@@ -1298,32 +1303,32 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.95,
+            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.95,
             'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 1.10, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
             'canvas-internals': 0.95, 'canvas-airpods': 0.90, 'canvas-watch': 0.95, 'canvas-macbook': 1.08,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 1.08, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
             'canvas-internals': 0.92, 'canvas-airpods': 0.92, 'canvas-watch': 0.92, 'canvas-macbook': 1.06,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.94,
+            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.94,
             'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.81, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
             'canvas-internals': 0.90, 'canvas-airpods': 0.63, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.79, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
             'canvas-internals': 0.88, 'canvas-airpods': 0.65, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.92,
+            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.92,
             'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.77, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
             'canvas-internals': 0.86, 'canvas-airpods': 0.61, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.90,
+            'canvas-hero': 1.04, 'canvas-pickup-iphone': 0.90,
             'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.75, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
             'canvas-internals': 0.84, 'canvas-airpods': 0.58, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
@@ -1705,12 +1710,17 @@
           const arm = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.45, 1.35), silverMat); arm.position.set(0, 1.05, -0.15);
           const laserCore = new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x9333ea, emissiveIntensity: 1.8, transparent: true, opacity: 0.98, roughness: 0.18 });
           const laserAura = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.22, depthWrite: false });
-          const beamAura = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.074, 1.5, 14), laserAura);
-          beamAura.position.set(0, -0.02, 0.2);
-          const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.032, 1.5, 14), laserCore); beam.position.set(0, -0.02, 0.2);
-          const spot = new THREE.Mesh(new THREE.RingGeometry(0.04, 0.11, 24), new THREE.MeshBasicMaterial({ color: 0xc084fc, transparent: true, opacity: 0.95, side: THREE.DoubleSide }));
+          const beamAura = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.074, 1.5, 18), laserAura);
+          const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.032, 1.5, 18), laserCore);
+          // Both beam meshes are aimed from the actual laser aperture to the exact
+          // animated work point. The cylinder's local Y axis is aligned to that vector.
+          const laserOrigin = new THREE.Vector3(0, 0.82, 0.42);
+          const laserAxis = new THREE.Vector3(0, 1, 0);
+          const laserTarget = new THREE.Vector3();
+          const laserDirection = new THREE.Vector3();
+          const spot = new THREE.Mesh(new THREE.RingGeometry(0.04, 0.11, 32), new THREE.MeshBasicMaterial({ color: 0xc084fc, transparent: true, opacity: 0.95, side: THREE.DoubleSide }));
           spot.rotation.x = -Math.PI / 2; spot.position.set(0, -0.71, 0.2);
-          const spark = new THREE.Mesh(new THREE.SphereGeometry(0.055, 14, 14), new THREE.MeshBasicMaterial({ color: 0xf3e8ff }));
+          const spark = new THREE.Mesh(new THREE.SphereGeometry(0.055, 20, 16), new THREE.MeshBasicMaterial({ color: 0xf3e8ff }));
           spark.position.set(0, -0.69, 0.2);
           root.add(base, bed, ph, tower, arm, beamAura, beam, spot, spark);
           return (t) => {
@@ -1720,10 +1730,15 @@
             spot.position.set(sx, -0.71, sz);
             spot.scale.setScalar(0.82 + pulse * 0.24);
             spark.position.set(sx, -0.69, sz);
-            beam.position.set(sx * 0.5, -0.02, 0.2 + (sz - 0.2) * 0.5);
+            laserTarget.set(sx, -0.71, sz);
+            laserDirection.subVectors(laserTarget, laserOrigin);
+            const beamLength = laserDirection.length();
+            beam.position.copy(laserOrigin).add(laserTarget).multiplyScalar(0.5);
+            beam.quaternion.setFromUnitVectors(laserAxis, laserDirection.normalize());
+            beam.scale.y = beamLength / 1.5;
             beamAura.position.copy(beam.position);
-            beam.rotation.z = sx * 0.3;
-            beamAura.rotation.copy(beam.rotation);
+            beamAura.quaternion.copy(beam.quaternion);
+            beamAura.scale.y = beam.scale.y;
             laserCore.emissiveIntensity = 1.25 + pulse * 0.9;
             laserAura.opacity = 0.12 + pulse * 0.14;
           };
