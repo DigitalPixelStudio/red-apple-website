@@ -288,7 +288,7 @@ function resolve(text: string): { topic: string; score: number } | null {
 const MENU: Record<string, { reply: string; chips: string[] }> = {
   start: {
     reply:
-      "Hi, I'm Forge AI — Red Apple's repair assistant. I can check prices, timing and warranty, and connect you to a technician. If my AI service is offline, I'll say so and use our verified offline answers instead. What's going on with your device?",
+      "Hi, I'm FaiCodex AI — Red Apple's repair assistant. I can check prices, timing and warranty, and connect you to a technician. If my AI service is offline, I'll say so and use our verified offline answers instead. What's going on with your device?",
     chips: ["iPhone screen", "Glass price", "Battery", "Back glass", "Price list", "Doorstep pickup", "Talk to a technician"],
   },
   about: {
@@ -505,6 +505,7 @@ export default function Concierge() {
   const [images, setImages] = useState<ChatImage[]>([]);
   const [imageError, setImageError] = useState("");
   const [imageProcessing, setImageProcessing] = useState(false);
+  const [imageConsent, setImageConsent] = useState(false);
 
   useEffect(() => {
     if (!memoryReady) return;
@@ -526,6 +527,7 @@ export default function Concierge() {
     const selected = Array.from(event.target.files ?? []);
     event.target.value = "";
     if (!selected.length) return;
+    setImageConsent(false);
     const remaining = Math.max(0, 3 - images.length);
     if (!remaining) { setImageError("You can attach up to 3 photos."); return; }
     if (selected.length > remaining) setImageError("Only the first " + remaining + " photo(s) were added; the limit is 3.");
@@ -545,11 +547,13 @@ export default function Concierge() {
     e.preventDefault();
     const t = draft.trim();
     if ((!t && !images.length) || typing || streaming || imageProcessing) return;
+    if (images.length && !imageConsent) { setImageError('Please confirm the photo-sharing notice before sending images through FaiCodex AI (Google Gemini).'); return; }
     const attached = images;
     setDraft("");
     setImages([]);
     setImageError("");
-    send(t || "Please inspect the attached photos. Describe the visible damage, likely repair options and what details are needed for an accurate quote.", attached);
+    send(t || "Please inspect the attached photos. Describe the visible damage, likely repair options and what details are needed for an accurate quote.", attached, imageConsent);
+    setImageConsent(false);
   };
 
   /**
@@ -565,7 +569,7 @@ export default function Concierge() {
    * call because they are instant and 100% accurate — no point spending a
    * round trip on a fact we already know.
    */
-  const send = async (text: string, attachments: ChatImage[] = []) => {
+  const send = async (text: string, attachments: ChatImage[] = [], consentToImageProcessing = false) => {
     if (stopped || typing || streaming) return;
     setMsgs((m) => [...m, { from: "user", text, images: attachments.map((image) => image.preview) }]);
     setTyping(true);
@@ -590,7 +594,7 @@ export default function Concierge() {
 
     const handoffNow = (reason: string) => {
       const transcript = [...msgs.slice(-8), { from: "user" as const, text }]
-        .map((item) => (item.from === "user" ? "Customer: " : "Forge AI: ") + item.text)
+        .map((item) => (item.from === "user" ? "Customer: " : "FaiCodex AI: ") + item.text)
         .join("\n");
       const message = "REDAPPLE-HANDOFF\nReason: " + reason + "\nPlease have a technician review this conversation.\n\n" + transcript;
       window.open(wa(message), "_blank", "noopener,noreferrer");
@@ -645,7 +649,7 @@ export default function Concierge() {
       const res = await fetch("/api/concierge", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history, images: attachments.map(({ mimeType, data }) => ({ mimeType, data })) }),
+        body: JSON.stringify({ message: text, history, images: attachments.map(({ mimeType, data }) => ({ mimeType, data })), imageConsent: attachments.length > 0 && consentToImageProcessing }),
         signal: AbortSignal.timeout(42000),
         cache: "no-store",
       });
@@ -801,7 +805,7 @@ export default function Concierge() {
     if (chip.includes("WhatsApp") || chip.includes("estimate") || chip.includes("quote") || /pickup/i.test(chip) || /technician|human|agent/i.test(chip)) {
       const isHuman = /technician|human|agent/i.test(chip);
       const transcript = msgs.slice(-8).map((item) =>
-        (item.from === "user" ? "Customer: " : "Forge AI: ") + item.text
+        (item.from === "user" ? "Customer: " : "FaiCodex AI: ") + item.text
       ).join("\n");
       const msg = isHuman
         ? "REDAPPLE-HANDOFF\nCustomer requests a technician. Please review this chat:\n\n" + transcript
@@ -868,7 +872,7 @@ export default function Concierge() {
       <button
         id="concierge-open"
         onClick={() => { if (!open) restoreMemory(); setOpen(!open); }}
-        aria-label="Open Forge AI chat"
+        aria-label="Open FaiCodex AI chat"
         className="fixed bottom-24 right-5 z-[70] grid h-12 w-12 place-items-center rounded-[13px] bg-[var(--cta-dark)] text-white shadow-xl transition-transform hover:scale-105 md:bottom-8 md:right-8"
       >
         {open ? <LineIcon name="close" size={20} /> : <LineIcon name="bot" size={22} />}
@@ -883,7 +887,7 @@ export default function Concierge() {
               <LineIcon name="bot" size={20} />
             </span>
             <div>
-              <div className="text-[14px] font-bold">Forge AI</div>
+              <div className="text-[14px] font-bold">FaiCodex AI</div>
               <div className="flex items-center gap-1.5 text-[11px] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Repair assistant · prices &amp; warranty · technician handoff</div>
             </div>
             <button
@@ -942,6 +946,12 @@ export default function Concierge() {
               <span className="text-[10px] text-zinc-500">{images.length}/3</span>
             </div>
           )}
+          {images.length > 0 && (
+            <label className="flex items-start gap-2 border-t border-black/[0.05] bg-amber-50 px-3 py-2 text-[10px] leading-relaxed text-zinc-700">
+              <input type="checkbox" checked={imageConsent} onChange={(event) => setImageConsent(event.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-red-600" />
+              <span>I agree to send these device photos through FaiCodex AI, powered by Google Gemini, for AI review. This preview uses Google’s free tier; Google may use prompts and images to improve its products. Do not upload personal or sensitive information.</span>
+            </label>
+          )}
           {imageError && <p role="status" className="bg-white px-3 pt-1 text-[10px] text-red-600">{imageError}</p>}
           <form onSubmit={submit} className="flex items-center gap-2 border-t border-black/[0.07] bg-white px-3 py-2.5">
             <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleImageSelection} aria-label="Choose repair photos" />
@@ -953,7 +963,7 @@ export default function Concierge() {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Type your problem — e.g. screen toot gayi"
-              aria-label="Type your message to Forge AI"
+              aria-label="Type your message to FaiCodex AI"
               className="min-w-0 flex-1 rounded-full border border-black/10 bg-[var(--bg-alt)] px-3.5 py-2.5 text-[13px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--orange)]/60"
             />
             <button
