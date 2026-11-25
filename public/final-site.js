@@ -87,34 +87,30 @@
         size(true);
 
         const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        let rafId = 0, timerId = 0, last = 0;
+        let rafId = 0, last = 0;
         function pause() {
-          if (timerId) { clearTimeout(timerId); timerId = 0; }
           if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+          last = 0;
         }
         function schedule() {
-          if (rafId || timerId || document.hidden || document.documentElement.dataset.motion !== 'on') return;
-          // One 30 FPS timeout followed by exactly one animation frame.
-          timerId = window.setTimeout(() => {
-            timerId = 0;
-            rafId = requestAnimationFrame(frame);
-          }, 33);
+          if (rafId || document.hidden || document.documentElement.dataset.motion !== 'on' || motionQuery.matches) return;
+          rafId = requestAnimationFrame(frame);
         }
         function frame(now) {
           rafId = 0;
-          if (document.hidden || document.documentElement.dataset.motion !== 'on') return;
-          if (now - last >= 32) {
-            last = now;
-            ctx.clearRect(0, 0, W, H);
-            for (const m of motes) {
-              m.x += m.vx; m.y += m.vy;
-              if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
-              if (m.x < -0.02) m.x = 1.02; else if (m.x > 1.02) m.x = -0.02;
-              ctx.beginPath();
-              ctx.fillStyle = `rgba(220,38,38,${m.a})`;
-              ctx.arc(m.x * W, m.y * H, m.r, 0, Math.PI * 2);
-              ctx.fill();
-            }
+          if (document.hidden || document.documentElement.dataset.motion !== 'on' || motionQuery.matches) { last = 0; return; }
+          const frameScale = last ? Math.min(2, Math.max(0.25, (now - last) / 33.333)) : 1;
+          last = now;
+          ctx.clearRect(0, 0, W, H);
+          for (const m of motes) {
+            m.x += m.vx * frameScale;
+            m.y += m.vy * frameScale;
+            if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
+            if (m.x < -0.02) m.x = 1.02; else if (m.x > 1.02) m.x = -0.02;
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(220,38,38,${m.a})`;
+            ctx.arc(m.x * W, m.y * H, m.r, 0, Math.PI * 2);
+            ctx.fill();
           }
           schedule();
         }
@@ -125,12 +121,12 @@
           schedule();
         }, { passive: true });
         document.addEventListener('visibilitychange', () => document.hidden ? pause() : schedule());
-        const onMotionChange = () => document.documentElement.dataset.motion === 'on' ? schedule() : pause();
+        const onMotionChange = () => document.documentElement.dataset.motion === 'on' && !motionQuery.matches ? schedule() : pause();
         document.addEventListener('ra-motion-change', onMotionChange);
         if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
         else if (typeof motionQuery.addListener === 'function') motionQuery.addListener(onMotionChange);
-        if (document.documentElement.dataset.motion === 'on' && !document.hidden) schedule();
         host.appendChild(cv);
+        if (document.documentElement.dataset.motion === 'on' && !document.hidden && !motionQuery.matches) schedule();
       })();
 
       // ============================================================
@@ -614,11 +610,11 @@
         if (!r.width || !r.height) return;
         const px = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
         const py = Math.max(0, Math.min(100, ((e.clientY - r.top) / r.height) * 100));
-        const rx = (0.5 - py / 100) * 18;
-        const ry = (px / 100 - 0.5) * 18;
+        const rx = (0.5 - py / 100) * 22;
+        const ry = (px / 100 - 0.5) * 22;
         holo.style.setProperty('--gx', px + '%');
         holo.style.setProperty('--gy', py + '%');
-        holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px) scale(1.018)`;
+        holo.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) scale(1.03)`;
       };
       holo?.addEventListener('pointerdown', (e) => { holo.classList.add('is-active'); moveWarrantyCard(e); });
       holo?.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.buttons > 0) moveWarrantyCard(e); });
@@ -827,7 +823,7 @@
         if (tourTimeout) { clearTimeout(tourTimeout); tourTimeout = null; }
         if (tourFocusTimeout) { clearTimeout(tourFocusTimeout); tourFocusTimeout = null; }
         document.querySelectorAll('.tour-focus').forEach((el) => el.classList.remove('tour-focus'));
-        if (tourProgress) tourProgress.textContent = 'Explore the website';
+        if (tourProgress) tourProgress.textContent = '';
         if (tourButton) {
           tourButton.classList.remove('tour-running');
           tourButton.setAttribute('aria-pressed', 'false');
@@ -1008,10 +1004,10 @@
         const images = aiPendingImages.slice(0, 3);
         const q = (rawText || '').trim() || (images.length ? 'Please inspect the attached repair photo(s). Describe only what is visibly damaged and what needs technician confirmation.' : '');
         if (!q || !aiMsgs) return;
-        if (images.length && !aiPhotoConsent?.checked) { if (aiPhotoStatus) aiPhotoStatus.textContent = 'Please confirm the photo-sharing notice before sending images to Google Gemini.'; return; }
+        if (images.length && !aiPhotoConsent?.checked) { if (aiPhotoStatus) aiPhotoStatus.textContent = 'Please confirm the photo-sharing notice before sending images through FaiCodex AI (Google Gemini).'; return; }
         aiPendingImages = []; images.forEach((photo) => { if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl); }); renderAiPhotoPreview();
         if (aiPhotoConsent) aiPhotoConsent.checked = false;
-        if (aiPhotoStatus) aiPhotoStatus.textContent = images.length ? 'Sending ' + images.length + ' photo(s) securely to Forge AI…' : 'Attach up to 3 repair photos';
+        if (aiPhotoStatus) aiPhotoStatus.textContent = images.length ? 'Sending ' + images.length + ' photo(s) to FaiCodex AI…' : 'Attach up to 3 repair photos';
         if (aiPhotoButton) aiPhotoButton.disabled = images.length > 0;
         aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + (images.length ? '<div class="mt-1 text-[10px] text-orange-200">📷 ' + images.length + ' photo(s) attached</div>' : '') + '</div>';
         const bid = 'ai-' + Date.now() + Math.random().toString(36).slice(2, 6);
@@ -1020,14 +1016,6 @@
         const bubble = document.getElementById(bid);
         let full = '';
         try {
-          const crmMatch = !images.length && q.match(/^(?:track|status|repair\s+status)\s+([A-Z0-9_-]{3,80})\s+(\+?[\d\s()-]{10,20})$/i);
-          if (crmMatch) {
-            const crmResponse = await fetch('/api/crm-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket: crmMatch[1], phone: crmMatch[2] }) });
-            const crm = await crmResponse.json(); if (!crmResponse.ok || !crm.ok) throw new Error('CRM lookup unavailable');
-            full = crm.stageLabel ? 'Live repair status for ' + (crm.jobNumber || crm.ticket) + ': ' + crm.stageLabel + '. Device: ' + (crm.deviceModel || 'not listed') + '. Service: ' + (crm.serviceType || 'not listed') + '. This is the latest status currently recorded in the repair system.' : (crm.message || 'No matching repair record was found. Please check the Job ID and registered mobile number.');
-            if (bubble) bubble.innerHTML = escHtml(full) + '<div class="mt-2 text-[9px] font-bold text-emerald-700">● Read-only live CRM lookup · no record changed</div>';
-            aiHistory.push({ role: 'user', text: 'Customer requested a repair status lookup.' }, { role: 'model', text: full });
-          } else {
           const res = await fetch('/api/concierge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1049,9 +1037,8 @@
           if (aiPhotoButton) aiPhotoButton.disabled = false;
           if (bubble) bubble.innerHTML = escHtml(full).replace(/\\n/g, '<br>') +
             '<div class="mt-2 text-[9px] font-bold ' + (src === 'gemini' ? 'text-red-600' : 'text-amber-700') + '">' +
-            (src === 'gemini' ? '✦ Forge AI · live photo-aware answer' : imageFailed ? '⚠ Photo review unavailable · no image analysis was performed' : '● Verified local knowledge') + '</div>';
+            (src === 'gemini' ? '✦ FaiCodex AI · live photo-aware answer' : imageFailed ? '⚠ Photo review unavailable · no image analysis was performed' : '● Verified local knowledge') + '</div>';
           aiHistory.push({ role: 'user', text: q }, { role: 'model', text: full });
-          }
         } catch {
           if (images.length && aiPhotoStatus) aiPhotoStatus.textContent = 'Photo upload or analysis failed. Your images were not confirmed as analysed; please retry.';
           if (aiPhotoButton) aiPhotoButton.disabled = false;
@@ -1072,7 +1059,10 @@
 
 
       // Motion defaults ON for the premium experience; preserve OS reduced-motion accessibility.
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !document.documentElement.dataset.motion) document.documentElement.dataset.motion = 'on';
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.dataset.motion = 'on';
+        document.dispatchEvent(new Event('ra-motion-change'));
+      }
       // Premium typography motion: accent colour and subtle breathing only while visible.
       if (document.documentElement.dataset.motion !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const motionText = document.querySelectorAll('.section-kicker, .quote-color-shift, .text-brand-grad, .badge-breathe, main h2 .text-red-600, main h2 .text-orange-600');
@@ -1139,12 +1129,18 @@
           return device + '-' + (w >= h ? 'landscape' : 'portrait');
         }
         const initialProfile = getDeviceProfile();
-        const dprCap = initialProfile.startsWith('mobile-') ? 1.12 : (initialProfile.startsWith('tablet-') ? 1.32 : 1.5);
-        const webglFrameInterval = initialProfile.startsWith('mobile-') ? (1000 / 30) : (initialProfile.startsWith('tablet-') ? (1000 / 40) : (1000 / 45));
+        const memoryGb = Number(navigator.deviceMemory || 4);
+        const cpuCores = Number(navigator.hardwareConcurrency || 4);
+        const lowPowerDevice = memoryGb <= 4 || cpuCores <= 4;
+        const dprCap = initialProfile.startsWith('mobile-')
+          ? (lowPowerDevice ? 1.30 : 1.50)
+          : initialProfile.startsWith('tablet-')
+            ? (lowPowerDevice ? 1.42 : 1.65)
+            : 1.80;
         const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
-        // Fixed per-device render scale: no adaptive governor that can resize
-        // backing canvases mid-session and unexpectedly refit/zoom the models.
-        const MAX_W = 1280, MAX_H = 960;
+        // One shared render surface sized for high-density device stages. Per-slot
+        // backing dimensions are DPR-aware and aspect-ratio preserving below.
+        const MAX_W = 2048, MAX_H = 1536;
         // Fit a slot's render target inside the shared GL canvas while PRESERVING aspect ratio.
         // Clamping width and height independently distorted camera.aspect on 2x-DPI tablets
         // (models looked stretched / pushed off-centre). Never resize the shared renderer per slot.
@@ -1152,7 +1148,7 @@
           const scale = Math.max(0.1, Math.min(dpr, MAX_W / Math.max(1, cw), MAX_H / Math.max(1, ch)));
           return [Math.max(1, Math.round(cw * scale)), Math.max(1, Math.round(ch * scale))];
         }
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
+        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
         renderer.setPixelRatio(1);
         renderer.setSize(MAX_W, MAX_H, false);
         renderer.setClearColor(0x000000, 0);
@@ -1162,22 +1158,16 @@
         const slots = [];
         const visibleSlots = new Set();
         let webglRafId = 0;
-        let webglTimerId = 0;
 
-        // Demand-driven shared renderer: one RAF loop exists only while at least
-        // one 3D canvas intersects the viewport. The single renderer stays shared.
+        // Native requestAnimationFrame cadence: render at the display's available
+        // refresh rate (60/90/120 Hz) while a 3D stage is visible, then sleep.
         function wakeWebGLLoop() {
-          if (webglRafId || webglTimerId || visibleSlots.size === 0 || document.hidden) return;
+          if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
             webglRafId = 0;
             if (document.hidden || visibleSlots.size === 0) return;
             renderFrame(now);
-            // Render at a stable device-class cadence instead of competing with
-            // every display refresh while multiple 3D stages are in view.
-            webglTimerId = window.setTimeout(() => {
-              webglTimerId = 0;
-              if (!document.hidden && visibleSlots.size > 0) webglRafId = requestAnimationFrame(tick);
-            }, webglFrameInterval);
+            webglRafId = requestAnimationFrame(tick);
           };
           webglRafId = requestAnimationFrame(tick);
         }
@@ -1291,15 +1281,15 @@
         // and resizing it per slot reintroduces the old bottom-right shift bug.
         // MODEL_FRAMING = frozen baseline. Shared renderer — NEVER per-slot setSize.
         const MODEL_FRAMING = {
-          'canvas-hero':          { fill: 1.18, fov: 34 },
+          'canvas-hero':          { fill: 1.10, fov: 34 },
           // iPad is portrait geometry — a RIGID landscape turn (no stretch) makes it fill width.
           'canvas-estimate-ipad': { fill: 0.95, fov: 34, rotZ: -Math.PI / 2 },
           'canvas-pickup-iphone': { fill: 0.95, fov: 34 },
-          'canvas-tbk-oca':       { fill: 0.88, fov: 34 },
+          'canvas-tbk-oca':       { fill: 0.94, fov: 34 },
           'canvas-tbk-90l':       { fill: 0.88, fov: 34 },
           'canvas-tbk-958':       { fill: 0.88, fov: 34 },
           'canvas-internals':     { fill: 0.95, fov: 34 },
-          'canvas-airpods':       { fill: 0.86, fov: 34 },
+          'canvas-airpods':       { fill: 0.92, fov: 34 },
           'canvas-watch':         { fill: 0.95, fov: 34 },
           'canvas-macbook':       { fill: 0.90, fov: 34 }, // FROZEN at 0.90 (no device override)
         };
@@ -1308,33 +1298,33 @@
         // TBK machines receive a measured increase; mobile MacBook/AirPods are zoomed in.
         const MODEL_PROFILE_FILL = {
           'mobile-portrait': {
-            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.95,
-            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 1.04, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
-            'canvas-internals': 0.95, 'canvas-airpods': 0.83, 'canvas-watch': 0.95, 'canvas-macbook': 1.02,
+            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.95,
+            'canvas-estimate-ipad': 0.95, 'canvas-tbk-oca': 1.10, 'canvas-tbk-90l': 0.98, 'canvas-tbk-958': 0.98,
+            'canvas-internals': 0.95, 'canvas-airpods': 0.90, 'canvas-watch': 0.95, 'canvas-macbook': 1.08,
           },
           'mobile-landscape': {
-            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 1.02, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
-            'canvas-internals': 0.92, 'canvas-airpods': 0.85, 'canvas-watch': 0.92, 'canvas-macbook': 1.00,
+            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.92,
+            'canvas-estimate-ipad': 0.92, 'canvas-tbk-oca': 1.08, 'canvas-tbk-90l': 0.96, 'canvas-tbk-958': 0.96,
+            'canvas-internals': 0.92, 'canvas-airpods': 0.92, 'canvas-watch': 0.92, 'canvas-macbook': 1.06,
           },
           'tablet-portrait': {
-            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.94,
-            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.75, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
-            'canvas-internals': 0.90, 'canvas-airpods': 0.58, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
+            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.94,
+            'canvas-estimate-ipad': 0.90, 'canvas-tbk-oca': 0.81, 'canvas-tbk-90l': 0.71, 'canvas-tbk-958': 0.71,
+            'canvas-internals': 0.90, 'canvas-airpods': 0.63, 'canvas-watch': 0.90, 'canvas-macbook': 0.90,
           },
           'tablet-landscape': {
-            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.73, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
-            'canvas-internals': 0.88, 'canvas-airpods': 0.60, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
+            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.92,
+            'canvas-estimate-ipad': 0.88, 'canvas-tbk-oca': 0.79, 'canvas-tbk-90l': 0.69, 'canvas-tbk-958': 0.69,
+            'canvas-internals': 0.88, 'canvas-airpods': 0.65, 'canvas-watch': 0.88, 'canvas-macbook': 0.88,
           },
           'desktop-portrait': {
-            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.92,
-            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.71, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
-            'canvas-internals': 0.86, 'canvas-airpods': 0.56, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
+            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.92,
+            'canvas-estimate-ipad': 0.86, 'canvas-tbk-oca': 0.77, 'canvas-tbk-90l': 0.67, 'canvas-tbk-958': 0.67,
+            'canvas-internals': 0.86, 'canvas-airpods': 0.61, 'canvas-watch': 0.86, 'canvas-macbook': 0.86,
           },
           'desktop-landscape': {
-            'canvas-hero': 1.18, 'canvas-pickup-iphone': 0.90,
-            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.69, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
+            'canvas-hero': 1.10, 'canvas-pickup-iphone': 0.90,
+            'canvas-estimate-ipad': 0.84, 'canvas-tbk-oca': 0.75, 'canvas-tbk-90l': 0.65, 'canvas-tbk-958': 0.65,
             'canvas-internals': 0.84, 'canvas-airpods': 0.58, 'canvas-watch': 0.84, 'canvas-macbook': 0.84,
           },
         };
