@@ -950,6 +950,8 @@
       const aiPhotoButton = document.getElementById('btn-ai-photo');
       const aiPhotoStatus = document.getElementById('ai-photo-status');
       const aiPhotoPreview = document.getElementById('ai-photo-preview');
+      const aiPhotoConsentWrap = document.getElementById('ai-photo-consent-wrap');
+      const aiPhotoConsent = document.getElementById('ai-photo-consent');
       function renderAiPhotoPreview() {
         if (!aiPhotoPreview) return;
         aiPhotoPreview.replaceChildren();
@@ -962,6 +964,7 @@
           item.append(image, meta, remove); aiPhotoPreview.append(item);
         });
         aiPhotoPreview.classList.toggle('hidden', aiPendingImages.length === 0);
+        if (aiPhotoConsentWrap) aiPhotoConsentWrap.classList.toggle('hidden', aiPendingImages.length === 0);
       }
       function readAiPhoto(file) {
         return new Promise((resolve, reject) => {
@@ -992,6 +995,7 @@
       aiPhotoButton?.addEventListener('click', () => aiPhotoInput?.click());
       aiPhotoInput?.addEventListener('change', async () => {
         const chosen = Array.from(aiPhotoInput.files || []);
+        if (!aiPendingImages.length && aiPhotoConsent) aiPhotoConsent.checked = false;
         const selected = chosen.slice(0, Math.max(0, 3 - aiPendingImages.length));
         if (!selected.length) { if (aiPhotoStatus) aiPhotoStatus.textContent = 'You can attach up to 3 photos per message.'; aiPhotoInput.value = ''; return; }
         if (aiPhotoStatus) aiPhotoStatus.textContent = 'Preparing ' + selected.length + ' photo(s)…';
@@ -1004,7 +1008,9 @@
         const images = aiPendingImages.slice(0, 3);
         const q = (rawText || '').trim() || (images.length ? 'Please inspect the attached repair photo(s). Describe only what is visibly damaged and what needs technician confirmation.' : '');
         if (!q || !aiMsgs) return;
+        if (images.length && !aiPhotoConsent?.checked) { if (aiPhotoStatus) aiPhotoStatus.textContent = 'Please confirm the photo-sharing notice before sending images to Google Gemini.'; return; }
         aiPendingImages = []; images.forEach((photo) => { if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl); }); renderAiPhotoPreview();
+        if (aiPhotoConsent) aiPhotoConsent.checked = false;
         if (aiPhotoStatus) aiPhotoStatus.textContent = images.length ? 'Sending ' + images.length + ' photo(s) securely to Forge AI…' : 'Attach up to 3 repair photos';
         if (aiPhotoButton) aiPhotoButton.disabled = images.length > 0;
         aiMsgs.innerHTML += '<div class="ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-zinc-900 px-3 py-2 text-white shadow-sm">' + escHtml(q) + (images.length ? '<div class="mt-1 text-[10px] text-orange-200">📷 ' + images.length + ' photo(s) attached</div>' : '') + '</div>';
@@ -1025,7 +1031,7 @@
           const res = await fetch('/api/concierge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images: images.map(({ mimeType, data }) => ({ mimeType, data })) })
+            body: JSON.stringify({ message: q, history: aiHistory.slice(-6), images: images.map(({ mimeType, data }) => ({ mimeType, data })), imageConsent: images.length > 0 ? true : false })
           });
           if (!res.ok || !res.body) throw new Error('offline');
           const reader = res.body.getReader();
