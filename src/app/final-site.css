@@ -1122,3 +1122,21 @@ body canvas, body img, body video, body picture { filter: none !important; }
 .dock-icon-glow-whatsapp::before { background:radial-gradient(circle,rgba(34,197,94,.34) 0%,rgba(16,185,129,.18) 44%,transparent 74%); }
 .dock-icon-glow-call::before { background:radial-gradient(circle,rgba(59,130,246,.32) 0%,rgba(14,165,233,.18) 44%,transparent 74%); }
 .dock-icon-glow { filter:drop-shadow(0 0 5px rgba(255,255,255,.35)); }
+
+
+/* NOV-25 PREMIUM MOTION + AI PHOTO FEEDBACK — lightweight and viewport-aware. */
+.ai-photo-preview { display:flex; flex-wrap:wrap; gap:8px; padding:8px 0 10px; }
+.ai-photo-thumb { display:grid; grid-template-columns:48px minmax(0,1fr) auto; align-items:center; gap:8px; width:100%; padding:7px; border:1px solid #e4e4e7; border-radius:12px; background:#fafafa; }
+.ai-photo-thumb img { width:48px; height:48px; border-radius:8px; object-fit:cover; background:#e4e4e7; }
+.ai-photo-thumb span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; font-weight:700; color:#3f3f46; }
+.ai-photo-remove { min-height:34px; padding:6px 9px; border-radius:8px; color:#b91c1c; background:#fee2e2; font-size:10px; font-weight:800; }
+.ai-chat-helper { margin:-2px 0 8px; color:#71717a; font-size:9px; line-height:1.45; }
+.ai-chat-helper strong { color:#991b1b; font-weight:900; }
+.web-tour-progress { display:inline-flex; align-items:center; min-height:32px; max-width:min(220px,calc(100vw - 66px)); padding:0 10px; overflow:hidden; border:1px solid rgba(220,38,38,.16); border-radius:999px; background:rgba(255,255,255,.94); color:#7f1d1d; font-size:10px; font-weight:800; white-space:nowrap; text-overflow:ellipsis; box-shadow:0 4px 14px rgba(24,24,27,.08); }
+@keyframes raAccentColour { 0%,100% { color:#b91c1c; } 50% { color:#ea580c; } }
+@keyframes raTypeBreath { 0%,100% { opacity:.92; transform:scale(1); } 50% { opacity:1; transform:scale(1.012); } }
+.ra-motion-text { display:inline-block; animation:none; }
+.ra-motion-text.ra-motion-visible { animation:raAccentColour 7.2s ease-in-out infinite,raTypeBreath 5.8s ease-in-out infinite; }
+#tour-dock { touch-action:pan-y; } #tour-start { min-width:44px; min-height:44px; width:44px; height:44px; }
+@media(max-width:480px){.web-tour-progress{max-width:calc(100vw - 78px);font-size:9px;padding-inline:8px}.ai-photo-thumb{grid-template-columns:42px minmax(0,1fr) auto}.ai-photo-thumb img{width:42px;height:42px}}
+@media(prefers-reduced-motion:reduce){.ra-motion-text,.ra-motion-text.ra-motion-visible{animation:none!important;transform:none!important;opacity:1!important}}
