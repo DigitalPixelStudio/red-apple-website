@@ -171,24 +171,6 @@ export const finalSiteHtml = `
 
 
 
-    <!-- Plain static repair capabilities: rebuilt markup, no ticker/motion component -->
-    <section id="repair-capabilities" class="repair-capabilities-plain border-b border-red-100 bg-[#faf8f5] py-6 sm:py-8" aria-label="Repair capabilities">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <p class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Our glass restoration capabilities</p>
-        <div class="repair-capabilities-copy">
-          <span>Front glass restoration</span>
-          <span>TBK OCA vacuum lamination</span>
-          <span>90-litre bubble remover</span>
-          <span>TBK-958 cold UV laser</span>
-          <span>Original OLED retained</span>
-          <span>6 Months repair warranty</span>
-          <span>Zero-password privacy</span>
-          <span>Apple Diagnostic Mode testing</span>
-          <span>Halasuru · Bengaluru</span>
-        </div>
-      </div>
-    </section>
-
     <!-- 3. A REAL SHOP, A REAL BENCH & THE REAL PEOPLE (MEDIUM-BIG BALANCED 2-COLUMN COLLAGE — ALL 8 REAL PHOTOS) -->
 
 
@@ -872,8 +854,28 @@ export const finalSiteHtml = `
             <a href="#estimate" class="dock-quote-btn inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-3 text-sm font-bold text-white">Get a glass-restoration quote</a>
             <a href="tel:+918660663776" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-900">Call the lab · +91 86606 63776</a>
           </div>
-          <p class="mt-4 text-sm leading-relaxed text-zinc-600">Store open 10 AM – 12 AM midnight, all 7 days. Customer assistance on WhatsApp 24/7. Walk-ins welcome.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- Glass restoration capabilities — relocated below the glass-lab machinery section -->
+    <section id="repair-capabilities" class="repair-capabilities-editorial border-b border-zinc-100 bg-[#faf8f5] py-10 sm:py-12" aria-label="Glass restoration capabilities">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-[11px] font-bold uppercase tracking-[.16em] text-red-700">Glass restoration</p>
+          <h2 class="mt-2 font-display text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl">Our Glass Restoration Capabilities</h2>
+        </div>
+        <ul class="repair-capabilities-grid mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <li>Front Glass Restoration</li>
+          <li>TBK OCA Vacuum Lamination</li>
+          <li>90-Litre Bubble Remover</li>
+          <li>TBK-958 Cold UV Laser</li>
+          <li>Original OLED Retained</li>
+          <li>6-Month Repair Warranty</li>
+          <li>Zero-Password Privacy</li>
+          <li>Apple Diagnostic Mode Testing</li>
+          <li>Halasuru · Bengaluru</li>
+        </ul>
       </div>
     </section>
 
@@ -1368,6 +1370,7 @@ export const finalSiteHtml = `
         <div class="lg:col-span-7">
           <div class="font-display text-lg font-extrabold text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair Store</div>
           <p class="mt-1 leading-relaxed text-zinc-600">Apple repairs, perfected. The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and board-level storage IC repair. MG Road, Halasuru · open 10 AM – 12 AM.</p>
+          <p class="mt-2 leading-relaxed text-zinc-600">Store Open 10 AM – 12 AM Midnight, All 7 Days. Customer Assistance on WhatsApp 24/7. Walk-ins Welcome.</p>
           <div class="mt-3 flex flex-nowrap flex-wrap gap-1 text-[10px] font-bold sm:gap-1.5">
             <a href="https://www.facebook.com/profile.php?id=100082952451220&amp;sk=reels_tab" target="_blank" rel="noopener noreferrer" class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700 hover:bg-blue-100">Facebook</a>
             <a href="https://www.instagram.com/red_apple_mobile_repair?fbclid=IwY2xjawVyValleHRuA2FlbQIxMABwZG9mBWJyaWQRMWIwM1dNNzRFaklER3NORTFzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEf7hvC0NYVT0O0grCO5ISQt96O7OB5yq7yHSTfH9zOkKAd7_l53VndCrJhGZI_aem__p2KWZFDyi1TfvqxcG8DRQ" target="_blank" rel="noopener noreferrer" class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700 hover:bg-orange-100">Instagram</a>
