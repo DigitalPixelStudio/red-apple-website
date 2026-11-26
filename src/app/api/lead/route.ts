@@ -93,6 +93,7 @@ export async function POST(req: Request) {
     term: body.utm_term || "", referrer: body.referrer || "",
   });
   try {
+    if (process.env.VERCEL_ENV !== "preview") {
     const crmResponse = await fetch(crmEndpoint, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -108,13 +109,14 @@ export async function POST(req: Request) {
       signal: AbortSignal.timeout(8000),
     });
     if (!crmResponse.ok) console.error("[lead] CRM sync returned", crmResponse.status);
+    }
   } catch (error) {
     console.error("[lead] CRM sync failed", error instanceof Error ? error.message : "unknown");
   }
 
   // 3. forward to an optional secondary webhook when one is configured
   const hook = process.env.LEAD_WEBHOOK_URL;
-  if (hook) {
+  if (hook && process.env.VERCEL_ENV !== "preview") {
     try {
       await fetch(hook, {
         method: "POST",
