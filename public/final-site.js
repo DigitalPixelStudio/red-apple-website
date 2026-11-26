@@ -1103,43 +1103,20 @@
         const slots = [];
         const visibleSlots = new Set();
         let webglRafId = 0;
-        let scrollResumeTimer = 0;
-        let pageScrolling = false;
         let lastRenderAt = 0;
-        // Use one consistent 60fps render target for every model on every
-        // device class. The browser/GPU may still deliver fewer frames under load.
-        const TARGET_MODEL_FPS = 60;
+        // Request up to 120fps for every 3D model on every device profile.
+        // Actual delivery is bounded by the display refresh rate and available GPU time.
+        const TARGET_MODEL_FPS = 120;
         const MAX_RENDER_INTERVAL = 1000 / TARGET_MODEL_FPS;
 
-        // Keep the 3D scene responsive while idle, but yield the GPU during native
-        // momentum scrolling. This prevents WebGL work competing with page compositing.
-        function pauseWebGLForScroll() {
-          pageScrolling = true;
-          if (webglRafId) {
-            cancelAnimationFrame(webglRafId);
-            webglRafId = 0;
-          }
-          if (scrollResumeTimer) clearTimeout(scrollResumeTimer);
-          scrollResumeTimer = setTimeout(() => {
-            pageScrolling = false;
-            scrollResumeTimer = 0;
-            lastFrameTime = 0;
-            lastRenderAt = 0;
-            wakeWebGLLoop();
-          }, 160);
-        }
-        // Yield WebGL as soon as a wheel/touch gesture begins, before the next paint.
-        window.addEventListener('wheel', pauseWebGLForScroll, { passive: true });
-        window.addEventListener('touchmove', pauseWebGLForScroll, { passive: true });
-        window.addEventListener('scroll', pauseWebGLForScroll, { passive: true });
-
-        // Cap background product rendering at 60fps. 120Hz displays still retain
-        // native 120Hz scrolling; the 3D loop no longer burns a second frame budget.
+        // Keep the model loop active during touch, wheel and momentum scrolling.
+        // Pausing the shared WebGL loop on every scroll event caused visible model
+        // freezes and uneven frame pacing while users moved between model sections.
         function wakeWebGLLoop() {
-          if (webglRafId || pageScrolling || visibleSlots.size === 0 || document.hidden) return;
+          if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
             webglRafId = 0;
-            if (document.hidden || pageScrolling || visibleSlots.size === 0) return;
+            if (document.hidden || visibleSlots.size === 0) return;
             if (!lastRenderAt || now - lastRenderAt >= MAX_RENDER_INTERVAL) {
               lastRenderAt = now;
               renderFrame(now);
