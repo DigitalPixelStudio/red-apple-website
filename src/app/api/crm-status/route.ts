@@ -5,7 +5,7 @@ import { REPAIR_STATUS_FLOW, wa } from "@/lib/site";
 import { rateLimit } from "@/lib/security/rateLimit";
 
 export const runtime = "nodejs";
-export const maxDuration = 8;
+export const maxDuration = 15;
 
 const Schema = z.object({
   ticket: z.string().trim().min(3).max(80),
