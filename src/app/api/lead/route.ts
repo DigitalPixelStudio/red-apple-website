@@ -6,7 +6,7 @@ import { qualifyOptional } from "@/lib/analytics/leadQuality";
 import { rateLimit } from "@/lib/security/rateLimit";
 
 export const runtime = "nodejs";
-export const maxDuration = 8;
+export const maxDuration = 15;
 
 const Schema = z.object({
   name: z.string().trim().min(2).max(80),
