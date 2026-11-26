@@ -1108,6 +1108,23 @@
         const visibleSlots = new Set();
         let webglRafId = 0;
 
+        // SCROLL_SETTLE_AUTO_ORBIT: keep the shared WebGL renderer and every model
+        // animation active, but briefly ease ambient auto-orbit during native page
+        // scroll/inertial touch scrolling. This avoids the subtle visual tug seen
+        // when the page settles after a finger flick. Pointer drag/orbit controls,
+        // model geometry, materials, cameras, canvas compositing and DPR are untouched.
+        let scrollQuietUntil = 0;
+        const SCROLL_SETTLE_HOLD_MS = 140;
+        const SCROLL_SETTLE_RAMP_MS = 280;
+        function notePageScroll() {
+          scrollQuietUntil = performance.now() + SCROLL_SETTLE_HOLD_MS;
+        }
+        function getScrollMotionScale(now) {
+          if (now <= scrollQuietUntil) return 0;
+          return Math.min(1, (now - scrollQuietUntil) / SCROLL_SETTLE_RAMP_MS);
+        }
+        window.addEventListener('scroll', notePageScroll, { passive: true });
+
         // Let the browser schedule one render per display refresh. This naturally
         // supports 60/90/120/144Hz screens without a second JavaScript FPS gate,
         // which can create uneven frame pacing on high-refresh displays.
@@ -1899,7 +1916,7 @@
               centerAndFitResponsive(s.camera, s.root, id);
             }
             if (typeof ResizeObserver === 'undefined') { s.camera.aspect = cw / ch; s.camera.updateProjectionMatrix(); }
-            s.orbit.update(s === heroSlot && heroAmbient ? 0.0028 : 0.0016, frameScale);
+            s.orbit.update((s === heroSlot && heroAmbient ? 0.0028 : 0.0016) * getScrollMotionScale(now), frameScale);
             if (s.onTick) s.onTick(t);
             renderer.setViewport(0, 0, rw, rh);
             renderer.setScissor(0, 0, rw, rh);
