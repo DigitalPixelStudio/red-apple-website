@@ -5494,7 +5494,7 @@ html[data-motion="off"] *,
 html[data-motion="off"] *::before,
 html[data-motion="off"] *::after {
   animation: none !important;
-  transition: none !important;
+  /* Keep native UI feedback transitions available for touch/click response. */
   scroll-behavior: auto !important;
 }
 html[data-motion="off"] #ambient-particles,
@@ -5677,3 +5677,49 @@ html:not([data-motion="off"]) .brand-sub {
   animation: none !important;
   will-change: auto !important;
 }
+
+/* FINAL TEXT SCROLL-JITTER FIX — all motion modes.
+   A late legacy rule re-enabled a 5.2s scale animation on .heading-breathe
+   while data-motion="off". On long text-heavy sections that repeatedly scales
+   glyph layers during native scrolling. Keep text and wordmarks static in both
+   motion modes; retain background/3D scene animation, one-shot reveals, hover
+   feedback and touch/click transitions. */
+.heading-breathe,
+.heading-breathe::after,
+.ra-motion-text,
+.ra-motion-text.ra-motion-visible,
+.text-brand-grad,
+.quote-color-shift,
+.brand-name-flow,
+.brand-name,
+.brand-sub,
+.badge-breathe,
+.fast-breathe-badge,
+.price-breathe,
+.kicker-shift,
+.stat-breathe,
+.text-shimmer,
+.whyus-heading .why-head-red {
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+.heading-breathe,
+.ra-motion-text,
+.stat-breathe {
+  transform: none !important;
+  opacity: 1 !important;
+  font-variation-settings: normal !important;
+}
+.text-brand-grad,
+.text-shimmer {
+  background-position: 0 50% !important;
+  filter: none !important;
+}
+.brand-name,
+.brand-name-flow {
+  background: none !important;
+  color: #111113 !important;
+  -webkit-text-fill-color: #111113 !important;
+}
+.brand-sub { color: #dc2626 !important; }
