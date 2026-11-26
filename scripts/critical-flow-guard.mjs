@@ -22,7 +22,7 @@ const required = [
 
 const failures = [];
 const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
-for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const machineZoom = isLargeScreen ? 1.12 : 0.92;", "const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? machineZoom : isMacbook ? 1.08 : 1.12;", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const machineZoom = isLargeScreen ? 1.05 : 0.86;", "const isAirpods = id === 'canvas-airpods';", "const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? machineZoom : isMacbook ? 1.14 : isAirpods ? 1.05 : 1.12;", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
   if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
 }
 const webglPath = "public/final-site.js";
@@ -40,7 +40,7 @@ try {
 const stylePath = "src/app/final-site.css";
 try {
   const styles = await readFile(new URL(`../${stylePath}`, import.meta.url), "utf8");
-  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion", "SCROLL / GPU STABILITY", "html[data-motion=\"off\"] #ambient-particles", "html[data-motion=\"off\"] .stage-3d-box::before"]) {
+  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion", "SCROLL / GPU STABILITY", "BACKGROUND MOTION CLEANUP", "html[data-motion=\"off\"] #ambient-particles", "html[data-motion=\"off\"] .ra-motion-text.ra-motion-visible", "html[data-motion=\"off\"] .stage-3d-box::before", "filter: none !important;"]) {
     if (!styles.includes(marker)) failures.push(`${stylePath}: ${marker}`);
   }
 } catch {
@@ -62,7 +62,7 @@ if (failures.length) {
 const htmlPath = "src/lib/final-site-html.ts";
 try {
   const html = await readFile(new URL(`../${htmlPath}`, import.meta.url), "utf8");
-  for (const marker of ["Glass Restoration And Repair Support", "TBK-958 Cold UV Laser", "#ZeroPasswordPolicy", "Get a Glass-restoration Quote"]) {
+  for (const marker of ["Glass Restoration And Repair Support", "TBK-958 Cold UV Laser", "#ZeroPasswordPolicy", "Get a Glass-restoration Quote", "ra-glass-capabilities", "AirPods Pro &amp; Charging Case"]) {
     if (!html.includes(marker)) failures.push(`${htmlPath}: missing ${marker}`);
   }
   for (const removed of ['id="repair-capabilities"', "#Halasuru"]) {
