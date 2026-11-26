@@ -84,3 +84,12 @@ This document is the durable project brief for future maintainers and coding age
 - Keep hero camera framing at its approved 1.04 multiplier and laptop at 1.08; other non-hero, non-laptop models use 1.08. Camera fill only; no mesh, model asset, geometry, material or rig changes.
 - Selecting a glass price pill must update the calculator without calling scrollIntoView on the already-visible #glass-lab section. Preserve native touch scrolling and existing WebGL touch/drag/orbit controls and scroll-settle behaviour.
 - Preserve AI image analysis, FaiCodex AI/concierge, CRM APIs/tables, lead capture, database schema/data, environment variables, model assets, and all unrelated page sections.
+
+## Model sizing + scroll-render stability pass (2026-11-26)
+- Preserve hero framing at 1.04 and MacBook framing at 1.08, including the existing large-screen MacBook fit multiplier of 0.86.
+- Remove the blanket 0.86 desktop/tablet multiplier from all other lower-stage models; it previously cancelled the intended zoom increase and made the models smaller. Apply camera-only fill 1.12 to other non-hero/non-MacBook models and 1.16 to the three TBK machinery models.
+- Pause the shared WebGL animation/compositing loop during native page scrolling and resume 160 ms after scroll settles. Do not lower DPR, disable antialiasing, change the shared renderer, or alter model geometry, materials, lighting, camera rigs, touch/drag controls, or model animation callbacks.
+- Tighten the WebGL visibility window slightly so fewer adjacent stages render simultaneously.
+- Remove per-pointermove layout reads/style writes for the decorative 3D glass sheen. Keep pointer drag rotation intact.
+- Hide ambient particle/orb layers and disable decorative infinite CSS motion by default; retain one-shot review-card reveals. The 3D model animation remains active whenever the page is not scrolling and the stage is visible.
+- Keep FaiCodex AI, image analysis, CRM APIs/tables, lead capture, data, environment variables and all customer flows unchanged.
