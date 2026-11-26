@@ -93,3 +93,10 @@ This document is the durable project brief for future maintainers and coding age
 - Remove per-pointermove layout reads/style writes for the decorative 3D glass sheen. Keep pointer drag rotation intact.
 - Hide ambient particle/orb layers and disable decorative infinite CSS motion by default; retain one-shot review-card reveals. The 3D model animation remains active whenever the page is not scrolling and the stage is visible.
 - Keep FaiCodex AI, image analysis, CRM APIs/tables, lead capture, data, environment variables and all customer flows unchanged.
+
+## Glass panel, model scale and motion cleanup (2026-11-26)
+- Glass Restoration And Repair Support is now a compact minimal panel: tighter spacing, smaller type, subtle neutral capability chips, compact quote/call CTAs; all eight capability labels and the original content are retained.
+- Camera-only model framing: hero remains 1.04; MacBook increases from 1.08 to 1.14; AirPods reduces from 1.12 to 1.05; TBK machinery reduces from 1.12 desktop/tablet or 0.92 mobile to 1.05 desktop/tablet or 0.86 mobile. No geometry, model assets, material, light, rig, animation or renderer changes.
+- Remove the global saturate/contrast filter applied to every heading, text node, button, label and SVG; it was unnecessary work across a large number of page elements.
+- The motion-restore CSS had re-enabled ambient-orb drift and ra-motion-text infinite animation even while the document explicitly set data-motion="off". Explicitly disable ambient particles/orbs, text/gradient/accent infinite loops and their transitions by default. Preserve WebGL model motion, touch/drag rotation and one-shot content reveals.
+- Keep AI image analysis, FaiCodex AI, CRM APIs/tables, customer records, lead capture, data, environment variables and integrations unchanged. No AI/CRM code or backend files changed in this pass.
