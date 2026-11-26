@@ -1363,7 +1363,8 @@
             const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;
             // MODEL_CAMERA_ZOOM_BOOST: camera-only framing; hero and laptop stay unchanged.
             // Machinery gets a measured stronger fill; other non-hero models get a modest increase.
-            const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? 1.16 : isMacbook ? 1.08 : 1.12;
+            const machineZoom = isLargeScreen ? 1.12 : 0.92;
+            const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? machineZoom : isMacbook ? 1.08 : 1.12;
             const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
