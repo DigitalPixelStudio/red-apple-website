@@ -103,7 +103,7 @@ export async function POST(req: Request) {
         utm, click_id: clickId, external_id: `website:${phone}:${body.model || ""}:${body.issue || ""}`,
         notes: [body.condition ? "Condition: " + body.condition : "", body.message || body.issue || "",
           body.urgency ? "Urgency: " + body.urgency : "", body.pickup ? "Service preference: " + body.pickup : "",
-          body.preferredTime ? "Preferred time: " + body.preferredTime : ""].filter(Boolean).join("\\n"),
+          body.preferredTime ? "Preferred time: " + body.preferredTime : ""].filter(Boolean).join(" · "),
       }),
       signal: AbortSignal.timeout(8000),
     });
