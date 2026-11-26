@@ -1,9 +1,12 @@
 (function () {
-  // Set motion preference as soon as this script executes (not on window.onload),
-  // so the CSS motion layer is active even when Next loads this script late.
-  // Website-wide decorative motion is disabled for a calmer, higher-FPS experience.
-  // The 3D model render loop is independent and remains untouched.
-  document.documentElement.dataset.motion = 'off';
+  // Motion defaults ON; only an explicit saved preference or OS reduced-motion
+  // preference disables decorative typography motion. The 3D renderer is untouched.
+  try {
+    const savedMotion = localStorage.getItem('ra-motion');
+    document.documentElement.dataset.motion = savedMotion === 'off' || (!savedMotion && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'off' : 'on';
+  } catch (_e) {
+    document.documentElement.dataset.motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
+  }
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -831,7 +834,16 @@
 
       // Gift: dark/light theme toggle
       const themeToggle = document.getElementById('theme-toggle');
-      const applyTheme = (mode) => { document.documentElement.dataset.theme = mode; };
+      const applyTheme = (mode) => {
+        const safeMode = mode === 'dark' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = safeMode;
+        if (themeToggle) {
+          themeToggle.setAttribute('aria-pressed', String(safeMode === 'dark'));
+          themeToggle.setAttribute('aria-label', safeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+          themeToggle.setAttribute('title', safeMode === 'dark' ? 'Switch to light appearance' : 'Switch to dark appearance');
+          document.querySelectorAll('#theme-toggle [data-icon]').forEach(el => el.classList.toggle('hidden', el.getAttribute('data-icon') !== safeMode));
+        }
+      };
       const detectTheme = () => {
         const saved = localStorage.getItem('ra-theme');
         if (saved) return saved;
@@ -841,11 +853,8 @@
       themeToggle?.addEventListener('click', () => {
         const now = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
         applyTheme(now); localStorage.setItem('ra-theme', now);
-        document.querySelectorAll('#theme-toggle [data-icon]').forEach(el => el.classList.add('hidden'));
-        document.querySelector('#theme-toggle [data-icon="' + now + '"]')?.classList.remove('hidden');
       });
-      // initial: reveal the correct theme icon
-      document.querySelectorAll('#theme-toggle [data-icon]').forEach(el => el.classList.toggle('hidden', document.documentElement.dataset.theme === 'dark' ? false : true));
+      // Initial icon state is synchronised by applyTheme above.
       // green check after tour
       const escHtml = (t) => String(t).replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
