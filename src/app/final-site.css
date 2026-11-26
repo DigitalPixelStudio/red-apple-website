@@ -1544,3 +1544,29 @@ html:not([data-theme="dark"]) :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-
 @media (prefers-reduced-motion: reduce) {
   #full-price-grid .price-pill { transition: none !important; }
 }
+
+/* SCROLL / GPU STABILITY — preserve WebGL model quality, remove decorative work. */
+html[data-motion="off"] #ambient-particles,
+html[data-motion="off"] .ambient-orb {
+  display: none !important;
+  animation: none !important;
+  will-change: auto !important;
+}
+html[data-motion="off"] .ra-motion-text,
+html[data-motion="off"] .ra-motion-text.ra-motion-visible,
+html[data-motion="off"] .heading-breathe,
+html[data-motion="off"] .text-brand-grad,
+html[data-motion="off"] .badge-breathe,
+html[data-motion="off"] .fast-breathe-badge,
+html[data-motion="off"] .price-breathe,
+html[data-motion="off"] .quote-color-shift,
+html[data-motion="off"] .kicker-shift,
+html[data-motion="off"] .heading-breathe::after,
+html[data-motion="off"] .brand-name-flow {
+  animation: none !important;
+  will-change: auto !important;
+}
+html[data-motion="off"] .stage-3d-box::before {
+  display: none !important;
+  content: none !important;
+}
