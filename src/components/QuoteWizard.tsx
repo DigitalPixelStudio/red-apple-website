@@ -123,7 +123,9 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
 
     // First-party CRM capture with campaign attribution; keep WhatsApp opening synchronous for popup blockers.
     const params = new URLSearchParams(window.location.search);
-    const attribution: Record<string, string> = {};
+    let savedAttribution: Record<string, string> = {};
+    try { savedAttribution = JSON.parse(localStorage.getItem("ra_attribution") || "{}"); } catch {}
+    const attribution: Record<string, string> = { ...savedAttribution };
     ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","gbraid","wbraid","fbclid"].forEach((key) => {
       const value = params.get(key); if (value) attribution[key] = value;
     });
@@ -133,7 +135,7 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
         name, phone, email, device: deviceDef?.label || device, model, issue: repair,
         condition, message: description, urgency, pickup, preferredTime,
         source: "quote_wizard", page: window.location.pathname,
-        referrer: document.referrer, landing_page: window.location.href, ...attribution,
+        referrer: attribution.referrer || document.referrer, landing_page: window.location.href, ...attribution,
       }),
     }).catch(() => {});
     const url = wa(msg);
