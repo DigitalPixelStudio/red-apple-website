@@ -21,6 +21,15 @@ const required = [
 ];
 
 const failures = [];
+const webglPath = "public/final-site.js";
+try {
+  const webgl = await readFile(new URL(`../${webglPath}`, import.meta.url), "utf8");
+  for (const marker of ["SCROLL_SETTLE_AUTO_ORBIT", "getScrollMotionScale(now)", "notePageScroll"]) {
+    if (!webgl.includes(marker)) failures.push(`${webglPath}: ${marker}`);
+  }
+} catch {
+  failures.push(`MISSING ${webglPath}`);
+}
 const stylePath = "src/app/final-site.css";
 try {
   const styles = await readFile(new URL(`../${stylePath}`, import.meta.url), "utf8");
