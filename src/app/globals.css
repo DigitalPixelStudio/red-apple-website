@@ -34,9 +34,8 @@ html[data-motion="off"] {
 html[data-motion="off"] *,
 html[data-motion="off"] *::before,
 html[data-motion="off"] *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
+  animation: none !important;
+  /* Keep native hover/focus/pressed transitions for responsive touch feedback. */
   scroll-behavior: auto !important;
 }
 
