@@ -14,7 +14,7 @@ const required = [
     "GEMINI_IMAGE_INPUT_ENABLED",
   ]],
   ["src/app/api/lead/route.ts", [
-    "Schema.safeParse", "rateLimit(", "rest/v1/leads",
+    "Schema.safeParse", "rateLimit(", 'readRows<IdRow>(baseUrl, serviceKey, "leads"',
     "on_conflict=event_id", "WhatsApp",
   ]],
 ];
