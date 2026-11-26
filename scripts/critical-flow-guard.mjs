@@ -28,7 +28,7 @@ for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('des
 const webglPath = "public/final-site.js";
 try {
   const webgl = await readFile(new URL(`../${webglPath}`, import.meta.url), "utf8");
-  for (const marker of ["SCROLL_RENDER_PAUSE", "pauseWebGLDuringPageScroll", "SCROLL_RESUME_DELAY_MS = 160", "scrollResumeTimer || visibleSlots.size === 0", "MODEL_CAMERA_ZOOM_BOOST", "PERFORMANCE_DEFAULT_MOTION_OFF", "Avoid per-move layout reads"]) {
+  for (const marker of ["SCROLL_RENDER_PAUSE", "pauseWebGLDuringPageScroll", "SCROLL_RESUME_DELAY_MS = 160", "scrollResumeTimer || visibleSlots.size === 0", "MODEL_CAMERA_ZOOM_BOOST", "PERFORMANCE_DEFAULT_MOTION_OFF", "POINTER_DRAG_ONLY_NO_LAYOUT_READS"]) {
     if (!webgl.includes(marker)) failures.push(`${webglPath}: ${marker}`);
   }
   if (webgl.includes("getScrollMotionScale") || webgl.includes("box.getBoundingClientRect()")) {
