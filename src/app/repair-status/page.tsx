@@ -79,7 +79,7 @@ export default function RepairStatusPage() {
                 <div className="rounded-full bg-[#ff2d55]/10 px-4 py-2 text-[12.5px] font-bold capitalize text-[#ff2d55]">{result.status.replace(/-/g, " ")}</div>
               </div>
 
-              <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {result.status === "cancelled" ? <div className="mt-8 rounded-[20px] border border-red-200 bg-red-50 p-5 text-[13px] text-red-700">This repair was cancelled. Please contact the store if you need help.</div> : <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {STATUS_STEPS.map((s, i) => {
                   const currentIndex = Math.max(0, STATUS_STEPS.findIndex((step) => step.key === result.status));
                   const done = i < currentIndex;
@@ -96,11 +96,11 @@ export default function RepairStatusPage() {
                       </div>
                       <p className={`mt-2 text-[11.5px] leading-relaxed ${current ? "text-white/60" : "text-[#86868b]"}`}>{s.desc}</p>
                       {done && !current && <div className="mt-2 text-[11px] font-bold text-[#30d158]">Done</div>}
-                      {current && <div className="mt-2 inline-flex rounded-full bg-[#ff2d55] px-3 py-1 text-[10.5px] font-bold text-white">● In progress</div>}
+                      {current && <div className="mt-2 inline-flex rounded-full bg-[#ff2d55] px-3 py-1 text-[10.5px] font-bold text-white">{result.status === "delivered" ? "✓ Completed" : "● In progress"}</div>}
                     </div>
                   );
                 })}
-              </div>
+              </div>}
 
               <div className="mt-8 rounded-[20px] bg-[#f5f5f7] p-5 text-center">
                 <p className="text-[13px] text-[#6e6e73]">Questions about your repair? Our team is one message away.</p>
