@@ -163,3 +163,7 @@ const result: QualifyResult = qualifyInquiry(noteFromEstimateForm);
 5. Wire `adQualify.ts` per §7 so Meta receives honest `high-intent` quality signals.
 6. Wait 7 days, review by qualified lead and booked job, then scale.
 7. Never edit `src/lib/site.ts`, pricing files, images or 3D assets to chase ad performance.
+## 2026-11-26 live readiness recheck
+- Google Ads official policy rechecked: third-party consumer hardware repair remains disallowed. Do not launch Google Search/LSA repair ads and do not disguise repair offers as device/accessory sales. See the official [Third-party consumer technical support policy](https://support.google.com/adspolicy/answer/13527027), [Circumventing systems](https://support.google.com/adspolicy/answer/15938075) and [Misrepresentation](https://support.google.com/adspolicy/answer/6020955).
+- Production /api/health: concierge, image understanding, CRM, lead storage, website lead ledger and all four CRM tables report healthy; lead webhook is not configured.
+- Production /api/ads-diagnostics: lead storage + CRM read configured, persistent event-ID dedup active, SHA-256 PII hashing and gclid/fbclid/msclkid capture present. Meta CAPI and Bing CAPI are not configured; do not mark server-side platform delivery as active until verified owner credentials are installed.
