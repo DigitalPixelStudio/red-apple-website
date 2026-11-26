@@ -53,3 +53,10 @@ This document is the durable project brief for future maintainers and coding age
 - The owner explicitly approved the restored 3D preview based on commit `a9e62b2178530236334999b45ac8322cbabbcb02`.
 - Treat that snapshot as the 3D visual/performance baseline. Do not change its renderer, canvas compositing, DPR, antialiasing, geometry, materials, cameras, animation timing or visibility scheduling without consulting the owner and testing a separate preview.
 - The later touch-GPU optimisation that caused visual defects was reverted for the baseline branch.
+
+
+## Scroll-settle refinement (2026-11-26)
+- A small scroll-settle guard now eases only ambient auto-orbit while the page is scrolling and during the short inertial settle window.
+- The shared WebGL renderer continues rendering; no scroll pause, renderer replacement, FPS throttle, DPR, antialiasing, canvas compositing, model geometry, materials, camera framing, or direct pointer-drag controls are changed.
+- Preserve the 140 ms scroll quiet period and 280 ms ease-in unless the owner explicitly approves a different interaction feel.
+- AI image analysis, FaiCodex concierge, CRM status APIs, database schemas and customer data are outside this change and must remain untouched.
