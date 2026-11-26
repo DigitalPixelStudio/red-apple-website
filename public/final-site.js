@@ -1107,7 +1107,6 @@
         // momentum scrolling. This prevents WebGL work competing with page compositing.
         function pauseWebGLForScroll() {
           pageScrolling = true;
-          document.documentElement.dataset.scrolling = 'true';
           if (webglRafId) {
             cancelAnimationFrame(webglRafId);
             webglRafId = 0;
@@ -1116,13 +1115,12 @@
           scrollResumeTimer = setTimeout(() => {
             pageScrolling = false;
             scrollResumeTimer = 0;
-            delete document.documentElement.dataset.scrolling;
             lastFrameTime = 0;
             lastRenderAt = 0;
             wakeWebGLLoop();
           }, 160);
         }
-        window.addEventListener('scroll', pauseWebGLForScroll, { passive: true });
+        // Yield WebGL as soon as a wheel/touch gesture begins, before the next paint.\n        window.addEventListener('wheel', pauseWebGLForScroll, { passive: true });\n        window.addEventListener('touchmove', pauseWebGLForScroll, { passive: true });\n        window.addEventListener('scroll', pauseWebGLForScroll, { passive: true });
 
         // Cap background product rendering at 60fps. 120Hz displays still retain
         // native 120Hz scrolling; the 3D loop no longer burns a second frame budget.
@@ -1150,7 +1148,7 @@
                 else visibleSlots.delete(s);
               });
               wakeWebGLLoop();
-            }, { threshold: 0.04 })
+            }, { rootMargin: '-8% 0px -8% 0px', threshold: 0.04 })
           : null;
 
         function roundedShape(w, h, r) {
@@ -1893,9 +1891,7 @@
           const frameScale = lastFrameTime ? Math.min(2, Math.max(0.5, (now - lastFrameTime) / 16.667)) : 1;
           lastFrameTime = now;
           t += 0.018 * frameScale;
-          for (let i = 0; i < slots.length; i++) {
-            const s = slots[i];
-            if (!s.visible || s.contextLost) continue;
+          // Iterate only the small set of stages currently intersecting the viewport.\n          for (const s of visibleSlots) {\n            if (!s.visible || s.contextLost) continue;
             let cw = s.cw, ch = s.ch;
             if (!cw || !ch) { cw = s.canvas.clientWidth; ch = s.canvas.clientHeight; s.cw = cw; s.ch = ch; }
             if (!cw || !ch) continue;
