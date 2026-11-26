@@ -22,13 +22,13 @@ const required = [
 
 const failures = [];
 const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
-for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'"]) {
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "id === 'canvas-macbook' ? 1.08 : 1.04", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
   if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
 }
 const webglPath = "public/final-site.js";
 try {
   const webgl = await readFile(new URL(`../${webglPath}`, import.meta.url), "utf8");
-  for (const marker of ["SCROLL_SETTLE_AUTO_ORBIT", "getScrollMotionScale(now)", "notePageScroll"]) {
+  for (const marker of ["SCROLL_SETTLE_AUTO_ORBIT", "getScrollMotionScale(now)", "notePageScroll", "MODEL_CAMERA_ZOOM_BOOST", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
     if (!webgl.includes(marker)) failures.push(`${webglPath}: ${marker}`);
   }
 } catch {
