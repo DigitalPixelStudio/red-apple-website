@@ -770,24 +770,24 @@ export const finalSiteHtml = `
         </div>
 
         <!-- Single merged glass-restoration support panel -->
-        <div class="ra-glass-support mt-7 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div class="min-w-0 lg:max-w-[34rem]">
-              <p class="text-[11px] font-bold uppercase tracking-[.16em] text-zinc-950">Glass Restoration</p>
-              <h3 class="mt-1 font-display text-xl font-extrabold tracking-tight text-zinc-950 sm:text-2xl">Glass Restoration And Repair Support</h3>
-              <p class="mt-2 text-sm leading-relaxed text-zinc-700">Specialist front-glass restoration that retains your original OLED, backed by precision TBK equipment, post-repair diagnostics and a six-month repair warranty.</p>
-              <div class="mt-3 flex flex-wrap gap-x-2 gap-y-1 text-[10px] font-semibold text-zinc-700 sm:text-[11px]">
+        <div class="ra-glass-support mt-6 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
+          <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div class="min-w-0 lg:max-w-[38rem]">
+              <p class="text-[9px] font-bold uppercase tracking-[.14em] text-zinc-500">Glass Restoration</p>
+              <h3 class="mt-0.5 font-display text-lg font-extrabold tracking-tight text-zinc-950 sm:text-xl">Glass Restoration And Repair Support</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-zinc-600">Specialist front-glass restoration that retains your original OLED, backed by precision TBK equipment, post-repair diagnostics and a six-month repair warranty.</p>
+              <div class="ra-glass-tags mt-2 flex flex-wrap gap-x-2 gap-y-1 text-[9px] font-semibold text-zinc-500">
                 <span>#PremiumMobileRepair</span><span>#iPhoneGlassReplacement</span><span>#FactoryLevelRepair</span><span>#OLEDRepair</span><span>#TBK958</span><span>#ColdUVLaser</span><span>#OCALamination</span><span>#ZeroPasswordPolicy</span>
               </div>
             </div>
-            <div class="flex shrink-0 flex-col gap-2 sm:flex-row lg:flex-col">
-              <a href="#estimate" class="dock-quote-btn inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-3 text-sm font-bold text-white">Get a Glass-restoration Quote</a>
-              <a href="tel:+918660663776" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-950">Call The Lab · +91 86606 63776</a>
+            <div class="flex shrink-0 flex-row flex-wrap gap-2">
+              <a href="#estimate" class="dock-quote-btn inline-flex min-h-9 items-center justify-center rounded-lg px-3.5 py-2 text-[11px] font-bold text-white">Get a Glass-restoration Quote</a>
+              <a href="tel:+918660663776" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-zinc-300 bg-white px-3.5 py-2 text-[11px] font-semibold text-zinc-950">Call The Lab · +91 86606 63776</a>
             </div>
           </div>
-          <div class="mt-5 border-t border-zinc-200 pt-4">
-            <h4 class="font-display text-base font-extrabold text-zinc-950">Our Glass Restoration Capabilities</h4>
-            <ul class="repair-capabilities-grid mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="mt-3 border-t border-zinc-100 pt-3">
+            <h4 class="font-display text-xs font-bold text-zinc-800">Our Glass Restoration Capabilities</h4>
+            <ul class="ra-glass-capabilities mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-4">
               <li>Front Glass Restoration</li>
               <li>TBK OCA Vacuum Lamination</li>
               <li>90-Litre Bubble Remover</li>
