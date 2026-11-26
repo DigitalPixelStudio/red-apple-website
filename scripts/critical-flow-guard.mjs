@@ -21,6 +21,10 @@ const required = [
 ];
 
 const failures = [];
+const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'"]) {
+  if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
+}
 const webglPath = "public/final-site.js";
 try {
   const webgl = await readFile(new URL(`../${webglPath}`, import.meta.url), "utf8");
