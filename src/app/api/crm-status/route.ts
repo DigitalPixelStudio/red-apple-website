@@ -15,7 +15,7 @@ const Schema = z.object({
 type CustomerRow = { id: string };
 type RepairRow = {
   id: string; token: string; device: string; issue: string;
-  status: string; created_at?: string | null; intake_on?: string | null;
+  status: string; created_at?: string | null;
 };
 type InvoiceRow = { code?: string | null; repair_id?: string | null; phone?: string | null };
 
@@ -24,6 +24,7 @@ const stageKeyByStatus: Record<string, string> = {
   diagnosis: "inspection",
   "waiting-part": "repair",
   repair: "repair",
+  repairing: "repair",
   "in-progress": "repair",
   qc: "quality",
   quality: "quality",
@@ -52,16 +53,16 @@ async function getRows<T>(
     method: "GET",
     headers: { apikey: key, Authorization: `Bearer ${key}`, Accept: "application/json" },
     cache: "no-store",
-    signal: AbortSignal.timeout(1800),
+    signal: AbortSignal.timeout(2500),
   });
-  if (!response.ok) throw new Error(`crm_read_${response.status}`);
+  if (!response.ok) throw new Error(`crm_read_${table}_${response.status}`);
   return (await response.json()) as T[];
 }
 
 /**
- * POST /api/crm-status — read-only CRM lookup. Every database request below is
- * an HTTP GET; only a minimal projection is selected and no customer PII is
- * returned. The service key remains server-side and is never sent to a client.
+ * Public repair lookup. It reads the same customers / repairs / invoices tables
+ * used by Red Apple CRM. Only a phone suffix and ticket must match; no customer
+ * profile, address, email, or full phone number is returned to the browser.
  */
 export async function POST(request: Request) {
   const limited = rateLimit(request, "crm-status", 12, 60_000);
@@ -74,9 +75,14 @@ export async function POST(request: Request) {
 
   const ticket = parsed.data.ticket.toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 80);
   const phone = parsed.data.phone.replace(/\D/g, "");
+  const last10 = phone.slice(-10);
   const phoneMasked = maskPhone(phone);
   const whatsapp = whatsappFallback(ticket, phone);
-  const baseUrl = (process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");\n  const key = process.env.CRM_SUPABASE_READONLY_KEY ||\n    process.env.CRM_SUPABASE_SERVICE_ROLE_KEY ||\n    process.env.SUPABASE_SERVICE_ROLE_KEY ||\n    process.env.SUPABASE_SERVICE_KEY || "";
+  const baseUrl = (process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");
+  const key = process.env.CRM_SUPABASE_READONLY_KEY ||
+    process.env.CRM_SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY || "";
 
   const empty = {
     ok: true, configured: Boolean(baseUrl && key), ticket, phoneMasked,
@@ -96,30 +102,45 @@ export async function POST(request: Request) {
   }
 
   try {
-    const last10 = phone.slice(-10);
-    const customers = await getRows<CustomerRow>(baseUrl, key, "customers", {\n      // The live Red Apple CRM stores one primary phone field (no alt_phone).\n      // Match the final 10 digits so +91, spaces and local formats all resolve.\n      select: "id", phone: `ilike.*${last10}`, is_test: "eq.false", order: "created_at.desc", limit: "1",\n    });
+    // Red Apple CRM has customers.phone (not alt_phone). Match the final 10
+    // digits to support both local and +91-formatted phone numbers.
+    const customers = await getRows<CustomerRow>(baseUrl, key, "customers", {
+      select: "id", phone: `ilike.*${last10}`, is_test: "eq.false",
+      order: "created_at.desc", limit: "1",
+    });
     const customerId = customers[0]?.id;
-    if (!customerId) return NextResponse.json(empty, { headers: { ...meta.headers, "Cache-Control": "no-store" } });
+    if (!customerId) {
+      return NextResponse.json(empty, { headers: { ...meta.headers, "Cache-Control": "no-store" } });
+    }
 
     let repairs = await getRows<RepairRow>(baseUrl, key, "repairs", {
       select: "id,token,device,issue,status,created_at",
-      token: `eq.${ticket}`, customer_id: `eq.${customerId}`, is_test: "eq.false", limit: "1",
+      token: `eq.${ticket}`, customer_id: `eq.${customerId}`,
+      is_test: "eq.false", order: "created_at.desc", limit: "1",
     });
 
     let invoiceNumber: string | null = null;
     if (!repairs[0]) {
-      const invoices = await getRows<InvoiceRow>(baseUrl, key, "invoices", {\n        // CRM invoices are linked by repair_id and carry a phone snapshot;\n        // they do not have a customer_id column. Keep the phone match here.\n        select: "code,repair_id,phone", code: `eq.${ticket}`, phone: `ilike.*${last10}`, is_test: "eq.false", limit: "1",\n      });
+      // CRM invoices have a phone snapshot and repair_id; there is no
+      // customer_id column on invoices.
+      const invoices = await getRows<InvoiceRow>(baseUrl, key, "invoices", {
+        select: "code,repair_id,phone", code: `eq.${ticket}`,
+        phone: `ilike.*${last10}`, is_test: "eq.false", limit: "1",
+      });
       invoiceNumber = invoices[0]?.code ?? null;
       if (invoices[0]?.repair_id) {
         repairs = await getRows<RepairRow>(baseUrl, key, "repairs", {
-          select: "id,token,device,issue,status,created_at,intake_on",
-          id: `eq.${invoices[0].repair_id}`, customer_id: `eq.${customerId}`, is_test: "eq.false", limit: "1",
+          select: "id,token,device,issue,status,created_at",
+          id: `eq.${invoices[0].repair_id}`, customer_id: `eq.${customerId}`,
+          is_test: "eq.false", limit: "1",
         });
       }
     }
 
     const repair = repairs[0];
-    if (!repair) return NextResponse.json(empty, { headers: { ...meta.headers, "Cache-Control": "no-store" } });
+    if (!repair) {
+      return NextResponse.json(empty, { headers: { ...meta.headers, "Cache-Control": "no-store" } });
+    }
 
     if (!invoiceNumber) {
       const invoices = await getRows<InvoiceRow>(baseUrl, key, "invoices", {
@@ -141,9 +162,8 @@ export async function POST(request: Request) {
       stageStep: stageIndex >= 0 ? stageIndex + 1 : null,
       stageLabel: currentStage?.label ?? null,
       currentStage,
-      // This CRM schema has no warranty-months or updated_at field; don't invent either.
       warrantyMonths: null,
-      updatedAt: null,
+      updatedAt: repair.created_at ?? null,
       message: currentStage ? `Live repair record found: ${currentStage.label}.` : "Live repair record found. Please confirm the exact stage with our team.",
       whatsapp,
     }, { headers: { ...meta.headers, "Cache-Control": "no-store" } });
