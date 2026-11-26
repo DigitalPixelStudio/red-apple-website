@@ -41,6 +41,10 @@ export const finalSiteHtml = `
 
       <div class="flex items-center gap-1">
         <button id="pwa-install-button" type="button" aria-label="Install Red Apple app" class="pwa-install-header whitespace-nowrap rounded-[6px] border border-red-200 bg-white px-2 py-2 text-[10px] font-bold text-red-700" hidden>↓ Install</button>
+        <button id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Toggle light and dark appearance" class="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-300 bg-white text-zinc-800 shadow-sm transition" data-theme-control>
+          <svg data-icon="light" class="theme-icon-moon h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.6 8.6 0 1 0 20.5 14.2Z"/></svg>
+          <svg data-icon="dark" class="theme-icon-sun h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+        </button>
         <a href="#estimate" class="dock-quote-btn whitespace-nowrap rounded-[6px] px-2 py-2 text-[10px] font-bold text-white transition hover:opacity-95">
           Get Quote
         </a>
