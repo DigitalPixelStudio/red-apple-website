@@ -1108,29 +1108,31 @@
         const visibleSlots = new Set();
         let webglRafId = 0;
 
-        // SCROLL_SETTLE_AUTO_ORBIT: keep the shared WebGL renderer and every model
-        // animation active, but briefly ease ambient auto-orbit during native page
-        // scroll/inertial touch scrolling. This avoids the subtle visual tug seen
-        // when the page settles after a finger flick. Pointer drag/orbit controls,
-        // model geometry, materials, cameras, canvas compositing and DPR are untouched.
-        let scrollQuietUntil = 0;
-        const SCROLL_SETTLE_HOLD_MS = 140;
-        const SCROLL_SETTLE_RAMP_MS = 280;
-        function notePageScroll() {
-          scrollQuietUntil = performance.now() + SCROLL_SETTLE_HOLD_MS;
+        // SCROLL_RENDER_PAUSE: stop expensive WebGL compositing while native page
+        // scrolling is in progress, then resume shortly after scroll settles. This
+        // removes GPU competition from touch scrolling without lowering model quality,
+        // changing render resolution, or disabling direct 3D pointer/touch controls.
+        let scrollResumeTimer = 0;
+        const SCROLL_RESUME_DELAY_MS = 160;
+        function pauseWebGLDuringPageScroll() {
+          if (webglRafId) {
+            cancelAnimationFrame(webglRafId);
+            webglRafId = 0;
+          }
+          if (scrollResumeTimer) clearTimeout(scrollResumeTimer);
+          scrollResumeTimer = setTimeout(() => {
+            scrollResumeTimer = 0;
+            wakeWebGLLoop();
+          }, SCROLL_RESUME_DELAY_MS);
         }
-        function getScrollMotionScale(now) {
-          if (now <= scrollQuietUntil) return 0;
-          return Math.min(1, (now - scrollQuietUntil) / SCROLL_SETTLE_RAMP_MS);
-        }
-        window.addEventListener('scroll', notePageScroll, { passive: true });
+        window.addEventListener('scroll', pauseWebGLDuringPageScroll, { passive: true });
 
         // Let the browser schedule one render per display refresh. This naturally
         // supports 60/90/120/144Hz screens without a second JavaScript FPS gate,
         // which can create uneven frame pacing on high-refresh displays.
         // Rendering stays active during scroll; only offscreen/hidden scenes sleep.
         function wakeWebGLLoop() {
-          if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
+          if (webglRafId || scrollResumeTimer || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
             webglRafId = 0;
             if (document.hidden || visibleSlots.size === 0) return;
@@ -1150,7 +1152,7 @@
                 else visibleSlots.delete(s);
               });
               wakeWebGLLoop();
-            }, { rootMargin: '-14% 0px -14% 0px', threshold: 0.06 })
+            }, { rootMargin: '-18% 0px -18% 0px', threshold: 0.08 })
           : null;
 
         function roundedShape(w, h, r) {
@@ -1177,13 +1179,8 @@
             try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
           });
           canvas.addEventListener('pointermove', (e) => {
-            // Gift: pointer-follow glass sheen (compositor-only CSS vars)
-            const box = canvas.closest('.stage-3d-box');
-            if (box) {
-              const r = box.getBoundingClientRect();
-              box.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-              box.style.setProperty('--my', (e.clientY - r.top) + 'px');
-            }
+            // Keep pointer handling limited to actual drag gestures. Avoid per-move
+            // layout reads and style writes for the decorative pointer-follow sheen.
             if (!drag) return;
             ty += (e.clientX - px) * 0.011;
             tx = Math.max(-0.85, Math.min(0.85, tx + (e.clientY - py) * 0.009));
@@ -1358,11 +1355,15 @@
             // Keep the hero and every mobile profile exactly at their approved values.
             const isLargeScreen = profile.startsWith('desktop-') || profile.startsWith('tablet-');
             const isLowerStage = id !== 'canvas-hero';
-            const layoutFit = isLargeScreen && isLowerStage ? 0.86 : 1;
-            // MODEL_CAMERA_ZOOM_BOOST: framing only; model meshes/assets remain untouched.
-            // The laptop stage receives a slightly stronger camera-fill boost.
-            // Keep hero and laptop framing at the approved values; gently enlarge all other models.
-            const modelZoom = id === 'canvas-hero' ? 1.04 : id === 'canvas-macbook' ? 1.08 : 1.08;
+            const isMacbook = id === 'canvas-macbook';
+            const isTbkMachine = id === 'canvas-tbk-oca' || id === 'canvas-tbk-90l' || id === 'canvas-tbk-958';
+            // Preserve the MacBook's previous large-screen framing; do not shrink every
+            // other lower-stage model. The old blanket 0.86 multiplier made the zoom
+            // boost net-negative on tablets/desktops.
+            const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;
+            // Camera-only framing: hero and laptop stay unchanged; machinery gets a
+            // measured stronger fill, with a modest increase for the remaining models.
+            const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? 1.16 : isMacbook ? 1.08 : 1.12;
             const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
@@ -1927,7 +1928,7 @@
               centerAndFitResponsive(s.camera, s.root, id);
             }
             if (typeof ResizeObserver === 'undefined') { s.camera.aspect = cw / ch; s.camera.updateProjectionMatrix(); }
-            s.orbit.update((s === heroSlot && heroAmbient ? 0.0028 : 0.0016) * getScrollMotionScale(now), frameScale);
+            s.orbit.update((s === heroSlot && heroAmbient ? 0.0028 : 0.0016), frameScale);
             if (s.onTick) s.onTick(t);
             renderer.setViewport(0, 0, rw, rh);
             renderer.setScissor(0, 0, rw, rh);
