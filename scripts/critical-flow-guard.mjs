@@ -21,6 +21,15 @@ const required = [
 ];
 
 const failures = [];
+const stylePath = "src/app/final-site.css";
+try {
+  const styles = await readFile(new URL(`../${stylePath}`, import.meta.url), "utf8");
+  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion"]) {
+    if (!styles.includes(marker)) failures.push(`${stylePath}: ${marker}`);
+  }
+} catch {
+  failures.push(`MISSING ${stylePath}`);
+}
 for (const [path, markers] of required) {
   let source = "";
   try { source = await readFile(new URL(`../${path}`, import.meta.url), "utf8"); }
