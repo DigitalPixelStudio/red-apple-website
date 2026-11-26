@@ -23,8 +23,9 @@ export const finalSiteHtml = `
       <a href="#hero" class="flex items-center gap-2.5">
         <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Logo" class="h-10 w-10 sm:h-11 sm:w-11 shrink-0 block rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div class="flex flex-col items-center">
-          <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="brand-name-flow">Red Apple</span></div>
-          <div class="mt-0.5 whitespace-nowrap text-[10px] font-medium text-zinc-500">Halasuru · Bengaluru</div>
+          <div class="font-display text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg">Red Apple</div>
+          <div class="mt-0.5 whitespace-nowrap text-[10px] font-extrabold uppercase tracking-[.12em] text-red-600 sm:text-[11px]">Mobile Repairs</div>
+          <div class="mt-0.5 whitespace-nowrap text-[9px] font-medium text-zinc-500">Halasuru · Bengaluru</div>
         </div>
       </a>
 
@@ -1371,7 +1372,7 @@ export const finalSiteHtml = `
           <span class="studio-laser-hairline" aria-hidden="true"></span>
         </div>
         <div class="lg:col-span-7">
-          <div class="font-display text-lg font-extrabold text-zinc-950"><span class="text-red-600">Red Apple</span> Mobile Repair Store</div>
+          <div class="font-display text-lg font-extrabold"><span class="text-zinc-950">Red Apple</span> <span class="text-red-600">Mobile Repairs</span></div>
           <p class="mt-1 leading-relaxed text-zinc-600">Apple repairs, perfected. The Apple repair specialist of Halasuru, Bengaluru — iPhone, iPad, Watch, AirPods, Mac &amp; MacBook, hardware, software and board-level storage IC repair. MG Road, Halasuru · open 10 AM – 12 AM.</p>
           <p class="mt-2 leading-relaxed text-zinc-600">Store Open 10 AM – 12 AM Midnight, All 7 Days. Customer Assistance on WhatsApp 24/7. Walk-ins Welcome.</p>
           <div class="mt-3 flex flex-nowrap flex-wrap gap-1 text-[10px] font-bold sm:gap-1.5">
