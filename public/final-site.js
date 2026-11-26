@@ -1103,24 +1103,17 @@
         const slots = [];
         const visibleSlots = new Set();
         let webglRafId = 0;
-        let lastRenderAt = 0;
-        // Request up to 120fps for every 3D model on every device profile.
-        // Actual delivery is bounded by the display refresh rate and available GPU time.
-        const TARGET_MODEL_FPS = 120;
-        const MAX_RENDER_INTERVAL = 1000 / TARGET_MODEL_FPS;
 
-        // Keep the model loop active during touch, wheel and momentum scrolling.
-        // Pausing the shared WebGL loop on every scroll event caused visible model
-        // freezes and uneven frame pacing while users moved between model sections.
+        // Let the browser schedule one render per display refresh. This naturally
+        // supports 60/90/120/144Hz screens without a second JavaScript FPS gate,
+        // which can create uneven frame pacing on high-refresh displays.
+        // Rendering stays active during scroll; only offscreen/hidden scenes sleep.
         function wakeWebGLLoop() {
           if (webglRafId || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
             webglRafId = 0;
             if (document.hidden || visibleSlots.size === 0) return;
-            if (!lastRenderAt || now - lastRenderAt >= MAX_RENDER_INTERVAL) {
-              lastRenderAt = now;
-              renderFrame(now);
-            }
+            renderFrame(now);
             webglRafId = requestAnimationFrame(tick);
           };
           webglRafId = requestAnimationFrame(tick);
