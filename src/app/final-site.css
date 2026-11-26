@@ -1101,7 +1101,7 @@
       .footer-light-modern div.flex.flex-nowrap.flex-wrap > a:active { transform: none !important; }
     }
 /* Permanent OLED-vivid contrast polish; original orange theme/backgrounds remain untouched. */
-body :is(h1,h2,h3,h4,h5,h6,p,a,button,label,small,strong,em,li,summary,svg) { filter: saturate(1.14) contrast(1.06); }
+body :is(h1,h2,h3,h4,h5,h6,p,a,button,label,small,strong,em,li,summary,svg) { filter: none !important; }
 body canvas, body img, body video, body picture { filter: none !important; }
 
 
@@ -1570,3 +1570,53 @@ html[data-motion="off"] .stage-3d-box::before {
   display: none !important;
   content: none !important;
 }
+
+/* RED APPLE — compact glass capability panel */
+.ra-glass-support { padding: 14px !important; border-radius: 16px !important; box-shadow: 0 2px 10px rgba(24,24,27,.035) !important; }
+.ra-glass-support .ra-glass-tags { color: #71717a !important; }
+.ra-glass-support .ra-glass-capabilities { list-style: none; margin: 0; padding: 0; }
+.ra-glass-support .ra-glass-capabilities li {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 9px;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #27272a !important;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+@media (min-width: 768px) {
+  .ra-glass-support { padding: 18px !important; }
+  .ra-glass-support .ra-glass-capabilities li { min-height: 34px; font-size: 11.5px; }
+}
+
+/* BACKGROUND MOTION CLEANUP
+   The old motion-restore block re-enabled ambient-orb drift and ra-motion-text
+   loops even while data-motion="off". Those repeated transforms/opacity changes,
+   plus a global filter on every text/SVG element, added avoidable compositing work.
+   Keep the studio backgrounds static; leave the interactive WebGL models untouched. */
+#ambient-particles,
+html[data-motion="off"] #ambient-particles,
+html[data-motion="off"] .ambient-orb,
+html[data-motion="off"] .ra-motion-text,
+html[data-motion="off"] .ra-motion-text.ra-motion-visible,
+html[data-motion="off"] .heading-breathe,
+html[data-motion="off"] #rail-label.heading-breathe,
+html[data-motion="off"] .text-brand-grad,
+html[data-motion="off"] .badge-breathe,
+html[data-motion="off"] .fast-breathe-badge,
+html[data-motion="off"] .price-breathe,
+html[data-motion="off"] .quote-color-shift,
+html[data-motion="off"] .kicker-shift,
+html[data-motion="off"] .heading-breathe::after,
+html[data-motion="off"] .brand-name-flow {
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+#ambient-particles { display: none !important; }
+html[data-motion="off"] .ambient-orb { display: none !important; }
+html[data-motion="off"] .stage-3d-box::before { display: none !important; content: none !important; }
