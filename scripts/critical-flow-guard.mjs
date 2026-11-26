@@ -22,7 +22,7 @@ const required = [
 
 const failures = [];
 const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
-for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? 1.16 : isMacbook ? 1.08 : 1.12;", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const machineZoom = isLargeScreen ? 1.12 : 0.92;", "const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? machineZoom : isMacbook ? 1.08 : 1.12;", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
   if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
 }
 const webglPath = "public/final-site.js";
