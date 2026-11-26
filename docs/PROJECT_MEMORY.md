@@ -87,7 +87,7 @@ This document is the durable project brief for future maintainers and coding age
 
 ## Model sizing + scroll-render stability pass (2026-11-26)
 - Preserve hero framing at 1.04 and MacBook framing at 1.08, including the existing large-screen MacBook fit multiplier of 0.86.
-- Remove the blanket 0.86 desktop/tablet multiplier from all other lower-stage models; it previously cancelled the intended zoom increase and made the models smaller. Apply camera-only fill 1.12 to other non-hero/non-MacBook models and 1.16 to the three TBK machinery models.
+- Remove the blanket 0.86 desktop/tablet multiplier from all other lower-stage models; it previously cancelled the intended zoom increase and made the models smaller. Apply camera-only fill 1.12 to other non-hero/non-MacBook models. For the three TBK machinery models, use 0.92 on mobile to prevent top/bottom clipping and 1.12 on tablet/desktop.
 - Pause the shared WebGL animation/compositing loop during native page scrolling and resume 160 ms after scroll settles. Do not lower DPR, disable antialiasing, change the shared renderer, or alter model geometry, materials, lighting, camera rigs, touch/drag controls, or model animation callbacks.
 - Tighten the WebGL visibility window slightly so fewer adjacent stages render simultaneously.
 - Remove per-pointermove layout reads/style writes for the decorative 3D glass sheen. Keep pointer drag rotation intact.
