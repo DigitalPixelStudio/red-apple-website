@@ -60,3 +60,10 @@ This document is the durable project brief for future maintainers and coding age
 - The shared WebGL renderer continues rendering; no scroll pause, renderer replacement, FPS throttle, DPR, antialiasing, canvas compositing, model geometry, materials, camera framing, or direct pointer-drag controls are changed.
 - Preserve the 140 ms scroll quiet period and 280 ms ease-in unless the owner explicitly approves a different interaction feel.
 - AI image analysis, FaiCodex concierge, CRM status APIs, database schemas and customer data are outside this change and must remain untouched.
+
+
+## Desktop/tablet lower 3D stage fit (2026-11-26)
+- Lower-stage 3D models use a camera-fit multiplier of 0.86 on desktop and tablet profiles only, increasing camera distance so models sit inside their containers without mesh scaling or aspect distortion.
+- Hero model and all mobile profiles retain their previous framing values.
+- No canvas/container CSS dimensions, renderer size, DPR, antialiasing, materials, geometry, lighting, interaction, animations, AI image analysis, CRM APIs, database schema or data are to be changed for this adjustment.
+- Keep this invariant covered by `scripts/critical-flow-guard.mjs`.
