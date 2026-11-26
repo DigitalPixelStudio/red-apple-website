@@ -5612,10 +5612,7 @@ html[data-motion="off"] #ambient-particles { display: none !important; }
 }
 
 
-/* Scroll-time performance: pause decorative CSS animation timelines while the
-   browser is handling touch momentum / wheel scrolling. They resume automatically. */
-html[data-scrolling="true"] *,
-html[data-scrolling="true"] *::before,
-html[data-scrolling="true"] *::after {
-  animation-play-state: paused !important;
-}
+/* Off-screen motion is already paused by the section motion governor.
+   Avoid a universal [data-scrolling] descendant selector: toggling it during
+   every scroll forced style recalculation across the entire long page. WebGL
+   now yields on wheel/touchmove/scroll instead, keeping the scroll compositor free. */
