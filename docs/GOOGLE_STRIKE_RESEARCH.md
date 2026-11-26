@@ -76,3 +76,15 @@ Banned-string scan: `1.3/5`, `90-day`, `GST`, `authorized service`, `genuine app
 2. **Delete the two old Vercel projects** `redappplemobilerepair` and `red-apple-repair` — cross-domain near-duplicate risk and split signals.
 3. **PageSpeed Insights (field data)** on `/` and `/services/iphone-display-repair` — confirm LCP/INP/CLS.
 4. **Do not run Google Search/LSA repair ads.** Hand `ADS_TARGETING_SETUP.md` to the ads manager with this constraint called out.
+## Live policy and backend recheck — 2026-11-26
+Official Google Ads policy pages rechecked on 2026-11-26:
+- [Third-party consumer technical support](https://support.google.com/adspolicy/answer/13527027) continues to list third-party **hardware repair services** as not allowed. The page currently states that this policy violation category receives at least seven days' warning before account suspension; this is distinct from deliberate circumvention.
+- [Circumventing systems](https://support.google.com/adspolicy/answer/15938075) continues to prohibit hiding the actual repair offer behind an accessory/device ad or a different destination. Such circumvention is treated as an egregious violation and can result in suspension without prior warning.
+- [Misrepresentation](https://support.google.com/adspolicy/answer/6020955) continues to prohibit implying affiliation/endorsement or misleading business identity, service availability or pricing.
+
+**Channel decision remains unchanged:** no Google Search or Local Services Ads for consumer repair, and no cloaking/bridge destination workaround. Use Google Business Profile and organic SEO for Google discovery; Meta click-to-WhatsApp/Instant Forms remain the paid acquisition route. The keyword set is for organic/GBP/Meta use, not a Google Search repair campaign.
+
+**Production backend snapshot (read-only, 2026-11-26):**
+- /api/health: ok=true; concierge, image understanding, CRM, lead storage, website lead ledger all true; customers/leads/repairs/invoices tables true; 59 models. leadWebhook=false (not configured).
+- /api/ads-diagnostics: lead storage and CRM read configured; persistent event_id dedup active; SHA-256 email/phone hashing; gclid, fbclid, msclkid captured; qualification threshold 65; Meta CAPI and Bing CAPI are false (owner endpoint/token configuration still required). Rate limiting reports best-effort per instance.
+- These false integration flags are explicit configuration gaps, not deployment omissions. Do not fabricate credentials or silently enable outbound conversion delivery.
