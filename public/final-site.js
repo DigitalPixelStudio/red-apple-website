@@ -1364,7 +1364,11 @@
             // MODEL_CAMERA_ZOOM_BOOST: camera-only framing; hero and laptop stay unchanged.
             // Machinery gets a measured stronger fill; other non-hero models get a modest increase.
             const machineZoom = isLargeScreen ? 1.05 : 0.86;
-            const machine90LZoom = isLargeScreen ? 1.00 : 0.82;
+            // FINAL CAMERA TUNING: a very small zoom-out for the architecture,
+            // iPad and free-pickup stages; the 90L chamber gets an even subtler
+            // adjustment. Camera-only values preserve mesh scale, materials,
+            // lighting, animation, texture resolution and renderer quality.
+            const machine90LZoom = isLargeScreen ? 0.98 : 0.80;
             const isTbk90L = id === 'canvas-tbk-90l';
             const isAirpods = id === 'canvas-airpods';
             const isComponentArchitecture = id === 'canvas-internals';
@@ -1374,7 +1378,7 @@
               : isTbkMachine ? (isTbk90L ? machine90LZoom : machineZoom)
               : isMacbook ? 1.14
               : isAirpods ? 1.05
-              : (isComponentArchitecture || isEstimateTablet || isPickupModel) ? 1.08
+              : (isComponentArchitecture || isEstimateTablet || isPickupModel) ? 1.04
               : 1.12;
             const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
