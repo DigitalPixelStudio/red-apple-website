@@ -25,6 +25,24 @@ type Lead = {
   message?: string;
   source?: string;
   page?: string;
+  model?: string;
+  condition?: string;
+  urgency?: string;
+  pickup?: string;
+  preferredTime?: string;
+  campaign?: string;
+  utm?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
+  gclid?: string;
+  gbraid?: string;
+  wbraid?: string;
+  fbclid?: string;
+  referrer?: string;
+  landing_page?: string;
 };
 
 const mask = (v?: string) =>
@@ -62,9 +80,43 @@ export async function POST(req: Request) {
     })
   );
 
-  // 2. forward to a webhook when one is configured
+  // 2. sync the lead to the CRM. Failure is non-blocking for the customer-facing WhatsApp flow.
+  const crmEndpoint = process.env.CRM_LEAD_ENDPOINT || "https://red-apple-crm.vercel.app/api/leads";
+  const sourceText = [body.utm_source, body.source, body.referrer].filter(Boolean).join(" ").toLowerCase();
+  const crmSource = /google|gclid|gbraid|wbraid/.test(sourceText) ? "google"
+    : /instagram|igshid/.test(sourceText) ? "meta-ig"
+    : /facebook|fbclid/.test(sourceText) ? "meta-fb" : "website";
+  const clickId = body.gclid || body.gbraid || body.wbraid || body.fbclid || "";
+  const utm = body.utm || JSON.stringify({
+    source: body.utm_source || "", medium: body.utm_medium || "",
+    campaign: body.utm_campaign || body.campaign || "", content: body.utm_content || "",
+    term: body.utm_term || "", referrer: body.referrer || "",
+  });
+  try {
+    if (process.env.VERCEL_ENV !== "preview") {
+    const crmResponse = await fetch(crmEndpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        name: lead.name || "", phone: lead.phone || "", email: body.email || "",
+        service: [body.device, body.model, body.issue].filter(Boolean).join(" — ") || body.message || "General enquiry",
+        source: crmSource, campaign: body.utm_campaign || body.campaign || "",
+        utm, click_id: clickId, external_id: `website:${phone}:${body.model || ""}:${body.issue || ""}`,
+        notes: [body.condition ? "Condition: " + body.condition : "", body.message || body.issue || "",
+          body.urgency ? "Urgency: " + body.urgency : "", body.pickup ? "Service preference: " + body.pickup : "",
+          body.preferredTime ? "Preferred time: " + body.preferredTime : ""].filter(Boolean).join(" · "),
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!crmResponse.ok) console.error("[lead] CRM sync returned", crmResponse.status);
+    }
+  } catch (error) {
+    console.error("[lead] CRM sync failed", error instanceof Error ? error.message : "unknown");
+  }
+
+  // 3. forward to an optional secondary webhook when one is configured
   const hook = process.env.LEAD_WEBHOOK_URL;
-  if (hook) {
+  if (hook && process.env.VERCEL_ENV !== "preview") {
     try {
       await fetch(hook, {
         method: "POST",

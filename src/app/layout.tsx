@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SITE, baseUrl, SERVICE_PAGES, FAQS } from "@/lib/site";
 import Script from "next/script";
+import VisitTracker from "@/components/VisitTracker";
 
 /* GA4 — dormant until NEXT_PUBLIC_GA_ID is set in Vercel.
    No env var -> nothing is rendered, zero bytes shipped. */
@@ -157,6 +158,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className="light-beam" aria-hidden="true" />
         {children}
+        <VisitTracker />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([localBusinessSchema, faqSchema, serviceSchema]) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }} />
         {GA_ID ? (

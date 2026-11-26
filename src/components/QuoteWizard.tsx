@@ -121,6 +121,23 @@ export default function QuoteWizard({ compact = false }: { compact?: boolean }) 
       `━━━━━━━━━━━━━━━━━━━━\n` +
       `Please confirm the exact price and the earliest slot. Thank you.`;
 
+    // First-party CRM capture with campaign attribution; keep WhatsApp opening synchronous for popup blockers.
+    const params = new URLSearchParams(window.location.search);
+    let savedAttribution: Record<string, string> = {};
+    try { savedAttribution = JSON.parse(localStorage.getItem("ra_attribution") || "{}"); } catch {}
+    const attribution: Record<string, string> = { ...savedAttribution };
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","gbraid","wbraid","fbclid"].forEach((key) => {
+      const value = params.get(key); if (value) attribution[key] = value;
+    });
+    void fetch("/api/lead", {
+      method: "POST", headers: { "content-type": "application/json" }, keepalive: true,
+      body: JSON.stringify({
+        name, phone, email, device: deviceDef?.label || device, model, issue: repair,
+        condition, message: description, urgency, pickup, preferredTime,
+        source: "quote_wizard", page: window.location.pathname,
+        referrer: attribution.referrer || document.referrer, landing_page: window.location.href, ...attribution,
+      }),
+    }).catch(() => {});
     const url = wa(msg);
     // open synchronously inside the click handler — popup blockers allow this
     const win = window.open(url, "_blank", "noopener,noreferrer");

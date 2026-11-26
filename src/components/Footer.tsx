@@ -10,7 +10,8 @@ const SOCIALS = [
   { label: "Facebook", icon: "facebook" as IconName, href: SITE.facebookUrl || "#" },
   { label: "YouTube", icon: "youtube" as IconName, href: SITE.youtubeUrl || "#" },
   { label: "Telegram", icon: "telegram" as IconName, href: SITE.telegramUrl || "#" },
-  { label: "Google Business", icon: "gmb" as IconName, href: SITE.gmbUrl },
+  { label: "Google Business Profile", icon: "gmb" as IconName, href: SITE.gmbUrl },
+  { label: "Google Maps directions", icon: "directions" as IconName, href: SITE.mapsUrl },
 ];
 
 export default function Footer() {
