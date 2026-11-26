@@ -243,7 +243,11 @@ const serviceListSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="color-scheme" content="light dark" />
+        <Script id="red-apple-theme-init" strategy="beforeInteractive">{`(function(){try{var saved=localStorage.getItem("ra-theme");var mode=saved==="dark"?"dark":"light";document.documentElement.dataset.theme=mode;}catch(_){document.documentElement.dataset.theme="light";}})();`}</Script>
+      </head>
       <body className={`${inter.variable} ${space.variable} ${mono.variable} bg-white text-[var(--text)] antialiased`}>
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
