@@ -207,7 +207,16 @@ def check_ambient_active(
     # accent text (₹1,00,000 span + trust badges). These are tiny, opacity-only,
     # reduced-motion-guarded compositor effects — NOT large full-width ambient motion.
     V17_ACCENT_ALLOW = re.compile(r"v17AccentBreath|quote-color-shift|badge-breathe|fast-breathe-badge|price-breathe", re.I)
+    # The Reviews row uses a single entrance reveal (iteration-count: 1), not
+    # an infinite marquee/ambient loop. Keep this exact exception so the guard
+    # protects the one-shot reveal while still blocking repeated scroll motion.
+    ONE_SHOT_REVIEW_REVEAL = re.compile(r"#reviews\\s+\\.marquee-track\\s*>\\s*\\.reveal-up\\.is-in", re.I)
     for selector, decls in rules:
+        if ONE_SHOT_REVIEW_REVEAL.search(selector):
+            parts = animation_parts(decls)
+            one_shot = re.search(r"animation-iteration-count\\s*:\\s*1\\b", decls, re.I)
+            if one_shot and parts and not any(re.search(r"\\binfinite\\b", part, re.I) for part in parts):
+                continue
         if V17_ACCENT_ALLOW.search(selector):
             continue
         if not AMBIENT_RX.search(selector):
