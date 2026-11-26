@@ -1120,7 +1120,10 @@
             wakeWebGLLoop();
           }, 160);
         }
-        // Yield WebGL as soon as a wheel/touch gesture begins, before the next paint.\n        window.addEventListener('wheel', pauseWebGLForScroll, { passive: true });\n        window.addEventListener('touchmove', pauseWebGLForScroll, { passive: true });\n        window.addEventListener('scroll', pauseWebGLForScroll, { passive: true });
+        // Yield WebGL as soon as a wheel/touch gesture begins, before the next paint.
+        window.addEventListener('wheel', pauseWebGLForScroll, { passive: true });
+        window.addEventListener('touchmove', pauseWebGLForScroll, { passive: true });
+        window.addEventListener('scroll', pauseWebGLForScroll, { passive: true });
 
         // Cap background product rendering at 60fps. 120Hz displays still retain
         // native 120Hz scrolling; the 3D loop no longer burns a second frame budget.
@@ -1891,7 +1894,9 @@
           const frameScale = lastFrameTime ? Math.min(2, Math.max(0.5, (now - lastFrameTime) / 16.667)) : 1;
           lastFrameTime = now;
           t += 0.018 * frameScale;
-          // Iterate only the small set of stages currently intersecting the viewport.\n          for (const s of visibleSlots) {\n            if (!s.visible || s.contextLost) continue;
+          // Iterate only the small set of stages currently intersecting the viewport.
+          for (const s of visibleSlots) {
+            if (!s.visible || s.contextLost) continue;
             let cw = s.cw, ch = s.ch;
             if (!cw || !ch) { cw = s.canvas.clientWidth; ch = s.canvas.clientHeight; s.cw = cw; s.ch = ch; }
             if (!cw || !ch) continue;
