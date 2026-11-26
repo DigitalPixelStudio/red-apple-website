@@ -1130,7 +1130,7 @@
         // Let the browser schedule one render per display refresh. This naturally
         // supports 60/90/120/144Hz screens without a second JavaScript FPS gate,
         // which can create uneven frame pacing on high-refresh displays.
-        // Rendering stays active during scroll; only offscreen/hidden scenes sleep.
+        // The full-quality WebGL loop resumes after scroll settles; offscreen/hidden scenes sleep.
         function wakeWebGLLoop() {
           if (webglRafId || scrollResumeTimer || visibleSlots.size === 0 || document.hidden) return;
           const tick = (now) => {
@@ -1364,8 +1364,18 @@
             // MODEL_CAMERA_ZOOM_BOOST: camera-only framing; hero and laptop stay unchanged.
             // Machinery gets a measured stronger fill; other non-hero models get a modest increase.
             const machineZoom = isLargeScreen ? 1.05 : 0.86;
+            const machine90LZoom = isLargeScreen ? 1.00 : 0.82;
+            const isTbk90L = id === 'canvas-tbk-90l';
             const isAirpods = id === 'canvas-airpods';
-            const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? machineZoom : isMacbook ? 1.14 : isAirpods ? 1.05 : 1.12;
+            const isComponentArchitecture = id === 'canvas-internals';
+            const isEstimateTablet = id === 'canvas-estimate-ipad';
+            const isPickupModel = id === 'canvas-pickup-iphone';
+            const modelZoom = id === 'canvas-hero' ? 1.04
+              : isTbkMachine ? (isTbk90L ? machine90LZoom : machineZoom)
+              : isMacbook ? 1.14
+              : isAirpods ? 1.05
+              : (isComponentArchitecture || isEstimateTablet || isPickupModel) ? 1.08
+              : 1.12;
             const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
