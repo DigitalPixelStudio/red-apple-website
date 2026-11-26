@@ -13,8 +13,7 @@ type StatusResponse = {
   ok: boolean;
   error?: string;
   ticket?: string;
-  phoneMasked?: string;
-  configured: boolean;
+  phoneMasked?: string;\n  configured: boolean;\n  jobNumber?: string | null;\n  invoiceNumber?: string | null;\n  deviceModel?: string | null;\n  serviceType?: string | null;\n  stageStep?: number | null;
   stages?: StatusStage[];
   currentStage: StatusStage | null;
   message: string;
@@ -92,6 +91,14 @@ export default function RepairStatusPage() {
                 </div>
               </div>
 
+              {(result?.deviceModel || result?.serviceType || result?.invoiceNumber) && (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {result.deviceModel && <div className="rounded-2xl bg-[#f5f5f7] p-4"><p className="text-[10px] font-bold uppercase tracking-wider text-[#86868b]">Device</p><p className="mt-1 text-[13px] font-semibold text-[#1d1d1f]">{result.deviceModel}</p></div>}
+                  {result.serviceType && <div className="rounded-2xl bg-[#f5f5f7] p-4"><p className="text-[10px] font-bold uppercase tracking-wider text-[#86868b]">Repair</p><p className="mt-1 text-[13px] font-semibold text-[#1d1d1f]">{result.serviceType}</p></div>}
+                  {result.invoiceNumber && <div className="rounded-2xl bg-[#f5f5f7] p-4"><p className="text-[10px] font-bold uppercase tracking-wider text-[#86868b]">Invoice</p><p className="mt-1 text-[13px] font-semibold text-[#1d1d1f]">{result.invoiceNumber}</p></div>}
+                </div>
+              )}
+
               <div className="mt-6 rounded-[20px] bg-[#fff5f6] p-5 text-center">
                 <p className="text-[13.5px] font-semibold text-[#1d1d1f]">{result?.message ?? error}</p>
                 {result && !result.configured && (
@@ -116,7 +123,7 @@ export default function RepairStatusPage() {
                       );
                     })}
                   </div>
-                  <p className="mt-3 text-[11.5px] text-[#86868b]">These are the stages we log — your live stage is confirmed by our team, never inferred from this page.</p>
+                  <p className="mt-3 text-[11.5px] text-[#86868b]">Your highlighted stage is read directly from the current repair record in our store CRM.</p>
                 </div>
               )}
 
