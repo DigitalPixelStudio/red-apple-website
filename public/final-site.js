@@ -1072,15 +1072,20 @@
         const memoryGb = Number(navigator.deviceMemory || 4);
         const cpuCores = Number(navigator.hardwareConcurrency || 4);
         const lowPowerDevice = memoryGb <= 4 || cpuCores <= 4;
-        const dprCap = initialProfile.startsWith('mobile-')
-          ? (lowPowerDevice ? 1.30 : 1.50)
-          : initialProfile.startsWith('tablet-')
-            ? (lowPowerDevice ? 1.42 : 1.65)
+        // Device-aware 3D budget: stable frame pacing is more useful than an
+        // unstable 60fps target on mobile/tablet GPUs. Geometry and camera framing
+        // remain unchanged; only canvas sampling density and render cadence adapt.
+        const isMobile3D = initialProfile.startsWith('mobile-');
+        const isTablet3D = initialProfile.startsWith('tablet-');
+        const dprCap = isMobile3D
+          ? (lowPowerDevice ? 1.10 : 1.35)
+          : isTablet3D
+            ? (lowPowerDevice ? 1.20 : 1.50)
             : 1.80;
         const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
-        // One shared render surface sized for high-density device stages. Per-slot
-        // backing dimensions are DPR-aware and aspect-ratio preserving below.
-        const MAX_W = 2048, MAX_H = 1536;
+        // The shared surface is a staging buffer, not the visible canvas size.
+        // Keep enough headroom for large desktop stages without oversized GPU allocations.
+        const MAX_W = 1792, MAX_H = 1344;
         // Fit a slot's render target inside the shared GL canvas while PRESERVING aspect ratio.
         // Clamping width and height independently distorted camera.aspect on 2x-DPI tablets
         // (models looked stretched / pushed off-centre). Never resize the shared renderer per slot.
@@ -1101,7 +1106,10 @@
         let scrollResumeTimer = 0;
         let pageScrolling = false;
         let lastRenderAt = 0;
-        const MAX_RENDER_INTERVAL = 1000 / 60;
+        // 60fps on desktop; 45fps on touch devices to avoid thermal/GPU
+        // throttling and uneven frame delivery on long, multi-model pages.
+        const TARGET_MODEL_FPS = (isMobile3D || isTablet3D) ? 45 : 60;
+        const MAX_RENDER_INTERVAL = 1000 / TARGET_MODEL_FPS;
 
         // Keep the 3D scene responsive while idle, but yield the GPU during native
         // momentum scrolling. This prevents WebGL work competing with page compositing.
@@ -1151,7 +1159,7 @@
                 else visibleSlots.delete(s);
               });
               wakeWebGLLoop();
-            }, { rootMargin: '-8% 0px -8% 0px', threshold: 0.04 })
+            }, { rootMargin: '-14% 0px -14% 0px', threshold: 0.06 })
           : null;
 
         function roundedShape(w, h, r) {
