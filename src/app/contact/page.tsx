@@ -17,6 +17,11 @@ export default function ContactPage() {
     e.preventDefault();
     if (name.trim().length < 2 || phone.trim().length < 10 || msg.trim().length < 5) return;
     track("lead_created", { source: "contact_page" });
+    void fetch("/api/lead", {
+      method: "POST", headers: { "content-type": "application/json" }, keepalive: true,
+      body: JSON.stringify({ name, phone, message: msg, issue: msg, source: "contact_page",
+        page: window.location.pathname, referrer: document.referrer, landing_page: window.location.href }),
+    }).catch(() => {});
     window.open(
       wa(`*New Contact Enquiry*\n\nName: ${name}\nPhone: ${phone}\nMessage: ${msg}`),
       "_blank", "noopener,noreferrer"
