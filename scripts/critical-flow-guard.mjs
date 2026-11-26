@@ -22,7 +22,7 @@ const required = [
 
 const failures = [];
 const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
-for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const machineZoom = isLargeScreen ? 1.05 : 0.86;", "const isAirpods = id === 'canvas-airpods';", "const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? machineZoom : isMacbook ? 1.14 : isAirpods ? 1.05 : 1.12;", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const machineZoom = isLargeScreen ? 1.05 : 0.86;", "const machine90LZoom = isLargeScreen ? 1.00 : 0.82;", "const isTbk90L = id === 'canvas-tbk-90l';", "const isComponentArchitecture = id === 'canvas-internals';", "const isEstimateTablet = id === 'canvas-estimate-ipad';", "const isPickupModel = id === 'canvas-pickup-iphone';", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
   if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
 }
 const webglPath = "public/final-site.js";
@@ -46,6 +46,17 @@ try {
 } catch {
   failures.push(`MISSING ${stylePath}`);
 }
+
+const globalStylePath = "src/app/globals.css";
+try {
+  const globalStyles = await readFile(new URL(`../${globalStylePath}`, import.meta.url), "utf8");
+  for (const marker of ["FINAL MOTION BUDGET", "font-variation-settings: normal !important;", "background-position: 0 50% !important;", "color: #111113 !important;", "color: #dc2626 !important;", "#ambient-particles { display: none !important; }"]) {
+    if (!globalStyles.includes(marker)) failures.push(`${globalStylePath}: ${marker}`);
+  }
+} catch {
+  failures.push(`MISSING ${globalStylePath}`);
+}
+
 for (const [path, markers] of required) {
   let source = "";
   try { source = await readFile(new URL(`../${path}`, import.meta.url), "utf8"); }
@@ -62,7 +73,7 @@ if (failures.length) {
 const htmlPath = "src/lib/final-site-html.ts";
 try {
   const html = await readFile(new URL(`../${htmlPath}`, import.meta.url), "utf8");
-  for (const marker of ["Glass Restoration And Repair Support", "TBK-958 Cold UV Laser", "#ZeroPasswordPolicy", "Get a Glass-restoration Quote", "ra-glass-capabilities", "AirPods Pro &amp; Charging Case"]) {
+  for (const marker of ["Glass Restoration And Repair Support", "TBK-958 Cold UV Laser", "#ZeroPasswordPolicy", "Get a Glass-restoration Quote", "ra-glass-capabilities", "AirPods Pro &amp; Charging Case", "Mobile Repairs", "Halasuru · Bengaluru"]) {
     if (!html.includes(marker)) failures.push(`${htmlPath}: missing ${marker}`);
   }
   for (const removed of ['id="repair-capabilities"', "#Halasuru"]) {
