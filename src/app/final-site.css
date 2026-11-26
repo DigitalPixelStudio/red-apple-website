@@ -1264,3 +1264,158 @@ html[data-motion="off"] .heading-breathe::after {
   animation: none !important;
   will-change: auto !important;
 }
+
+
+/* ============================================================
+   RED APPLE THEME LAYER — isolated UI palette, 3D/media protected
+   User-selectable light/dark. Never applies filters to imagery,
+   WebGL canvases, video, machine photos, or model materials.
+   ============================================================ */
+:root { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] {
+  --bg: #111216;
+  --bg-alt: #191b21;
+  --text: #f4f4f5;
+  --text-muted: #d4d4d8;
+  --text-light: #a1a1aa;
+  --border: rgba(255,255,255,.12);
+  --glass: rgba(27,29,35,.88);
+  --glass-strong: rgba(25,27,33,.96);
+  --glass-border: rgba(255,255,255,.12);
+  --cta-dark: #090a0d;
+  background: #111216;
+}
+html[data-theme="dark"] body {
+  background-color: #111216 !important;
+  background-image:
+    radial-gradient(circle at 10% 8%, rgba(220,38,38,.11), transparent 46%),
+    radial-gradient(circle at 92% 22%, rgba(234,88,12,.09), transparent 48%),
+    radial-gradient(rgba(255,255,255,.10) .6px, transparent .6px) !important;
+  color: var(--text) !important;
+}
+html[data-theme="dark"] .site-header-120fps {
+  background: rgba(17,18,22,.96) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] main section:not(.stage-3d-box):not(.stage-3d-white) {
+  border-color: rgba(255,255,255,.10) !important;
+}
+html[data-theme="dark"] [class*="bg-white"]:not(.stage-3d-box):not(.stage-3d-white):not(.tile-3d-studio-pearl):not(.tile-3d-studio-lab):not(.tile-3d-studio-uv-lab):not(.tile-3d-studio-graphite):not(.tile-3d-studio-mac),
+html[data-theme="dark"] [class*="bg-\[\#FDFCFB\]"],
+html[data-theme="dark"] [class*="bg-zinc-50"],
+html[data-theme="dark"] [class*="bg-stone-50"] {
+  background-color: #1b1d23 !important;
+}
+html[data-theme="dark"] [class*="bg-zinc-100"],
+html[data-theme="dark"] [class*="bg-neutral-100"] {
+  background-color: #24262d !important;
+}
+html[data-theme="dark"] [class*="bg-zinc-200"],
+html[data-theme="dark"] [class*="bg-neutral-200"] {
+  background-color: #30323a !important;
+}
+html[data-theme="dark"] [class*="text-zinc-950"],
+html[data-theme="dark"] [class*="text-zinc-900"],
+html[data-theme="dark"] [class*="text-zinc-800"],
+html[data-theme="dark"] [class*="text-zinc-700"],
+html[data-theme="dark"] [class*="text-stone-900"],
+html[data-theme="dark"] [class*="text-neutral-900"] {
+  color: #f4f4f5 !important;
+}
+html[data-theme="dark"] [class*="text-zinc-600"],
+html[data-theme="dark"] [class*="text-zinc-500"],
+html[data-theme="dark"] [class*="text-stone-600"],
+html[data-theme="dark"] [class*="text-neutral-600"] {
+  color: #c4c4cc !important;
+}
+html[data-theme="dark"] [class*="border-zinc-100"],
+html[data-theme="dark"] [class*="border-zinc-200"],
+html[data-theme="dark"] [class*="border-zinc-300"],
+html[data-theme="dark"] [class*="border-stone-200"] {
+  border-color: rgba(255,255,255,.14) !important;
+}
+html[data-theme="dark"] .ambient-warm {
+  background-color: #17181d !important;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(220,38,38,.14), transparent 52%),
+    radial-gradient(circle at 88% 82%, rgba(234,88,12,.12), transparent 52%),
+    radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px) !important;
+}
+html[data-theme="dark"] .ambient-clean {
+  background-color: #15171c !important;
+  background-image:
+    radial-gradient(circle at 82% 15%, rgba(234,88,12,.12), transparent 50%),
+    radial-gradient(circle at 18% 85%, rgba(220,38,38,.10), transparent 50%),
+    radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px) !important;
+}
+html[data-theme="dark"] .glass,
+html[data-theme="dark"] .glass-card {
+  background: rgba(29,31,38,.88) !important;
+  border-color: rgba(255,255,255,.13) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.24) !important;
+}
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  color: #f4f4f5 !important;
+  background-color: #202229 !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder { color: #a1a1aa !important; }
+html[data-theme="dark"] .theme-toggle {
+  color: #fbbf24 !important;
+  background: #24262d !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+html[data-theme="light"] .theme-toggle { color: #52525b; }
+#theme-toggle [data-icon] { display: none; }
+html[data-theme="light"] #theme-toggle [data-icon="light"],
+html[data-theme="dark"] #theme-toggle [data-icon="dark"] { display: block; }
+
+/* Protected visual assets: dark mode must not tint, invert, dim or recolour them. */
+html[data-theme] img,
+html[data-theme] picture,
+html[data-theme] video,
+html[data-theme] canvas,
+html[data-theme] .stage-3d-box,
+html[data-theme] .stage-3d-white,
+html[data-theme] .tile-3d-studio-pearl,
+html[data-theme] .tile-3d-studio-lab,
+html[data-theme] .tile-3d-studio-uv-lab,
+html[data-theme] .tile-3d-studio-graphite,
+html[data-theme] .tile-3d-studio-mac {
+  filter: none !important;
+}
+html[data-theme="dark"] .stage-3d-box,
+html[data-theme="dark"] .stage-3d-white,
+html[data-theme="dark"] .tile-3d-studio-pearl,
+html[data-theme="dark"] .tile-3d-studio-lab,
+html[data-theme="dark"] .tile-3d-studio-uv-lab,
+html[data-theme="dark"] .tile-3d-studio-graphite,
+html[data-theme="dark"] .tile-3d-studio-mac {
+  /* Intentionally retain the approved light/graphite studio gradients. */
+  color-scheme: light;
+}
+
+/* Calm text-only motion: transform/opacity, no layout changes or blur filters. */
+@keyframes raHeadingDrift {
+  0%, 100% { transform: translate3d(0,0,0); opacity: 1; }
+  50% { transform: translate3d(0,-1px,0); opacity: .985; }
+}
+html[data-motion="on"] .heading-breathe {
+  animation: raHeadingDrift 6.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+html[data-motion="off"] .heading-breathe {
+  animation: none !important;
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion="on"] .heading-breathe { animation: none !important; }
+}
+@media (max-width: 767px) {
+  #theme-toggle { width: 36px; height: 36px; }
+}
