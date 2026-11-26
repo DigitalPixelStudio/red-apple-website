@@ -1370,9 +1370,9 @@ html[data-theme="dark"] .theme-toggle {
   background: #24262d !important;
   border-color: rgba(255,255,255,.18) !important;
 }
-html[data-theme="light"] .theme-toggle { color: #52525b; }
+html:not([data-theme="dark"]) .theme-toggle { color: #52525b; }
 #theme-toggle [data-icon] { display: none; }
-html[data-theme="light"] #theme-toggle [data-icon="light"],
+html:not([data-theme="dark"]) #theme-toggle [data-icon="light"],
 html[data-theme="dark"] #theme-toggle [data-icon="dark"] { display: block; }
 
 /* Protected visual assets: dark mode must not tint, invert, dim or recolour them. */
@@ -1500,25 +1500,25 @@ html[data-motion="off"] #reviews .marquee-track > .reveal-up:nth-child(4).is-in 
 /* RED APPLE BRAND + GLASS SUPPORT REFINEMENT
    Neutral typography is black on the light editorial surfaces; preserve
    deliberate white/semantic text on dark panels, badges and action buttons. */
-html[data-theme="light"] .brand-name-flow,
-html[data-theme="light"] .brand-dark-glow {
+html:not([data-theme="dark"]) .brand-name-flow,
+html:not([data-theme="dark"]) .brand-dark-glow {
   color: #09090b !important;
   background: none !important;
   background-image: none !important;
   -webkit-text-fill-color: #09090b !important;
 }
-html[data-theme="light"] .text-zinc-500,
-html[data-theme="light"] .text-zinc-600,
-html[data-theme="light"] .text-zinc-700,
-html[data-theme="light"] .text-zinc-800,
-html[data-theme="light"] .text-zinc-900 {
+html:not([data-theme="dark"]) .text-zinc-500,
+html:not([data-theme="dark"]) .text-zinc-600,
+html:not([data-theme="dark"]) .text-zinc-700,
+html:not([data-theme="dark"]) .text-zinc-800,
+html:not([data-theme="dark"]) .text-zinc-900 {
   color: #09090b !important;
 }
-html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-500,
-html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-600,
-html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-700,
-html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-800,
-html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-900 {
+html:not([data-theme="dark"]) :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-500,
+html:not([data-theme="dark"]) :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-600,
+html:not([data-theme="dark"]) :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-700,
+html:not([data-theme="dark"]) :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-800,
+html:not([data-theme="dark"]) :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-900 {
   color: #d4d4d8 !important;
 }
 
