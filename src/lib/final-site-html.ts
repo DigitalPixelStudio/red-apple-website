@@ -21,9 +21,9 @@ export const finalSiteHtml = `
     <div class="pt-2">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
       <a href="#hero" class="flex items-center gap-2.5">
-        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-10 w-10 sm:h-11 sm:w-11 shrink-0 block rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
+        <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Logo" class="h-10 w-10 sm:h-11 sm:w-11 shrink-0 block rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div class="flex flex-col items-center">
-          <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="brand-name-flow">Red Apple</span> <span class="brand-dark-glow brand-name-flow">Mobile Repair</span></div>
+          <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="brand-name-flow">Red Apple</span></div>
           <div class="mt-0.5 whitespace-nowrap text-[10px] font-medium text-zinc-500">Halasuru · Bengaluru</div>
         </div>
       </a>
@@ -692,11 +692,11 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 9. KEEP THE ORIGINAL OLED. RESTORE THE GLASS + SAVINGS CALCULATOR + ZERO-JITTER FULL PRICE LIST -->
+    <!-- 9. RED APPLE GLASS RESTORATION + SUPPORT · PRICE GUIDE · CAPABILITIES -->
     <section id="glass-lab" class="laser-stage ambient-clean border-b border-zinc-100 py-12 sm:py-16"><span class="laser-line" aria-hidden="true"></span>
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center">
-          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Front Glass Restoration · Halasuru Lab</div>
+          <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Glass Restoration</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Keep the Original OLED. <span class="text-brand-grad">Restore the Glass.</span></h2>
           <p class="mt-2 text-sm text-zinc-600">Why replace a ₹1,40,000 iPhone when only the top glass is cracked? Using specialised TBK machinery, we bond new glass to your original OLED and preserve touch sensitivity and True Tone.</p>
         </div>
@@ -767,6 +767,37 @@ export const finalSiteHtml = `
             <input id="price-search" type="text" placeholder="Filter model (e.g. 16 Pro)..." class="rounded-full border border-zinc-300 bg-zinc-50 px-4 py-2 text-xs outline-none focus:border-red-600">
           </div>
           <div id="full-price-grid" class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </div>
+
+        <!-- Single merged glass-restoration support panel -->
+        <div class="ra-glass-support mt-7 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div class="min-w-0 lg:max-w-[34rem]">
+              <p class="text-[11px] font-bold uppercase tracking-[.16em] text-zinc-950">Glass Restoration</p>
+              <h3 class="mt-1 font-display text-xl font-extrabold tracking-tight text-zinc-950 sm:text-2xl">Glass Restoration And Repair Support</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-700">Specialist front-glass restoration that retains your original OLED, backed by precision TBK equipment, post-repair diagnostics and a six-month repair warranty.</p>
+              <div class="mt-3 flex flex-wrap gap-x-2 gap-y-1 text-[10px] font-semibold text-zinc-700 sm:text-[11px]">
+                <span>#PremiumMobileRepair</span><span>#iPhoneGlassReplacement</span><span>#FactoryLevelRepair</span><span>#OLEDRepair</span><span>#TBK958</span><span>#ColdUVLaser</span><span>#OCALamination</span><span>#ZeroPasswordPolicy</span>
+              </div>
+            </div>
+            <div class="flex shrink-0 flex-col gap-2 sm:flex-row lg:flex-col">
+              <a href="#estimate" class="dock-quote-btn inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-3 text-sm font-bold text-white">Get a Glass-restoration Quote</a>
+              <a href="tel:+918660663776" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-950">Call The Lab · +91 86606 63776</a>
+            </div>
+          </div>
+          <div class="mt-5 border-t border-zinc-200 pt-4">
+            <h4 class="font-display text-base font-extrabold text-zinc-950">Our Glass Restoration Capabilities</h4>
+            <ul class="repair-capabilities-grid mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              <li>Front Glass Restoration</li>
+              <li>TBK OCA Vacuum Lamination</li>
+              <li>90-Litre Bubble Remover</li>
+              <li>TBK-958 Cold UV Laser</li>
+              <li>Original OLED Retained</li>
+              <li>6-Month Repair Warranty</li>
+              <li>Zero-Password Privacy</li>
+              <li>Apple Diagnostic Mode Testing</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -848,38 +879,6 @@ export const finalSiteHtml = `
           </div>
         </div>
 
-        <!-- Plain static glass-lab information: new structure, same customer information and actions -->
-        <div class="repair-contact-plain mt-8 border-t border-zinc-200 pt-6">
-          <p class="mb-3 text-sm font-semibold text-zinc-700">Glass restoration and repair support</p>
-          <p class="repair-hashtags-plain">
-            #PremiumMobileRepair · #iPhoneGlassReplacement · #FactoryLevelRepair · #OLEDRepair · #TBK958 · #ColdUVLaser · #OCALamination · #Halasuru · #ZeroPasswordPolicy
-          </p>
-          <div class="repair-contact-actions-plain">
-            <a href="#estimate" class="dock-quote-btn inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-3 text-sm font-bold text-white">Get a glass-restoration quote</a>
-            <a href="tel:+918660663776" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-900">Call the lab · +91 86606 63776</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Glass restoration capabilities — relocated below the glass-lab machinery section -->
-    <section id="repair-capabilities" class="repair-capabilities-editorial border-b border-zinc-100 bg-[#faf8f5] py-10 sm:py-12" aria-label="Glass restoration capabilities">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="mx-auto max-w-3xl text-center">
-          <p class="text-[11px] font-bold uppercase tracking-[.16em] text-red-700">Glass restoration</p>
-          <h2 class="mt-2 font-display text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl">Our Glass Restoration Capabilities</h2>
-        </div>
-        <ul class="repair-capabilities-grid mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <li>Front Glass Restoration</li>
-          <li>TBK OCA Vacuum Lamination</li>
-          <li>90-Litre Bubble Remover</li>
-          <li>TBK-958 Cold UV Laser</li>
-          <li>Original OLED Retained</li>
-          <li>6-Month Repair Warranty</li>
-          <li>Zero-Password Privacy</li>
-          <li>Apple Diagnostic Mode Testing</li>
-          <li>Halasuru · Bengaluru</li>
-        </ul>
       </div>
     </section>
 
@@ -1268,14 +1267,14 @@ export const finalSiteHtml = `
       </div>
     </section>
 
-    <!-- 16. TRUSTED BY HALASURU & BENGALURU (ENLARGED ORIGINAL LOGO IN PRECISION AURA + MOVING REVIEWS MARQUEE) -->
+    <!-- 16. CUSTOMER REVIEWS (STATIC TRUST PANEL) -->
     <section id="reviews" class="ambient-warm border-b border-zinc-100 py-12 sm:py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
         <div class="flex flex-col items-center text-center">
           <div class="logo-laser relative mb-5 flex h-72 w-72 sm:h-80 sm:w-80 lg:h-96 lg:w-96 items-center justify-center rounded-3xl border border-red-200 bg-white p-2 shadow-xl">
             <span class="aura-ring"></span>
             <span class="aura-ring aura-ring-2"></span>
-            <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Mobile Repair Original Logo" class="relative z-10 h-[94%] w-[94%] object-contain" onerror="this.src='/logo.png'">
+            <img loading="lazy" decoding="async" width="512" height="512" src="/icon-512.png" alt="Red Apple Original Logo" class="relative z-10 h-[94%] w-[94%] object-contain" onerror="this.src='/logo.png'">
           </div>
           <div class="kicker-shift font-mono-num text-[11px] font-bold uppercase tracking-widest">Reviews · Apple Device Repairs, Perfected.</div>
           <h2 class="heading-breathe mt-1 font-display text-3xl font-black text-zinc-950 sm:text-4xl">Trusted by <span class="text-brand-grad">Halasuru &amp; Bengaluru.</span></h2>
@@ -1434,7 +1433,7 @@ export const finalSiteHtml = `
 
       <!-- Bottom Independent Disclaimer + ONLY Tracked Pixel Forge Studio Credit — anchored near footer bottom edge -->
       <div class="footer-bottom-edge-bar mb-0 border-t border-zinc-200 py-5 text-center">
-        <p class="footer-light-sub text-[11px] text-zinc-500">© 2026 Red Apple Mobile Repair Store · Halasuru, Bengaluru 560008 · Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</p>
+        <p class="footer-light-sub text-[11px] text-zinc-500">© 2026 Red Apple · Halasuru, Bengaluru 560008 · Independent Apple repair studio — not affiliated with Apple Inc. Apple is a trademark of Apple Inc.</p>
         <div class="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
           <a href="https://wa.me/919620024812?text=The%20Pixel%20Forge%20Studio%2C%20I%20would%20like%20to%20discuss%20a%20Business%20Build.%20I%20came%20via%20redmobilerepair.in%20website%20that%20you%20have%20build." target="_blank" rel="noopener noreferrer" class="footer-light-link font-display text-xs font-extrabold text-zinc-950 hover:text-red-600">
             Developed by The Pixel Forge Studio · 96200 24812
