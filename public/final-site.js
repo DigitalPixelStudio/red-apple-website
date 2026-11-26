@@ -1,7 +1,7 @@
 (function () {
   // Motion defaults ON; only an explicit saved preference or OS reduced-motion
   // preference disables decorative typography motion. The 3D renderer is untouched.
-  document.documentElement.dataset.motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
+  document.documentElement.dataset.motion = 'off'; // PERFORMANCE_DEFAULT_MOTION_OFF
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -12,7 +12,7 @@
       // Enable the site's ambient typography/motion by default when the visitor
       // has not explicitly disabled it. Always respect the OS reduced-motion setting.
       if (!document.documentElement.hasAttribute('data-motion')) {
-        document.documentElement.dataset.motion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
+        document.documentElement.dataset.motion = 'off';
       }
       // Consistent Title Case for customer-facing copy. Preserve official brand
       // spellings, acronyms, contact details, URLs and technical identifiers.
@@ -1004,11 +1004,11 @@
 
       // Motion defaults ON for the premium experience; preserve OS reduced-motion accessibility.
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.dataset.motion = 'on';
+        document.documentElement.dataset.motion = 'off';
         document.dispatchEvent(new Event('ra-motion-change'));
       }
       // Premium typography motion: accent colour and subtle breathing only while visible.
-      if (document.documentElement.dataset.motion !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (false && document.documentElement.dataset.motion !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const motionText = document.querySelectorAll('.section-kicker, .quote-color-shift, .text-brand-grad, .badge-breathe, main h2 .text-red-600, main h2 .text-orange-600');
         if ('IntersectionObserver' in window) {
           const motionTextObserver = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle('ra-motion-visible', entry.isIntersecting)), { rootMargin: '80px 0px', threshold: 0.01 });
@@ -1359,7 +1359,10 @@
             const isLargeScreen = profile.startsWith('desktop-') || profile.startsWith('tablet-');
             const isLowerStage = id !== 'canvas-hero';
             const layoutFit = isLargeScreen && isLowerStage ? 0.86 : 1;
-            const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit);
+            // MODEL_CAMERA_ZOOM_BOOST: framing only; model meshes/assets remain untouched.
+            // The laptop stage receives a slightly stronger camera-fill boost.
+            const modelZoom = id === 'canvas-macbook' ? 1.08 : 1.04;
+            const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
             // so animated pose changes can never drift the framing after idle wake.
