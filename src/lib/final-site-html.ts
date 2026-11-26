@@ -23,7 +23,7 @@ export const finalSiteHtml = `
       <a href="#hero" class="flex items-center gap-2.5">
         <img loading="lazy" decoding="async" src="/icon-512.png" alt="Red Apple Mobile Repair Logo" class="h-10 w-10 sm:h-11 sm:w-11 shrink-0 block rounded-[3px] border border-red-200 object-contain shadow-md brand-icon-glow" onerror="this.src='/icon-512.png'">
         <div class="flex flex-col items-center">
-          <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="text-red-600">Red Apple</span> <span class="brand-dark-glow">Mobile Repair</span></div>
+          <div class="font-display brand-name-glow text-[10px] font-extrabold leading-none text-zinc-950 sm:text-lg"><span class="brand-name-flow">Red Apple</span> <span class="brand-dark-glow brand-name-flow">Mobile Repair</span></div>
           <div class="mt-0.5 whitespace-nowrap text-[10px] font-medium text-zinc-500">Halasuru · Bengaluru</div>
         </div>
       </a>
