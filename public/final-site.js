@@ -1106,9 +1106,9 @@
         let scrollResumeTimer = 0;
         let pageScrolling = false;
         let lastRenderAt = 0;
-        // 60fps on desktop; 45fps on touch devices to avoid thermal/GPU
-        // throttling and uneven frame delivery on long, multi-model pages.
-        const TARGET_MODEL_FPS = (isMobile3D || isTablet3D) ? 45 : 60;
+        // Use one consistent 60fps render target for every model on every
+        // device class. The browser/GPU may still deliver fewer frames under load.
+        const TARGET_MODEL_FPS = 60;
         const MAX_RENDER_INTERVAL = 1000 / TARGET_MODEL_FPS;
 
         // Keep the 3D scene responsive while idle, but yield the GPU during native
