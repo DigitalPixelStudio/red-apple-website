@@ -129,17 +129,23 @@ const result: QualifyResult = qualifyInquiry(noteFromEstimateForm);
 // result.reason          -> plain-English explanation for CRM notes
 ```
 
-**BE-1 integration recipe (backend owns the APIs; RES did NOT wire them):**
-1. In `/api/estimate` (and optionally the concierge/lead note handler), call
-   `qualifyInquiry(text)` on the free-text field. Do **not** reject a human solely
-   on this signal — attach a non-blocking `quality` flag to the stored lead.
-2. Feed the flag into the Meta `Lead` event via CAPI as a custom property, e.g.
-   `lead_quality: result.intent`, plus `lead_score: result.score`. Use predefined
-   `Lead`/`Booked` WhatsApp labels in parallel.
-3. Optionally store `reason` in the CRM lead note so the counter team sees why a
-   lead was flagged. Review `low-intent` samples weekly; add recurring junk terms
-   to `NEGATIVE_KEYWORDS` (single source) rather than hard-coding filters in APIs.
-4. Never log or transmit secrets; the helper itself needs none.
+**Live backend integration (verified 2026-11-26):**
+- `src/lib/analytics/leadQuality.ts` wraps `qualifyInquiry()` from this module
+  and is already used by `/api/lead`, `/api/estimate`, and
+  `/api/track-conversion`.
+- The helper is fail-open and non-blocking: it adds a quality verdict/score and
+  event name/value; it does not reject or discard an enquiry. Lead/conversion
+  storage remains the source of truth.
+- The lead and conversion routes persist the quality score/verdict with their
+  event rows. The estimate endpoint returns the quality metadata with its quote.
+- Live `/api/ads-diagnostics` reports lead storage, persistent conversion
+  deduplication and CRM read as configured. Meta CAPI and Bing CAPI are currently
+  **not configured**; those require verified owner-supplied endpoint/token
+  environment variables. Do not invent or expose credentials.
+- Once Meta CAPI is configured, send the existing qualified event and quality
+  fields through the already implemented server-side delivery path. Use
+  predefined `Lead`/`Booked` WhatsApp labels in parallel.
+- Never log or transmit secrets.
 
 **Verified behaviour (transpile smoke test, 2026-11-23):**
 - `"Hi, my iPhone 15 Pro Max screen cracked today, need same day display replacement in Indiranagar, pickup possible?"` → `high-intent` (score 4)
