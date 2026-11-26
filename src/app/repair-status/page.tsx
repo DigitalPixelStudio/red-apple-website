@@ -13,7 +13,13 @@ type StatusResponse = {
   ok: boolean;
   error?: string;
   ticket?: string;
-  phoneMasked?: string;\n  configured: boolean;\n  jobNumber?: string | null;\n  invoiceNumber?: string | null;\n  deviceModel?: string | null;\n  serviceType?: string | null;\n  stageStep?: number | null;
+  phoneMasked?: string;
+  configured: boolean;
+  jobNumber?: string | null;
+  invoiceNumber?: string | null;
+  deviceModel?: string | null;
+  serviceType?: string | null;
+  stageStep?: number | null;
   stages?: StatusStage[];
   currentStage: StatusStage | null;
   message: string;
