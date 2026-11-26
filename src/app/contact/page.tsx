@@ -17,10 +17,15 @@ export default function ContactPage() {
     e.preventDefault();
     if (name.trim().length < 2 || phone.trim().length < 10 || msg.trim().length < 5) return;
     track("lead_created", { source: "contact_page" });
+    let savedAttribution: Record<string, string> = {};
+    try { savedAttribution = JSON.parse(localStorage.getItem("ra_attribution") || "{}"); } catch {}
+    const params = new URLSearchParams(window.location.search);
+    const attribution: Record<string, string> = { ...savedAttribution };
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","gbraid","wbraid","fbclid"].forEach((key) => { const value = params.get(key); if (value) attribution[key] = value; });
     void fetch("/api/lead", {
       method: "POST", headers: { "content-type": "application/json" }, keepalive: true,
       body: JSON.stringify({ name, phone, message: msg, issue: msg, source: "contact_page",
-        page: window.location.pathname, referrer: document.referrer, landing_page: window.location.href }),
+        page: window.location.pathname, referrer: attribution.referrer || document.referrer, landing_page: window.location.href, ...attribution }),
     }).catch(() => {});
     window.open(
       wa(`*New Contact Enquiry*\n\nName: ${name}\nPhone: ${phone}\nMessage: ${msg}`),
