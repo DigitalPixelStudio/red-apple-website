@@ -1476,3 +1476,21 @@ html[data-motion="off"] .brand-name-flow {
   animation: none !important;
   will-change: auto !important;
 }
+
+
+/* OWNER REQUEST — stop decorative text/wordmark motion.
+   This does not target Three.js, model canvases, image assets or touch controls. */
+html[data-motion] .heading-breathe,
+html[data-motion] #rail-label.heading-breathe,
+html[data-motion] .brand-name-flow,
+html[data-motion] .ra-motion-text,
+html[data-motion] .badge-breathe,
+html[data-motion] .fast-breathe-badge,
+html[data-motion] .price-breathe,
+html[data-motion] .kicker-shift {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
