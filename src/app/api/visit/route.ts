@@ -7,6 +7,7 @@ export async function POST(req: Request) {
     city?: string; event?: string;
   };
   if (!body) return NextResponse.json({ ok: false }, { status: 400 });
+  if (process.env.VERCEL_ENV === "preview") return NextResponse.json({ ok: true, preview: true });
   const endpoint = process.env.CRM_VISIT_ENDPOINT || "https://red-apple-crm.vercel.app/api/visits";
   try {
     const response = await fetch(endpoint, {
