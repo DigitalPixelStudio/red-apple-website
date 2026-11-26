@@ -75,3 +75,12 @@ This document is the durable project brief for future maintainers and coding age
 - Decorative typography and CSS motion are off by default to reduce nonessential main-thread/compositor work. The independent WebGL model animation and orbit/touch interaction remain enabled.
 - The Reviews section (#reviews), titled around Halasuru and Bengaluru, retains a one-shot side-entry reveal for its four cards. It is not an infinite ticker or continuous animation. Respect prefers-reduced-motion.
 - Keep the model zoom, motion-off default, scroll-settle behaviour, and review-side-reveal covered by the critical flow guard.
+
+
+## Red Apple glass support + stability refinement (2026-11-26)
+- Customer-facing brand wordmark is "Red Apple". Keep standard editorial typography black on light surfaces; preserve white text on dark cards/CTAs and semantic status colours.
+- Glass Restoration And Repair Support, hashtags, quote/call actions and eight capabilities are merged into one compact panel inside #glass-lab. Do not add a duplicate capabilities section. Exclude the Halasuru/Bengaluru locality label and #Halasuru hashtag from this glass-support panel.
+- Equipment wording is "TBK-958 Cold UV Laser".
+- Keep hero camera framing at its approved 1.04 multiplier and laptop at 1.08; other non-hero, non-laptop models use 1.08. Camera fill only; no mesh, model asset, geometry, material or rig changes.
+- Selecting a glass price pill must update the calculator without calling scrollIntoView on the already-visible #glass-lab section. Preserve native touch scrolling and existing WebGL touch/drag/orbit controls and scroll-settle behaviour.
+- Preserve AI image analysis, FaiCodex AI/concierge, CRM APIs/tables, lead capture, database schema/data, environment variables, model assets, and all unrelated page sections.
