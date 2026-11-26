@@ -22,7 +22,7 @@ const required = [
 
 const failures = [];
 const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
-for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "id === 'canvas-macbook' ? 1.08 : 1.04", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "id === 'canvas-hero' ? 1.04 : id === 'canvas-macbook' ? 1.08 : 1.08", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
   if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
 }
 const webglPath = "public/final-site.js";
@@ -56,4 +56,21 @@ if (failures.length) {
   failures.forEach((failure) => console.error(" - " + failure));
   process.exit(1);
 }
-console.log("[critical-flow-guard] AI, repair-status CRM, health and lead-capture invariants verified.");
+const htmlPath = "src/lib/final-site-html.ts";
+try {
+  const html = await readFile(new URL(`../${htmlPath}`, import.meta.url), "utf8");
+  for (const marker of ["Glass Restoration And Repair Support", "TBK-958 Cold UV Laser", "#ZeroPasswordPolicy", "Get a Glass-restoration Quote"]) {
+    if (!html.includes(marker)) failures.push(`${htmlPath}: missing ${marker}`);
+  }
+  for (const removed of ['id="repair-capabilities"', "#Halasuru"]) {
+    if (html.includes(removed)) failures.push(`${htmlPath}: obsolete glass section item remains: ${removed}`);
+  }
+} catch {
+  failures.push(`MISSING ${htmlPath}`);
+}
+if (failures.length) {
+  console.error("[critical-flow-guard] Build blocked; critical invariants are missing:");
+  failures.forEach((failure) => console.error(" - " + failure));
+  process.exit(1);
+}
+console.log("[critical-flow-guard] AI, repair-status CRM, health, lead-capture, model framing and glass-support invariants verified.");
