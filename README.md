@@ -35,4 +35,19 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+## Project documentation
+
+- [Project memory & owner preferences](docs/PROJECT_MEMORY.md)
+- [Protected systems / hard rules](docs/PROTECTED_SYSTEMS.md)
+- [Architecture & build record](docs/ARCHITECTURE.md)
+- [Asset and source backup guide](docs/BACKUPS.md)
+
+## Safe local backup
+
+```bash
+npm run backup:site
+```
+
+This backs up public images, procedural 3D model source, approved site data and source references with SHA-256 checksums. It intentionally excludes live CRM/customer records and secrets.
+
 <!-- deploy trigger 2026-11-02 -->
