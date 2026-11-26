@@ -1495,3 +1495,52 @@ html[data-motion="off"] #reviews .marquee-track > .reveal-up:nth-child(4).is-in 
 @media (prefers-reduced-motion: reduce) {
   #reviews .marquee-track > .reveal-up.is-in { animation: none !important; }
 }
+
+
+/* RED APPLE BRAND + GLASS SUPPORT REFINEMENT
+   Neutral typography is black on the light editorial surfaces; preserve
+   deliberate white/semantic text on dark panels, badges and action buttons. */
+html[data-theme="light"] .brand-name-flow,
+html[data-theme="light"] .brand-dark-glow {
+  color: #09090b !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-text-fill-color: #09090b !important;
+}
+html[data-theme="light"] .text-zinc-500,
+html[data-theme="light"] .text-zinc-600,
+html[data-theme="light"] .text-zinc-700,
+html[data-theme="light"] .text-zinc-800,
+html[data-theme="light"] .text-zinc-900 {
+  color: #09090b !important;
+}
+html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-500,
+html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-600,
+html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-700,
+html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-800,
+html[data-theme="light"] :is(.bg-zinc-950,.bg-zinc-900,.bg-neutral-950,.bg-black) .text-zinc-900 {
+  color: #d4d4d8 !important;
+}
+
+/* Merged glass support: compact, static cards with predictable layout. */
+.ra-glass-support { contain: layout paint; }
+.ra-glass-support .repair-capabilities-grid li {
+  min-height: 46px;
+  padding: 11px 13px;
+  color: #09090b !important;
+  font-size: 13px;
+  line-height: 1.35;
+}
+#full-price-grid {
+  contain: layout paint;
+  align-content: start;
+  min-height: 5.5rem;
+}
+#full-price-grid .price-pill {
+  min-height: 42px;
+  transition: border-color 140ms ease, background-color 140ms ease;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #full-price-grid .price-pill { transition: none !important; }
+}
