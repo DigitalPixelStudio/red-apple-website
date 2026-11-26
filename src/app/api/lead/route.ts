@@ -25,6 +25,24 @@ type Lead = {
   message?: string;
   source?: string;
   page?: string;
+  model?: string;
+  condition?: string;
+  urgency?: string;
+  pickup?: string;
+  preferredTime?: string;
+  campaign?: string;
+  utm?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
+  gclid?: string;
+  gbraid?: string;
+  wbraid?: string;
+  fbclid?: string;
+  referrer?: string;
+  landing_page?: string;
 };
 
 const mask = (v?: string) =>
