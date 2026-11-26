@@ -17,7 +17,7 @@ type RepairRow = {
   id: string; token: string; device: string; issue: string;
   status: string; created_at?: string | null; intake_on?: string | null;
 };
-type InvoiceRow = { code?: string | null; repair_id?: string | null };
+type InvoiceRow = { code?: string | null; repair_id?: string | null; phone?: string | null };
 
 const stageKeyByStatus: Record<string, string> = {
   intake: "received",
@@ -76,10 +76,7 @@ export async function POST(request: Request) {
   const phone = parsed.data.phone.replace(/\D/g, "");
   const phoneMasked = maskPhone(phone);
   const whatsapp = whatsappFallback(ticket, phone);
-  const baseUrl = (process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
-  const key = process.env.CRM_SUPABASE_READONLY_KEY ||
-    process.env.CRM_SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const baseUrl = (process.env.CRM_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");\n  const key = process.env.CRM_SUPABASE_READONLY_KEY ||\n    process.env.CRM_SUPABASE_SERVICE_ROLE_KEY ||\n    process.env.SUPABASE_SERVICE_ROLE_KEY ||\n    process.env.SUPABASE_SERVICE_KEY || "";
 
   const empty = {
     ok: true, configured: Boolean(baseUrl && key), ticket, phoneMasked,
@@ -100,22 +97,18 @@ export async function POST(request: Request) {
 
   try {
     const last10 = phone.slice(-10);
-    const customers = await getRows<CustomerRow>(baseUrl, key, "customers", {
-      select: "id", or: `(phone.ilike.*${last10},alt_phone.ilike.*${last10})`, is_test: "eq.false", limit: "1",
-    });
+    const customers = await getRows<CustomerRow>(baseUrl, key, "customers", {\n      // The live Red Apple CRM stores one primary phone field (no alt_phone).\n      // Match the final 10 digits so +91, spaces and local formats all resolve.\n      select: "id", phone: `ilike.*${last10}`, is_test: "eq.false", order: "created_at.desc", limit: "1",\n    });
     const customerId = customers[0]?.id;
     if (!customerId) return NextResponse.json(empty, { headers: { ...meta.headers, "Cache-Control": "no-store" } });
 
     let repairs = await getRows<RepairRow>(baseUrl, key, "repairs", {
-      select: "id,token,device,issue,status,created_at,intake_on",
+      select: "id,token,device,issue,status,created_at",
       token: `eq.${ticket}`, customer_id: `eq.${customerId}`, is_test: "eq.false", limit: "1",
     });
 
     let invoiceNumber: string | null = null;
     if (!repairs[0]) {
-      const invoices = await getRows<InvoiceRow>(baseUrl, key, "invoices", {
-        select: "code,repair_id", code: `eq.${ticket}`, customer_id: `eq.${customerId}`, is_test: "eq.false", limit: "1",
-      });
+      const invoices = await getRows<InvoiceRow>(baseUrl, key, "invoices", {\n        // CRM invoices are linked by repair_id and carry a phone snapshot;\n        // they do not have a customer_id column. Keep the phone match here.\n        select: "code,repair_id,phone", code: `eq.${ticket}`, phone: `ilike.*${last10}`, is_test: "eq.false", limit: "1",\n      });
       invoiceNumber = invoices[0]?.code ?? null;
       if (invoices[0]?.repair_id) {
         repairs = await getRows<RepairRow>(baseUrl, key, "repairs", {
