@@ -56,7 +56,7 @@ try {
   for (const marker of ["FINAL MOTION BUDGET", "FINAL TEXT SCROLL-JITTER FIX — all motion modes", "font-variation-settings: normal !important;", "background-position: 0 50% !important;", "color: #111113 !important;", "color: #dc2626 !important;", "#ambient-particles { display: none !important; }", "Keep native UI feedback transitions available for touch/click response."]) {
     if (!globalStyles.includes(marker)) failures.push(`${globalStylePath}: ${marker}`);
   }
-  const motionOffRule = globalStyles.match(/html\\[data-motion="off"\\] \\*,[\\s\\S]*?\\{([\\s\\S]*?)\\}/);
+  const motionOffRule = globalStyles.match(/html\[data-motion="off"\] \*,[\s\S]*?\{([\s\S]*?)\}/);
   if (motionOffRule?.[1].includes("transition: none")) failures.push(`${globalStylePath}: global motion-off rule still disables touch feedback transitions`);
 } catch {
   failures.push(`MISSING ${globalStylePath}`);
