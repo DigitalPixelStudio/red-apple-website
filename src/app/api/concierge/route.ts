@@ -515,12 +515,26 @@ export async function POST(request: NextRequest) {
         ...(keys[1] && index === 0 ? [{ model, key: keys[1] }] : []),
       ]);
 
-  // Image inspection needs more provider time than a short text reply. Keep a\n  // hard request budget below the Vercel function limit, then allocate that\n  // budget across model fallbacks instead of aborting every vision call at 8s.\n  const requestDeadline = Date.now() + (images.length ? 35_000 : 30_000);\n  for (const attempt of plan) {\n    const remainingMs = requestDeadline - Date.now();\n    if (remainingMs < 1_500) break;\n    const previousFailure = attempts[attempts.length - 1];
+  // Image inspection needs more provider time than a short text reply. Keep a
+  // hard request budget below the Vercel function limit, then allocate that
+  // budget across model fallbacks instead of aborting every vision call at 8s.
+  const requestDeadline = Date.now() + (images.length ? 35_000 : 30_000);
+  for (const attempt of plan) {
+    const remainingMs = requestDeadline - Date.now();
+    if (remainingMs < 1_500) break;
+    const previousFailure = attempts[attempts.length - 1];
     if (previousFailure && (previousFailure.status === 429 || previousFailure.status === 503)) {
       const backoffMs = Math.min(250 * 2 ** attempts.length, 750);
       await new Promise((resolve) => setTimeout(resolve, backoffMs));
     }
-    const attemptTimeout = Math.min(images.length ? 13_000 : 8_000, Math.max(1_000, requestDeadline - Date.now() - 500));\n    let result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, images), attemptTimeout);\n    // Some provider/model combinations reject optional thinking settings. Retry\n    // once with the minimal config only when enough of the shared budget remains.\n    if (!result.ok && result.status === 400 && requestDeadline - Date.now() > 2_500) {\n      const retryTimeout = Math.min(7_000, Math.max(1_000, requestDeadline - Date.now() - 500));\n      result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, images, true), retryTimeout);\n    }
+    const attemptTimeout = Math.min(images.length ? 13_000 : 8_000, Math.max(1_000, requestDeadline - Date.now() - 500));
+    let result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, images), attemptTimeout);
+    // Some provider/model combinations reject optional thinking settings. Retry
+    // once with the minimal config only when enough of the shared budget remains.
+    if (!result.ok && result.status === 400 && requestDeadline - Date.now() > 2_500) {
+      const retryTimeout = Math.min(7_000, Math.max(1_000, requestDeadline - Date.now() - 500));
+      result = await callGemini(attempt.model, attempt.key, buildPayload(message, history, attempt.model, images, true), retryTimeout);
+    }
     if (result.ok) {
       selected = { response: result.response, model: result.model };
       break;
