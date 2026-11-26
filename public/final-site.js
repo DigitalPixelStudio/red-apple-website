@@ -1352,7 +1352,14 @@
             // switch to their own model values without misclassifying tablet desktop mode.
             const profile = getDeviceProfile();
             const chosen = MODEL_PROFILE_FILL[profile]?.[id] ?? cfg.fill;
-            const fill = Math.min(1.48, chosen ?? 0.95);
+            // DESKTOP_TABLET_NON_HERO_FIT: the lower-stage models were filling
+            // too much of their containers on wider layouts. Reduce camera fill
+            // (increase camera distance) without scaling or deforming model meshes.
+            // Keep the hero and every mobile profile exactly at their approved values.
+            const isLargeScreen = profile.startsWith('desktop-') || profile.startsWith('tablet-');
+            const isLowerStage = id !== 'canvas-hero';
+            const layoutFit = isLargeScreen && isLowerStage ? 0.86 : 1;
+            const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
             // so animated pose changes can never drift the framing after idle wake.
