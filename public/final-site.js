@@ -1371,7 +1371,6 @@
             const distV = (size.y * 0.5) / (Math.tan(vFov / 2) * fill);
             const distH = (Math.hypot(size.x, size.z) * 0.5) / (Math.tan(hFov / 2) * fill);
             const dist = Math.max(distV, distH);
-            const isTbkMachine = id === 'canvas-tbk-oca' || id === 'canvas-tbk-90l' || id === 'canvas-tbk-958';
             const cameraX = isTbkMachine ? 0.22 : 0.16;
             const cameraY = isTbkMachine ? 0.14 : 0.10;
             const cameraZ = isTbkMachine ? 0.965 : 0.982;
