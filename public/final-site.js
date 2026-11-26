@@ -1179,8 +1179,8 @@
             try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
           });
           canvas.addEventListener('pointermove', (e) => {
-            // Keep pointer handling limited to actual drag gestures. Avoid per-move
-            // layout reads and style writes for the decorative pointer-follow sheen.
+            // POINTER_DRAG_ONLY_NO_LAYOUT_READS: keep pointer handling limited to actual drags.
+            // The decorative pointer-follow sheen is removed; no per-move layout reads or style writes.
             if (!drag) return;
             ty += (e.clientX - px) * 0.011;
             tx = Math.max(-0.85, Math.min(0.85, tx + (e.clientY - py) * 0.009));
@@ -1361,8 +1361,8 @@
             // other lower-stage model. The old blanket 0.86 multiplier made the zoom
             // boost net-negative on tablets/desktops.
             const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;
-            // Camera-only framing: hero and laptop stay unchanged; machinery gets a
-            // measured stronger fill, with a modest increase for the remaining models.
+            // MODEL_CAMERA_ZOOM_BOOST: camera-only framing; hero and laptop stay unchanged.
+            // Machinery gets a measured stronger fill; other non-hero models get a modest increase.
             const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? 1.16 : isMacbook ? 1.08 : 1.12;
             const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
