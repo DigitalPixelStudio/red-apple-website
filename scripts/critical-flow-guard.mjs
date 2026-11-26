@@ -40,8 +40,11 @@ try {
 const stylePath = "src/app/final-site.css";
 try {
   const styles = await readFile(new URL(`../${stylePath}`, import.meta.url), "utf8");
-  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion", "SCROLL / GPU STABILITY", "BACKGROUND MOTION CLEANUP", "html[data-motion=\"off\"] #ambient-particles", "html[data-motion=\"off\"] .ra-motion-text.ra-motion-visible", "html[data-motion=\"off\"] .stage-3d-box::before", "filter: none !important;"]) {
+  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion", "SCROLL / GPU STABILITY", "BACKGROUND MOTION CLEANUP", "TEXT SCROLL JITTER FIX", "html[data-motion=\"off\"] #ambient-particles", "html[data-motion=\"off\"] .ra-motion-text.ra-motion-visible", "html[data-motion=\"off\"] .stage-3d-box::before", "filter: none !important;"]) {
     if (!styles.includes(marker)) failures.push(`${stylePath}: ${marker}`);
+  }
+  for (const removedMotion of ["@keyframes faiColorFlow", "animation: faiHeadingBreath 5.2s ease-in-out infinite !important;", "animation: raHeadingPulseFinal 5.2s cubic-bezier(.42,0,.58,1) infinite !important;"]) {
+    if (styles.includes(removedMotion)) failures.push(`${stylePath}: expensive text-motion restore remains: ${removedMotion}`);
   }
 } catch {
   failures.push(`MISSING ${stylePath}`);
