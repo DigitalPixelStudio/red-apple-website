@@ -3,11 +3,12 @@ import { readFile } from "node:fs/promises";
 const required = [
   ["src/app/api/concierge/route.ts", [
     "export async function POST", "GEMINI_IMAGE_INPUT_ENABLED", "rateLimit(",
-    "localResponse", "KNOWLEDGE_BASE",
+    "localResponse", "KNOWLEDGE_BASE", "IMAGE_MODELS", "inlineData",
+    "imageConsent", "image-review-disabled", "image_payload_too_large",
   ]],
   ["src/app/api/crm-status/route.ts", [
     "Schema.safeParse", "rateLimit(", "CRM_SUPABASE_READONLY_KEY",
-    '"customers"', "Cache-Control",
+    '"customers"', '"repairs"', '"invoices"', "Cache-Control",
   ]],
   ["src/app/api/health/route.ts", [
     "concierge: hasGemini", "crm,", "leadStorage",
