@@ -1,12 +1,7 @@
 (function () {
   // Motion defaults ON; only an explicit saved preference or OS reduced-motion
   // preference disables decorative typography motion. The 3D renderer is untouched.
-  try {
-    const savedMotion = localStorage.getItem('ra-motion');
-    document.documentElement.dataset.motion = savedMotion === 'off' || (!savedMotion && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'off' : 'on';
-  } catch (_e) {
-    document.documentElement.dataset.motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
-  }
+  document.documentElement.dataset.motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
@@ -846,8 +841,8 @@
       };
       const detectTheme = () => {
         const saved = localStorage.getItem('ra-theme');
-        if (saved) return saved;
-        return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        if (saved === 'dark' || saved === 'light') return saved;
+        return 'light';
       };
       applyTheme(detectTheme());
       themeToggle?.addEventListener('click', () => {
