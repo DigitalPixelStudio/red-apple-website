@@ -387,7 +387,8 @@
         fullGrid.querySelectorAll('.price-pill').forEach((btn) => {
           btn.addEventListener('click', () => {
             selectGlassModel(parseInt(btn.dataset.pidx, 10));
-            document.getElementById('glass-lab')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // The selected price pill is already inside #glass-lab; avoid a redundant
+            // scrollIntoView that can nudge the page and look like scroll jitter.
           });
         });
       }
@@ -734,7 +735,6 @@
         { id: '#pickup', label: 'Doorstep Pickup' },
         { id: '#glass-lab', label: 'Glass Restoration' },
         { id: '#tbk-machines', label: 'TBK Machinery' },
-        { id: '#repair-capabilities', label: 'Capabilities' },
         { id: '#ecosystem-3d', label: 'Apple Devices' },
         { id: '#qc-grid', label: 'Quality & QC' },
         { id: '#services-grid', label: 'Repair Services' },
@@ -1361,7 +1361,8 @@
             const layoutFit = isLargeScreen && isLowerStage ? 0.86 : 1;
             // MODEL_CAMERA_ZOOM_BOOST: framing only; model meshes/assets remain untouched.
             // The laptop stage receives a slightly stronger camera-fill boost.
-            const modelZoom = id === 'canvas-macbook' ? 1.08 : 1.04;
+            // Keep hero and laptop framing at the approved values; gently enlarge all other models.
+            const modelZoom = id === 'canvas-hero' ? 1.04 : id === 'canvas-macbook' ? 1.08 : 1.08;
             const fill = Math.min(1.48, (chosen ?? 0.95) * layoutFit * modelZoom);
             // ASPECT-AWARE PER-AXIS FIT: BOTH width and height, take the larger.
             // hypot(x,z) is rotation-invariant (no 360° crop); base size is cached
