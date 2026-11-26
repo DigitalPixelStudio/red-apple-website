@@ -67,3 +67,11 @@ This document is the durable project brief for future maintainers and coding age
 - Hero model and all mobile profiles retain their previous framing values.
 - No canvas/container CSS dimensions, renderer size, DPR, antialiasing, materials, geometry, lighting, interaction, animations, AI image analysis, CRM APIs, database schema or data are to be changed for this adjustment.
 - Keep this invariant covered by `scripts/critical-flow-guard.mjs`.
+
+
+## Model framing and motion cleanup (2026-11-26)
+- All 3D stages receive a modest 4% camera-fill increase; the MacBook stage receives an 8% camera-fill increase. Existing desktop/tablet lower-stage fit multiplier remains 0.86 before the zoom boost.
+- This is camera framing only. Do not edit model meshes, geometry, dimensions, materials, lighting, model assets, renderer, DPR, antialiasing, touch/drag controls, WebGL scheduling or animation callbacks.
+- Decorative typography and CSS motion are off by default to reduce nonessential main-thread/compositor work. The independent WebGL model animation and orbit/touch interaction remain enabled.
+- The Reviews section (#reviews), titled around Halasuru and Bengaluru, retains a one-shot side-entry reveal for its four cards. It is not an infinite ticker or continuous animation. Respect prefers-reduced-motion.
+- Keep the model zoom, motion-off default, scroll-settle behaviour, and review-side-reveal covered by the critical flow guard.
