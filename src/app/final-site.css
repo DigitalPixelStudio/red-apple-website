@@ -1136,7 +1136,7 @@ body canvas, body img, body video, body picture { filter: none !important; }
 @keyframes raAccentColour { 0%,100% { color:#b91c1c; } 50% { color:#ea580c; } }
 @keyframes raTypeBreath { 0%,100% { opacity:.92; transform:scale(1); } 50% { opacity:1; transform:scale(1.012); } }
 .ra-motion-text { display:inline-block; animation:none; }
-.ra-motion-text.ra-motion-visible { animation:raAccentColour 7.2s ease-in-out infinite,raTypeBreath 5.8s ease-in-out infinite; }
+.ra-motion-text.ra-motion-visible { animation:none !important; transform:none !important; opacity:1 !important; }
 #tour-dock { touch-action:pan-y; } #tour-start { min-width:44px; min-height:44px; width:44px; height:44px; }
 @media(max-width:480px){.web-tour-progress{max-width:calc(100vw - 78px);font-size:9px;padding-inline:8px}.ai-photo-thumb{grid-template-columns:42px minmax(0,1fr) auto}.ai-photo-thumb img{width:42px;height:42px}}
 @media(prefers-reduced-motion:reduce){.ra-motion-text,.ra-motion-text.ra-motion-visible{animation:none!important;transform:none!important;opacity:1!important}}
@@ -1172,25 +1172,8 @@ body canvas, body img, body video, body picture { filter: none !important; }
   50% { opacity: 1; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .ambient-orb {
-    will-change: transform, opacity;
-    animation: raAmbientDrift 18s ease-in-out infinite !important;
-  }
-  .heading-breathe {
-    animation: raHeadingBreath 5.8s ease-in-out infinite !important;
-  }
-  #rail-label.heading-breathe {
-    animation: raHeadingBreath 5.8s ease-in-out infinite !important;
-  }
-  .text-brand-grad {
-    background-size: 200% auto;
-    animation: raGradientFlow 8s ease-in-out infinite !important;
-  }
-  .badge-breathe, .fast-breathe-badge, .price-breathe, .quote-color-shift {
-    animation: raAccentBreath 4.2s ease-in-out infinite !important;
-  }
-}
+/* Ambient orb and heading motion restore removed: intentionally static; avoid scroll-time glyph/compositor work. */
+
 @media (prefers-reduced-motion: reduce) {
   #ambient-particles { display:none !important; }
   .ambient-orb, .heading-breathe, .text-brand-grad,
@@ -1206,44 +1189,13 @@ body canvas, body img, body video, body picture { filter: none !important; }
   0%, 100% { opacity: .88; transform: translateZ(0) scale(1); }
   50% { opacity: 1; transform: translateZ(0) scale(1.008); }
 }
-@keyframes faiColorFlow {
-  0%, 100% { background-position: 0% 50%; filter: saturate(1); }
-  50% { background-position: 100% 50%; filter: saturate(1.28); }
-}
+/* faiColorFlow removed: animated filter/background-position repainted glyph-heavy headings. */
 @keyframes faiAccentBreath {
   0%, 100% { opacity: .78; transform: translateZ(0) scale(1); }
   50% { opacity: 1; transform: translateZ(0) scale(1.025); }
 }
-@media (prefers-reduced-motion: no-preference) {
-  html:not([data-motion="off"]) .heading-breathe:not(#rail-label) {
-    animation: faiHeadingBreath 5.2s ease-in-out infinite !important;
-    will-change: opacity, transform;
-  }
-  html:not([data-motion="off"]) #rail-label.heading-breathe {
-    animation: faiAccentBreath 5.2s ease-in-out infinite !important;
-  }
-  html:not([data-motion="off"]) .text-brand-grad {
-    background-size: 260% 100% !important;
-    animation: faiColorFlow 4.8s ease-in-out infinite !important;
-    will-change: background-position, filter;
-  }
-  html:not([data-motion="off"]) .badge-breathe,
-  html:not([data-motion="off"]) .fast-breathe-badge,
-  html:not([data-motion="off"]) .price-breathe,
-  html:not([data-motion="off"]) .quote-color-shift,
-  html:not([data-motion="off"]) .kicker-shift {
-    animation: faiAccentBreath 3.8s ease-in-out infinite !important;
-    will-change: opacity, transform;
-  }
-  html:not([data-motion="off"]) .ambient-orb {
-    animation: raAmbientDrift 18s ease-in-out infinite alternate !important;
-    will-change: transform, opacity;
-  }
-  html:not([data-motion="off"]) .heading-breathe::after {
-    animation: raAccentBreath 4.2s ease-in-out infinite !important;
-    opacity: .8;
-  }
-}
+/* FAI text/gradient/accent motion restore removed: intentionally static; avoid scroll-time glyph/compositor work. */
+
 @media (prefers-reduced-motion: reduce) {
   .heading-breathe, .text-brand-grad, .badge-breathe, .fast-breathe-badge,
   .price-breathe, .quote-color-shift, .kicker-shift, .ambient-orb,
@@ -1406,8 +1358,9 @@ html[data-theme="dark"] .tile-3d-studio-mac {
   50% { transform: translate3d(0,-1px,0); opacity: .985; }
 }
 html[data-motion="on"] .heading-breathe {
-  animation: raHeadingDrift 6.4s ease-in-out infinite;
-  will-change: transform, opacity;
+  animation: none !important;
+  transform: none !important;
+  will-change: auto !important;
 }
 html[data-motion="off"] .heading-breathe {
   animation: none !important;
@@ -1435,35 +1388,8 @@ html[data-motion="off"] .heading-breathe {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
-@media (prefers-reduced-motion: no-preference) {
-  html:not([data-motion="off"]) .heading-breathe:not(#rail-label) {
-    animation: raHeadingPulseFinal 5.2s cubic-bezier(.42,0,.58,1) infinite !important;
-    transform-origin: center center;
-    will-change: transform, opacity;
-  }
-  html:not([data-motion="off"]) #rail-label.heading-breathe {
-    animation: raRailPulseFinal 5.2s cubic-bezier(.42,0,.58,1) infinite !important;
-    transform-origin: center center;
-    will-change: transform, opacity;
-  }
-  html:not([data-motion="off"]) .brand-name-flow {
-    background-size: 240% 100%;
-    animation: raBrandColourFinal 6.8s ease-in-out infinite;
-    will-change: background-position;
-  }
-}
-.brand-name-flow {
-  color: transparent !important;
-  background-image: linear-gradient(100deg,#dc2626 0%,#ea580c 32%,#f59e0b 54%,#dc2626 76%,#ea580c 100%);
-  background-size: 240% 100%;
-  background-position: 0% 50%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-html[data-theme="dark"] .brand-dark-glow {
-  background-image: linear-gradient(100deg,#fca5a5 0%,#fdba74 45%,#fbbf24 100%);
-}
+/* Final heading/brand motion restore removed: intentionally static; avoid scroll-time glyph/compositor work. */
+
 @media (prefers-reduced-motion: reduce) {
   .heading-breathe, #rail-label.heading-breathe, .brand-name-flow {
     animation: none !important;
@@ -1620,3 +1546,26 @@ html[data-motion="off"] .brand-name-flow {
 #ambient-particles { display: none !important; }
 html[data-motion="off"] .ambient-orb { display: none !important; }
 html[data-motion="off"] .stage-3d-box::before { display: none !important; content: none !important; }
+
+/* TEXT SCROLL JITTER FIX — static glyph rendering in every motion preference. */
+.ra-motion-text,
+.ra-motion-text.ra-motion-visible,
+html:not([data-motion="off"]) .heading-breathe,
+html:not([data-motion="off"]) #rail-label.heading-breathe,
+html:not([data-motion="off"]) .text-brand-grad,
+html:not([data-motion="off"]) .brand-name-flow,
+html:not([data-motion="off"]) .ambient-orb,
+html:not([data-motion="off"]) .heading-breathe::after {
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+html:not([data-motion="off"]) .heading-breathe,
+html:not([data-motion="off"]) .ra-motion-text {
+  transform: none !important;
+  opacity: 1 !important;
+}
+html:not([data-motion="off"]) .text-brand-grad {
+  background-position: 0 50% !important;
+  filter: none !important;
+}
