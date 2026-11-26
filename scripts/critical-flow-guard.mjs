@@ -22,14 +22,17 @@ const required = [
 
 const failures = [];
 const modelSource = await readFile(new URL("../public/final-site.js", import.meta.url), "utf8");
-for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "id === 'canvas-hero' ? 1.04 : id === 'canvas-macbook' ? 1.08 : 1.08", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
+for (const invariant of ["DESKTOP_TABLET_NON_HERO_FIT", "profile.startsWith('desktop-')", "profile.startsWith('tablet-')", "id !== 'canvas-hero'", "MODEL_CAMERA_ZOOM_BOOST", "const layoutFit = isLargeScreen && isLowerStage && isMacbook ? 0.86 : 1;", "const modelZoom = id === 'canvas-hero' ? 1.04 : isTbkMachine ? 1.16 : isMacbook ? 1.08 : 1.12;", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
   if (!modelSource.includes(invariant)) failures.push(`public/final-site.js missing desktop/tablet model-fit invariant: ${invariant}`);
 }
 const webglPath = "public/final-site.js";
 try {
   const webgl = await readFile(new URL(`../${webglPath}`, import.meta.url), "utf8");
-  for (const marker of ["SCROLL_SETTLE_AUTO_ORBIT", "getScrollMotionScale(now)", "notePageScroll", "MODEL_CAMERA_ZOOM_BOOST", "PERFORMANCE_DEFAULT_MOTION_OFF"]) {
+  for (const marker of ["SCROLL_RENDER_PAUSE", "pauseWebGLDuringPageScroll", "SCROLL_RESUME_DELAY_MS = 160", "scrollResumeTimer || visibleSlots.size === 0", "MODEL_CAMERA_ZOOM_BOOST", "PERFORMANCE_DEFAULT_MOTION_OFF", "Avoid per-move layout reads"]) {
     if (!webgl.includes(marker)) failures.push(`${webglPath}: ${marker}`);
+  }
+  if (webgl.includes("getScrollMotionScale") || webgl.includes("box.getBoundingClientRect()")) {
+    failures.push(`${webglPath}: obsolete scroll-render or pointer-sheen work remains`);
   }
 } catch {
   failures.push(`MISSING ${webglPath}`);
@@ -37,7 +40,7 @@ try {
 const stylePath = "src/app/final-site.css";
 try {
   const styles = await readFile(new URL(`../${stylePath}`, import.meta.url), "utf8");
-  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion"]) {
+  for (const marker of ["raHeadingPulseFinal", "raBrandColourFinal", "brand-name-flow", "prefers-reduced-motion", "SCROLL / GPU STABILITY", "html[data-motion=\"off\"] #ambient-particles", "html[data-motion=\"off\"] .stage-3d-box::before"]) {
     if (!styles.includes(marker)) failures.push(`${stylePath}: ${marker}`);
   }
 } catch {
