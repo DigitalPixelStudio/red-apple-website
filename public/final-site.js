@@ -1077,11 +1077,13 @@
         // remain unchanged; only canvas sampling density and render cadence adapt.
         const isMobile3D = initialProfile.startsWith('mobile-');
         const isTablet3D = initialProfile.startsWith('tablet-');
+        // Touch GPUs benefit more from stable frame delivery than supersampling.
+        // Keep full model geometry/materials/camera; reduce only raster workload.
         const dprCap = isMobile3D
-          ? (lowPowerDevice ? 1.10 : 1.35)
+          ? (lowPowerDevice ? 1.00 : 1.15)
           : isTablet3D
-            ? (lowPowerDevice ? 1.20 : 1.50)
-            : 1.80;
+            ? (lowPowerDevice ? 1.05 : 1.20)
+            : 1.60;
         const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
         // The shared surface is a staging buffer, not the visible canvas size.
         // Keep enough headroom for large desktop stages without oversized GPU allocations.
@@ -1093,7 +1095,8 @@
           const scale = Math.max(0.1, Math.min(dpr, MAX_W / Math.max(1, cw), MAX_H / Math.max(1, ch)));
           return [Math.max(1, Math.round(cw * scale)), Math.max(1, Math.round(ch * scale))];
         }
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
+        // MSAA is expensive on mobile/tablet tile GPUs; retain desktop antialiasing.
+        const renderer = new THREE.WebGLRenderer({ antialias: !isMobile3D && !isTablet3D, alpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
         renderer.setPixelRatio(1);
         renderer.setSize(MAX_W, MAX_H, false);
         renderer.setClearColor(0x000000, 0);
@@ -1355,6 +1358,8 @@
           const canvas = document.getElementById(canvasId);
           if (!canvas) return null;
           const ctx = canvas.getContext('2d');
+          // Each frame fully replaces this slot's bitmap; COPY avoids an extra clear pass.
+          if (ctx) ctx.globalCompositeOperation = 'copy';
           const scene = new THREE.Scene();
           const camera = new THREE.PerspectiveCamera(40, 4 / 3, 0.1, 100);
           camera.position.set(0, 0.42, camZ);
@@ -1900,7 +1905,6 @@
             renderer.setViewport(0, 0, rw, rh);
             renderer.setScissor(0, 0, rw, rh);
             renderer.render(s.scene, s.camera);
-            s.ctx.clearRect(0, 0, rw, rh);
             s.ctx.drawImage(glCanvas, 0, MAX_H - rh, rw, rh, 0, 0, rw, rh);
           }
         }
