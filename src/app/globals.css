@@ -5788,3 +5788,32 @@ html:not([data-motion="off"]) .brand-sub {
   animation: none !important;
   opacity: 1 !important;
 }
+
+
+/* FINAL REQUEST — model-stage white finish and iPhone-only material restraint.
+   Keep all WebGL model geometry, camera framing and interaction unchanged. */
+.stage-3d-box,
+.stage-3d-orange-bg,
+.tile-3d-studio-pearl,
+.tile-3d-studio-lab,
+.tile-3d-studio-uv-lab,
+.tile-3d-studio-graphite,
+.stage-3d-white {
+  background: #fff !important;
+  background-image: none !important;
+}
+
+/* Reduce vividness on the iPhone 17 Pro Max hero render only. */
+#canvas-hero {
+  filter: saturate(.84) !important;
+}
+
+/* Rounded display glass on the existing CSS 3D phone component. */
+.phone-front {
+  border-radius: 46px !important;
+  overflow: hidden !important;
+}
+.phone-screen {
+  border-radius: 40px !important;
+  overflow: hidden !important;
+}
