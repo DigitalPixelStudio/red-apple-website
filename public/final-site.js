@@ -1530,9 +1530,9 @@
           backPlate.position.z = -0.105;
           g.add(backPlate);
 
-          const bezel = new THREE.Mesh(new THREE.PlaneGeometry(1.38, 2.86), darkObs);
+          const bezel = new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(1.38, 2.86, 0.20)), darkObs);
           bezel.position.z = 0.104;
-          const scr = new THREE.Mesh(new THREE.PlaneGeometry(1.32, 2.78), useHeroScreen ? heroOledMat : screenMat);
+          const scr = new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(1.32, 2.78, 0.18)), useHeroScreen ? heroOledMat : screenMat);
           scr.position.z = 0.108;
           const pill = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.08, 0.012), darkObs);
           pill.position.set(0, 1.24, 0.114);
