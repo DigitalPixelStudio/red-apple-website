@@ -1514,7 +1514,69 @@
           metalness: 0.15
         });
         const cosmicOrangeFrame = new THREE.MeshStandardMaterial({ color: 0xea580c, metalness: 0.84, roughness: 0.22 });
-        const cosmicOrangeBack = new THREE.MeshStandardMaterial({ color: 0xc2410c, metalness: 0.52, roughness: 0.32 });
+
+        // Hero iPhone 17 Pro Max rear finish: recreate the supplied orange panel
+        // with its bold white angular starburst. This texture is used only by the
+        // hero phone; the Free Pickup phone keeps its original graphite back.
+        function makeHeroBackTexture() {
+          const c = document.createElement('canvas');
+          c.width = 1024;
+          c.height = 2048;
+          const ctx = c.getContext('2d');
+          const bg = ctx.createLinearGradient(0, 0, 1024, 2048);
+          bg.addColorStop(0, '#fb923c');
+          bg.addColorStop(0.48, '#ea580c');
+          bg.addColorStop(1, '#c2410c');
+          ctx.fillStyle = bg;
+          ctx.fillRect(0, 0, c.width, c.height);
+
+          // Fine satin grain keeps the finish tactile without adding visible dots.
+          ctx.globalAlpha = 0.055;
+          for (let y = 0; y < 2048; y += 8) {
+            ctx.fillStyle = y % 16 === 0 ? '#fff' : '#7c2d12';
+            ctx.fillRect(0, y, 1024, 1);
+          }
+          ctx.globalAlpha = 1;
+
+          // Large asymmetric starburst, positioned below the camera island.
+          const cx = 540, cy = 1190;
+          const points = 32;
+          ctx.beginPath();
+          for (let i = 0; i < points; i++) {
+            const a = -Math.PI / 2 + (i / points) * Math.PI * 2;
+            const r = i % 2 === 0
+              ? (i % 4 === 0 ? 520 : 455)
+              : (i % 3 === 0 ? 285 : 235);
+            const x = cx + Math.cos(a) * r * 0.88;
+            const y = cy + Math.sin(a) * r;
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = '#fffaf4';
+          ctx.fill();
+
+          // Angular orange core gives the burst a crisp, dimensional centre.
+          ctx.beginPath();
+          for (let i = 0; i < 12; i++) {
+            const a = -Math.PI / 2 + (i / 12) * Math.PI * 2;
+            const r = i % 2 === 0 ? 142 : 82;
+            const x = cx + Math.cos(a) * r;
+            const y = cy + Math.sin(a) * r;
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = '#e65a16';
+          ctx.fill();
+
+          const tex = new THREE.CanvasTexture(c);
+          tex.colorSpace = THREE.SRGBColorSpace;
+          tex.anisotropy = 4;
+          return tex;
+        }
+        const heroBackTexture = makeHeroBackTexture();
+        const cosmicOrangeBack = new THREE.MeshStandardMaterial({
+          map: heroBackTexture, color: 0xffffff, metalness: 0.34, roughness: 0.38
+        });
         const lensOpticMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x1d4ed8, emissiveIntensity: 0.45, metalness: 0.96, roughness: 0.05 });
 
         function buildBeveledPhone(matBody, useHeroScreen = false) {
