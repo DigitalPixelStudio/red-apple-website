@@ -1532,7 +1532,18 @@
 
           const bezel = new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(1.38, 2.86, 0.20)), darkObs);
           bezel.position.z = 0.104;
-          const scr = new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(1.32, 2.78, 0.18)), useHeroScreen ? heroOledMat : screenMat);
+          const screenGeo = new THREE.ShapeGeometry(roundedShape(1.32, 2.78, 0.18));
+          // ShapeGeometry uses model-space XY as its default UVs. Normalize them
+          // to 0..1 so the lock-screen canvas texture renders once, crisply,
+          // instead of repeating/clipping its text across the rounded display.
+          const screenPositions = screenGeo.attributes.position;
+          const screenUvs = new Float32Array(screenPositions.count * 2);
+          for (let i = 0; i < screenPositions.count; i++) {
+            screenUvs[i * 2] = (screenPositions.getX(i) + 0.66) / 1.32;
+            screenUvs[i * 2 + 1] = (screenPositions.getY(i) + 1.39) / 2.78;
+          }
+          screenGeo.setAttribute('uv', new THREE.Float32BufferAttribute(screenUvs, 2));
+          const scr = new THREE.Mesh(screenGeo, useHeroScreen ? heroOledMat : screenMat);
           scr.position.z = 0.108;
           const pill = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.08, 0.012), darkObs);
           pill.position.set(0, 1.24, 0.114);
