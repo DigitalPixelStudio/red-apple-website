@@ -5817,3 +5817,15 @@ html:not([data-motion="off"]) .brand-sub {
   border-radius: 40px !important;
   overflow: hidden !important;
 }
+
+
+/* Final polish: remove the tiny orange body-wide dot texture only.
+   Keep the existing subtle ambient corner glows and all section styling. */
+body {
+  background-image:
+    radial-gradient(circle at 10% 8%, rgba(220,38,38,.05), transparent 46%),
+    radial-gradient(circle at 92% 22%, rgba(234,88,12,.055), transparent 48%) !important;
+}
+.fx-dots {
+  display: none !important;
+}
