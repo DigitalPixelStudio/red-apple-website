@@ -2775,3 +2775,15 @@ footer a {
 .phone-orbit {
   border-color: rgba(120, 120, 120, .10) !important;
 }
+
+
+/* Keep the small connected/pickup device mockup on a white stage too. */
+.connect-device {
+  background: #fff !important;
+  border: 1px solid rgba(0, 0, 0, .10);
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+.connect-device svg {
+  color: #9a6b50 !important;
+  stroke: #9a6b50 !important;
+}
