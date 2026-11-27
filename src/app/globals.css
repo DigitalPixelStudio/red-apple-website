@@ -2701,3 +2701,77 @@ footer a {
 .head-underline::after {
   transition-property: transform, opacity !important;
 }
+
+
+/* ============================================================
+   REQUESTED VISUAL-ONLY REFINEMENT — iPhone model + white stages
+   No layout, content, route, or interaction changes.
+   ============================================================ */
+
+/* Keep the hero and all decorative model stages clean white. */
+.hero-landscape-compact {
+  background: #fff !important;
+}
+.hero-landscape-compact > .absolute.inset-0.bg-gradient-to-b {
+  background: #fff !important;
+}
+.hero-landscape-compact > .orb {
+  display: none !important;
+}
+.bg-3d {
+  background: #fff !important;
+}
+.bg-3d .bg-grid,
+.bg-3d .bg-orb-3d {
+  display: none !important;
+}
+.fx-dots {
+  background: #fff !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+.phone-stage,
+.connect-stage,
+.device-frame {
+  background-color: #fff !important;
+}
+
+/* More rounded, softer iPhone 17 Pro Max silhouette. */
+.phone-face {
+  border-radius: 46px !important;
+}
+.phone-back::after,
+.phone-sheen {
+  border-radius: 46px !important;
+}
+.phone-back-plate {
+  border-radius: 38px !important;
+}
+.phone-screen {
+  border-radius: 39px !important;
+}
+
+/* Muted titanium/copper finish: less vivid than the previous saturated orange. */
+.phone-back {
+  background: linear-gradient(168deg,
+    #e7c2a8 0%,
+    #d9a98a 18%,
+    #c58b6b 42%,
+    #ad7558 66%,
+    #89583f 88%,
+    #754832 100%) !important;
+  filter: saturate(.72);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 236, 220, .58),
+    inset 0 -18px 34px -18px rgba(0, 0, 0, .32) !important;
+}
+.phone-camera-island {
+  background: linear-gradient(158deg, #dfb99e 0%, #c89577 48%, #a9775c 100%) !important;
+  filter: saturate(.78);
+}
+.phone-edge {
+  background: linear-gradient(180deg, #e3c2aa 0%, #bd8a6d 48%, #8c6049 100%) !important;
+}
+.phone-orbit {
+  border-color: rgba(120, 120, 120, .10) !important;
+}
