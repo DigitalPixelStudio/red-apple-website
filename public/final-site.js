@@ -1530,43 +1530,96 @@
           ctx.fillStyle = bg;
           ctx.fillRect(0, 0, c.width, c.height);
 
-          // Fine satin grain keeps the finish tactile without adding visible dots.
-          ctx.globalAlpha = 0.055;
+          // Subtle satin grain on the orange rear panel.
+          ctx.globalAlpha = 0.045;
           for (let y = 0; y < 2048; y += 8) {
             ctx.fillStyle = y % 16 === 0 ? '#fff' : '#7c2d12';
             ctx.fillRect(0, y, 1024, 1);
           }
           ctx.globalAlpha = 1;
 
-          // Large asymmetric starburst, positioned below the camera island.
-          const cx = 540, cy = 1190;
-          const points = 32;
-          ctx.beginPath();
-          for (let i = 0; i < points; i++) {
-            const a = -Math.PI / 2 + (i / points) * Math.PI * 2;
-            const r = i % 2 === 0
-              ? (i % 4 === 0 ? 520 : 455)
-              : (i % 3 === 0 ? 285 : 235);
-            const x = cx + Math.cos(a) * r * 0.88;
-            const y = cy + Math.sin(a) * r;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-          }
-          ctx.closePath();
+          // Recreate the reference's broken-screen mark: a sharp white
+          // impact point with irregular long fracture lines and fine branches.
+          const cx = 520, cy = 1190;
+          const rays = [
+            [-0.08,-1, 480], [0.13,-0.99,390], [0.42,-0.91,455],
+            [0.72,-0.69,390], [0.98,-0.18,430], [0.93,0.36,370],
+            [0.72,0.70,430], [0.31,0.95,380], [-0.10,0.99,460],
+            [-0.48,0.88,385], [-0.83,0.55,450], [-0.99,0.10,360],
+            [-0.91,-0.40,430], [-0.65,-0.76,370], [-0.35,-0.93,445]
+          ];
+          ctx.save();
+          ctx.lineCap = 'square';
+          ctx.lineJoin = 'miter';
+          ctx.strokeStyle = '#fffaf4';
           ctx.fillStyle = '#fffaf4';
-          ctx.fill();
+          ctx.shadowColor = 'rgba(255,255,255,.24)';
+          ctx.shadowBlur = 5;
 
-          // Angular orange core gives the burst a crisp, dimensional centre.
+          // Central fractured glass shards.
           ctx.beginPath();
-          for (let i = 0; i < 12; i++) {
-            const a = -Math.PI / 2 + (i / 12) * Math.PI * 2;
-            const r = i % 2 === 0 ? 142 : 82;
-            const x = cx + Math.cos(a) * r;
-            const y = cy + Math.sin(a) * r;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          ctx.moveTo(cx, cy - 92); ctx.lineTo(cx + 54, cy - 25);
+          ctx.lineTo(cx + 118, cy - 8); ctx.lineTo(cx + 40, cy + 36);
+          ctx.lineTo(cx + 12, cy + 108); ctx.lineTo(cx - 28, cy + 42);
+          ctx.lineTo(cx - 112, cy + 18); ctx.lineTo(cx - 42, cy - 28);
+          ctx.closePath(); ctx.fill();
+
+          rays.forEach(([dx,dy,len], idx) => {
+            const ex = cx + dx * len, ey = cy + dy * len;
+            const bend = 24 + (idx % 4) * 15;
+            const px = -dy, py = dx;
+            ctx.lineWidth = idx % 3 === 0 ? 18 : 11;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + dx * len * .28 + px * bend, cy + dy * len * .28 + py * bend);
+            ctx.lineTo(cx + dx * len * .57 - px * bend * .55, cy + dy * len * .57 - py * bend * .55);
+            ctx.lineTo(ex, ey);
+            ctx.stroke();
+
+            // Smaller secondary cracks branch off the main fracture.
+            const bx = cx + dx * len * (.43 + (idx % 3) * .08);
+            const by = cy + dy * len * (.43 + (idx % 3) * .08);
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(bx, by);
+            ctx.lineTo(bx + px * (55 + (idx % 4) * 14) + dx * 35,
+                       by + py * (55 + (idx % 4) * 14) + dy * 35);
+            ctx.lineTo(bx + px * (85 + (idx % 4) * 12) + dx * 72,
+                       by + py * (85 + (idx % 4) * 12) + dy * 72);
+            ctx.stroke();
+          });
+
+          // Fine glass splinters around the impact point.
+          ctx.shadowBlur = 0;
+          ctx.lineWidth = 4;
+          for (let i = 0; i < 18; i++) {
+            const a = (i / 18) * Math.PI * 2 + .12;
+            const r1 = 120 + (i % 4) * 18, r2 = r1 + 80 + (i % 3) * 22;
+            ctx.beginPath();
+            ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+            ctx.lineTo(cx + Math.cos(a + .07) * r2, cy + Math.sin(a + .07) * r2);
+            ctx.stroke();
           }
-          ctx.closePath();
-          ctx.fillStyle = '#e65a16';
-          ctx.fill();
+          ctx.restore();
+
+          // Small cartoon fish decal visible near the right edge in the reference.
+          ctx.save();
+          ctx.translate(905, 1180);
+          ctx.rotate(-0.16);
+          ctx.fillStyle = '#f97316';
+          ctx.strokeStyle = '#fff7ed';
+          ctx.lineWidth = 13;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 54, 31, 0, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(-45, 0); ctx.lineTo(-88, -32); ctx.lineTo(-82, 0); ctx.lineTo(-88, 32); ctx.closePath();
+          ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#fff';
+          ctx.beginPath(); ctx.arc(29, -7, 7, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#1f2937';
+          ctx.beginPath(); ctx.arc(31, -7, 3.5, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
 
           const tex = new THREE.CanvasTexture(c);
           tex.colorSpace = THREE.SRGBColorSpace;
